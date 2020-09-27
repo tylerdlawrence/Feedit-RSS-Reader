@@ -32,7 +32,7 @@ struct HomeView: View {
             homeListView
                 .tabItem {
                     VStack {
-                        Image(systemName:"square.3.stack.3d.top.fill") //"square.stack.3d.up.fill","rectangle.grid.1x2","mail.stack.fill",")
+                        Image(systemName:"square.3.stack.3d") //"square.stack.3d.up.fill","rectangle.grid.1x2","mail.stack.fill",")
                             .imageScale(.large)
                         Text("")
                     }
@@ -40,7 +40,7 @@ struct HomeView: View {
             archiveListView
                 .tabItem {
                     VStack {
-                        Image(systemName: "bookmark.circle.fill")
+                        Image(systemName: "bookmark")
                             .imageScale(.large)
                         Text("")
                     }
@@ -56,7 +56,7 @@ struct HomeView: View {
             settingListView
                 .tabItem {
                     VStack{
-                        Image(systemName: "gearshape.fill")
+                        Image(systemName: "gearshape")
                             .imageScale(.large)
                         Text("")
                     }
