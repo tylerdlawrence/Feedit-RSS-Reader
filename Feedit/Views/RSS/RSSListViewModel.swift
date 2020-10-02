@@ -45,3 +45,5 @@ class RSSListViewModel: NSObject, ObservableObject {
     }
     
 }
+
+

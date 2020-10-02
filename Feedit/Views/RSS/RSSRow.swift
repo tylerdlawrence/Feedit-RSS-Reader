@@ -38,7 +38,7 @@ struct RSSRow: View {
             Text(rss.title)
                 .font(.headline)
                 .fontWeight(.bold)
-                .lineLimit(1)
+                .lineLimit(2)
                 
             Text(rss.desc)
                 .font(.subheadline)
@@ -61,13 +61,17 @@ struct RSSRow: View {
                         
                     } else {
                         
-                        Image(systemName:"square.3.stack.3d.top.fill")
+                        Image(systemName:"note.text")
+                            .font(.system(size:26, weight: .ultraLight))
+                            
+                            //"dot.squareshape"
                             //"info.circle.fill"
-                            .foregroundColor(Color("footnoteColor"))
-                                .frame(width: 25, height: 25, alignment: .trailing)
+
+                            .foregroundColor(Color.white)
+                            .frame(width: 25, height: 25, alignment: .leading)
                                 .cornerRadius(2)
                                     .animation(.easeInOut)
-                            //.padding(.top, 35.0)
+                            .padding(.bottom, 20)
                             //.frame(width: 15.0, height: /*@START_MENU_TOKEN@*/15.0/*@END_MENU_TOKEN@*/)
                             //.font(.system(size:24, weight: .bold))
                             
@@ -105,6 +109,7 @@ struct RSSRow_Previews: PreviewProvider {
     static var previews: some View {
         RSSListView(viewModel: self.viewModel)
             .preferredColorScheme(.dark)
+            .padding(.vertical)
             
     }
 }

@@ -29,6 +29,7 @@ struct RSSListView: View {
             self.selectedFeatureItem = .add
         }) {
             Image(systemName: "plus")
+                .padding(.trailing, 3.0)
                 .imageScale(.large)
         }
     }
@@ -47,7 +48,6 @@ struct RSSListView: View {
     private var ListView: some View {
         HStack(alignment: .top, spacing: 24) {
             addSourceButton
-            
         }
     }
 //    private let addRSSPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("addNewRSSPublisher"))
@@ -69,10 +69,11 @@ struct RSSListView: View {
                 }
             }
             }
-            .navigationBarTitle("Feeds", displayMode: .inline)
+            .navigationBarTitle("Feeds", displayMode: .automatic)
             .navigationBarItems(trailing: ListView)
+            
         }
-        .padding(.horizontal, -10)
+        .padding([.top, .leading, .trailing], -10.0)
         .sheet(isPresented: $isSheetPresented, content: {
                     AddRSSView(
                         viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss),
@@ -81,6 +82,8 @@ struct RSSListView: View {
                 .onAppear {
                     self.viewModel.fecthResults()
                 }
+        .shadow(radius: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/)
+        
             }
         }
 extension RSSListView {

@@ -9,12 +9,12 @@ import SwiftUI
 import WidgetKit
 import Intents
 
-struct ArchiveListView: View {
+struct ArchiveTableView: View {
     
     @ObservedObject var viewModel: ArchiveListViewModel
     
     @State private var selectedItem: RSSItem?
-    @State var footer = "more"
+    @State var footer = "Refresh"
     
     init(viewModel: ArchiveListViewModel) {
         self.viewModel = viewModel
@@ -56,19 +56,20 @@ struct ArchiveListView: View {
                 self.viewModel.fecthResults()
             }
             .listStyle(GroupedListStyle())
-            .navigationBarTitle("Read Later", displayMode: .inline)
+            .navigationBarTitle("Bookmarks", displayMode: .automatic)
             .environment(\.horizontalSizeClass, .regular)
         }
+        
     }
 }
 
 
-extension ArchiveListView {
+extension ArchiveTableView {
 }
 
 struct ArchiveListView_Previews: PreviewProvider {
     static var previews: some View {
-        ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
+        ArchiveTableView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
             .previewDevice("iPhone 11 Pro Max")
             .preferredColorScheme(.dark)
             

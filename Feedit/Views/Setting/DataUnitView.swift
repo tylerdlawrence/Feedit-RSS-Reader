@@ -17,9 +17,11 @@ struct DataUnitView: View {
         var gradient: Gradient {
             switch self {
             case .blue:
-                return Gradient(colors: [Color(0x13ABD6), Color(0x0036FF)])
+                return Gradient(colors: [Color(0x262628), Color(0x4c4d51)])
             case .orange:
-                return Gradient(colors: [Color(0xF1C300), Color(0xF37102)])
+                return Gradient(colors: [Color(0x262628), Color(0x4c4d51)])
+                //(0xF1C300)
+                //(0xF37102)
             }
         }
     }
@@ -62,10 +64,4 @@ struct DataUnitView: View {
     }
 }
 
-struct DataUnitView_Previews: PreviewProvider {
-    static var previews: some View {
-        DataUnitView(label: "RSS", content: .constant(12), colorType: .blue)
-            .frame(height: 120)
-    }
-}
 

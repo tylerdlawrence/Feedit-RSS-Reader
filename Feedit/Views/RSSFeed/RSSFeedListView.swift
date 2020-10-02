@@ -22,7 +22,7 @@ struct RSSFeedListView: View {
     @State private var selectedItem: RSSItem?
     @State private var isSafariViewPresented = false
     @State private var start: Int = 0
-    @State private var footer: String = "more"
+    @State private var footer: String = "Refresh"
     @State var cancellables = Set<AnyCancellable>()
     
     init(viewModel: RSSFeedViewModel) {

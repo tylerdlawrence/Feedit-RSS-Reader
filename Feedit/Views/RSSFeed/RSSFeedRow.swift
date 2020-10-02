@@ -23,11 +23,11 @@ struct RSSItemRow: View {
         VStack(alignment: .leading, spacing: 0) {
             Text(itemWrapper.title)
                 .font(.headline)
-                .lineLimit(2)
+                .lineLimit(3)
             //Spacer()
             Text(itemWrapper.desc.trimHTMLTag.trimWhiteAndSpace)
                 .font(.subheadline)
-                .lineLimit(1)
+                .lineLimit(3)
                 .foregroundColor(.gray)
             Spacer()
             HStack(spacing: 10) {
@@ -62,7 +62,7 @@ struct RSSItemRow: View {
         .contextMenu {
             ActionContextMenu(
                 label: itemWrapper.isArchive ? "Done" : "Read Later",
-                systemName: "tray.and.arrow.\(itemWrapper.isArchive ? "up" : "down")",
+                systemName: "bookmark\(itemWrapper.isArchive ? "up" : "down")",
                 onAction: {
                     self.contextMenuAction?(self.itemWrapper)
             })

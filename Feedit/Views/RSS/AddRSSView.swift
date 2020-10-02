@@ -38,10 +38,10 @@ struct AddRSSView: View {
     
     private var sectionHeader: some View {
         HStack {
-            Text("Input")
+            Text("SEARCH")//input
             Spacer()
             Button(action: self.fetchDetail) {
-                Text("fetch")
+                Text("FIND")
             }
         }
     }
@@ -67,11 +67,13 @@ struct AddRSSView: View {
         NavigationView {
             Form {
                 Section(header: sectionHeader) {
-                    TextFieldView(label: "URL", placeholder: "", text: $feedUrl)
+                    TextFieldView(label: "Feed URL, Site URL or @twitter handle", placeholder: "", text: $feedUrl)
+                        .opacity(/*@START_MENU_TOKEN@*/0.3/*@END_MENU_TOKEN@*/)
                 }
-                Section(header: Text("Display")) {
+                Section(header: Text("Result")) {
                     if !hasFetchResult {
-                        Text("no result")
+                        Text("press FIND to display result")
+                            .opacity(/*@START_MENU_TOKEN@*/0.3/*@END_MENU_TOKEN@*/)
                     } else {
                         if $viewModel.rss != nil {
                             RSSDisplayView(rss: viewModel.rss!)
@@ -79,7 +81,7 @@ struct AddRSSView: View {
                     }
                 }
             }
-            .navigationBarTitle("Add Source")
+            .navigationBarTitle("Add Feed")
             .navigationBarItems(leading: cancelButton, trailing: doneButton)
         }
         .onDisappear {
@@ -101,5 +103,14 @@ struct AddRSSView: View {
                 print("fetchDetail error = \(error)")
             }
         }
+    }
+}
+
+struct AddRSSView_Previews: PreviewProvider {
+    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+
+    static var previews: some View {
+        RSSListView(viewModel: self.viewModel)
+            .preferredColorScheme(.dark)
     }
 }

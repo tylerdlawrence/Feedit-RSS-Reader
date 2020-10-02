@@ -20,8 +20,8 @@ struct DataNStorageView: View {
     var body: some View {
         VStack {
             HStack(spacing: 12) {
-                DataUnitView(label: "RSS Feeds", content: self.$viewModel.rssCount, colorType: .blue)
-                DataUnitView(label: "Total # of Feeds", content: self.$viewModel.rssItemCount, colorType: .orange)
+                DataUnitView(label: "Subscription Count", content: self.$viewModel.rssCount, colorType: .blue)
+                DataUnitView(label: "Article Count", content: self.$viewModel.rssItemCount, colorType: .orange)
             }
             .padding(.leading, 12)
             .padding(.trailing, 12)
@@ -37,8 +37,3 @@ struct DataNStorageView: View {
     }
 }
 
-struct DataNStorageView_Previews: PreviewProvider {
-    static var previews: some View {
-        DataNStorageView()
-    }
-}

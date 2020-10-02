@@ -15,8 +15,8 @@ struct ActionContextMenu: View {
     var onAction: (() -> Void)?
     
     init(label: String, systemName: String, onAction: (() -> Void)? = nil) {
-        self.label = "Read Later"
-        //self.remove = "Remove from Read Later"
+        self.label = "Bookmark"
+        //self.remove = "Remove Bookmark"
         self.systemName = systemName
         self.onAction = onAction
     }
@@ -29,7 +29,7 @@ struct ActionContextMenu: View {
                 HStack() {
                     Text(self.label)
                     Image(systemName: "bookmark.fill")
-                        .imageScale(.large)
+                        .imageScale(.small)
                         .foregroundColor(.primary)
                 }
             }
@@ -39,7 +39,7 @@ struct ActionContextMenu: View {
 
 struct ActionContextMenu_Previews: PreviewProvider {
     static var previews: some View {
-        ActionContextMenu(label: "Read Later", systemName: "bookmark.fill")
+        ActionContextMenu(label: "Bookmark", systemName: "bookmark.fill")
             .preferredColorScheme(.dark)
             .previewDevice("iPhone 11 Pro Max")
     }

@@ -102,9 +102,11 @@ struct SettingListView: View {
     }
 }
 
-struct SettingView_Previews: PreviewProvider {
+struct SettingView_Preview: PreviewProvider {
     static var previews: some View {
         SettingListView()
+        .previewDevice("iPhone 11 Pro Max")
+        .preferredColorScheme(.dark)
     }
 }
 
