@@ -13,44 +13,35 @@ import Foundation
 
 struct HomeView: View {
 
-    @State private var archiveScale: Image.Scale = .medium
+    @State private var archiveScale: Image.Scale = .small
     
     private var homeListView: some View
-    //homeListView
     {
         RSSListView(viewModel: RSSListViewModel(dataSource: DataSourceService.current.rss))
             
-            
-
-            
     }
+    
     private var settingListView: some View {
         SettingListView()
+        
     }
     
     private var archiveTableView: some View {
         ArchiveTableView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
+        
     }
-    
-//    private var itemListView: some View {
-//        ItemListView()
     
     var body: some View {
         TabView {
             homeListView
-                //homeListView
                 .tabItem {
-                    VStack {
+                    VStack() {
                         Image(systemName:"square.3.stack.3d") //"square.stack.3d.up.fill","rectangle.grid.1x2","mail.stack.fill",")
                             .imageScale(.small)
                         Text("")
                     }
                 }
                 .preferredColorScheme(/*@START_MENU_TOKEN@*/.dark/*@END_MENU_TOKEN@*/)
-                
-                
-                
-                
             archiveTableView
                 .tabItem {
                     VStack {
@@ -82,6 +73,7 @@ struct HomeView: View {
         
         
         
+        
     }
 }
 
@@ -94,7 +86,7 @@ extension HomeView {
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()
-            .preferredColorScheme(.dark)
+            //.preferredColorScheme(.dark)
             .previewDevice("iPhone 11")
             
     }

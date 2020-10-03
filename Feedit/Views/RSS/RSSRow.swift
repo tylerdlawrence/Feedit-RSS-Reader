@@ -6,8 +6,8 @@
 //
 
 import SwiftUI
-import WidgetKit
 import Intents
+import UIKit
 
 struct RSSRow: View {
     
@@ -22,61 +22,61 @@ struct RSSRow: View {
     private func iconImageView(_ image: UIImage) -> some View {
         Image(uiImage: image)
         .resizable()
-            .frame(width: 25, height: 25, alignment: .trailing)
-            .cornerRadius(2)
-                .animation(.easeInOut)
-            //.frame(width: 35, height: 35, alignment: .bottomLeading)
-    //         ORIGINAL IMAGE SIZE BELOW
-//        .resizable()
-        //    .frame(width: 35, height: 35, alignment: .center)
-       // .cornerRadius(30)
-         //   .animation(.easeInOut)
+            .cornerRadius(0)
+            .animation(.easeInOut)
+            .border(Color.white, width: 1)
+        
     }
 
     private var pureTextView: some View {
-        VStack(alignment: .leading, spacing: 0.0) {
+        VStack(spacing: 0.0) {
             Text(rss.title)
-                .font(.headline)
-                .fontWeight(.bold)
-                .lineLimit(2)
-                
-            Text(rss.desc)
-                .font(.subheadline)
                 .lineLimit(1)
+                .contextMenu {
+                    Text("Article List")
+                    Text("Details")
+                    Text("Edit")
+                    Text("Unsubscribe")
+                }
+// below are options to have parsed feed description and last updated time
+        
+            //Text(rss.desc)
+                //.font(.subheadline)
+                //.lineLimit(1)
                         
-            Text(rss.createTimeStr)
-                .font(.footnote)
-                .foregroundColor(.gray)
+            //Text(rss.createTimeStr)
+                //.font(.footnote)
+                //.foregroundColor(.gray)
+            
         }
     }
 
     var body: some View {
-        HStack(alignment: .top) {
-            VStack(alignment: .leading) {
+        HStack() {
+            VStack(alignment: .center) {
                 HStack {
-                    if self.imageLoader.image != nil {
+                    if
+                        self.imageLoader.image != nil {
                         iconImageView(self.imageLoader.image!)
+                            .font(.body)
+                            .frame(width: 20.0, height: 20.0,alignment: .center)
+                            //.layoutPriority(10)
+                            
+                            
                             
                         pureTextView
                         
                     } else {
                         
-                        Image(systemName:"note.text")
-                            .font(.system(size:26, weight: .ultraLight))
+                        Image(systemName:"dot.squareshape")
+                            .font(.body)
                             
-                            //"dot.squareshape"
-                            //"info.circle.fill"
+                            //"dock.rectangle"
 
                             .foregroundColor(Color.white)
-                            .frame(width: 25, height: 25, alignment: .leading)
-                                .cornerRadius(2)
+                            .frame(width: 20, height: 20, alignment: .center)
+                                //.cornerRadius(2)
                                     .animation(.easeInOut)
-                            .padding(.bottom, 20)
-                            //.frame(width: 15.0, height: /*@START_MENU_TOKEN@*/15.0/*@END_MENU_TOKEN@*/)
-                            //.font(.system(size:24, weight: .bold))
-                            
-                            //.frame(width: 10, height: 10, alignment: .trailing)
-                            //.cornerRadius(2)
                             .imageScale(.large)
     
                         pureTextView
@@ -90,6 +90,10 @@ struct RSSRow: View {
                 }
                 
                 
+                
+                
+                
+                
                // Text(rss.createTimeStr)
                  //   .font(.footnote)
                 //    .foregroundColor(.gray)
@@ -97,7 +101,12 @@ struct RSSRow: View {
             }
             
             
+            
+            
         }
+        
+        
+        
         //.padding(.top, 10)
         //.padding(.bottom, 10)
     }

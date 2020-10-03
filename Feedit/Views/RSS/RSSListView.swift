@@ -29,7 +29,7 @@ struct RSSListView: View {
             self.selectedFeatureItem = .add
         }) {
             Image(systemName: "plus")
-                .padding(.trailing, 3.0)
+                .padding(.trailing, 10)
                 .imageScale(.large)
         }
     }
@@ -59,30 +59,35 @@ struct RSSListView: View {
                 ForEach(viewModel.items, id: \.self) { rss in
                     NavigationLink(destination:  self.destinationView(rss)) {
                         RSSRow(rss: rss)
-                            
+                        
                     }
                     .tag("RSS")
                 }
                 .onDelete { indexSet in
-                if let index = indexSet.first {
-                    self.viewModel.delete(at: index)
+                    if let index = indexSet.first {
+                        self.viewModel.delete(at: index)
+                    }
                 }
-            }
             }
             .navigationBarTitle("Feeds", displayMode: .automatic)
             .navigationBarItems(trailing: ListView)
-            
+            .onAppear {
+                self.viewModel.fecthResults()
+            }
+            .listStyle(GroupedListStyle())
+            .environment(\.horizontalSizeClass, .regular)
         }
-        .padding([.top, .leading, .trailing], -10.0)
         .sheet(isPresented: $isSheetPresented, content: {
-                    AddRSSView(
-                        viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss),
-                        onDoneAction: self.onDoneAction)
-                })
-                .onAppear {
-                    self.viewModel.fecthResults()
-                }
-        .shadow(radius: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/)
+            AddRSSView(
+                viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss),
+                onDoneAction: self.onDoneAction)
+            
+        })
+        .onAppear {
+            self.viewModel.fecthResults()
+        }
+        
+        
         
             }
         }
@@ -105,6 +110,7 @@ struct RSSListView_Previews: PreviewProvider {
     static var previews: some View {
         RSSListView(viewModel: self.viewModel)
             .preferredColorScheme(.dark)
+            .environment(\.sizeCategory, .small)
             
         
             }

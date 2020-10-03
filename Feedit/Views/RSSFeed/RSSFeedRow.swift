@@ -23,11 +23,11 @@ struct RSSItemRow: View {
         VStack(alignment: .leading, spacing: 0) {
             Text(itemWrapper.title)
                 .font(.headline)
-                .lineLimit(3)
+                .lineLimit(2)
             //Spacer()
             Text(itemWrapper.desc.trimHTMLTag.trimWhiteAndSpace)
                 .font(.subheadline)
-                .lineLimit(3)
+                .lineLimit(2)
                 .foregroundColor(.gray)
             Spacer()
             HStack(spacing: 10) {

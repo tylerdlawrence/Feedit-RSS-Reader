@@ -44,7 +44,7 @@ struct LinerProgressBar_Previews: PreviewProvider {
     static var previews: some View {
         ZStack {
             VStack {
-                LinerProgressBar(color: .orange, progress: .constant(0.5))
+                LinerProgressBar(color: .blue, progress: .constant(0.5))
                     .frame(height: 100)
                     .padding(40.0)
                 
