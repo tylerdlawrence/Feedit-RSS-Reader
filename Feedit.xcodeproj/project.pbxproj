@@ -351,6 +351,11 @@
 		61C8189424E1F3FB00593939 /* Feedit */ = {
 			isa = PBXGroup;
 			children = (
+				61C8189524E1F3FB00593939 /* AppDelegate.swift */,
+				61C8189724E1F3FB00593939 /* SceneDelegate.swift */,
+				61C818A324E1F3FD00593939 /* LaunchScreen.storyboard */,
+				61967F0624E2096100AA647C /* Info.plist */,
+				61967F0724E20D6200AA647C /* RSS.xcdatamodeld */,
 				61CDCF6724E84D5E007654C5 /* rss.entitlements */,
 				61C818EC24E1FAF700593939 /* Wrapper */,
 				61C818D424E1F6F000593939 /* Services */,
@@ -360,12 +365,7 @@
 				61C818EF24E1FB2600593939 /* CommonViews */,
 				618F9025250DCD4F00D5A03E /* Models */,
 				61C818D124E1F65D00593939 /* Views */,
-				61C8189524E1F3FB00593939 /* AppDelegate.swift */,
-				61C8189724E1F3FB00593939 /* SceneDelegate.swift */,
 				61C8189E24E1F3FD00593939 /* Assets.xcassets */,
-				61C818A324E1F3FD00593939 /* LaunchScreen.storyboard */,
-				61967F0624E2096100AA647C /* Info.plist */,
-				61967F0724E20D6200AA647C /* RSS.xcdatamodeld */,
 				61C818A024E1F3FD00593939 /* Preview Content */,
 			);
 			path = Feedit;
@@ -601,6 +601,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ja,
 			);
 			mainGroup = 61C8188924E1F3FB00593939;
 			packageReferences = (
@@ -1002,7 +1003,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_ASSET_PATHS = "\"Feedit/Preview Content\"";
 				DEVELOPMENT_TEAM = 7Z3Z6D3TH7;
 				ENABLE_PREVIEWS = YES;
@@ -1027,7 +1028,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_ASSET_PATHS = "\"Feedit/Preview Content\"";
 				DEVELOPMENT_TEAM = 7Z3Z6D3TH7;
 				ENABLE_PREVIEWS = YES;

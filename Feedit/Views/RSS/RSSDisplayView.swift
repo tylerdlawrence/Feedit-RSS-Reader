@@ -20,11 +20,10 @@ struct RSSDisplayView: View {
     }
 }
 struct RSSDisplayView_Previews: PreviewProvider {
-    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-
     static var previews: some View {
-        RSSListView(viewModel: self.viewModel)
+        HomeView()
             .preferredColorScheme(.dark)
+            .previewDevice("iPhone 11")
     }
 }
 //#if DEBUG

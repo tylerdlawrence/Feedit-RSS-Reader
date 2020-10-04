@@ -12,10 +12,11 @@ import CoreData
 import Foundation
 
 struct HomeView: View {
-
+    
     @State private var archiveScale: Image.Scale = .small
     
     private var homeListView: some View
+    
     {
         RSSListView(viewModel: RSSListViewModel(dataSource: DataSourceService.current.rss))
             
@@ -26,8 +27,8 @@ struct HomeView: View {
         
     }
     
-    private var archiveTableView: some View {
-        ArchiveTableView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
+    private var archiveListView: some View {
+        ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
         
     }
     
@@ -36,13 +37,14 @@ struct HomeView: View {
             homeListView
                 .tabItem {
                     VStack() {
-                        Image(systemName:"square.3.stack.3d") //"square.stack.3d.up.fill","rectangle.grid.1x2","mail.stack.fill",")
+                        Image(systemName:"square.3.stack.3d")
                             .imageScale(.small)
                         Text("")
                     }
                 }
-                .preferredColorScheme(/*@START_MENU_TOKEN@*/.dark/*@END_MENU_TOKEN@*/)
-            archiveTableView
+                
+                //.preferredColorScheme(.dark)
+            archiveListView
                 .tabItem {
                     VStack {
                         Image(systemName: "bookmark")
@@ -50,13 +52,6 @@ struct HomeView: View {
                         Text("")
                     }
                 }
-            
-//            itemListView
-//                .tabItem {
-//                    VStack {
-//                        Image(systemName: "list.bullet")
-//                            .imageScale(.large)
-//                        Text("Subscriptions")
                         
             settingListView
                 .tabItem {
@@ -64,16 +59,11 @@ struct HomeView: View {
                         Image(systemName: "gearshape")
                             .imageScale(.small)
                         Text("")
+                        
                     }
                 }
+
         }
-        
-        
-        
-        
-        
-        
-        
     }
 }
 
@@ -86,8 +76,8 @@ extension HomeView {
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()
-            //.preferredColorScheme(.dark)
-            .previewDevice("iPhone 11")
+            .preferredColorScheme(.dark)
+            .previewDevice("iPhone X")
             
     }
 }

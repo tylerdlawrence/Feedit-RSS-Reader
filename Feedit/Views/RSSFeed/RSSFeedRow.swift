@@ -73,3 +73,13 @@ struct RSSItemRow: View {
         }
     }
 }
+
+struct RSSFeedRow_Previews: PreviewProvider {
+    static var previews: some View {
+        HomeView()
+            .preferredColorScheme(.dark)
+            .previewDevice("iPhone 11")
+    }
+}
+
+

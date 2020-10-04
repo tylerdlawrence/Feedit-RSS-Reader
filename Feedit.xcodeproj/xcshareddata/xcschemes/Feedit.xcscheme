@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1200"
+   LastUpgradeVersion = "1220"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -32,7 +32,7 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "616CAF7824F7269700690804"
+               BlueprintIdentifier = "6182212925053FEE005636B2"
                BuildableName = "rssTests.xctest"
                BlueprintName = "rssTests"
                ReferencedContainer = "container:Feedit.xcodeproj">

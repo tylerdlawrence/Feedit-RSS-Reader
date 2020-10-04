@@ -8,7 +8,6 @@
 import SwiftUI
 import UIKit
 import CoreData
-import FeedKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

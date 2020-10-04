@@ -44,8 +44,10 @@ struct RSSFeedListView: View {
                     Button(action: self.rssFeedViewModel.loadMore) {
                         Text(self.footer)
                     }
+                    
                 }
             }
+            .padding(.top)
             .navigationBarTitle(rssSource.title)
         }.onAppear {
             self.rssFeedViewModel.fecthResults()
@@ -70,5 +72,16 @@ struct RSSFeedListView: View {
     
     func contextmenuAction(_ item: RSSItem) {
         rssFeedViewModel.archiveOrCancel(item)
+    }
+}
+extension RSSFeedListView {
+}
+
+struct RSSFeedListView_Previews: PreviewProvider {
+    static var previews: some View {
+        HomeView()
+            .preferredColorScheme(.dark)
+            .previewDevice("iPhone 11")
+            
     }
 }
