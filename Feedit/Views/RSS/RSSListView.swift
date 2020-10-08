@@ -8,6 +8,7 @@
 import SwiftUI
 import WidgetKit
 import Intents
+import FeedKit
 
 struct RSSListView: View {
     
@@ -29,7 +30,7 @@ struct RSSListView: View {
             self.selectedFeatureItem = .add
         }) {
             Image(systemName: "plus")
-                .padding(.trailing, 10)
+                .padding(.trailing, 0)
                 .imageScale(.large)
         }
     }
@@ -50,9 +51,10 @@ struct RSSListView: View {
             addSourceButton
         }
     }
-//    private let addRSSPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("addNewRSSPublisher"))
-//    private let rssRefreshPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("rssListNeedRefresh"))
-    
+    //
+    private let addRSSPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("addNewRSSPublisher"))
+    private let rssRefreshPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("rssListNeedRefresh"))
+    //
     var body: some View {
         NavigationView {
             List {
@@ -69,13 +71,17 @@ struct RSSListView: View {
                     }
                 }
             }
+
             .navigationBarTitle("Feeds", displayMode: .automatic)
             .navigationBarItems(trailing: ListView)
             .onAppear {
                 self.viewModel.fecthResults()
             }
-            .listStyle(GroupedListStyle())
+            
+            .listStyle(InsetListStyle())
             .environment(\.horizontalSizeClass, .regular)
+            .font(/*@START_MENU_TOKEN@*/.body/*@END_MENU_TOKEN@*/)
+            
         }
         .sheet(isPresented: $isSheetPresented, content: {
             AddRSSView(

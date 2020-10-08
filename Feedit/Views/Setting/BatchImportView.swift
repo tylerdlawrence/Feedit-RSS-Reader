@@ -54,7 +54,7 @@ struct BatchImportView: View {
                 .border(Color.gray, width: 1.0)
                 .padding(.leading, 20)
                 .padding(.trailing, 20)
-            Spacer()
+            //Spacer()
             RoundRectangeButton(status: $buttonStatus) { status in
                 switch status {
                 case .error:
@@ -66,10 +66,13 @@ struct BatchImportView: View {
                     self.viewModel.batchInsert(JSONText: self.JSONText)
                     self.buttonStatus = .normal("Import Successful")
                     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.0) {
-                        self.buttonStatus = .normal("Select File ...")
+                        self.buttonStatus = .normal("Select File")
                     }
                 }
             }
+            .padding(.bottom, 200.0)
+            
+            
         }
         .sheet(isPresented: $isSheetPresented, content: {
             DocumentPicker(viewModel: self.pickerViewModel)

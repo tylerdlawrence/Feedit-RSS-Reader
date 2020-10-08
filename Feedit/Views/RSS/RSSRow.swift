@@ -73,7 +73,7 @@ struct RSSRow: View {
                             
                             //"dock.rectangle"
 
-                            .foregroundColor(Color.white)
+                            .foregroundColor(Color.gray)
                             .frame(width: 20, height: 20, alignment: .center)
                                 //.cornerRadius(2)
                                     .animation(.easeInOut)
@@ -107,18 +107,17 @@ struct RSSRow: View {
         
         
         
-        //.padding(.top, 10)
-        //.padding(.bottom, 10)
+        .padding(.top, 10)
+        .padding(.bottom, 10)
+        //.frame(maxWidth: .infinity, alignment: .leading)
+        //.background(Color(red: 32/255, green: 32/255, blue: 32/255))
     }
 }
 
 struct RSSRow_Previews: PreviewProvider {
-    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-
     static var previews: some View {
-        RSSListView(viewModel: self.viewModel)
+        HomeView()
             .preferredColorScheme(.dark)
-            .padding(.vertical)
-            
+            .previewDevice("iPhone 11")
     }
 }

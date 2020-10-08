@@ -9,7 +9,7 @@ import SwiftUI
 import WidgetKit
 import Intents
 
-struct ArchiveTableView: View {
+struct ArchiveListView: View {
     
     @ObservedObject var viewModel: ArchiveListViewModel
     
@@ -27,7 +27,9 @@ struct ArchiveTableView: View {
                     RSSItemRow(wrapper: item)
                         .onTapGesture {
                             self.selectedItem = item
+
                     }
+                    
                 }
                 .onDelete { indexSet in
                     if let index = indexSet.first {
@@ -55,23 +57,23 @@ struct ArchiveTableView: View {
             .onAppear {
                 self.viewModel.fecthResults()
             }
-            .listStyle(GroupedListStyle())
+            .listStyle(InsetListStyle()
+                        )
             .navigationBarTitle("Bookmarks", displayMode: .automatic)
             .environment(\.horizontalSizeClass, .regular)
         }
-        
     }
 }
 
-
-extension ArchiveTableView {
+extension ArchiveListView {
+    
 }
 
 struct ArchiveListView_Previews: PreviewProvider {
     static var previews: some View {
-        ArchiveTableView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
-            .previewDevice("iPhone 11 Pro Max")
+        HomeView()
             .preferredColorScheme(.dark)
+            .previewDevice("iPhone 11")
             
     }
 }

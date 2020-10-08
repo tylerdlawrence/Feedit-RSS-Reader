@@ -28,6 +28,7 @@ class ArchiveListViewModel: NSObject, ObservableObject {
     func fecthResults(start: Int = 0) {
         if start == 0 {
             items.removeAll()
+
         }
         dataSource.performFetch(RSSItem.requestArchiveObjects(start: start))
         if let objects = dataSource.fetchedResult.fetchedObjects {
@@ -49,7 +50,9 @@ class ArchiveListViewModel: NSObject, ObservableObject {
             items.removeAll { item == $0 }
         case .unchanged:
             print("----> \(#function) unchanged")
+            
         }
+        
     }
     
     func archiveOrCancel(_ item: RSSItem) {

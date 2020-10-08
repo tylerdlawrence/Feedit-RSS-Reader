@@ -52,6 +52,7 @@ struct SettingListView: View {
                                 .fixedSize()
                             Toggle("Use Safari", isOn: self.$isSelected)
                         }
+                        padding()
                         HStack {
                             NavigationLink(destination: self.batchImportView) {
                                 HStack {
@@ -76,21 +77,21 @@ struct SettingListView: View {
                         }
                     }
                 }
-                SectionView {
-                    Group {
-                        HStack {
-                            Image(systemName: "envelope")
-                                .fixedSize()
-                            Text("Contact")
-                        }
-                        .onTapGesture {
-                            print("tyler.lawrence@hey.com")
-                        }
-                    }
-                }
+//                SectionView {
+//                    Group {
+//                        HStack {
+//                            Image(systemName: "envelope")
+//                                .fixedSize()
+//                            Text("Contact")
+//                        }
+//                        .onTapGesture {
+//                            print("tyler.lawrence@hey.com")
+//                        }
+//                    }
+//                }
             }
-            .listStyle(GroupedListStyle())
-            .navigationBarTitle("Settings", displayMode: .inline)
+            .listStyle(InsetListStyle())
+            .navigationBarTitle("Settings", displayMode: .automatic)
             .environment(\.horizontalSizeClass, .regular)
         }
         .onAppear {
@@ -109,6 +110,3 @@ struct SettingView_Preview: PreviewProvider {
         .preferredColorScheme(.dark)
     }
 }
-
-
-
