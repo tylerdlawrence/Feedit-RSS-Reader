@@ -13,6 +13,8 @@
 		6117365924E83C9F00A2DEA5 /* BatchImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6117365824E83C9F00A2DEA5 /* BatchImportView.swift */; };
 		6117365B24E83CC500A2DEA5 /* BatchImportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6117365A24E83CC500A2DEA5 /* BatchImportViewModel.swift */; };
 		6142E7F72505467000482251 /* Subscriptions-test2.opml in Resources */ = {isa = PBXBuildFile; fileRef = 6142E7F62505467000482251 /* Subscriptions-test2.opml */; };
+		615E961925300E5C00891083 /* AppearenceSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615E961825300E5C00891083 /* AppearenceSection.swift */; };
+		615E961D2530116600891083 /* AppearenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615E961C2530116600891083 /* AppearenceView.swift */; };
 		616CAF6024F7131000690804 /* OPMLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616CAF5F24F7131000690804 /* OPMLParser.swift */; };
 		616CAF6324F7154600690804 /* DateSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616CAF6224F7154600690804 /* DateSpec.swift */; };
 		616CAF6524F7158200690804 /* RFC3339DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616CAF6424F7158200690804 /* RFC3339DateFormatter.swift */; };
@@ -200,6 +202,8 @@
 		6117365824E83C9F00A2DEA5 /* BatchImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchImportView.swift; sourceTree = "<group>"; };
 		6117365A24E83CC500A2DEA5 /* BatchImportViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchImportViewModel.swift; sourceTree = "<group>"; };
 		6142E7F62505467000482251 /* Subscriptions-test2.opml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = "Subscriptions-test2.opml"; path = "Support Files/Subscriptions-test2.opml"; sourceTree = SOURCE_ROOT; };
+		615E961825300E5C00891083 /* AppearenceSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearenceSection.swift; sourceTree = "<group>"; };
+		615E961C2530116600891083 /* AppearenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearenceView.swift; sourceTree = "<group>"; };
 		616CAF5F24F7131000690804 /* OPMLParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OPMLParser.swift; sourceTree = "<group>"; };
 		616CAF6224F7154600690804 /* DateSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateSpec.swift; sourceTree = "<group>"; };
 		616CAF6424F7158200690804 /* RFC3339DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RFC3339DateFormatter.swift; sourceTree = "<group>"; };
@@ -434,8 +438,8 @@
 			children = (
 				61967EFC24E2068400AA647C /* AddRSSView.swift */,
 				61967EFD24E2068400AA647C /* AddRSSViewModel.swift */,
-				61967EFF24E2068400AA647C /* RSSDisplayView.swift */,
 				61967EFE24E2068400AA647C /* RSSRow.swift */,
+				61967EFF24E2068400AA647C /* RSSDisplayView.swift */,
 				61C818D824E1F74D00593939 /* RSSListView.swift */,
 				61C818DA24E1F77C00593939 /* RSSListViewModel.swift */,
 			);
@@ -519,6 +523,8 @@
 				6117365624E83C7B00A2DEA5 /* DataNStorageViewModel.swift */,
 				6117365824E83C9F00A2DEA5 /* BatchImportView.swift */,
 				6117365A24E83CC500A2DEA5 /* BatchImportViewModel.swift */,
+				615E961825300E5C00891083 /* AppearenceSection.swift */,
+				615E961C2530116600891083 /* AppearenceView.swift */,
 			);
 			path = Setting;
 			sourceTree = "<group>";
@@ -761,6 +767,7 @@
 				61967EF224E2061100AA647C /* RSSFeedViewModel.swift in Sources */,
 				61C8189624E1F3FB00593939 /* AppDelegate.swift in Sources */,
 				61967EE324E205AD00AA647C /* RSSStore.swift in Sources */,
+				615E961925300E5C00891083 /* AppearenceSection.swift in Sources */,
 				61967EFB24E2063D00AA647C /* SettingListView.swift in Sources */,
 				61C818DF24E1F7F300593939 /* ArchiveListView.swift in Sources */,
 				61C818DB24E1F77C00593939 /* RSSListViewModel.swift in Sources */,
@@ -768,6 +775,7 @@
 				61967ED424E2053D00AA647C /* RSSError.swift in Sources */,
 				616CAF6524F7158200690804 /* RFC3339DateFormatter.swift in Sources */,
 				61967EE924E205DD00AA647C /* ActionContextMenu.swift in Sources */,
+				615E961D2530116600891083 /* AppearenceView.swift in Sources */,
 				61C818E724E1F9BA00593939 /* PersistenceManager.swift in Sources */,
 				616CAF6024F7131000690804 /* OPMLParser.swift in Sources */,
 				61967ECB24E204FB00AA647C /* AppEnvironment.swift in Sources */,
@@ -1003,7 +1011,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
 				DEVELOPMENT_ASSET_PATHS = "\"Feedit/Preview Content\"";
 				DEVELOPMENT_TEAM = 7Z3Z6D3TH7;
 				ENABLE_PREVIEWS = YES;
@@ -1028,7 +1036,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
 				DEVELOPMENT_ASSET_PATHS = "\"Feedit/Preview Content\"";
 				DEVELOPMENT_TEAM = 7Z3Z6D3TH7;
 				ENABLE_PREVIEWS = YES;

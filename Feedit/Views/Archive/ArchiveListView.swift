@@ -3,7 +3,8 @@
 //  Feedit
 //
 //  Created by Tyler D Lawrence on 8/10/20.
-//
+//  BOOKMARKS Screen
+//  TODO: correct issue w/ action button only viewing 'Bookmark' - not showing 'Removing Bookmark'
 
 import SwiftUI
 import WidgetKit
@@ -61,6 +62,7 @@ struct ArchiveListView: View {
                         )
             .navigationBarTitle("Bookmarks", displayMode: .automatic)
             .environment(\.horizontalSizeClass, .regular)
+            .navigationBarItems(trailing: EditButton())
         }
     }
 }
