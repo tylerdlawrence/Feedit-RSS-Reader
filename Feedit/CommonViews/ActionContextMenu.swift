@@ -30,7 +30,7 @@ struct ActionContextMenu: View {
                     Text(self.label)
                     Image(systemName: "bookmark.fill")
                         .imageScale(.small)
-                        .foregroundColor(.primary)
+                        .foregroundColor(.blue)
                 }
             }
         }

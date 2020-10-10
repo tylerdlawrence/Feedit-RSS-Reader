@@ -3,7 +3,7 @@
 //  Feedit
 //
 //  Created by Tyler D Lawrence on 8/10/20.
-//  "READ LATER" PAGE
+//  View once you choose Feed on Main Screen
 
 import SwiftUI
 import FeedKit
@@ -11,16 +11,32 @@ import FeedKit
 struct RSSItemRow: View {
     
     @ObservedObject var itemWrapper: RSSItem
+    //@ObservedObject var imageLoader: ImageLoader
+    //@ObservedObject var rss: RSS
     
     var contextMenuAction: ((RSSItem) -> Void)?
+    
+    //init(rss: RSS) {
+        //self.rss = rss
+        //self.imageLoader = ImageLoader(path: rssItem.image)
     
     init(wrapper: RSSItem, menu action: ((RSSItem) -> Void)? = nil) {
         itemWrapper = wrapper
         contextMenuAction = action
     }
     
+    private func iconImageView(_ image: UIImage) -> some View {
+        Image(uiImage: image)
+        .resizable()
+            .cornerRadius(0)
+            .animation(.easeInOut)
+            .border(Color.white, width: 1)
+        
+    }
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
+            
             Text(itemWrapper.title)
                 .font(.headline)
                 .lineLimit(2)
@@ -29,7 +45,7 @@ struct RSSItemRow: View {
                 .font(.subheadline)
                 .lineLimit(2)
                 .foregroundColor(.gray)
-            Spacer()
+            //Spacer()
             HStack(spacing: 10) {
                 if itemWrapper.progress >= 1.0 {
                     Text("DONE")
@@ -53,7 +69,8 @@ struct RSSItemRow: View {
                     .foregroundColor(.gray)
                 Spacer(minLength: 10)
                 if itemWrapper.isArchive {
-                    Image(systemName: "bookmark.fill")
+                    Image(systemName: "bookmark")
+                    //tray.and.arrow.down.fill
                 }
             }
         }
@@ -61,14 +78,13 @@ struct RSSItemRow: View {
         .padding(.bottom, 8)
         .contextMenu {
             ActionContextMenu(
-                label: itemWrapper.isArchive ? "Done" : "Read Later",
-                systemName: "bookmark\(itemWrapper.isArchive ? "up" : "down")",
+                label: itemWrapper.isArchive ? "Remove Bookmark" : "Bookmark",
+                systemName: "tray.and.arrow.\(itemWrapper.isArchive ? "up" : "down")",
                 onAction: {
                     self.contextMenuAction?(self.itemWrapper)
             })
         }
     }
-
             }
         }
     }

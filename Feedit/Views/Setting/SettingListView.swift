@@ -30,6 +30,23 @@ struct SettingListView: View {
             }
         }
     }
+    
+    //enum Appearance {
+        //case light
+        //case dark
+    //}
+    
+    //enum AppearanceItem: CaseIterable {
+        //case lightMode
+        //case darkMode
+        
+        //var label: String {
+            //switch self {
+            //case .lightMode: return "Light"
+            //case .darkMode: return "Dark"
+            //}
+        //}
+    //}
     @State private var isSelected: Bool = false
     
     var batchImportView: BatchImportView {
@@ -41,6 +58,7 @@ struct SettingListView: View {
         let storage = DataNStorageView()
         return storage
     }
+    
     //^^^
     var body: some View {
         NavigationView {
@@ -48,17 +66,11 @@ struct SettingListView: View {
                 SectionView {
                     Group {
                         HStack {
-                            Image(systemName: "safari")
-                                .fixedSize()
-                            Toggle("Use Safari", isOn: self.$isSelected)
-                        }
-                        padding()
-                        HStack {
                             NavigationLink(destination: self.batchImportView) {
                                 HStack {
                                     Image(systemName: "folder")
                                         .fixedSize()
-                                    Text("Import File")
+                                    Text("Import")
                                 }
                             }
                         }
@@ -77,6 +89,28 @@ struct SettingListView: View {
                         }
                     }
                 }
+                padding()
+                SectionView {
+                    Group {
+                        padding()
+                        HStack {
+                            Image(systemName: "safari")
+                                .fixedSize()
+                            Toggle("Reader View", isOn: self.$isSelected)
+                        }
+                        padding()
+                        HStack {
+                            HStack {
+                                Image(systemName: "circle.lefthalf.fill")
+                                        .fixedSize()
+                                Toggle("Appearance", isOn: self.$isSelected)
+                                
+                                }
+                            }
+                        }
+                    }
+                
+                
 //                SectionView {
 //                    Group {
 //                        HStack {
@@ -93,20 +127,27 @@ struct SettingListView: View {
             .listStyle(InsetListStyle())
             .navigationBarTitle("Settings", displayMode: .automatic)
             .environment(\.horizontalSizeClass, .regular)
+    
+    .onAppear {
+        self.isSelected = AppEnvironment.current.useSafari
+    }
+    .onDisappear {
+        AppEnvironment.current.useSafari = self.isSelected
+    }
+            
         }
-        .onAppear {
-            self.isSelected = AppEnvironment.current.useSafari
-        }
-        .onDisappear {
-            AppEnvironment.current.useSafari = self.isSelected
-        }
+
     }
 }
+
 
 struct SettingView_Preview: PreviewProvider {
     static var previews: some View {
         SettingListView()
+            .preferredColorScheme(.dark)
         .previewDevice("iPhone 11 Pro Max")
-        .preferredColorScheme(.dark)
+        //.preferredColorScheme(.dark)
     }
+    
 }
+
