@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "ExpandableCollectionViewKit",
+        "repositoryURL": "https://github.com/jVirus/expandable-collection-view-kit",
+        "state": {
+          "branch": null,
+          "revision": "252c0d37a30606a749a608efdf17d0c2988762ab",
+          "version": "1.1.0"
+        }
+      },
+      {
         "package": "FeedKit",
         "repositoryURL": "git@github.com:nmdias/FeedKit.git",
         "state": {
