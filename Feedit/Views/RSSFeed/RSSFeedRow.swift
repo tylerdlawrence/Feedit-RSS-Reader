@@ -7,6 +7,7 @@
 
 import SwiftUI
 import FeedKit
+import RSTree
 
 struct RSSItemRow: View {
     
@@ -92,7 +93,7 @@ struct RSSItemRow: View {
 
 struct RSSFeedRow_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView()
+        ContentView()
             .preferredColorScheme(.dark)
             .previewDevice("iPhone 11")
     }

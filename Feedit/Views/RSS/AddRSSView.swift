@@ -62,12 +62,12 @@ struct AddRSSView: View {
         self.onDoneAction = onDoneAction
         self.onCancelAction = onCancelAction
     }
-    
+    //or @twitter handle
     var body: some View {
         NavigationView {
             Form {
                 Section(header: sectionHeader) {
-                    TextFieldView(label: "Feed URL, Site URL or @twitter handle", placeholder: "", text: $feedUrl)
+                    TextFieldView(label: "Feed or Site URL", placeholder: "", text: $feedUrl)
                         .opacity(/*@START_MENU_TOKEN@*/0.3/*@END_MENU_TOKEN@*/)
                 }
                 Section(header: Text("Result")) {
@@ -75,7 +75,7 @@ struct AddRSSView: View {
                         Text("press FIND to display result")
                             .opacity(/*@START_MENU_TOKEN@*/0.3/*@END_MENU_TOKEN@*/)
                     } else {
-                        if $viewModel.rss != nil {
+                        if viewModel.rss != nil {
                             RSSDisplayView(rss: viewModel.rss!)
                         }
                     }
@@ -108,7 +108,7 @@ struct AddRSSView: View {
 
 struct AddRSSView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView()
+        ContentView()
             .preferredColorScheme(.dark)
             .previewDevice("iPhone 11")
     }

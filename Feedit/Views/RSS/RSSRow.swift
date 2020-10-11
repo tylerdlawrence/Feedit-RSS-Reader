@@ -31,11 +31,14 @@ struct RSSRow: View {
     private var pureTextView: some View {
         VStack(spacing: 0.0) {
             Text(rss.title)
+                .font(.body)
+                .multilineTextAlignment(.leading)
                 .lineLimit(1)
                 .contextMenu {
+                    EditButton()
+                    //Spacer()
                     Text("Article List")
                     Text("Details")
-                    Text("Edit")
                     Text("Unsubscribe")
                 }
 // below are options to have parsed feed description and last updated time
@@ -116,7 +119,7 @@ struct RSSRow: View {
 
 struct RSSRow_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView()
+        ContentView()
             .preferredColorScheme(.dark)
             .previewDevice("iPhone 11")
     }

@@ -79,7 +79,7 @@ extension RSSFeedListView {
 
 struct RSSFeedListView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView()
+        ContentView()
             .preferredColorScheme(.dark)
             .previewDevice("iPhone 11")
             

@@ -9,8 +9,20 @@ import SwiftUI
 import WidgetKit
 import Intents
 import FeedKit
+import RSTree
 
 struct RSSListView: View {
+    
+   @Environment(\.managedObjectContext) var managedObjectContext
+    
+    enum SettingItem {
+        case setting
+    }
+    
+    enum MoveItem {
+        case move
+        case item
+    }
     
     enum FeatureItem {
         case remove
@@ -23,8 +35,13 @@ struct RSSListView: View {
     
     @ObservedObject var viewModel: RSSListViewModel
     
+    @State private var selectedSettingItem = SettingItem.setting
     @State private var selectedFeaureItem = FeaureItem.add
     @State private var selectedFeatureItem = FeatureItem.remove
+    @State private var selectedMoveItem = MoveItem.move
+    @State private var isSettingItemPresented = false
+
+    //@State private var isSettingPresented = false
     @State private var isAddFormPresented = false
     @State private var isSheetPresented = false
     @State private var addRSSProgressValue = 0.0
@@ -38,32 +55,53 @@ struct RSSListView: View {
             Image(systemName: "plus")
                 .padding(.trailing, 0)
                 .imageScale(.large)
+                .frame(width: 44, height: 44)
+                .contextMenu(menuItems: {
+                    Image(systemName: "plus")
+                    Image(systemName: "folder.badge.plus")
+                    //Text("New Feed");
+                    //Text("New Folder")
+        
+                })
         }
     }
     
+    private var settingButton: some View {
+        Button(action: {
+            self.isSettingItemPresented = true
+            self.selectedSettingItem = .setting
+        }) {
+            Image(systemName: "bookmark")
+                .imageScale(.medium)
+        }
+    }
+    
+    //ListView, trailingView
     private var ListView: some View {
         HStack(alignment: .top, spacing: 24) {
             addSourceButton
+            //settingButton
+            //EditButton()
         }
     }
+    
+
 
     private let addRSSPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("addNewRSSPublisher"))
     private let rssRefreshPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("rssListNeedRefresh"))
-    
-// TODO: add move function
-//.onMove { (indexSet, index) in
-//self.viewModel.move(fromOffsets: indexSet, toOffset: index)
                 
     var body: some View {
         NavigationView {
             List {
                 ForEach(viewModel.items, id: \.self) { rss in
                     NavigationLink(destination: self.destinationView(rss)) {
+                        //Text("\(rssItem.name) - \(rssItem.order)")
                         RSSRow(rss: rss)
                         
                     }
                     .tag("RSS")
                 }
+                .onMove(perform: moveItem)
                 .onDelete { indexSet in
                     if let index = indexSet.first {
                         self.viewModel.delete(at: index)
@@ -73,6 +111,15 @@ struct RSSListView: View {
             
             .navigationBarTitle("Feeds", displayMode: .automatic)
             .navigationBarItems(leading: EditButton(), trailing: ListView)
+            //.navigationBarItems(leading:
+                            //HStack {
+                                //EditButton()
+                                    //.padding(.leading, 250.0)
+                            //}, trailing:
+                            //HStack {
+                                //settingButton
+                                //addSourceButton
+                    
             .onAppear {
                 self.viewModel.fecthResults()
             }
@@ -81,6 +128,7 @@ struct RSSListView: View {
             .environment(\.horizontalSizeClass, .regular)
             .font(.body)
         }
+    
             .sheet(isPresented: $isSheetPresented, content: {
             AddRSSView( viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss),
                 onDoneAction: self.onDoneAction)
@@ -105,7 +153,41 @@ extension RSSListView {
     func deleteItems(at offsets: IndexSet) {
         viewModel.items.remove(atOffsets: offsets)
     }
+    
+    func moveItem(indexSet: IndexSet, destination: Int) {
+        let source = indexSet.first!
+        
+        if source < destination {
+            var startIndex = source + 1
+            let endIndex = destination - 1
+            //var startOrder = item[source].order
+            while startIndex <= endIndex {
+                //""[startIndex].order = startOrder
+                //startOrder = startOrder + 1
+                startIndex = startIndex + 1
+            }
+            
+            //moveItem[source].order = startIndex
+            
+        } else if destination < source {
+            var startIndex = destination
+            let endIndex = source - 1
+            //var startOrder = ""[destination].order + 1
+            //let newOrder = ""[destination].order
+            while startIndex <= endIndex {
+               // ""[startIndex].order = startOrder
+                //startOrder = startOrder + 1
+                startIndex = startIndex + 1
+            }
+            //""[source].order = newOrder
+        }
+    
+    func saveItems(){
+    }
+    }
 }
+
+
 
 struct RSSListView_Previews: PreviewProvider {
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)

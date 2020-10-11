@@ -9,6 +9,15 @@
           "revision": "68493a33d862c33c9a9f67ec729b3b7df1b20ade",
           "version": "9.1.2"
         }
+      },
+      {
+        "package": "RSTree",
+        "repositoryURL": "https://github.com/Ranchero-Software/RSTree.git",
+        "state": {
+          "branch": null,
+          "revision": "979ed0eb610b6d95dc7adcf4620bd44205f512a6",
+          "version": "1.0.0-beta1"
+        }
       }
     ]
   },

@@ -21,7 +21,7 @@ struct RSSDisplayView: View {
 }
 struct RSSDisplayView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView()
+        ContentView()
             .preferredColorScheme(.dark)
             .previewDevice("iPhone 11")
     }

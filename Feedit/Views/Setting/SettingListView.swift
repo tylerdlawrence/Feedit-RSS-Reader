@@ -30,23 +30,24 @@ struct SettingListView: View {
             }
         }
     }
+////////////////////////
+    enum Appearance {
+        case light
+        case dark
+    }
     
-    //enum Appearance {
-        //case light
-        //case dark
-    //}
-    
-    //enum AppearanceItem: CaseIterable {
-        //case lightMode
-        //case darkMode
+    enum AppearanceItem: CaseIterable {
+        case lightMode
+        case darkMode
         
-        //var label: String {
-            //switch self {
-            //case .lightMode: return "Light"
-            //case .darkMode: return "Dark"
-            //}
-        //}
-    //}
+        var label: String {
+            switch self {
+            case .lightMode: return "Light"
+            case .darkMode: return "Dark"
+            }
+        }
+    }
+////////////////////////
     @State private var isSelected: Bool = false
     
     var batchImportView: BatchImportView {
@@ -92,7 +93,7 @@ struct SettingListView: View {
                 padding()
                 SectionView {
                     Group {
-                        padding()
+                        //padding()
                         HStack {
                             Image(systemName: "safari")
                                 .fixedSize()
@@ -136,7 +137,6 @@ struct SettingListView: View {
     }
             
         }
-
     }
 }
 

@@ -73,7 +73,7 @@ extension ArchiveListView {
 
 struct ArchiveListView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView()
+        ContentView()
             .preferredColorScheme(.dark)
             .previewDevice("iPhone 11")
             
