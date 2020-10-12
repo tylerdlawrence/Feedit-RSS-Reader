@@ -15,10 +15,13 @@
 		6142E7F72505467000482251 /* Subscriptions-test2.opml in Resources */ = {isa = PBXBuildFile; fileRef = 6142E7F62505467000482251 /* Subscriptions-test2.opml */; };
 		615E961925300E5C00891083 /* AppearenceSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615E961825300E5C00891083 /* AppearenceSection.swift */; };
 		615E961D2530116600891083 /* AppearenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615E961C2530116600891083 /* AppearenceView.swift */; };
-		615E968D2531FE6300891083 /* RSTree in Frameworks */ = {isa = PBXBuildFile; productRef = 615E968C2531FE6300891083 /* RSTree */; settings = {ATTRIBUTES = (Weak, ); }; };
+		615E968D2531FE6300891083 /* RSTree in Frameworks */ = {isa = PBXBuildFile; productRef = 615E968C2531FE6300891083 /* RSTree */; settings = {ATTRIBUTES = (Required, ); }; };
 		615E968E2531FE6300891083 /* RSTree in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 615E968C2531FE6300891083 /* RSTree */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		615E971F25323C1900891083 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615E971E25323C1900891083 /* Reachability.swift */; };
 		615E98402533AFAE00891083 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615E983F2533AFAE00891083 /* ContentView.swift */; };
+		615E989C253403D600891083 /* OAuthSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 615E989B253403D600891083 /* OAuthSwift */; };
+		615E98A52534060800891083 /* SwipeCell in Frameworks */ = {isa = PBXBuildFile; productRef = 615E98A42534060800891083 /* SwipeCell */; };
+		615E98AC2534092600891083 /* IndentedTree in Frameworks */ = {isa = PBXBuildFile; productRef = 615E98AB2534092600891083 /* IndentedTree */; };
 		616CAF6024F7131000690804 /* OPMLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616CAF5F24F7131000690804 /* OPMLParser.swift */; };
 		616CAF6324F7154600690804 /* DateSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616CAF6224F7154600690804 /* DateSpec.swift */; };
 		616CAF6524F7158200690804 /* RFC3339DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616CAF6424F7158200690804 /* RFC3339DateFormatter.swift */; };
@@ -304,9 +307,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				61CDCF6A24E85230007654C5 /* FeedKit in Frameworks */,
+				615E98AC2534092600891083 /* IndentedTree in Frameworks */,
 				61DEBE3F25152CB90025B1B3 /* SwiftUI.framework in Frameworks */,
+				615E989C253403D600891083 /* OAuthSwift in Frameworks */,
 				61DEBE3D25152CB20025B1B3 /* WidgetKit.framework in Frameworks */,
 				615E968D2531FE6300891083 /* RSTree in Frameworks */,
+				615E98A52534060800891083 /* SwipeCell in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -593,11 +599,18 @@
 			buildRules = (
 			);
 			dependencies = (
+				615E98A12534048300891083 /* PBXTargetDependency */,
+				615E98A82534061700891083 /* PBXTargetDependency */,
+				615E98AF2534094300891083 /* PBXTargetDependency */,
+				615E989F2534046A00891083 /* PBXTargetDependency */,
 			);
 			name = Feedit;
 			packageProductDependencies = (
 				61CDCF6924E85230007654C5 /* FeedKit */,
 				615E968C2531FE6300891083 /* RSTree */,
+				615E989B253403D600891083 /* OAuthSwift */,
+				615E98A42534060800891083 /* SwipeCell */,
+				615E98AB2534092600891083 /* IndentedTree */,
 			);
 			productName = Feedit;
 			productReference = 61C8189224E1F3FB00593939 /* Feedit.app */;
@@ -634,6 +647,9 @@
 			packageReferences = (
 				61CDCF6824E85230007654C5 /* XCRemoteSwiftPackageReference "FeedKit" */,
 				615E968B2531FE6300891083 /* XCRemoteSwiftPackageReference "RSTree" */,
+				615E989A253403D600891083 /* XCRemoteSwiftPackageReference "OAuthSwift" */,
+				615E98A32534060800891083 /* XCRemoteSwiftPackageReference "SwipeCell" */,
+				615E98AA2534092600891083 /* XCRemoteSwiftPackageReference "IndentedTree" */,
 			);
 			productRefGroup = 61C8189324E1F3FB00593939 /* Products */;
 			projectDirPath = "";
@@ -850,6 +866,22 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		615E989F2534046A00891083 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 615E989E2534046A00891083 /* OAuthSwift */;
+		};
+		615E98A12534048300891083 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 615E98A02534048300891083 /* FeedKit */;
+		};
+		615E98A82534061700891083 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 615E98A72534061700891083 /* SwipeCell */;
+		};
+		615E98AF2534094300891083 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 615E98AE2534094300891083 /* IndentedTree */;
+		};
 		6182213025053FEE005636B2 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 61C8189124E1F3FB00593939 /* Feedit */;
@@ -1039,6 +1071,10 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Feedit/Preview Content\"";
 				DEVELOPMENT_TEAM = 7Z3Z6D3TH7;
 				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = Feedit/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1066,6 +1102,10 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Feedit/Preview Content\"";
 				DEVELOPMENT_TEAM = 7Z3Z6D3TH7;
 				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = Feedit/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1122,6 +1162,30 @@
 				minimumVersion = "1.0.0-beta1";
 			};
 		};
+		615E989A253403D600891083 /* XCRemoteSwiftPackageReference "OAuthSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Ranchero-Software/OAuthSwift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.1.0;
+			};
+		};
+		615E98A32534060800891083 /* XCRemoteSwiftPackageReference "SwipeCell" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/EnesKaraosman/SwipeCell.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.1;
+			};
+		};
+		615E98AA2534092600891083 /* XCRemoteSwiftPackageReference "IndentedTree" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ralfebert/IndentedTree.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		61CDCF6824E85230007654C5 /* XCRemoteSwiftPackageReference "FeedKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "git@github.com:nmdias/FeedKit.git";
@@ -1137,6 +1201,41 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 615E968B2531FE6300891083 /* XCRemoteSwiftPackageReference "RSTree" */;
 			productName = RSTree;
+		};
+		615E989B253403D600891083 /* OAuthSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 615E989A253403D600891083 /* XCRemoteSwiftPackageReference "OAuthSwift" */;
+			productName = OAuthSwift;
+		};
+		615E989E2534046A00891083 /* OAuthSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 615E989A253403D600891083 /* XCRemoteSwiftPackageReference "OAuthSwift" */;
+			productName = OAuthSwift;
+		};
+		615E98A02534048300891083 /* FeedKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 61CDCF6824E85230007654C5 /* XCRemoteSwiftPackageReference "FeedKit" */;
+			productName = FeedKit;
+		};
+		615E98A42534060800891083 /* SwipeCell */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 615E98A32534060800891083 /* XCRemoteSwiftPackageReference "SwipeCell" */;
+			productName = SwipeCell;
+		};
+		615E98A72534061700891083 /* SwipeCell */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 615E98A32534060800891083 /* XCRemoteSwiftPackageReference "SwipeCell" */;
+			productName = SwipeCell;
+		};
+		615E98AB2534092600891083 /* IndentedTree */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 615E98AA2534092600891083 /* XCRemoteSwiftPackageReference "IndentedTree" */;
+			productName = IndentedTree;
+		};
+		615E98AE2534094300891083 /* IndentedTree */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 615E98AA2534092600891083 /* XCRemoteSwiftPackageReference "IndentedTree" */;
+			productName = IndentedTree;
 		};
 		61CDCF6924E85230007654C5 /* FeedKit */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -2,6 +2,24 @@
   "object": {
     "pins": [
       {
+        "package": "BrightFutures",
+        "repositoryURL": "https://github.com/Thomvis/BrightFutures.git",
+        "state": {
+          "branch": null,
+          "revision": "9279defa6bdc21501ce740266e5a14d0119ddc63",
+          "version": "8.0.1"
+        }
+      },
+      {
+        "package": "Erik",
+        "repositoryURL": "https://github.com/phimage/Erik.git",
+        "state": {
+          "branch": null,
+          "revision": "109a130e9cdb00789a43a7a625293eeb12d22989",
+          "version": "5.1.0"
+        }
+      },
+      {
         "package": "FeedKit",
         "repositoryURL": "git@github.com:nmdias/FeedKit.git",
         "state": {
@@ -11,12 +29,66 @@
         }
       },
       {
+        "package": "FileKit",
+        "repositoryURL": "https://github.com/nvzqz/FileKit.git",
+        "state": {
+          "branch": null,
+          "revision": "826d9161b184509f80d85c28cd612d630646de98",
+          "version": "6.0.0"
+        }
+      },
+      {
+        "package": "IndentedTree",
+        "repositoryURL": "https://github.com/ralfebert/IndentedTree.git",
+        "state": {
+          "branch": "master",
+          "revision": "3b525902a2a186fc1d562f94af3d42cd2d1b1f7c",
+          "version": null
+        }
+      },
+      {
+        "package": "Kanna",
+        "repositoryURL": "https://github.com/tid-kijyun/Kanna.git",
+        "state": {
+          "branch": null,
+          "revision": "4a80ebe93b6966d5083394fcaaaff57a2fcec935",
+          "version": "5.2.3"
+        }
+      },
+      {
+        "package": "OAuthSwift",
+        "repositoryURL": "https://github.com/Ranchero-Software/OAuthSwift.git",
+        "state": {
+          "branch": null,
+          "revision": "2e75d626532c2c6373e603312c0f1207e7e778ea",
+          "version": "2.1.0"
+        }
+      },
+      {
         "package": "RSTree",
         "repositoryURL": "https://github.com/Ranchero-Software/RSTree.git",
         "state": {
           "branch": null,
           "revision": "979ed0eb610b6d95dc7adcf4620bd44205f512a6",
           "version": "1.0.0-beta1"
+        }
+      },
+      {
+        "package": "Swifter",
+        "repositoryURL": "https://github.com/httpswift/swifter.git",
+        "state": {
+          "branch": null,
+          "revision": "9483a5d459b45c3ffd059f7b55f9638e268632fd",
+          "version": "1.5.0"
+        }
+      },
+      {
+        "package": "SwipeCell",
+        "repositoryURL": "https://github.com/EnesKaraosman/SwipeCell.git",
+        "state": {
+          "branch": null,
+          "revision": "3f963d3d477b65fad7655e6b9c94b9391c066e7c",
+          "version": "0.1.1"
         }
       }
     ]

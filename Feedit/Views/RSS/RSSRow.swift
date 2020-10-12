@@ -4,10 +4,11 @@
 //
 //  Created by Tyler D Lawrence on 8/10/20.
 //
-
 import SwiftUI
-import Intents
+import SwipeCell
 import UIKit
+import Intents
+import FeedKit
 
 struct RSSRow: View {
     
@@ -34,12 +35,12 @@ struct RSSRow: View {
                 .font(.body)
                 .multilineTextAlignment(.leading)
                 .lineLimit(1)
-                .contextMenu {
-                    EditButton()
+                //.contextMenu {
+                    //EditButton()
                     //Spacer()
-                    Text("Article List")
-                    Text("Details")
-                    Text("Unsubscribe")
+                    //Text("Article List")
+                    //Text("Details")
+                    //Text("Unsubscribe")
                 }
 // below are options to have parsed feed description and last updated time
         
@@ -52,8 +53,8 @@ struct RSSRow: View {
                 //.foregroundColor(.gray)
             
         }
-    }
-
+    
+    
     var body: some View {
         HStack() {
             VStack(alignment: .center) {
@@ -83,29 +84,13 @@ struct RSSRow: View {
                             .imageScale(.large)
     
                         pureTextView
-                        //circle.bottomthird.split
-                        //systemName:(globe)
-                        //info.circle
-                        //asterisk.circle
-                        //globe
-                        //waveform.circle
                     }
                 }
-                
-                
-                
-                
-                
-                
                // Text(rss.createTimeStr)
                  //   .font(.footnote)
                 //    .foregroundColor(.gray)
-                    
             }
-            
-            
-            
-            
+
         }
         
         
@@ -124,3 +109,4 @@ struct RSSRow_Previews: PreviewProvider {
             .previewDevice("iPhone 11")
     }
 }
+

@@ -10,6 +10,7 @@ import WidgetKit
 import Intents
 import FeedKit
 import RSTree
+import SwipeCell
 
 struct RSSListView: View {
     
@@ -101,7 +102,7 @@ struct RSSListView: View {
                     }
                     .tag("RSS")
                 }
-                .onMove(perform: moveItem)
+                //.onMove(perform: moveItem)
                 .onDelete { indexSet in
                     if let index = indexSet.first {
                         self.viewModel.delete(at: index)
@@ -153,38 +154,6 @@ extension RSSListView {
     func deleteItems(at offsets: IndexSet) {
         viewModel.items.remove(atOffsets: offsets)
     }
-    
-    func moveItem(indexSet: IndexSet, destination: Int) {
-        let source = indexSet.first!
-        
-        if source < destination {
-            var startIndex = source + 1
-            let endIndex = destination - 1
-            //var startOrder = item[source].order
-            while startIndex <= endIndex {
-                //""[startIndex].order = startOrder
-                //startOrder = startOrder + 1
-                startIndex = startIndex + 1
-            }
-            
-            //moveItem[source].order = startIndex
-            
-        } else if destination < source {
-            var startIndex = destination
-            let endIndex = source - 1
-            //var startOrder = ""[destination].order + 1
-            //let newOrder = ""[destination].order
-            while startIndex <= endIndex {
-               // ""[startIndex].order = startOrder
-                //startOrder = startOrder + 1
-                startIndex = startIndex + 1
-            }
-            //""[source].order = newOrder
-        }
-    
-    func saveItems(){
-    }
-    }
 }
 
 
@@ -198,4 +167,3 @@ struct RSSListView_Previews: PreviewProvider {
             .environment(\.sizeCategory, .small)
         }
     }
-
