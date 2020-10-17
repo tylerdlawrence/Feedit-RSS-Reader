@@ -4,10 +4,11 @@
 //
 //  Created by Tyler D Lawrence on 8/10/20.
 //
-
 import SwiftUI
-import Intents
+import SwipeCell
 import UIKit
+import Intents
+import FeedKit
 
 struct RSSRow: View {
     
@@ -31,12 +32,9 @@ struct RSSRow: View {
     private var pureTextView: some View {
         VStack(spacing: 0.0) {
             Text(rss.title)
+                .font(.body)
+                .multilineTextAlignment(.leading)
                 .lineLimit(1)
-                .contextMenu {
-                    Text("Article List")
-                    Text("Details")
-                    Text("Edit")
-                    Text("Unsubscribe")
                 }
 // below are options to have parsed feed description and last updated time
         
@@ -49,8 +47,8 @@ struct RSSRow: View {
                 //.foregroundColor(.gray)
             
         }
-    }
-
+    
+    
     var body: some View {
         HStack() {
             VStack(alignment: .center) {
@@ -61,48 +59,25 @@ struct RSSRow: View {
                             .font(.body)
                             .frame(width: 20.0, height: 20.0,alignment: .center)
                             //.layoutPriority(10)
-                            
-                            
-                            
                         pureTextView
                         
                     } else {
                         
                         Image(systemName:"dot.squareshape")
                             .font(.body)
-                            
-                            //"dock.rectangle"
-
                             .foregroundColor(Color.gray)
                             .frame(width: 20, height: 20, alignment: .center)
                                 //.cornerRadius(2)
                                     .animation(.easeInOut)
                             .imageScale(.large)
-    
                         pureTextView
-                        //circle.bottomthird.split
-                        //systemName:(globe)
-                        //info.circle
-                        //asterisk.circle
-                        //globe
-                        //waveform.circle
                     }
                 }
-                
-                
-                
-                
-                
-                
                // Text(rss.createTimeStr)
                  //   .font(.footnote)
                 //    .foregroundColor(.gray)
-                    
             }
-            
-            
-            
-            
+
         }
         
         
@@ -116,8 +91,9 @@ struct RSSRow: View {
 
 struct RSSRow_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView()
+        ContentView()
             .preferredColorScheme(.dark)
             .previewDevice("iPhone 11")
     }
 }
+

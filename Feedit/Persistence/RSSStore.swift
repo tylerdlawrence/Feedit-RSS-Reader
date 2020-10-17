@@ -45,7 +45,7 @@ class RSSStore: NSObject {
         self.rssSrouces = items;
     }
     
-    public func createAndSave(url: String, title: String = "", desc: String = "") -> RSS {
+    public func createAndSave(url: String, image: String, title: String = "", desc: String = "") -> RSS {
         let rss = RSS.create(
             url: url,
             title: title,
@@ -82,6 +82,7 @@ class RSSStore: NSObject {
                 rss.title = item.title
                 rss.desc = item.desc
                 rss.url = item.url
+                rss.image = item.image
                 rss.lastFetchTime = item.lastFetchTime
                 rss.createTime = item.createTime
                 rss.updateTime = Date()

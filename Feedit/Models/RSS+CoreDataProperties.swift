@@ -16,6 +16,8 @@ extension RSS {
         return NSFetchRequest<RSS>(entityName: "RSS")
     }
 
+    @NSManaged public var author: String
+    @NSManaged public var urlToImage: String
     @NSManaged public var url: String
     @NSManaged public var title: String
     @NSManaged public var desc: String
@@ -49,10 +51,10 @@ extension RSS {
     
     static func simple(image: String = "") -> RSS {
         let rss = RSS(context: Persistence.current.context)
-        rss.image = image
-        rss.title = "demo"
-        rss.desc = "desc demo"
-        rss.url = "http://images.apple.com/main/rss/hotnews/hotnews.rss"
+        rss.image = "AppIconBot"
+        rss.title = "Daring Fireball"
+        rss.desc = "description of RSS feed"
+        rss.url = "https://daringfireball.net/feeds/main"
         return rss
     }
     
@@ -80,11 +82,14 @@ extension RSS {
         let rss = self
         switch feed {
         case .atom(let atomFeed):
+            //rss.image = atomFeed.image ?? ""
             rss.title = atomFeed.title ?? ""
         case .json(let jsonFeed):
+            //rss.image = jsonFeed.image ?? ""
             rss.title = jsonFeed.title ?? ""
             rss.desc = jsonFeed.description?.trimWhiteAndSpace ?? ""
         case .rss(let rssFeed):
+            //rss.image = rssFeed.image ?? ""
             rss.title = rssFeed.title ?? ""
             rss.desc = rssFeed.description?.trimWhiteAndSpace ?? ""
         }

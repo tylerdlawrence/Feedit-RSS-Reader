@@ -7,7 +7,17 @@
 
 import SwiftUI
 
-struct AppearenceSection: View {
+struct AppearenceSection: ToggleStyle {
+    func makeBody(configuration: Configuration) -> some View {
+            return HStack {
+                configuration.label
+                Spacer()
+                Image(systemName: configuration.isOn ? "checkmark.square" : "square")
+                    .resizable()
+                    .frame(width: 22, height: 22)
+                    .onTapGesture { configuration.isOn.toggle() }
+            }
+        }
 
     @Binding var isToggled: Bool
     @Binding var isSelected: Bool
@@ -40,8 +50,10 @@ struct AppearenceSection: View {
     }
 }
 
-    struct AppearenceSection_Previews: PreviewProvider {
-        static var previews: some View {
-            AppearenceSection(isToggled: .constant(true), isSelected: .constant(true))
-        }
-    }
+//struct AppearenceSection_Previews: PreviewProvider {
+  //  typealias Previews = ToggleStyle
+    //
+      //  var previews: some ToggleStyle {
+        //    AppearenceSection(isToggled: .constant(true), isSelected: .constant(true))
+        //}
+    //}

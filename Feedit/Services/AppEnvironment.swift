@@ -10,10 +10,16 @@ import Foundation
 
 class AppEnvironment: NSObject {
     
-    static let prefix = //"com.acumen.rss.app.environment"
-        "com.tylerdlawrence.feedit.app.environment"
+    static let prefix = "com.tylerdlawrence.feedit.app.environment"
     static let current = AppEnvironment()
+    
+    @UserDefault(key: "\(prefix).light", default: true)
+    var lightMode: Bool
+    
+    @UserDefault(key: "\(prefix).dark", default: false)
+    var darkMode: Bool
     
     @UserDefault(key: "\(prefix).useSafari", default: true)
     var useSafari: Bool
+    
 }

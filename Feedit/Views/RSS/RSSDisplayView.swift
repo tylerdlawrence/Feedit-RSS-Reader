@@ -13,7 +13,12 @@ struct RSSDisplayView: View {
 //the code below shows w/i the ADD VIEW handle once opened
     var body: some View {
         Group {
+            ZStack {
             TextFieldView(label: "Title", placeholder: "", text: $rss.title)
+                HStack {
+                    Image(rss.image)
+                }
+            }
             TextFieldView(label: "Description", placeholder: "", text: $rss.desc)
             TextFieldView(label: "Feed URL", placeholder: "", text: $rss.url)
         }
@@ -21,9 +26,10 @@ struct RSSDisplayView: View {
 }
 struct RSSDisplayView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView()
+        ContentView()
             .preferredColorScheme(.dark)
-            .previewDevice("iPhone 11")
+            .previewDevice("iPhone 12")
+
     }
 }
 #if DEBUG
@@ -38,7 +44,7 @@ struct SourceDisplayView_Previews: PreviewProvider {
         return RSSDisplayView(rss: rss)
             
             .preferredColorScheme(.dark)
-            .environment(\.sizeCategory, .small)
+            .environment(\.sizeCategory, .medium)
     }
 }
 

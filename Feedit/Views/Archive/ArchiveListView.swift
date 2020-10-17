@@ -58,7 +58,7 @@ struct ArchiveListView: View {
             .onAppear {
                 self.viewModel.fecthResults()
             }
-            .listStyle(InsetListStyle()
+            .listStyle(InsetGroupedListStyle()
                         )
             .navigationBarTitle("Bookmarks", displayMode: .automatic)
             .environment(\.horizontalSizeClass, .regular)
@@ -73,7 +73,7 @@ extension ArchiveListView {
 
 struct ArchiveListView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView()
+        ContentView()
             .preferredColorScheme(.dark)
             .previewDevice("iPhone 11")
             

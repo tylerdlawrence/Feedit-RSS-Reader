@@ -35,7 +35,33 @@ struct DocumentPicker: UIViewControllerRepresentable {
     
     func makeUIViewController(context: UIViewControllerRepresentableContext<DocumentPicker>) -> UIDocumentPickerViewController {
         
-        let picker = UIDocumentPickerViewController(documentTypes: ["public.json"], in: .import)
+        func sendFileWithURL(_ url: URL, completion: @escaping ((_ error: Error?) -> Void)) {
+            func finish(_ error: Error?) {
+                DispatchQueue.main.async {
+                    completion(error)
+                }
+            }
+        
+        
+        DispatchQueue(label: "DownloadingFileData." + UUID().uuidString).async {
+                do {
+                    let data: Data = try Data(contentsOf: url)
+                    _ = data.base64EncodedString()
+                    // TODO: send string to server and call the completion
+                    finish(nil)
+                } catch {
+                    finish(error)
+                }
+            }
+        }
+        
+        func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+            urls.forEach { sendFileWithURL($0) {_ in
+                }
+            }
+        }
+        
+        let picker = UIDocumentPickerViewController(documentTypes: [], in: .import)
         picker.delegate = context.coordinator
         return picker
     }

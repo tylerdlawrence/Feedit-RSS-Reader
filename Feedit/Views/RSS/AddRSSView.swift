@@ -42,6 +42,8 @@ struct AddRSSView: View {
             Spacer()
             Button(action: self.fetchDetail) {
                 Text("FIND")
+                    .padding(.all, 0)
+                
             }
         }
     }
@@ -62,27 +64,27 @@ struct AddRSSView: View {
         self.onDoneAction = onDoneAction
         self.onCancelAction = onCancelAction
     }
-    
     var body: some View {
         NavigationView {
             Form {
                 Section(header: sectionHeader) {
-                    TextFieldView(label: "Feed URL, Site URL or @twitter handle", placeholder: "", text: $feedUrl)
-                        .opacity(/*@START_MENU_TOKEN@*/0.3/*@END_MENU_TOKEN@*/)
+                    TextFieldView(label: "Feed or Site URL", placeholder: "https://", text: $feedUrl)
+                        .opacity(0.5)
                 }
                 Section(header: Text("Result")) {
                     if !hasFetchResult {
-                        Text("press FIND to display result")
+                        Text("")
                             .opacity(/*@START_MENU_TOKEN@*/0.3/*@END_MENU_TOKEN@*/)
                     } else {
-                        if $viewModel.rss != nil {
+                        if viewModel.rss != nil {
                             RSSDisplayView(rss: viewModel.rss!)
                         }
                     }
                 }
             }
-            .navigationBarTitle("Add Feed")
+            .navigationBarTitle("Add Subscription")
             .navigationBarItems(leading: cancelButton, trailing: doneButton)
+            .preferredColorScheme(.dark)
         }
         .onDisappear {
             self.viewModel.cancelCreateNewRSS()
@@ -108,7 +110,7 @@ struct AddRSSView: View {
 
 struct AddRSSView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView()
+        ContentView()
             .preferredColorScheme(.dark)
             .previewDevice("iPhone 11")
     }

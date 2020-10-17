@@ -11,21 +11,20 @@ import FeedKit
 struct RSSItemRow: View {
     
     @ObservedObject var itemWrapper: RSSItem
-    //@ObservedObject var imageLoader: ImageLoader
-    //@ObservedObject var rss: RSS
+//    @ObservedObject var imageLoader: ImageLoader
+//    @ObservedObject var rss: RSS
     
     var contextMenuAction: ((RSSItem) -> Void)?
     
-    //init(rss: RSS) {
-        //self.rss = rss
-        //self.imageLoader = ImageLoader(path: rssItem.image)
     
     init(wrapper: RSSItem, menu action: ((RSSItem) -> Void)? = nil) {
         itemWrapper = wrapper
         contextMenuAction = action
+//        self.rss = rss
+//        self.imageLoader = ImageLoader(path: rss.image)
     }
     
-    private func iconImageView(_ image: UIImage) -> some View {
+    func iconImageView(_ image: UIImage) -> some View {
         Image(uiImage: image)
         .resizable()
             .cornerRadius(0)
@@ -36,9 +35,10 @@ struct RSSItemRow: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            
+            Image("AppIcon.png")
             Text(itemWrapper.title)
                 .font(.headline)
+                .fontWeight(.medium)
                 .lineLimit(2)
             //Spacer()
             Text(itemWrapper.desc.trimHTMLTag.trimWhiteAndSpace)
@@ -92,9 +92,9 @@ struct RSSItemRow: View {
 
 struct RSSFeedRow_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView()
+        ContentView()
             .preferredColorScheme(.dark)
-            .previewDevice("iPhone 11")
+            .previewDevice("iPhone 12")
     }
 }
 

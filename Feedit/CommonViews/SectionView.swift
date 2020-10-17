@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SectionView<Content: View>: View {
     
+    var image: String?
     var title: String?
     var description: String?
     let content: () -> Content
@@ -48,7 +49,7 @@ struct SectionView<Content: View>: View {
 }
  struct SectionView_Previews: PreviewProvider {
      static var previews: some View {
-         SectionView(title: "Section", description: "Description", content: { Text("Content") })
+        SectionView(image: "Image", title: "Section", description: "Description", content: { Text("Content") })
          .previewLayout(.sizeThatFits)
              .previewLayout(.sizeThatFits)
      }

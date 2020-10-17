@@ -44,6 +44,27 @@ class RSSListViewModel: NSObject, ObservableObject {
         items.remove(at: index)
     }
     
+    class FeedsAPIResponse: Codable {
+        var status: String
+        var articles: [RSSListItem]?
+    }
+    
+    class RSSListItem: Identifiable, Codable {
+        var uuid = UUID()
+        //var item = String?.self
+        let title: String = ""
+        let children: [Item]? = nil
+        var author: String?
+        //var title: String
+        var urlToImage: String?
+        var url: String
+        var image: String?
+    
+        enum CodingKeys: String, CodingKey {
+            case author, title, urlToImage, url, image
+        }
+    }
+    
+    
 }
-
 
