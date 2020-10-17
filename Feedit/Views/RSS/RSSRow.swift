@@ -35,12 +35,6 @@ struct RSSRow: View {
                 .font(.body)
                 .multilineTextAlignment(.leading)
                 .lineLimit(1)
-                //.contextMenu {
-                    //EditButton()
-                    //Spacer()
-                    //Text("Article List")
-                    //Text("Details")
-                    //Text("Unsubscribe")
                 }
 // below are options to have parsed feed description and last updated time
         
@@ -65,24 +59,17 @@ struct RSSRow: View {
                             .font(.body)
                             .frame(width: 20.0, height: 20.0,alignment: .center)
                             //.layoutPriority(10)
-                            
-                            
-                            
                         pureTextView
                         
                     } else {
                         
                         Image(systemName:"dot.squareshape")
                             .font(.body)
-                            
-                            //"dock.rectangle"
-
                             .foregroundColor(Color.gray)
                             .frame(width: 20, height: 20, alignment: .center)
                                 //.cornerRadius(2)
                                     .animation(.easeInOut)
                             .imageScale(.large)
-    
                         pureTextView
                     }
                 }

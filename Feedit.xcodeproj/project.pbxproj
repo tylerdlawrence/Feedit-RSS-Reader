@@ -12,7 +12,8 @@
 		6117365724E83C7B00A2DEA5 /* DataNStorageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6117365624E83C7B00A2DEA5 /* DataNStorageViewModel.swift */; };
 		6117365924E83C9F00A2DEA5 /* BatchImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6117365824E83C9F00A2DEA5 /* BatchImportView.swift */; };
 		6117365B24E83CC500A2DEA5 /* BatchImportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6117365A24E83CC500A2DEA5 /* BatchImportViewModel.swift */; };
-		6142E7F72505467000482251 /* Subscriptions-test2.opml in Resources */ = {isa = PBXBuildFile; fileRef = 6142E7F62505467000482251 /* Subscriptions-test2.opml */; };
+		6156C7A7253A3FA500326AE7 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6156C7A6253A3FA400326AE7 /* Item.swift */; };
+		6156C7AA253A400200326AE7 /* ItemList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6156C7A9253A400200326AE7 /* ItemList.swift */; };
 		615E961925300E5C00891083 /* AppearenceSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615E961825300E5C00891083 /* AppearenceSection.swift */; };
 		615E961D2530116600891083 /* AppearenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615E961C2530116600891083 /* AppearenceView.swift */; };
 		615E968D2531FE6300891083 /* RSTree in Frameworks */ = {isa = PBXBuildFile; productRef = 615E968C2531FE6300891083 /* RSTree */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -22,6 +23,8 @@
 		615E989C253403D600891083 /* OAuthSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 615E989B253403D600891083 /* OAuthSwift */; };
 		615E98A52534060800891083 /* SwipeCell in Frameworks */ = {isa = PBXBuildFile; productRef = 615E98A42534060800891083 /* SwipeCell */; };
 		615E98AC2534092600891083 /* IndentedTree in Frameworks */ = {isa = PBXBuildFile; productRef = 615E98AB2534092600891083 /* IndentedTree */; };
+		6161FE6125393FA400CB0F00 /* UrlImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6161FE5625393FA400CB0F00 /* UrlImageModel.swift */; };
+		6161FEEF2539CF9300CB0F00 /* DefaultFeeds.json in Resources */ = {isa = PBXBuildFile; fileRef = 6161FEE42539CF9200CB0F00 /* DefaultFeeds.json */; };
 		616CAF6024F7131000690804 /* OPMLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616CAF5F24F7131000690804 /* OPMLParser.swift */; };
 		616CAF6324F7154600690804 /* DateSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616CAF6224F7154600690804 /* DateSpec.swift */; };
 		616CAF6524F7158200690804 /* RFC3339DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616CAF6424F7158200690804 /* RFC3339DateFormatter.swift */; };
@@ -59,6 +62,8 @@
 		618F9036250DCDEE00D5A03E /* RSSItemDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C818E824E1FA7D00593939 /* RSSItemDataSource.swift */; };
 		618F9037250DCDFC00D5A03E /* RSSDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C818E324E1F91B00593939 /* RSSDataSource.swift */; };
 		618F9038250DCE4800D5A03E /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61967EC924E204FB00AA647C /* Request.swift */; };
+		6193AEEE253645DA00EF8460 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 6193AEED253645DA00EF8460 /* SwiftyJSON */; };
+		6193AEF52536480400EF8460 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 6193AEF42536480400EF8460 /* SDWebImageSwiftUI */; };
 		61967EC724E204BC00AA647C /* UserDefaultWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61967EC524E204BC00AA647C /* UserDefaultWrapper.swift */; };
 		61967ECB24E204FB00AA647C /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61967EC824E204FB00AA647C /* AppEnvironment.swift */; };
 		61967ECC24E204FB00AA647C /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61967EC924E204FB00AA647C /* Request.swift */; };
@@ -218,12 +223,15 @@
 		6117365624E83C7B00A2DEA5 /* DataNStorageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataNStorageViewModel.swift; sourceTree = "<group>"; };
 		6117365824E83C9F00A2DEA5 /* BatchImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchImportView.swift; sourceTree = "<group>"; };
 		6117365A24E83CC500A2DEA5 /* BatchImportViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchImportViewModel.swift; sourceTree = "<group>"; };
-		6142E7F62505467000482251 /* Subscriptions-test2.opml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = "Subscriptions-test2.opml"; path = "Support Files/Subscriptions-test2.opml"; sourceTree = SOURCE_ROOT; };
+		6156C7A6253A3FA400326AE7 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		6156C7A9253A400200326AE7 /* ItemList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemList.swift; sourceTree = "<group>"; };
 		615E961825300E5C00891083 /* AppearenceSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearenceSection.swift; sourceTree = "<group>"; };
 		615E961C2530116600891083 /* AppearenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearenceView.swift; sourceTree = "<group>"; };
 		615E96A12531FFA700891083 /* Feedit.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Feedit.entitlements; sourceTree = "<group>"; };
 		615E971E25323C1900891083 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		615E983F2533AFAE00891083 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContentView.swift; path = Feedit/Views/ContentView.swift; sourceTree = SOURCE_ROOT; };
+		6161FE5625393FA400CB0F00 /* UrlImageModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UrlImageModel.swift; sourceTree = "<group>"; };
+		6161FEE42539CF9200CB0F00 /* DefaultFeeds.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = DefaultFeeds.json; sourceTree = "<group>"; };
 		616CAF5F24F7131000690804 /* OPMLParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OPMLParser.swift; sourceTree = "<group>"; };
 		616CAF6224F7154600690804 /* DateSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateSpec.swift; sourceTree = "<group>"; };
 		616CAF6424F7158200690804 /* RFC3339DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RFC3339DateFormatter.swift; sourceTree = "<group>"; };
@@ -308,6 +316,8 @@
 			files = (
 				61CDCF6A24E85230007654C5 /* FeedKit in Frameworks */,
 				615E98AC2534092600891083 /* IndentedTree in Frameworks */,
+				6193AEEE253645DA00EF8460 /* SwiftyJSON in Frameworks */,
+				6193AEF52536480400EF8460 /* SDWebImageSwiftUI in Frameworks */,
 				61DEBE3F25152CB90025B1B3 /* SwiftUI.framework in Frameworks */,
 				615E989C253403D600891083 /* OAuthSwift in Frameworks */,
 				61DEBE3D25152CB20025B1B3 /* WidgetKit.framework in Frameworks */,
@@ -334,7 +344,6 @@
 			isa = PBXGroup;
 			children = (
 				6182213C250542E9005636B2 /* Subscriptions-test.opml */,
-				6142E7F62505467000482251 /* Subscriptions-test2.opml */,
 				6182212C25053FEE005636B2 /* rssTests.swift */,
 				6182212E25053FEE005636B2 /* Info.plist */,
 				61822139250542BF005636B2 /* BatchImportViewModelTests.swift */,
@@ -346,11 +355,13 @@
 		618F9025250DCD4F00D5A03E /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				618F9026250DCD4F00D5A03E /* ModelHelper.swift */,
 				618F9027250DCD4F00D5A03E /* RSS+CoreDataClass.swift */,
-				618F9028250DCD4F00D5A03E /* RSS+CoreDataProperties.swift */,
 				618F9029250DCD4F00D5A03E /* RSSItem+CoreDataClass.swift */,
+				618F9026250DCD4F00D5A03E /* ModelHelper.swift */,
+				618F9028250DCD4F00D5A03E /* RSS+CoreDataProperties.swift */,
 				618F902A250DCD4F00D5A03E /* RSSItem+CoreDataProperties.swift */,
+				6156C7A6253A3FA400326AE7 /* Item.swift */,
+				6156C7A9253A400200326AE7 /* ItemList.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -378,9 +389,9 @@
 		61C8189424E1F3FB00593939 /* Feedit */ = {
 			isa = PBXGroup;
 			children = (
-				615E971E25323C1900891083 /* Reachability.swift */,
 				615E96A12531FFA700891083 /* Feedit.entitlements */,
 				61C818A324E1F3FD00593939 /* LaunchScreen.storyboard */,
+				615E971E25323C1900891083 /* Reachability.swift */,
 				61967F0624E2096100AA647C /* Info.plist */,
 				61967F0724E20D6200AA647C /* RSS.xcdatamodeld */,
 				61CDCF6724E84D5E007654C5 /* rss.entitlements */,
@@ -440,6 +451,7 @@
 				61C818D724E1F73C00593939 /* RSS */,
 				61C818F124E1FB6600593939 /* RSSFeed */,
 				615E983F2533AFAE00891083 /* ContentView.swift */,
+				6161FEE42539CF9200CB0F00 /* DefaultFeeds.json */,
 				61C8189524E1F3FB00593939 /* AppDelegate.swift */,
 				61C8189724E1F3FB00593939 /* SceneDelegate.swift */,
 			);
@@ -465,8 +477,8 @@
 				61967EFD24E2068400AA647C /* AddRSSViewModel.swift */,
 				61967EFE24E2068400AA647C /* RSSRow.swift */,
 				61967EFF24E2068400AA647C /* RSSDisplayView.swift */,
-				61C818D824E1F74D00593939 /* RSSListView.swift */,
 				61C818DA24E1F77C00593939 /* RSSListViewModel.swift */,
+				61C818D824E1F74D00593939 /* RSSListView.swift */,
 			);
 			path = RSS;
 			sourceTree = "<group>";
@@ -527,13 +539,13 @@
 				61967EE424E205DD00AA647C /* ActionContextMenu.swift */,
 				61967EE524E205DD00AA647C /* ProgressBar.swift */,
 				61967EE724E205DD00AA647C /* SafariView.swift */,
-				61967EE824E205DD00AA647C /* SectionView.swift */,
 				61967EE624E205DD00AA647C /* TextFieldView.swift */,
 				61CDCF5624E8459B007654C5 /* LinerProgressBar.swift */,
 				61CDCF5824E845DE007654C5 /* DocumentPicker.swift */,
 				61CDCF5A24E8461D007654C5 /* RoundRectangleButton.swift */,
 				61CDCF5C24E84645007654C5 /* TextView.swift */,
 				61CDCF5E24E8466C007654C5 /* WKWebViewWrapper.swift */,
+				61967EE824E205DD00AA647C /* SectionView.swift */,
 			);
 			path = CommonViews;
 			sourceTree = "<group>";
@@ -561,6 +573,7 @@
 				61967EEF24E2061100AA647C /* RSSFeedRow.swift */,
 				61967EEE24E2061100AA647C /* RSSFeedViewModel.swift */,
 				61967EF024E2061100AA647C /* WebView.swift */,
+				6161FE5625393FA400CB0F00 /* UrlImageModel.swift */,
 			);
 			path = RSSFeed;
 			sourceTree = "<group>";
@@ -599,6 +612,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				6193AEF82536481A00EF8460 /* PBXTargetDependency */,
+				6193AEF1253645ED00EF8460 /* PBXTargetDependency */,
 				615E98A12534048300891083 /* PBXTargetDependency */,
 				615E98A82534061700891083 /* PBXTargetDependency */,
 				615E98AF2534094300891083 /* PBXTargetDependency */,
@@ -611,6 +626,8 @@
 				615E989B253403D600891083 /* OAuthSwift */,
 				615E98A42534060800891083 /* SwipeCell */,
 				615E98AB2534092600891083 /* IndentedTree */,
+				6193AEED253645DA00EF8460 /* SwiftyJSON */,
+				6193AEF42536480400EF8460 /* SDWebImageSwiftUI */,
 			);
 			productName = Feedit;
 			productReference = 61C8189224E1F3FB00593939 /* Feedit.app */;
@@ -623,7 +640,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1200;
-				LastUpgradeCheck = 1200;
+				LastUpgradeCheck = 1220;
 				TargetAttributes = {
 					6182212925053FEE005636B2 = {
 						CreatedOnToolsVersion = 12.0;
@@ -650,6 +667,8 @@
 				615E989A253403D600891083 /* XCRemoteSwiftPackageReference "OAuthSwift" */,
 				615E98A32534060800891083 /* XCRemoteSwiftPackageReference "SwipeCell" */,
 				615E98AA2534092600891083 /* XCRemoteSwiftPackageReference "IndentedTree" */,
+				6193AEEC253645DA00EF8460 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
+				6193AEF32536480400EF8460 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 			);
 			productRefGroup = 61C8189324E1F3FB00593939 /* Products */;
 			projectDirPath = "";
@@ -746,7 +765,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				6182213D250542E9005636B2 /* Subscriptions-test.opml in Resources */,
-				6142E7F72505467000482251 /* Subscriptions-test2.opml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -755,6 +773,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				61C818A524E1F3FD00593939 /* LaunchScreen.storyboard in Resources */,
+				6161FEEF2539CF9300CB0F00 /* DefaultFeeds.json in Resources */,
 				61C818A224E1F3FD00593939 /* Preview Assets.xcassets in Resources */,
 				61C8189F24E1F3FD00593939 /* Assets.xcassets in Resources */,
 			);
@@ -815,6 +834,7 @@
 				61967EE924E205DD00AA647C /* ActionContextMenu.swift in Sources */,
 				615E961D2530116600891083 /* AppearenceView.swift in Sources */,
 				61C818E724E1F9BA00593939 /* PersistenceManager.swift in Sources */,
+				6161FE6125393FA400CB0F00 /* UrlImageModel.swift in Sources */,
 				616CAF6024F7131000690804 /* OPMLParser.swift in Sources */,
 				615E971F25323C1900891083 /* Reachability.swift in Sources */,
 				61967ECB24E204FB00AA647C /* AppEnvironment.swift in Sources */,
@@ -849,6 +869,7 @@
 				61967EEA24E205DD00AA647C /* ProgressBar.swift in Sources */,
 				61CDCF4B24E843C4007654C5 /* Color+Ext.swift in Sources */,
 				616CAF6924F715DD00690804 /* ISO8601DateFormatter.swift in Sources */,
+				6156C7A7253A3FA500326AE7 /* Item.swift in Sources */,
 				616CAF9224F974AF00690804 /* SettingListViewModel.swift in Sources */,
 				61967EED24E205DD00AA647C /* SectionView.swift in Sources */,
 				61967F0124E2068400AA647C /* AddRSSViewModel.swift in Sources */,
@@ -857,6 +878,7 @@
 				61C818E924E1FA7D00593939 /* RSSItemDataSource.swift in Sources */,
 				61C8189824E1F3FB00593939 /* SceneDelegate.swift in Sources */,
 				61967ED324E2053D00AA647C /* ManagedObjectContext.swift in Sources */,
+				6156C7AA253A400200326AE7 /* ItemList.swift in Sources */,
 				61C818E124E1F81C00593939 /* ArchiveListViewModel.swift in Sources */,
 				6117365724E83C7B00A2DEA5 /* DataNStorageViewModel.swift in Sources */,
 				618F902F250DCD4F00D5A03E /* RSSItem+CoreDataProperties.swift in Sources */,
@@ -886,6 +908,14 @@
 			isa = PBXTargetDependency;
 			target = 61C8189124E1F3FB00593939 /* Feedit */;
 			targetProxy = 6182212F25053FEE005636B2 /* PBXContainerItemProxy */;
+		};
+		6193AEF1253645ED00EF8460 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 6193AEF0253645ED00EF8460 /* SwiftyJSON */;
+		};
+		6193AEF82536481A00EF8460 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 6193AEF72536481A00EF8460 /* SDWebImageSwiftUI */;
 		};
 /* End PBXTargetDependency section */
 
@@ -947,6 +977,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -1008,6 +1039,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -1067,7 +1099,7 @@
 				CODE_SIGN_ENTITLEMENTS = Feedit/Feedit.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 14;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_ASSET_PATHS = "\"Feedit/Preview Content\"";
 				DEVELOPMENT_TEAM = 7Z3Z6D3TH7;
 				ENABLE_PREVIEWS = YES;
@@ -1098,7 +1130,7 @@
 				CODE_SIGN_ENTITLEMENTS = Feedit/Feedit.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 14;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_ASSET_PATHS = "\"Feedit/Preview Content\"";
 				DEVELOPMENT_TEAM = 7Z3Z6D3TH7;
 				ENABLE_PREVIEWS = YES;
@@ -1186,6 +1218,22 @@
 				kind = branch;
 			};
 		};
+		6193AEEC253645DA00EF8460 /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+		6193AEF32536480400EF8460 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.5.0;
+			};
+		};
 		61CDCF6824E85230007654C5 /* XCRemoteSwiftPackageReference "FeedKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "git@github.com:nmdias/FeedKit.git";
@@ -1236,6 +1284,26 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 615E98AA2534092600891083 /* XCRemoteSwiftPackageReference "IndentedTree" */;
 			productName = IndentedTree;
+		};
+		6193AEED253645DA00EF8460 /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6193AEEC253645DA00EF8460 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
+		};
+		6193AEF0253645ED00EF8460 /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6193AEEC253645DA00EF8460 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
+		};
+		6193AEF42536480400EF8460 /* SDWebImageSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6193AEF32536480400EF8460 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			productName = SDWebImageSwiftUI;
+		};
+		6193AEF72536481A00EF8460 /* SDWebImageSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6193AEF32536480400EF8460 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			productName = SDWebImageSwiftUI;
 		};
 		61CDCF6924E85230007654C5 /* FeedKit */ = {
 			isa = XCSwiftPackageProductDependency;

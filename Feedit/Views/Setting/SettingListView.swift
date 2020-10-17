@@ -12,6 +12,8 @@ import Foundation
 
 struct SettingListView: View {
     
+    @Environment(\.presentationMode) var presentationMode
+    
     enum ReadMode {
         case safari
         case webview
@@ -30,24 +32,7 @@ struct SettingListView: View {
             }
         }
     }
-////////////////////////
-    enum Appearance {
-        case light
-        case dark
-    }
-    
-    enum AppearanceItem: CaseIterable {
-        case lightMode
-        case darkMode
-        
-        var label: String {
-            switch self {
-            case .lightMode: return "Light"
-            case .darkMode: return "Dark"
-            }
-        }
-    }
-////////////////////////
+
     @State private var isSelected: Bool = false
     
     var batchImportView: BatchImportView {
@@ -59,95 +44,116 @@ struct SettingListView: View {
         let storage = DataNStorageView()
         return storage
     }
-    
-    //^^^
+    @State var accounts: String = ""
+    @State var isPrivate: Bool = true
+    @State var notificationsEnabled: Bool = false
+    @State private var previewIndex = 0
+
     var body: some View {
         NavigationView {
-            List {
-                SectionView {
-                    Group {
-                        HStack {
-                            NavigationLink(destination: self.batchImportView) {
-                                HStack {
-                                    Image(systemName: "folder")
-                                        .fixedSize()
-                                    Text("Import")
-                                }
-                            }
-                        }
+            Form {
+                Section(header: Text("ACCOUNTS")) {
+                    TextField("On My iPhone", text: $accounts)
+                    Toggle(isOn: $isPrivate) {
+                        Image(systemName: "key.icloud")
+                        Text("Private Account")
                     }
                 }
-                SectionView {
+                
+                Section(header: Text("DATA & Notifications")) {
                     Group {
                         HStack {
                             NavigationLink(destination: self.dataNStorage) {
                                 HStack {
-                                    Image(systemName: "info.circle")
+                                    Image(systemName: "internaldrive")
                                         .fixedSize()
-                                    Text("Data and Storage")
+                                    Text("Data & Storage")
                                 }
+                            }
+                        }
+                            
+                    Group {
+                        HStack {
+                            Image(systemName: "circlebadge.2")
+                                fixedSize()
+                            Toggle(isOn: $notificationsEnabled) {
+                                Text("Notification Badges")
                             }
                         }
                     }
                 }
-                padding()
-                SectionView {
-                    Group {
-                        //padding()
-                        HStack {
-                            Image(systemName: "safari")
-                                .fixedSize()
-                            Toggle("Reader View", isOn: self.$isSelected)
-                        }
-                        padding()
-                        HStack {
+            }
+                Section(header: Text("FEEDS")) {
+                        Group {
                             HStack {
-                                Image(systemName: "circle.lefthalf.fill")
+                                NavigationLink(destination: self.batchImportView) {
+                                        HStack {
+                                        Image(systemName: "square.and.arrow.down")
                                         .fixedSize()
-                                Toggle("Appearance", isOn: self.$isSelected)
-                                
+                                        Text("Import")
+                                        }
+                                    }
                                 }
                             }
                         }
+
+                Section(header: Text("READING & APPEARENCE")) {
+                            Group {
+                            //padding()
+                                HStack {
+                                    Image(systemName: "safari")
+                                        .fixedSize()
+                                    Toggle("Reader View", isOn: self.$isSelected)
+                                }
+                                //padding()
+                                HStack {
+                                    HStack {
+                                        Image(systemName: "circle.lefthalf.fill")
+                                                .fixedSize()
+                                        Toggle("Appearance", isOn: self.$isSelected)
+                                        
+                                        }
+                                    }
+                                }
+                        }
+                        
+
+                    //Picker(selection: $previewIndex, label: Text("Show Previews")) {
+                        //ForEach(0 ..< previewOptions.count) {
+                            //Text(self.previewOptions[$0])
+                        //}
+                    //}
+                //}
+                
+                Section(header: Text("ABOUT")) {
+                    HStack {
+                        Text("Version")
+                        Spacer()
+                        Text("1.1.4")
                     }
+                }
                 
-                
-//                SectionView {
-//                    Group {
-//                        HStack {
-//                            Image(systemName: "envelope")
-//                                .fixedSize()
-//                            Text("Contact")
-//                        }
-//                        .onTapGesture {
-//                            print("tyler.lawrence@hey.com")
-//                        }
-//                    }
-//                }
-            }
-            .listStyle(InsetListStyle())
-            .navigationBarTitle("Settings", displayMode: .automatic)
-            .environment(\.horizontalSizeClass, .regular)
-    
-    .onAppear {
-        self.isSelected = AppEnvironment.current.useSafari
-    }
-    .onDisappear {
-        AppEnvironment.current.useSafari = self.isSelected
-    }
+                Section {
+                    Button(action: {
+                        print("Perform an action here...")
+                    }) {
+                        Text("Reset All Settings")
+                    }
+                }
+            }.navigationBarTitle("Settings")
+
             
         }
     }
+    
 }
-
 
 struct SettingView_Preview: PreviewProvider {
     static var previews: some View {
         SettingListView()
             .preferredColorScheme(.dark)
-        .previewDevice("iPhone 11 Pro Max")
+            .previewDevice("iPhone 11")
         //.preferredColorScheme(.dark)
     }
     
 }
-

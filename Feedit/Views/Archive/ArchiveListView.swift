@@ -58,7 +58,7 @@ struct ArchiveListView: View {
             .onAppear {
                 self.viewModel.fecthResults()
             }
-            .listStyle(InsetListStyle()
+            .listStyle(InsetGroupedListStyle()
                         )
             .navigationBarTitle("Bookmarks", displayMode: .automatic)
             .environment(\.horizontalSizeClass, .regular)

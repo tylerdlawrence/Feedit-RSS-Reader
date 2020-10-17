@@ -42,6 +42,8 @@ struct AddRSSView: View {
             Spacer()
             Button(action: self.fetchDetail) {
                 Text("FIND")
+                    .padding(.all, 0)
+                
             }
         }
     }
@@ -62,17 +64,16 @@ struct AddRSSView: View {
         self.onDoneAction = onDoneAction
         self.onCancelAction = onCancelAction
     }
-    //or @twitter handle
     var body: some View {
         NavigationView {
             Form {
                 Section(header: sectionHeader) {
-                    TextFieldView(label: "Feed or Site URL", placeholder: "", text: $feedUrl)
-                        .opacity(/*@START_MENU_TOKEN@*/0.3/*@END_MENU_TOKEN@*/)
+                    TextFieldView(label: "Feed or Site URL", placeholder: "https://", text: $feedUrl)
+                        .opacity(0.5)
                 }
                 Section(header: Text("Result")) {
                     if !hasFetchResult {
-                        Text("press FIND to display result")
+                        Text("")
                             .opacity(/*@START_MENU_TOKEN@*/0.3/*@END_MENU_TOKEN@*/)
                     } else {
                         if viewModel.rss != nil {
@@ -81,8 +82,9 @@ struct AddRSSView: View {
                     }
                 }
             }
-            .navigationBarTitle("Add Feed")
+            .navigationBarTitle("Add Subscription")
             .navigationBarItems(leading: cancelButton, trailing: doneButton)
+            .preferredColorScheme(.dark)
         }
         .onDisappear {
             self.viewModel.cancelCreateNewRSS()

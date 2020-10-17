@@ -6,24 +6,10 @@
 //
 
 import SwiftUI
-import WidgetKit
 import Intents
 import FeedKit
-import RSTree
-import SwipeCell
 
 struct RSSListView: View {
-    
-   @Environment(\.managedObjectContext) var managedObjectContext
-    
-    enum SettingItem {
-        case setting
-    }
-    
-    enum MoveItem {
-        case move
-        case item
-    }
     
     enum FeatureItem {
         case remove
@@ -35,18 +21,14 @@ struct RSSListView: View {
     }
     
     @ObservedObject var viewModel: RSSListViewModel
-    
-    @State private var selectedSettingItem = SettingItem.setting
+    @State private var revealDetails = false
     @State private var selectedFeaureItem = FeaureItem.add
     @State private var selectedFeatureItem = FeatureItem.remove
-    @State private var selectedMoveItem = MoveItem.move
-    @State private var isSettingItemPresented = false
-
-    //@State private var isSettingPresented = false
     @State private var isAddFormPresented = false
     @State private var isSheetPresented = false
     @State private var addRSSProgressValue = 0.0
     @State var sources: [RSS] = []
+    @State var isEditing = false
     
     private var addSourceButton: some View {
         Button(action: {
@@ -56,37 +38,14 @@ struct RSSListView: View {
             Image(systemName: "plus")
                 .padding(.trailing, 0)
                 .imageScale(.large)
-                .frame(width: 44, height: 44)
-                .contextMenu(menuItems: {
-                    Image(systemName: "plus")
-                    Image(systemName: "folder.badge.plus")
-                    //Text("New Feed");
-                    //Text("New Folder")
-        
-                })
         }
     }
     
-    private var settingButton: some View {
-        Button(action: {
-            self.isSettingItemPresented = true
-            self.selectedSettingItem = .setting
-        }) {
-            Image(systemName: "bookmark")
-                .imageScale(.medium)
-        }
-    }
-    
-    //ListView, trailingView
     private var ListView: some View {
         HStack(alignment: .top, spacing: 24) {
             addSourceButton
-            //settingButton
-            //EditButton()
         }
     }
-    
-
 
     private let addRSSPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("addNewRSSPublisher"))
     private let rssRefreshPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("rssListNeedRefresh"))
@@ -96,50 +55,86 @@ struct RSSListView: View {
             List {
                 ForEach(viewModel.items, id: \.self) { rss in
                     NavigationLink(destination: self.destinationView(rss)) {
-                        //Text("\(rssItem.name) - \(rssItem.order)")
                         RSSRow(rss: rss)
-                        
+
                     }
                     .tag("RSS")
                 }
-                //.onMove(perform: moveItem)
                 .onDelete { indexSet in
                     if let index = indexSet.first {
                         self.viewModel.delete(at: index)
                     }
                 }
             }
-            
+
             .navigationBarTitle("Feeds", displayMode: .automatic)
-            .navigationBarItems(leading: EditButton(), trailing: ListView)
-            //.navigationBarItems(leading:
-                            //HStack {
-                                //EditButton()
-                                    //.padding(.leading, 250.0)
-                            //}, trailing:
-                            //HStack {
-                                //settingButton
-                                //addSourceButton
-                    
+            .navigationBarItems(trailing: ListView)
+            //leading: EditButton(),
             .onAppear {
                 self.viewModel.fecthResults()
             }
-            
-            .listStyle(InsetListStyle())
+
+            .listStyle(InsetGroupedListStyle())
             .environment(\.horizontalSizeClass, .regular)
-            .font(.body)
+            .font(.headline)
+
+
         }
-    
+
             .sheet(isPresented: $isSheetPresented, content: {
             AddRSSView( viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss),
                 onDoneAction: self.onDoneAction)
         })
             .onAppear {
             self.viewModel.fecthResults()
+            }
         }
     }
-    }
-    
+
+//        VStack {
+//            DisclosureGroup("Default Feeds", isExpanded:      $revealDetails) {
+//                Button("Hide") {
+//                    revealDetails.toggle()
+//                }
+//            }
+
+//        NavigationView {
+//            List {
+//                ForEach(viewModel.items, id: \.self) { rss in
+//                    NavigationLink(destination: self.destinationView(rss)) {
+//                        RSSRow(rss: rss)
+//
+//                    }
+//                    .tag("RSS")
+//                }
+//                .onDelete { indexSet in
+//                    if let index = indexSet.first {
+//                        self.viewModel.delete(at: index)
+//                    }
+//                }
+//
+//
+//            .navigationBarTitle("Feeds", displayMode: .automatic)
+//            .navigationBarItems(leading: EditButton(), trailing: ListView)
+//            .onAppear {
+//                self.viewModel.fecthResults()
+//            }
+//
+//            .listStyle(InsetGroupedListStyle())
+//            .environment(\.horizontalSizeClass, .regular)
+//            .font(.headline)
+//
+//
+//        }
+//
+//            .sheet(isPresented: $isSheetPresented, content: {
+//            AddRSSView( viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss),
+//                onDoneAction: self.onDoneAction)
+//        })
+//            .onAppear {
+//            self.viewModel.fecthResults()
+//            }
+
 extension RSSListView {
     
     func onDoneAction() {
@@ -155,8 +150,6 @@ extension RSSListView {
         viewModel.items.remove(atOffsets: offsets)
     }
 }
-
-
 
 struct RSSListView_Previews: PreviewProvider {
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)

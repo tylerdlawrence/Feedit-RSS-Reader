@@ -16,6 +16,10 @@ class AppEnvironment: NSObject {
     @UserDefault(key: "\(prefix).light", default: true)
     var lightMode: Bool
     
+    @UserDefault(key: "\(prefix).dark", default: false)
+    var darkMode: Bool
+    
     @UserDefault(key: "\(prefix).useSafari", default: true)
     var useSafari: Bool
+    
 }

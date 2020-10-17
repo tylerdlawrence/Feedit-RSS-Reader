@@ -49,7 +49,7 @@ struct RoundRectangeButton: View {
         }
         .frame(width: UIScreen.main.bounds.width - 40, height: 48)
         .background(status.backgroundColor)
-        .cornerRadius(12)
+        .cornerRadius(20)
     }
 }
 
@@ -58,6 +58,8 @@ struct RoundRectangeButton_Previews: PreviewProvider {
         RoundRectangeButton(status: .constant(.ok("Import"))) { _ in
             
         }
+        .preferredColorScheme(.dark)
+        .environment(\.sizeCategory, .small)
     }
 }
 

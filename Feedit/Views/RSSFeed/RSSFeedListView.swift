@@ -11,8 +11,27 @@ import Combine
 
 struct RSSFeedListView: View {
     
+    public static let shared = ImageService()
+    
+    public func fetchImage(url: URL) -> AnyPublisher<UIImage?, Never> {
+        return URLSession.shared.dataTaskPublisher(for: url)
+            .tryMap { (data, response) -> UIImage? in
+                return UIImage(data: data)
+                
+        }.catch { error in
+            
+            return Just(nil)
+            
+        }
+        
+            .eraseToAnyPublisher()
+    
+    }
+    
+    
     var rssSource: RSS {
         return self.rssFeedViewModel.rss
+        
     }
     
     @EnvironmentObject var rssDataSource: RSSDataSource
@@ -27,6 +46,7 @@ struct RSSFeedListView: View {
     
     init(viewModel: RSSFeedViewModel) {
         self.rssFeedViewModel = viewModel
+        
     }
     
     var body: some View {
@@ -44,11 +64,11 @@ struct RSSFeedListView: View {
                     Button(action: self.rssFeedViewModel.loadMore) {
                         Text(self.footer)
                     }
-                    
                 }
             }
             .padding(.top)
             .navigationBarTitle(rssSource.title)
+            .listStyle(InsetGroupedListStyle())
         }.onAppear {
             self.rssFeedViewModel.fecthResults()
             self.rssFeedViewModel.fetchRemoteRSSItems()
@@ -74,7 +94,13 @@ struct RSSFeedListView: View {
         rssFeedViewModel.archiveOrCancel(item)
     }
 }
+
 extension RSSFeedListView {
+    
+    private func destinationView(_ rss: RSS) -> some View {
+        RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
+            .environmentObject(DataSourceService.current.rss)
+    }
 }
 
 struct RSSFeedListView_Previews: PreviewProvider {

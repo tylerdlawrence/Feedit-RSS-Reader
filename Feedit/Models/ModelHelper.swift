@@ -14,6 +14,8 @@ protocol RSSItemConvertable {
     func asRSSItem(container uuid: UUID, in context: NSManagedObjectContext) -> RSSItem
 }
 
+
+
 extension Array where Element: RSSItemConvertable {
     func asRSSItems(container uuid: UUID, in context: NSManagedObjectContext, condition: ((Element) -> Bool)? = nil) -> [RSSItem] {
          return filter { e -> Bool in
@@ -24,8 +26,7 @@ extension Array where Element: RSSItemConvertable {
 
 extension RSSFeedItem: RSSItemConvertable {
     func asRSSItem(container uuid: UUID, in context: NSManagedObjectContext) -> RSSItem {
-        return RSSItem.create(uuid: uuid,
-                              title: title ?? "",
+        return RSSItem.create(uuid: uuid, image: "", title: title ?? "",
                               desc: description ?? "",
                               author: author ?? "",
                               url: link ?? "",
@@ -36,7 +37,7 @@ extension RSSFeedItem: RSSItemConvertable {
 
 extension AtomFeedEntry: RSSItemConvertable {
     func asRSSItem(container uuid: UUID, in context: NSManagedObjectContext) -> RSSItem {
-        return RSSItem.create(uuid: uuid,
+        return RSSItem.create(uuid: uuid, image: "",
                               title: title ?? "",
                               desc: "",
                               author: authors?.first?.name ?? "",
@@ -48,7 +49,7 @@ extension AtomFeedEntry: RSSItemConvertable {
 
 extension JSONFeedItem: RSSItemConvertable {
     func asRSSItem(container uuid: UUID, in context: NSManagedObjectContext) -> RSSItem {
-        return RSSItem.create(uuid: uuid,
+        return RSSItem.create(uuid: uuid, image: image!,
                               title: title ?? "",
                               author: author?.name ?? "",
                               url: url ?? "",
