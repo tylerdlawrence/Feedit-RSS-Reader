@@ -9,9 +9,21 @@ import SwiftUI
 
 class DocumentPickerViewModel: ObservableObject {
     
+//@Environment(\.exportFiles) var exportAction
+
     @Published var jsonURL: URL?
 }
-
+//Button("Export") {
+//    let url = Bundle.main.url(forResource: "default", withExtension: "json")!
+//    
+//    exportAction(moving: url) { result in
+//        switch result {
+//        case .success(let url):
+//            print("Success! Moved to: \(url)")
+//        case .failure(let error):
+//            print("Oops: \(error.localizedDescription")
+//        case .none:
+//            print("Cancelled")
 struct DocumentPicker: UIViewControllerRepresentable {
     
     class Coordinator: NSObject, UIDocumentPickerDelegate {

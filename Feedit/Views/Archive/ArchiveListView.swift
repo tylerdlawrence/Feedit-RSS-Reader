@@ -41,6 +41,7 @@ struct ArchiveListView: View {
                 VStack(alignment: .center) {
                     Button(action: self.viewModel.loadMore) {
                         Text(self.footer)
+                            .font(.custom("Gotham", size: 16))
                     }
                 }
             }
@@ -60,7 +61,8 @@ struct ArchiveListView: View {
             }
             .listStyle(InsetGroupedListStyle()
                         )
-            .navigationBarTitle("Bookmarks", displayMode: .automatic)
+            .navigationBarTitle("Bookmarked", displayMode: .automatic)
+            .font(.custom("Gotham", size: 20))
             .environment(\.horizontalSizeClass, .regular)
             .navigationBarItems(trailing: EditButton())
         }
@@ -72,10 +74,11 @@ extension ArchiveListView {
 }
 
 struct ArchiveListView_Previews: PreviewProvider {
+    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     static var previews: some View {
-        ContentView()
+        RSSListView(viewModel: self.viewModel)
             .preferredColorScheme(.dark)
-            .previewDevice("iPhone 11")
+            .previewDevice("iPhone 12 mini")
             
     }
 }
