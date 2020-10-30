@@ -66,9 +66,11 @@ struct RSSFeedListView: View {
                     }
                 }
             }
-            .padding(.top)
+            //.padding(.top)
             .navigationBarTitle(rssSource.title)
-            .listStyle(InsetGroupedListStyle())
+            .font(.custom("Gotham", size: 28))
+            
+            //.listStyle(InsetGroupedListStyle())
         }.onAppear {
             self.rssFeedViewModel.fecthResults()
             self.rssFeedViewModel.fetchRemoteRSSItems()

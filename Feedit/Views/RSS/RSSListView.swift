@@ -58,6 +58,9 @@ struct RSSListView: View {
                         RSSRow(rss: rss)
 
                     }
+//                    .onMove { (indexSet, index) in
+//                        self.listItems.move(fromOffsets: indexSet, toOffset: index)
+                            
                     .tag("RSS")
                 }
                 .onDelete { indexSet in
@@ -66,10 +69,52 @@ struct RSSListView: View {
                     }
                 }
             }
+//            return NavigationView {
+//                List() {
+//                    ForEach(viewModel.items) { rss in
+//                        NavigationLink(destination: self.RSSListView(rss: rss),
+//                                   isActive: $viewModel.isRead)
+//                        VStack {
+//                            HStack {
+//                                RSSRow(rss: rss)
+//                                Spacer()
+//                                if rss.isRead == false {
+//                                    Image(systemName: "circle.fill")
+//                                        .imageScale(.small)
+//                                        .foregroundColor(.blue)
+//                                        .onTapGesture( perform: { rss.isRead = true } )
+//                                }
+//                                else {
+//                                    Image(systemName: "circle")
+//                                        .imageScale(.small)
+//                                        .foregroundColor(.gray)
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+        
+
 
             .navigationBarTitle("Feeds", displayMode: .automatic)
-            .navigationBarItems(trailing: ListView)
-            //leading: EditButton(),
+//            .navigationBarItems(trailing: ListView)
+//            //leading: EditButton(),
+            .navigationBarItems(trailing:
+                HStack {
+                    
+                    Button(action: {
+                        print("Reload button pressed...")
+                        
+                    }) {
+                        
+                        Image(systemName: "arrow.clockwise")
+                    }
+                    .padding(.trailing)
+                    
+                    addSourceButton
+                }
+            )
             .onAppear {
                 self.viewModel.fecthResults()
             }

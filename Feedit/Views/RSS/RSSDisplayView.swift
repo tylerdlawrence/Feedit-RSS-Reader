@@ -10,7 +10,9 @@ import SwiftUI
 struct RSSDisplayView: View {
     
     @ObservedObject var rss: RSS
-//the code below shows w/i the ADD VIEW handle once opened
+
+    //the code below shows w/i the ADD VIEW handle once opened
+    
     var body: some View {
         Group {
             ZStack {
@@ -24,14 +26,7 @@ struct RSSDisplayView: View {
         }
     }
 }
-struct RSSDisplayView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-            .preferredColorScheme(.dark)
-            .previewDevice("iPhone 12")
 
-    }
-}
 #if DEBUG
 
 struct SourceDisplayView_Previews: PreviewProvider {

@@ -23,6 +23,6 @@ struct ItemList: View {
             Text($0.title)
                 
             }
-        }
+        }.navigationBarTitle("Feeds")
     }
 }

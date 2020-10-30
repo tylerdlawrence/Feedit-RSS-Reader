@@ -53,7 +53,7 @@ class RSSListViewModel: NSObject, ObservableObject {
         var uuid = UUID()
         //var item = String?.self
         let title: String = ""
-        let children: [Item]? = nil
+        let children: [RSS]? = nil
         var author: String?
         //var title: String
         var urlToImage: String?

@@ -11,17 +11,15 @@ import FeedKit
 struct RSSItemRow: View {
     
     @ObservedObject var itemWrapper: RSSItem
-//    @ObservedObject var imageLoader: ImageLoader
-//    @ObservedObject var rss: RSS
+    @ObservedObject var imageLoader: ImageLoader
     
     var contextMenuAction: ((RSSItem) -> Void)?
-    
     
     init(wrapper: RSSItem, menu action: ((RSSItem) -> Void)? = nil) {
         itemWrapper = wrapper
         contextMenuAction = action
-//        self.rss = rss
-//        self.imageLoader = ImageLoader(path: rss.image)
+        self.imageLoader = ImageLoader(path: wrapper.image)
+
     }
     
     func iconImageView(_ image: UIImage) -> some View {
@@ -33,62 +31,100 @@ struct RSSItemRow: View {
         
     }
     
-    var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Image("AppIcon.png")
+    private var pureTextView: some View {
+            
             Text(itemWrapper.title)
-                .font(.headline)
-                .fontWeight(.medium)
-                .lineLimit(2)
-            //Spacer()
-            Text(itemWrapper.desc.trimHTMLTag.trimWhiteAndSpace)
-                .font(.subheadline)
-                .lineLimit(2)
-                .foregroundColor(.gray)
-            //Spacer()
-            HStack(spacing: 10) {
-                if itemWrapper.progress >= 1.0 {
-                    Text("DONE")
-                        .font(.footnote)
-                        .foregroundColor(.blue)
-                } else if itemWrapper.progress > 0 {
-                    ProgressBar(
-                        boardWidth: 4,
-                        font: Font.system(size: 9),
-                        color: .blue,
-                        content: false,
-                        progress: self.$itemWrapper.progress
-                    )
-                    .frame(width: 20, height: 20, alignment: .center)
+                .font(.custom("Gotham", size: 18))
+                .multilineTextAlignment(.leading)
+                .lineLimit(1)
                 }
-                HStack(alignment: .top) {
+    
+    var body: some View{
+        VStack(alignment: .leading, spacing: 0) {
+            Text(itemWrapper.title)
+                //.font(.custom("Gotham", size: 16))
+                //.fontWeight(.semibold)
+                //.foregroundColor(Color("AccentColor"))
+                .lineLimit(2)
+            Spacer()
+            Text(itemWrapper.desc.trimHTMLTag.trimWhiteAndSpace)
+                .font(.custom("Gotham", size: 14))
+                .lineLimit(1)
+                .foregroundColor(.accentColor)
+            
+                HStack(alignment: .center) {
                     VStack(alignment: .leading) {
                         HStack {
-                Text("\(itemWrapper.createTime?.string() ?? "")")
-                    .font(.footnote)
-                    .foregroundColor(.gray)
-                Spacer(minLength: 10)
+                            if
+                                self.imageLoader.image != nil {
+                                iconImageView(self.imageLoader.image!)
+                                    .font(.body)
+                                    .frame(width: 25.0, height: 25.0,alignment: .center)
+                                    .layoutPriority(10)
+                                    .animation(.easeInOut)
+                            
+                            } else {
+                                
+                                Image("Thumbnail")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .font(.body)
+                                    .frame(width: 25.0, height: 25.0,alignment: .center)
+                                    .layoutPriority(10)
+                                    .animation(.easeInOut)
+                                    //.padding(.trailing, 150)
+
+                            }
+
+                            HStack(spacing: 10) {
+                                if itemWrapper.progress >= 1.0 {
+                                    Text("DONE")
+                                        .font(.footnote)
+                                        .foregroundColor(.blue)
+                                    
+                                } else if itemWrapper.progress > 0 {
+                                    
+                                    ProgressBar(
+                                        boardWidth: 4,
+                                        font: Font.system(size: 9),
+                                        color: .blue,
+                                        content: false,
+                                        progress: self.$itemWrapper.progress
+                                    )
+                                    .frame(width: 13, height: 13, alignment: .center)
+                                }
+                                
+                    
+                                Text("\(itemWrapper.createTime?.string() ?? "")")
+                                    .font(.custom("Gotham", size: 14))                                    .foregroundColor(.gray)
+                                    .multilineTextAlignment(.trailing)
+                    
+                //Spacer(minLength: 10)
                 if itemWrapper.isArchive {
-                    Image(systemName: "bookmark")
-                    //tray.and.arrow.down.fill
+                    Image(systemName: "bookmark.circle")
+                        .imageScale(.small)
+                        .foregroundColor(.gray)
                 }
             }
         }
+    }
+                        
+        
         .padding(.top, 8)
         .padding(.bottom, 8)
         .contextMenu {
             ActionContextMenu(
                 label: itemWrapper.isArchive ? "Remove Bookmark" : "Bookmark",
-                systemName: "tray.and.arrow.\(itemWrapper.isArchive ? "up" : "down")",
+                systemName: "bookmark.circle\(itemWrapper.isArchive ? "" : ".slash")",
                 onAction: {
                     self.contextMenuAction?(self.itemWrapper)
             })
+                .font(.custom("Gotham", size: 18))
         }
     }
             }
         }
     }
-}
 
 struct RSSFeedRow_Previews: PreviewProvider {
     static var previews: some View {

@@ -68,7 +68,7 @@ struct AddRSSView: View {
         NavigationView {
             Form {
                 Section(header: sectionHeader) {
-                    TextFieldView(label: "Feed or Site URL", placeholder: "https://", text: $feedUrl)
+                    TextFieldView(label: "Feed URL", placeholder: "https://morningreader.com/rss/feed/", text: $feedUrl)
                         .opacity(0.5)
                 }
                 Section(header: Text("Result")) {
@@ -82,7 +82,7 @@ struct AddRSSView: View {
                     }
                 }
             }
-            .navigationBarTitle("Add Subscription")
+            .navigationBarTitle("Add Feed")
             .navigationBarItems(leading: cancelButton, trailing: doneButton)
             .preferredColorScheme(.dark)
         }

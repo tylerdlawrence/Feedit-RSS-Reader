@@ -5,10 +5,10 @@
 //  Created by Tyler D Lawrence on 8/10/20.
 //
 import SwiftUI
-import SwipeCell
 import UIKit
 import Intents
 import FeedKit
+
 
 struct RSSRow: View {
     
@@ -23,16 +23,18 @@ struct RSSRow: View {
     private func iconImageView(_ image: UIImage) -> some View {
         Image(uiImage: image)
         .resizable()
-            .cornerRadius(0)
-            .animation(.easeInOut)
-            .border(Color.white, width: 1)
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 25, height: 25,alignment: .center)
+            .cornerRadius(1)
+            //.animation(.easeInOut)
+            .border(Color.secondary, width: 1)
         
     }
 
     private var pureTextView: some View {
         VStack(spacing: 0.0) {
             Text(rss.title)
-                .font(.body)
+                .font(.custom("Gotham", size: 18))
                 .multilineTextAlignment(.leading)
                 .lineLimit(1)
                 }
@@ -56,20 +58,20 @@ struct RSSRow: View {
                     if
                         self.imageLoader.image != nil {
                         iconImageView(self.imageLoader.image!)
-                            .font(.body)
-                            .frame(width: 20.0, height: 20.0,alignment: .center)
+                            .frame(width: 25, height: 25,alignment: .center)
                             //.layoutPriority(10)
                         pureTextView
                         
                     } else {
                         
-                        Image(systemName:"dot.squareshape")
+                        Image("Thumbnail")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
                             .font(.body)
-                            .foregroundColor(Color.gray)
-                            .frame(width: 20, height: 20, alignment: .center)
-                                //.cornerRadius(2)
-                                    .animation(.easeInOut)
-                            .imageScale(.large)
+                            .frame(width: 25, height: 25,alignment: .center)
+                            .layoutPriority(10)
+                            .animation(.easeInOut)
+                            
                         pureTextView
                     }
                 }
@@ -82,8 +84,8 @@ struct RSSRow: View {
         
         
         
-        .padding(.top, 10)
-        .padding(.bottom, 10)
+//        .padding(.top, 10)
+//        .padding(.bottom, 10)
         //.frame(maxWidth: .infinity, alignment: .leading)
         //.background(Color(red: 32/255, green: 32/255, blue: 32/255))
     }
