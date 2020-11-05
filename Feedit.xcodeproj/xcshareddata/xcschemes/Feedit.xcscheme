@@ -28,26 +28,6 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6182212925053FEE005636B2"
-               BuildableName = "rssTests.xctest"
-               BlueprintName = "rssTests"
-               ReferencedContainer = "container:Feedit.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "61F091B52505351200942BE7"
-               BuildableName = "feeditTests.xctest"
-               BlueprintName = "feeditTests"
-               ReferencedContainer = "container:Feedit.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

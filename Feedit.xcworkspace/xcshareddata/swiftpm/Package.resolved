@@ -21,7 +21,7 @@
       },
       {
         "package": "FeedKit",
-        "repositoryURL": "git@github.com:nmdias/FeedKit.git",
+        "repositoryURL": "https://github.com/nmdias/FeedKit.git",
         "state": {
           "branch": null,
           "revision": "68493a33d862c33c9a9f67ec729b3b7df1b20ade",
@@ -38,12 +38,30 @@
         }
       },
       {
-        "package": "IndentedTree",
-        "repositoryURL": "https://github.com/ralfebert/IndentedTree.git",
+        "package": "iColor",
+        "repositoryURL": "https://github.com/benjaminsage/iColor.git",
         "state": {
-          "branch": "master",
-          "revision": "3b525902a2a186fc1d562f94af3d42cd2d1b1f7c",
-          "version": null
+          "branch": null,
+          "revision": "3c2ae81be776ba4b26a0ca223f819c4d7676b5d4",
+          "version": "0.1.2"
+        }
+      },
+      {
+        "package": "iGraphics",
+        "repositoryURL": "https://github.com/benjaminsage/iGraphics.git",
+        "state": {
+          "branch": null,
+          "revision": "ee1b64e75aea47f9e6083ccc163d49496bdf3b6a",
+          "version": "0.0.6"
+        }
+      },
+      {
+        "package": "iPages",
+        "repositoryURL": "https://github.com/benjaminsage/iPages.git",
+        "state": {
+          "branch": null,
+          "revision": "45288072bfb3841514e6da231d29d66ce53e8035",
+          "version": "0.0.7"
         }
       },
       {
@@ -56,6 +74,15 @@
         }
       },
       {
+        "package": "ModalView",
+        "repositoryURL": "https://github.com/diniska/modal-view.git",
+        "state": {
+          "branch": "master",
+          "revision": "e9063b249148134b6ab24832ac8101835638a5af",
+          "version": null
+        }
+      },
+      {
         "package": "OAuthSwift",
         "repositoryURL": "https://github.com/Ranchero-Software/OAuthSwift.git",
         "state": {
@@ -65,12 +92,21 @@
         }
       },
       {
-        "package": "RSTree",
-        "repositoryURL": "https://github.com/Ranchero-Software/RSTree.git",
+        "package": "SDWebImage",
+        "repositoryURL": "https://github.com/SDWebImage/SDWebImage.git",
         "state": {
           "branch": null,
-          "revision": "979ed0eb610b6d95dc7adcf4620bd44205f512a6",
-          "version": "1.0.0-beta1"
+          "revision": "88b3ba211c0d604e60eab204c1baf8229c513399",
+          "version": "5.9.4"
+        }
+      },
+      {
+        "package": "SDWebImageSwiftUI",
+        "repositoryURL": "https://github.com/SDWebImage/SDWebImageSwiftUI.git",
+        "state": {
+          "branch": null,
+          "revision": "4c7f169e39bc35d6b80d42b8eb8301bee9cd0907",
+          "version": "1.5.0"
         }
       },
       {
@@ -80,15 +116,6 @@
           "branch": null,
           "revision": "9483a5d459b45c3ffd059f7b55f9638e268632fd",
           "version": "1.5.0"
-        }
-      },
-      {
-        "package": "SwipeCell",
-        "repositoryURL": "https://github.com/EnesKaraosman/SwipeCell.git",
-        "state": {
-          "branch": null,
-          "revision": "3f963d3d477b65fad7655e6b9c94b9391c066e7c",
-          "version": "0.1.1"
         }
       }
     ]

@@ -7,7 +7,7 @@
 		<key>Feedit.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>0</integer>
+			<integer>7</integer>
 		</dict>
 		<key>FeeditWidgetExtension.xcscheme_^#shared#^_</key>
 		<dict>
@@ -80,6 +80,11 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>6182212925053FEE005636B2</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>61C8189124E1F3FB00593939</key>
 		<dict>
 			<key>primary</key>

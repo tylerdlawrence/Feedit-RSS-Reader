@@ -8,8 +8,8 @@
 import UIKit
 import SwiftUI
 import FeedKit
-import SwiftyJSON
-import SDWebImageSwiftUI
+//import SwiftyJSON
+//import SDWebImageSwiftUI
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
@@ -18,7 +18,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
         let contentView = ContentView()
-
 //            .tabViewStyle(PageTabViewStyle())
 //            .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
 

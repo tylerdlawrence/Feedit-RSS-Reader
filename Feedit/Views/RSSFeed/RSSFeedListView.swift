@@ -38,6 +38,8 @@ struct RSSFeedListView: View {
     
     @ObservedObject var rssFeedViewModel: RSSFeedViewModel
     
+    @Environment(\.colorScheme) var colorScheme
+
     @State private var selectedItem: RSSItem?
     @State private var isSafariViewPresented = false
     @State private var start: Int = 0
@@ -51,7 +53,7 @@ struct RSSFeedListView: View {
     
     var body: some View {
         VStack {
-            List {
+            Form {
                 ForEach(self.rssFeedViewModel.items, id: \.self) { item in
                     RSSItemRow(wrapper: item,
                                menu: self.contextmenuAction(_:))
@@ -67,10 +69,13 @@ struct RSSFeedListView: View {
                 }
             }
             //.padding(.top)
+            //.shadow(color: .gray, radius: 1, y: 1)
             .navigationBarTitle(rssSource.title)
-            .font(.custom("Gotham", size: 28))
-            
-            //.listStyle(InsetGroupedListStyle())
+            .font(.custom("Gotham", size: 24))
+            //.shadow(color: .gray, radius: 3, y: 3)
+            .background(Color("bg"))
+            .listStyle(GroupedListStyle())
+            .edgesIgnoringSafeArea(.vertical)
         }.onAppear {
             self.rssFeedViewModel.fecthResults()
             self.rssFeedViewModel.fetchRemoteRSSItems()

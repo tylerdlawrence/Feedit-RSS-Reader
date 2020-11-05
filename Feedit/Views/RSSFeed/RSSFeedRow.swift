@@ -25,7 +25,7 @@ struct RSSItemRow: View {
     func iconImageView(_ image: UIImage) -> some View {
         Image(uiImage: image)
         .resizable()
-            .cornerRadius(0)
+            .cornerRadius(3)
             .animation(.easeInOut)
             .border(Color.white, width: 1)
         
@@ -34,7 +34,7 @@ struct RSSItemRow: View {
     private var pureTextView: some View {
             
             Text(itemWrapper.title)
-                .font(.custom("Gotham", size: 18))
+                .font(.custom("Gotham", size: 20))
                 .multilineTextAlignment(.leading)
                 .lineLimit(1)
                 }
@@ -42,15 +42,15 @@ struct RSSItemRow: View {
     var body: some View{
         VStack(alignment: .leading, spacing: 0) {
             Text(itemWrapper.title)
-                //.font(.custom("Gotham", size: 16))
+                .font(.headline)//.custom("Gotham", size: 16))
                 //.fontWeight(.semibold)
-                //.foregroundColor(Color("AccentColor"))
+                //.foregroundColor(Color("accentColor"))
                 .lineLimit(2)
             Spacer()
             Text(itemWrapper.desc.trimHTMLTag.trimWhiteAndSpace)
-                .font(.custom("Gotham", size: 14))
+                .font(.custom("Gotham", size: 16))
                 .lineLimit(1)
-                .foregroundColor(.accentColor)
+                .foregroundColor(.gray)
             
                 HStack(alignment: .center) {
                     VStack(alignment: .leading) {
@@ -61,7 +61,7 @@ struct RSSItemRow: View {
                                     .font(.body)
                                     .frame(width: 25.0, height: 25.0,alignment: .center)
                                     .layoutPriority(10)
-                                    .animation(.easeInOut)
+                                    .animation(.easeIn)
                             
                             } else {
                                 
@@ -69,9 +69,9 @@ struct RSSItemRow: View {
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
                                     .font(.body)
-                                    .frame(width: 25.0, height: 25.0,alignment: .center)
+                                    .frame(width: 15.0, height: 15.0,alignment: .center)
                                     .layoutPriority(10)
-                                    .animation(.easeInOut)
+                                    //.animation(.easeInOut)
                                     //.padding(.trailing, 150)
 
                             }
@@ -119,10 +119,10 @@ struct RSSItemRow: View {
                 onAction: {
                     self.contextMenuAction?(self.itemWrapper)
             })
-                .font(.custom("Gotham", size: 18))
+                .font(.custom("Gotham", size: 20))
         }
     }
-            }
+            }.shadow(color: .gray, radius: 1, y: 1)
         }
     }
 
@@ -133,5 +133,3 @@ struct RSSFeedRow_Previews: PreviewProvider {
             .previewDevice("iPhone 12")
     }
 }
-
-
