@@ -2,39 +2,21 @@
   "object": {
     "pins": [
       {
-        "package": "BrightFutures",
-        "repositoryURL": "https://github.com/Thomvis/BrightFutures.git",
+        "package": "AFNetworking",
+        "repositoryURL": "https://github.com/AFNetworking/AFNetworking.git",
         "state": {
           "branch": null,
-          "revision": "9279defa6bdc21501ce740266e5a14d0119ddc63",
-          "version": "8.0.1"
-        }
-      },
-      {
-        "package": "Erik",
-        "repositoryURL": "https://github.com/phimage/Erik.git",
-        "state": {
-          "branch": null,
-          "revision": "109a130e9cdb00789a43a7a625293eeb12d22989",
-          "version": "5.1.0"
+          "revision": "ffae2391ab0c29dc88eb0a58d2f5b2c2c27cadbf",
+          "version": "4.0.1"
         }
       },
       {
         "package": "FeedKit",
-        "repositoryURL": "git@github.com:nmdias/FeedKit.git",
+        "repositoryURL": "https://github.com/nmdias/FeedKit.git",
         "state": {
           "branch": null,
           "revision": "68493a33d862c33c9a9f67ec729b3b7df1b20ade",
           "version": "9.1.2"
-        }
-      },
-      {
-        "package": "FileKit",
-        "repositoryURL": "https://github.com/nvzqz/FileKit.git",
-        "state": {
-          "branch": null,
-          "revision": "826d9161b184509f80d85c28cd612d630646de98",
-          "version": "6.0.0"
         }
       },
       {
@@ -59,23 +41,14 @@
         "package": "iPages",
         "repositoryURL": "https://github.com/benjaminsage/iPages.git",
         "state": {
-          "branch": null,
-          "revision": "45288072bfb3841514e6da231d29d66ce53e8035",
-          "version": "0.0.7"
-        }
-      },
-      {
-        "package": "Kanna",
-        "repositoryURL": "https://github.com/tid-kijyun/Kanna.git",
-        "state": {
-          "branch": null,
-          "revision": "4a80ebe93b6966d5083394fcaaaff57a2fcec935",
-          "version": "5.2.3"
+          "branch": "main",
+          "revision": "8505db2e78ebf1f59950cd481c0fc202877b43a4",
+          "version": null
         }
       },
       {
         "package": "ModalView",
-        "repositoryURL": "https://github.com/diniska/modal-view.git",
+        "repositoryURL": "https://github.com/diniska/modal-view",
         "state": {
           "branch": "master",
           "revision": "e9063b249148134b6ab24832ac8101835638a5af",
@@ -83,12 +56,12 @@
         }
       },
       {
-        "package": "OAuthSwift",
-        "repositoryURL": "https://github.com/Ranchero-Software/OAuthSwift.git",
+        "package": "PureLayout",
+        "repositoryURL": "https://github.com/PureLayout/PureLayout.git",
         "state": {
-          "branch": null,
-          "revision": "2e75d626532c2c6373e603312c0f1207e7e778ea",
-          "version": "2.1.0"
+          "branch": "master",
+          "revision": "d19b40e831e4d621097765998be97df3856e8413",
+          "version": null
         }
       },
       {
@@ -96,8 +69,8 @@
         "repositoryURL": "https://github.com/SDWebImage/SDWebImage.git",
         "state": {
           "branch": null,
-          "revision": "a71dcd2b43de1d948b203249b7e1dee328e8016d",
-          "version": "5.9.3"
+          "revision": "88b3ba211c0d604e60eab204c1baf8229c513399",
+          "version": "5.9.4"
         }
       },
       {
@@ -107,24 +80,6 @@
           "branch": null,
           "revision": "4c7f169e39bc35d6b80d42b8eb8301bee9cd0907",
           "version": "1.5.0"
-        }
-      },
-      {
-        "package": "Swifter",
-        "repositoryURL": "https://github.com/httpswift/swifter.git",
-        "state": {
-          "branch": null,
-          "revision": "9483a5d459b45c3ffd059f7b55f9638e268632fd",
-          "version": "1.5.0"
-        }
-      },
-      {
-        "package": "SwiftyJSON",
-        "repositoryURL": "https://github.com/SwiftyJSON/SwiftyJSON.git",
-        "state": {
-          "branch": null,
-          "revision": "2b6054efa051565954e1d2b9da831680026cd768",
-          "version": "5.0.0"
         }
       }
     ]

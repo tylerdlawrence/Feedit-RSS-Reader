@@ -51,7 +51,9 @@ struct SettingView: View {
     @State private var previewIndex = 0
 
     var body: some View {
+        HStack {
         NavigationView {
+            
             Form {
                 Section(header: Text("ACCOUNTS")) {
                     TextField("On My iPhone", text: $accounts)
@@ -130,7 +132,7 @@ struct SettingView: View {
                     HStack {
                         Text("Feedit: RSS Reader")
                         Spacer()
-                        Text("1.1.5")
+                        Text("1.1.6")
                     }
                 }
                 
@@ -141,7 +143,8 @@ struct SettingView: View {
                         Text("Reset Settings")
                     }
                 }
-            }.navigationBarTitle("Settings")
+            }//.navigationBarTitle("Settings")
+            //.navigationBarItems(leading: BackButton())
 
             .onAppear {
                 self.isSelected = AppEnvironment.current.useSafari
@@ -149,6 +152,8 @@ struct SettingView: View {
             .onDisappear {
                 AppEnvironment.current.useSafari = self.isSelected
             }
+            .shadow(color: .gray, radius: 1, y: 1)
+        }
         }
     }
 }

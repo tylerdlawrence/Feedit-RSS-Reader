@@ -59,11 +59,10 @@ struct ArchiveListView: View {
             .onAppear {
                 self.viewModel.fecthResults()
             }
-            .listStyle(InsetGroupedListStyle()
-                        )
-            .navigationBarTitle("Bookmarked", displayMode: .automatic)
+            .listStyle(PlainListStyle())
+            .navigationBarTitle("Tags", displayMode: .automatic)
             .font(.custom("Gotham", size: 20))
-            .environment(\.horizontalSizeClass, .regular)
+            //.environment(\.horizontalSizeClass, .regular)
             .navigationBarItems(trailing: EditButton())
         }
     }
