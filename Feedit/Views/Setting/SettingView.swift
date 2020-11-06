@@ -11,6 +11,7 @@ import CoreData
 import Foundation
 
 struct SettingView: View {
+    
     @State private var isDarkModeOn = true
     @State private var isSettingsExpanded: Bool = true
     @Environment(\.presentationMode) var presentationMode
@@ -143,8 +144,8 @@ struct SettingView: View {
                         Text("Reset Settings")
                     }
                 }
-            }//.navigationBarTitle("Settings")
-            //.navigationBarItems(leading: BackButton())
+            }
+//            .navigationBarItems(leading: BackButton())
 
             .onAppear {
                 self.isSelected = AppEnvironment.current.useSafari
@@ -152,9 +153,10 @@ struct SettingView: View {
             .onDisappear {
                 AppEnvironment.current.useSafari = self.isSelected
             }
-            .shadow(color: .gray, radius: 1, y: 1)
+            //.shadow(color: .gray, radius: 1, y: 1)
         }
-        }
+        .foregroundColor(.gray)
+        }.navigationBarTitle("Settings", displayMode: .automatic)
     }
 }
 

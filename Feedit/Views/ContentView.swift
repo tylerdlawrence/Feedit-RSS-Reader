@@ -9,6 +9,7 @@ import SwiftUI
 import FeedKit
 import ModalView
 import iPages
+import Foundation
 
 struct ContentView: View {
 
@@ -28,6 +29,16 @@ struct ContentView: View {
         case add
     }
     
+//    @ObservedObject var itemWrapper: RSSItem
+//
+//    var contextMenuAction: ((RSSItem) -> Void)?
+//
+//    init(wrapper: RSSItem, menu action: ((RSSItem) -> Void)? = nil) {
+//        itemWrapper = wrapper
+//        contextMenuAction = action
+//    }
+    
+    @State var showSheetView = false
     @State private var revealDetails = false
     @State private var selectedFeaureItem = FeaureItem.add
     @State private var selectedFeatureItem = FeatureItem.remove
@@ -71,36 +82,72 @@ struct ContentView: View {
         }
     }
     
-    private var ListView: some View {
-        HStack(alignment: .top, spacing: 24) {
-            addSourceButton
-        }
-    }
-    
     var body: some View {
         NavigationView {
             ModalPresenter() {
                 VStack{
                     Image("launch")
                         .resizable()
+                        .padding(.bottom)
                         .frame(width: 125, height: 125, alignment: .center)
+                        .opacity(0.8)
                 }
                 Form {
-                    Section(header: Text("Smart Feeds")) {
+                    Section(header: Text("Account")) {
                         ModalLink(destination: homeListView) {
-                            Text("All Articles")
+                            
+                        HStack{
+                            VStack{
+                                Image(systemName: "text.alignleft")
+                                    .font(.system(size: 16, weight: .black))
+                            }
+                            VStack(alignment: .leading) {
+                                Text("All Feeds")
+                                    .font(.system(size: 18, weight: .black))
+                                    .fontWeight(.regular)
+                                Text("Updated Today")
+                                    .font(.system(size: 16, weight: .black))
+                                    .fontWeight(.regular)
+                                    .foregroundColor(Color.gray)
+                                    
+                                    
+                            }
                         }
-                        ModalLink(destination: archiveListView) {
-                            Text("Tags")
-                        }
-//                        ModalLink(destination: ListView) {
-//                            Text("Add Feed")
-//                        }
                     }
-//                    Section(header: Text("Plants")) {
-//                        ModalLink(destination: Text("🍎")) {
-//                            Text("Show 🍏")
-//                        }
+                        ModalLink(destination: archiveListView) {
+                        HStack{
+                            VStack{
+                                Image(systemName: "tag")
+                                    .font(.system(size: 16, weight: .black))
+                            }
+                            VStack(alignment: .leading) {
+                                Text("Tagged Articles")
+                                    .font(.system(size: 18, weight: .black))
+                                    .fontWeight(.regular)
+
+                                Text("Updated Today")
+                                    .font(.system(size: 16, weight: .black))
+                                    .fontWeight(.regular)
+                                    .foregroundColor(Color.gray)
+                            }
+                        }
+                    }
+                }
+                    Section(header: Text("")) {
+                        ModalLink(destination: settingListView) {
+                            
+                            HStack{
+                            Image("settingtoggle")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 24, height: 24, alignment: .center)
+                            Text("Settings")
+                                .font(.system(size: 18, weight: .black))
+                                .foregroundColor(.darkGray)
+                                .fontWeight(.regular)
+                            }
+                        }
+                    }
 //                        ModalLink(destination: Text("🥑")) {
 //                            Text("Show 🥑")
 //                        }
@@ -111,39 +158,23 @@ struct ContentView: View {
                 }
             }
             //.navigationBarTitle("Feedit")
-            .listStyle(SidebarListStyle())
-            .navigationBarItems(trailing:
-                HStack {
-                    
-                    Button(action: {
-                        print("Reload button pressed...")
-                        
-                    }) {
-                        
-                        Image(systemName: "arrow.clockwise")
-                    }
-                    .padding(.trailing)
-                    
-                    Button(action: {
-                        print("Setting button pressed")
-                        
-                    }) {
-                        
-                        Image("settingtoggle")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 24, height: 24, alignment: .center)
-                    }
-                    //Image("settingtoggle")
-                    
-                    //addSourceButton
-                }
-            )
-//            .navigationBarItems(leading: settingListView, trailing: Image(systemName: "plus")
-//                                    .resizable()
-//                                    .frame(width: 15, height: 15)
-//        )
-            
+            .font(.subheadline)
+            //.listStyle(PlainListStyle())
+            .foregroundColor(.primary)
+//            .navigationBarItems(trailing:
+//
+//                //HStack {
+//
+//                    Button(action: {
+//                        //settingListView
+//                    }) {
+//
+//                        Image("settingtoggle")
+//                            .resizable()
+//                            .aspectRatio(contentMode: .fit)
+//                            .frame(width: 24, height: 24, alignment: .center)
+//                }
+//            )
         }
     }
 }
@@ -226,6 +257,15 @@ struct ContentView: View {
 //
 //    }
 //}
+
+extension Date {
+    func string(format: String = "MMM d, h:mm a") -> String {
+        let f = DateFormatter()
+        f.dateFormat = format
+        return f.string(from: self)
+    }
+}
+
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()

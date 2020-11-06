@@ -42,15 +42,13 @@ struct RSSItemRow: View {
     var body: some View{
         VStack(alignment: .leading, spacing: 0) {
             Text(itemWrapper.title)
-                .font(.headline)//.custom("Gotham", size: 16))
-                //.fontWeight(.semibold)
-                //.foregroundColor(Color("accentColor"))
+                .font(.headline)
                 .lineLimit(2)
             Spacer()
             Text(itemWrapper.desc.trimHTMLTag.trimWhiteAndSpace)
                 .font(.custom("Gotham", size: 16))
                 .lineLimit(1)
-                .foregroundColor(.gray)
+                
             
                 HStack(alignment: .center) {
                     VStack(alignment: .leading) {
@@ -59,7 +57,7 @@ struct RSSItemRow: View {
                                 self.imageLoader.image != nil {
                                 iconImageView(self.imageLoader.image!)
                                     .font(.body)
-                                    .frame(width: 25.0, height: 25.0,alignment: .center)
+                                    .frame(width: 30, height: 30,alignment: .center)
                                     .layoutPriority(10)
                                     .animation(.easeIn)
                             
@@ -101,7 +99,7 @@ struct RSSItemRow: View {
                     
                 //Spacer(minLength: 10)
                 if itemWrapper.isArchive {
-                    Image(systemName: "bookmark.circle")
+                    Image(systemName: "tag")
                         .imageScale(.small)
                         .foregroundColor(.gray)
                 }
@@ -114,8 +112,8 @@ struct RSSItemRow: View {
         .padding(.bottom, 8)
         .contextMenu {
             ActionContextMenu(
-                label: itemWrapper.isArchive ? "Remove Bookmark" : "Bookmark",
-                systemName: "bookmark.circle\(itemWrapper.isArchive ? "" : ".slash")",
+                label: itemWrapper.isArchive ? "Untag" : "Tag",
+                systemName: "tag\(itemWrapper.isArchive ? "" : ".slash")",
                 onAction: {
                     self.contextMenuAction?(self.itemWrapper)
             })

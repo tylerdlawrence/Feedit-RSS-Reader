@@ -68,13 +68,10 @@ struct RSSFeedListView: View {
                     }
                 }
             }
-            //.padding(.top)
-            //.shadow(color: .gray, radius: 1, y: 1)
             .navigationBarTitle(rssSource.title)
             .font(.custom("Gotham", size: 24))
-            //.shadow(color: .gray, radius: 3, y: 3)
-            .background(Color("bg"))
-            .listStyle(GroupedListStyle())
+            .background(Color("secondary"))
+            .listStyle(PlainListStyle())
             .edgesIgnoringSafeArea(.vertical)
         }.onAppear {
             self.rssFeedViewModel.fecthResults()
