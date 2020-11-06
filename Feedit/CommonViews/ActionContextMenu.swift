@@ -15,7 +15,7 @@ struct ActionContextMenu: View {
     var onAction: (() -> Void)?
     
     init(label: String, systemName: String, onAction: (() -> Void)? = nil) {
-        self.label = "Bookmark Article"
+        self.label = "Tag"
         self.systemName = systemName
         self.onAction = onAction
     }
@@ -27,7 +27,7 @@ struct ActionContextMenu: View {
             }) {
                 HStack() {
                     Text(self.label)
-                    Image(systemName: "bookmark.circle")
+                    Image(systemName: "tag")
                         .imageScale(.small)
                         .foregroundColor(.blue)
                 }

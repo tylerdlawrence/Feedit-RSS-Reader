@@ -38,8 +38,8 @@ struct SourceDisplayView_Previews: PreviewProvider {
                              image: "", in: Persistence.current.context)
         return RSSDisplayView(rss: rss)
             
-            .preferredColorScheme(.dark)
-            .environment(\.sizeCategory, .medium)
+            //.preferredColorScheme(.dark)
+            .environment(\.sizeCategory, .small)
     }
 }
 
