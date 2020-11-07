@@ -37,19 +37,19 @@
       "size" : "40x40"
     },
     {
-      "filename" : "iPhone App Icon iOS 7,12@2x.png",
+      "filename" : "iPhone App iOS 7,12@2x.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "60x60"
     },
     {
-      "filename" : "iPhone App Icon iOS 7,12@3x.png",
+      "filename" : "iPhone App iOS 7,12@3x.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "60x60"
     },
     {
-      "filename" : "iPad notification iOS 7,12.png",
+      "filename" : "iPad noti iOS 7,12.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "20x20"
@@ -61,7 +61,7 @@
       "size" : "20x20"
     },
     {
-      "filename" : "iPad Settings.png",
+      "filename" : "iPad Setting.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "29x29"
@@ -97,7 +97,7 @@
       "size" : "76x76"
     },
     {
-      "filename" : "iPad Pro Icon iOS 9,12@2x.png",
+      "filename" : "iPad Pro iOS 9,12@2x.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "83.5x83.5"

@@ -27,7 +27,6 @@
 		616121E8255367590074F061 /* PureLayout in Frameworks */ = {isa = PBXBuildFile; productRef = 616121E7255367590074F061 /* PureLayout */; };
 		616121EC2553678B0074F061 /* AFNetworking in Frameworks */ = {isa = PBXBuildFile; productRef = 616121EB2553678B0074F061 /* AFNetworking */; };
 		616121F0255367B60074F061 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 616121EF255367B60074F061 /* SDWebImageSwiftUI */; };
-		616121F6255376BB0074F061 /* iPages in Frameworks */ = {isa = PBXBuildFile; productRef = 616121F5255376BB0074F061 /* iPages */; };
 		6161FE6125393FA400CB0F00 /* UrlImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6161FE5625393FA400CB0F00 /* UrlImageModel.swift */; };
 		6161FEEF2539CF9300CB0F00 /* default.json in Resources */ = {isa = PBXBuildFile; fileRef = 6161FEE42539CF9200CB0F00 /* default.json */; };
 		616CAF6024F7131000690804 /* OPMLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616CAF5F24F7131000690804 /* OPMLParser.swift */; };
@@ -252,7 +251,6 @@
 				616121D7255366A00074F061 /* ModalView in Frameworks */,
 				61DEBE3F25152CB90025B1B3 /* SwiftUI.framework in Frameworks */,
 				61DEBE3D25152CB20025B1B3 /* WidgetKit.framework in Frameworks */,
-				616121F6255376BB0074F061 /* iPages in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -532,7 +530,6 @@
 				6193AEF82536481A00EF8460 /* PBXTargetDependency */,
 				615E989F2534046A00891083 /* PBXTargetDependency */,
 				6168D6D42548D39600A7B8B9 /* PBXTargetDependency */,
-				610EEAED254BB91E00AB672A /* PBXTargetDependency */,
 			);
 			name = Feedit;
 			packageProductDependencies = (
@@ -541,7 +538,6 @@
 				616121E7255367590074F061 /* PureLayout */,
 				616121EB2553678B0074F061 /* AFNetworking */,
 				616121EF255367B60074F061 /* SDWebImageSwiftUI */,
-				616121F5255376BB0074F061 /* iPages */,
 			);
 			productName = Feedit;
 			productReference = 61C8189224E1F3FB00593939 /* Feedit.app */;
@@ -580,7 +576,6 @@
 				616121E6255367590074F061 /* XCRemoteSwiftPackageReference "PureLayout" */,
 				616121EA2553678B0074F061 /* XCRemoteSwiftPackageReference "AFNetworking" */,
 				616121EE255367B60074F061 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
-				616121F4255376BB0074F061 /* XCRemoteSwiftPackageReference "iPages" */,
 			);
 			productRefGroup = 61C8189324E1F3FB00593939 /* Products */;
 			projectDirPath = "";
@@ -724,10 +719,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		610EEAED254BB91E00AB672A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = 610EEAEC254BB91E00AB672A /* iPages */;
-		};
 		615E989F2534046A00891083 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = 615E989E2534046A00891083 /* OAuthSwift */;
@@ -939,7 +930,7 @@
 				CODE_SIGN_ENTITLEMENTS = Feedit/Feedit.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_ASSET_PATHS = "\"Feedit/Preview Content\"";
 				DEVELOPMENT_TEAM = 7Z3Z6D3TH7;
 				ENABLE_PREVIEWS = YES;
@@ -970,7 +961,7 @@
 				CODE_SIGN_ENTITLEMENTS = Feedit/Feedit.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_ASSET_PATHS = "\"Feedit/Preview Content\"";
 				DEVELOPMENT_TEAM = 7Z3Z6D3TH7;
 				ENABLE_PREVIEWS = YES;
@@ -1026,14 +1017,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		610EEAE8254BB90900AB672A /* XCRemoteSwiftPackageReference "iPages" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/benjaminsage/iPages.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.0.7;
-			};
-		};
 		615E989A253403D600891083 /* XCRemoteSwiftPackageReference "OAuthSwift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Ranchero-Software/OAuthSwift.git";
@@ -1082,14 +1065,6 @@
 				minimumVersion = 1.5.0;
 			};
 		};
-		616121F4255376BB0074F061 /* XCRemoteSwiftPackageReference "iPages" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/benjaminsage/iPages.git";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
 		6168D6C52548D38000A7B8B9 /* XCRemoteSwiftPackageReference "modal-view" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/diniska/modal-view.git";
@@ -1109,11 +1084,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		610EEAEC254BB91E00AB672A /* iPages */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 610EEAE8254BB90900AB672A /* XCRemoteSwiftPackageReference "iPages" */;
-			productName = iPages;
-		};
 		615E989E2534046A00891083 /* OAuthSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 615E989A253403D600891083 /* XCRemoteSwiftPackageReference "OAuthSwift" */;
@@ -1143,11 +1113,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 616121EE255367B60074F061 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
 			productName = SDWebImageSwiftUI;
-		};
-		616121F5255376BB0074F061 /* iPages */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 616121F4255376BB0074F061 /* XCRemoteSwiftPackageReference "iPages" */;
-			productName = iPages;
 		};
 		616121F8255376F30074F061 /* FeedKit */ = {
 			isa = XCSwiftPackageProductDependency;
