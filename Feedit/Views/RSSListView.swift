@@ -14,7 +14,7 @@ struct RSSListView: View {
         case remove
         case move
     }
-    
+ 
     enum FeaureItem {
         case add
     }

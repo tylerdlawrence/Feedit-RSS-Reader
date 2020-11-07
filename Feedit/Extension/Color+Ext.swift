@@ -7,7 +7,6 @@
 
 import Foundation
 import SwiftUI
-import iColor
 
 extension Color {
     init(_ rgb: UInt, _ alpha: CGFloat = 1.0) {

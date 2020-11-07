@@ -52,10 +52,10 @@
 	</dict>
 	<key>UILaunchScreen</key>
 	<dict>
-		<key>UIImageName</key>
-		<string>launch</string>
 		<key>UIColorName</key>
 		<string>bg</string>
+		<key>UIImageName</key>
+		<string>launch</string>
 	</dict>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>

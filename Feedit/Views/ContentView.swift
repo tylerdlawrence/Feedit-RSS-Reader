@@ -8,7 +8,6 @@
 import SwiftUI
 import FeedKit
 import ModalView
-import iPages
 import Foundation
 
 struct ContentView: View {
@@ -143,7 +142,6 @@ struct ContentView: View {
                                 .frame(width: 24, height: 24, alignment: .center)
                             Text("Settings")
                                 .font(.system(size: 18, weight: .black))
-                                .foregroundColor(.darkGray)
                                 .fontWeight(.regular)
                             }
                         }
