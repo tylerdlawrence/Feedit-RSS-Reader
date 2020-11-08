@@ -15,7 +15,7 @@ struct ArchiveListView: View {
     @ObservedObject var viewModel: ArchiveListViewModel
     
     @State private var selectedItem: RSSItem?
-    @State var footer = "Refresh"
+    @State var footer = "Load more articles"
     
     init(viewModel: ArchiveListViewModel) {
         self.viewModel = viewModel
@@ -41,7 +41,7 @@ struct ArchiveListView: View {
                 VStack(alignment: .center) {
                     Button(action: self.viewModel.loadMore) {
                         Text(self.footer)
-                            .font(.custom("Gotham", size: 16))
+                            .font(.custom("Gotham", size: 14))
                     }
                 }
             }
@@ -60,8 +60,8 @@ struct ArchiveListView: View {
                 self.viewModel.fecthResults()
             }
             .listStyle(PlainListStyle())
-            .navigationBarTitle("Tags", displayMode: .automatic)
-            .font(.custom("Gotham", size: 20))
+            .navigationBarTitle("Tagged Articles", displayMode: .automatic)
+            .font(.custom("Gotham", size: 14))
             //.environment(\.horizontalSizeClass, .regular)
             .navigationBarItems(trailing: EditButton())
         }

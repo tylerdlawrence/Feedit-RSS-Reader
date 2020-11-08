@@ -43,7 +43,7 @@ struct RSSFeedListView: View {
     @State private var selectedItem: RSSItem?
     @State private var isSafariViewPresented = false
     @State private var start: Int = 0
-    @State private var footer: String = "Refresh"
+    @State private var footer: String = "Load more articles"
     @State var cancellables = Set<AnyCancellable>()
     
     init(viewModel: RSSFeedViewModel) {
@@ -52,28 +52,38 @@ struct RSSFeedListView: View {
     }
     
     var body: some View {
-        VStack {
-            Form {
+//        VStack {
+        Text(rssSource.title)
+            .font(.title)
+            .fontWeight(.bold)
+        //Spacer()
+        Text(rssSource.desc)
+            .font(.subheadline)
+            .fontWeight(.semibold)
+            .multilineTextAlignment(.center)
+            .lineLimit(3)
+            .padding(.bottom)
+        VStack{
+            List {
                 ForEach(self.rssFeedViewModel.items, id: \.self) { item in
                     RSSItemRow(wrapper: item,
                                menu: self.contextmenuAction(_:))
                         .contentShape(Rectangle())
                         .onTapGesture {
                             self.selectedItem = item
-                        }
+                        //}
+                    }
                 }
                 VStack(alignment: .center) {
                     Button(action: self.rssFeedViewModel.loadMore) {
                         Text(self.footer)
+                        }
                     }
                 }
-            }
-            .navigationBarTitle(rssSource.title)
-            .font(.custom("Gotham", size: 24))
-            .background(Color("secondary"))
-            .listStyle(PlainListStyle())
-            .edgesIgnoringSafeArea(.vertical)
-        }.onAppear {
+                }
+                .padding(.bottom)
+        //}
+        .onAppear {
             self.rssFeedViewModel.fecthResults()
             self.rssFeedViewModel.fetchRemoteRSSItems()
         }
@@ -92,8 +102,12 @@ struct RSSFeedListView: View {
             self.rssFeedViewModel.fecthResults()
             self.rssFeedViewModel.fetchRemoteRSSItems()
         }
+//        .navigationBarTitle(rssSource.title)
+//        Text(rssSource.desc)
+//            .font(.subheadline)
+//            .fontWeight(.semibold)
     }
-    
+
     func contextmenuAction(_ item: RSSItem) {
         rssFeedViewModel.archiveOrCancel(item)
     }

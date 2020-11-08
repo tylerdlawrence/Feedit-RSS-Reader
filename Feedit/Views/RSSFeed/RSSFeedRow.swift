@@ -37,10 +37,16 @@ struct RSSItemRow: View {
                 .font(.custom("Gotham", size: 20))
                 .multilineTextAlignment(.leading)
                 .lineLimit(1)
-                }
+    }
+    
+    private var descView: some View {
+            Text(itemWrapper.desc)
+                .font(.subheadline)
+                .lineLimit(1)
+    }
     
     var body: some View{
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading) {
             Text(itemWrapper.title)
                 .font(.headline)
                 .lineLimit(2)
@@ -67,7 +73,7 @@ struct RSSItemRow: View {
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
                                     .font(.body)
-                                    .frame(width: 15.0, height: 15.0,alignment: .center)
+                                    .frame(width: 20, height: 20,alignment: .center)
                                     .layoutPriority(10)
                                     //.animation(.easeInOut)
                                     //.padding(.trailing, 150)
@@ -120,7 +126,8 @@ struct RSSItemRow: View {
                 .font(.custom("Gotham", size: 20))
         }
     }
-            }.shadow(color: .gray, radius: 1, y: 1)
+            }
+        //.shadow(color: .gray, radius: 1, y: 1)
         }
     }
 

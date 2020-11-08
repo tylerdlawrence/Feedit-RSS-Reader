@@ -70,11 +70,12 @@ struct AddRSSView: View {
                 Section(header: sectionHeader) {
                     TextFieldView(label: "Feed URL", placeholder: "https://morningreader.com/rss/feed/", text: $feedUrl)
                         .opacity(0.5)
+                        .disableAutocorrection(true)
                 }
                 Section(header: Text("Result")) {
                     if !hasFetchResult {
                         Text("")
-                            .opacity(/*@START_MENU_TOKEN@*/0.3/*@END_MENU_TOKEN@*/)
+                            .opacity(0.3)
                     } else {
                         if viewModel.rss != nil {
                             RSSDisplayView(rss: viewModel.rss!)

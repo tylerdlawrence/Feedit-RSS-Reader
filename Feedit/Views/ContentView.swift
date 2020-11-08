@@ -12,12 +12,12 @@ import Foundation
 
 struct ContentView: View {
 
-//    init(){
-//        UITableView.appearance().backgroundColor = .clear
+    init(){
+        UITableView.appearance().backgroundColor = .clear
 //        //.secondarySystemGroupedBackground
 //        //.clear
 //
-//    }
+    }
     
     enum FeatureItem {
         case remove
@@ -37,7 +37,7 @@ struct ContentView: View {
 //        contextMenuAction = action
 //    }
     
-    @State var showSheetView = false
+    @State private var showDetails = false
     @State private var revealDetails = false
     @State private var selectedFeaureItem = FeaureItem.add
     @State private var selectedFeatureItem = FeatureItem.remove
@@ -69,17 +69,7 @@ struct ContentView: View {
     private var settingListView: some View {
         SettingView()
     }
-    
-    private var addSourceButton: some View {
-        Button(action: {
-            self.isSheetPresented = true
-            self.selectedFeaureItem = .add
-        }) {
-            Image(systemName: "plus")
-                .padding(.trailing, 0)
-                .imageScale(.large)
-        }
-    }
+
     
     var body: some View {
         NavigationView {
@@ -87,12 +77,11 @@ struct ContentView: View {
                 VStack{
                     Image("launch")
                         .resizable()
-                        .padding(.bottom)
-                        .frame(width: 125, height: 125, alignment: .center)
+                        .frame(width: 125, height: 130, alignment: .center)
                         .opacity(0.8)
                 }
                 Form {
-                    Section(header: Text("Account")) {
+                    Section(header: Text("")) {
                         ModalLink(destination: homeListView) {
                             
                         HStack{
@@ -155,10 +144,9 @@ struct ContentView: View {
 //                    }
                 }
             }
-            //.navigationBarTitle("Feedit")
             .font(.subheadline)
-            //.listStyle(PlainListStyle())
             .foregroundColor(.primary)
+            .opacity(0.8)
 //            .navigationBarItems(trailing:
 //
 //                //HStack {
@@ -268,6 +256,7 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
             .preferredColorScheme(.dark)
+            
         ContentView()
             .environment(\.sizeCategory, .extraSmall)
     }

@@ -133,7 +133,7 @@ struct SettingView: View {
                     HStack {
                         Text("Feedit: RSS Reader")
                         Spacer()
-                        Text("1.1.6")
+                        Text("1.1.7")
                     }
                 }
                 
@@ -155,8 +155,9 @@ struct SettingView: View {
             }
             //.shadow(color: .gray, radius: 1, y: 1)
         }
-        .foregroundColor(.gray)
-        }.navigationBarTitle("Settings", displayMode: .automatic)
+        .navigationBarTitle("Settings", displayMode: .automatic)
+        }
+
     }
 }
 
