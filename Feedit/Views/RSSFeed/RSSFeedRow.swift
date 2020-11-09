@@ -12,7 +12,8 @@ struct RSSItemRow: View {
     
     @ObservedObject var itemWrapper: RSSItem
     @ObservedObject var imageLoader: ImageLoader
-    
+   // @ObservedObject var rssFeedViewModel: RSSFeedViewModel
+
     var contextMenuAction: ((RSSItem) -> Void)?
     
     init(wrapper: RSSItem, menu action: ((RSSItem) -> Void)? = nil) {
@@ -50,10 +51,11 @@ struct RSSItemRow: View {
             Text(itemWrapper.title)
                 .font(.headline)
                 .lineLimit(2)
-            Spacer()
+            //Spacer()
             Text(itemWrapper.desc.trimHTMLTag.trimWhiteAndSpace)
-                .font(.custom("Gotham", size: 16))
-                .lineLimit(1)
+                .font(.subheadline)
+                .foregroundColor(Color("darkerAccent"))
+                .lineLimit(2)
                 
             
                 HStack(alignment: .center) {
@@ -79,6 +81,8 @@ struct RSSItemRow: View {
                                     //.padding(.trailing, 150)
 
                             }
+                            
+                            //Text(itemWrapper.title)
 
                             HStack(spacing: 10) {
                                 if itemWrapper.progress >= 1.0 {
@@ -97,7 +101,6 @@ struct RSSItemRow: View {
                                     )
                                     .frame(width: 13, height: 13, alignment: .center)
                                 }
-                                
                     
                                 Text("\(itemWrapper.createTime?.string() ?? "")")
                                     .font(.custom("Gotham", size: 14))                                    .foregroundColor(.gray)
@@ -123,11 +126,10 @@ struct RSSItemRow: View {
                 onAction: {
                     self.contextMenuAction?(self.itemWrapper)
             })
-                .font(.custom("Gotham", size: 20))
+//.font(.custom("Gotham", size: 20))
         }
     }
             }
-        //.shadow(color: .gray, radius: 1, y: 1)
         }
     }
 

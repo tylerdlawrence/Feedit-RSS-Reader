@@ -22,7 +22,8 @@ struct AddRSSView: View {
             self.onDoneAction?()
             self.presentationMode.wrappedValue.dismiss()
         }) {
-            Text("Done")
+            Image(systemName: "checkmark")
+            //Text("Done")
         }.disabled(!isVaildSource)
     }
     
@@ -32,19 +33,21 @@ struct AddRSSView: View {
             self.onCancelAction?()
             self.presentationMode.wrappedValue.dismiss()
         }) {
-            Text("Cancel")
+            Image(systemName: "xmark")
+            //Text("Cancel")
         }
     }
     
     private var sectionHeader: some View {
         HStack {
-            Text("SEARCH")//input
+            Text("")//input//search
             Spacer()
             Button(action: self.fetchDetail) {
                 Text("FIND")
                     .padding(.all, 0)
                 
             }
+            .frame(width: 50, height: 30)
         }
     }
     
@@ -68,11 +71,17 @@ struct AddRSSView: View {
         NavigationView {
             Form {
                 Section(header: sectionHeader) {
-                    TextFieldView(label: "Feed URL", placeholder: "https://morningreader.com/rss/feed/", text: $feedUrl)
+                    HStack{
+                    Image(systemName: "magnifyingglass")
+                        .opacity(0.5)
+                        TextFieldView(label: "Feed URL", placeholder: "https://github.blog/feed/", text: $feedUrl)
+                            .padding(.trailing)
                         .opacity(0.5)
                         .disableAutocorrection(true)
+                    }
                 }
-                Section(header: Text("Result")) {
+                Section(header: Text("") //result
+                            ) {
                     if !hasFetchResult {
                         Text("")
                             .opacity(0.3)
@@ -85,7 +94,6 @@ struct AddRSSView: View {
             }
             .navigationBarTitle("Add Feed")
             .navigationBarItems(leading: cancelButton, trailing: doneButton)
-            .preferredColorScheme(.dark)
         }
         .onDisappear {
             self.viewModel.cancelCreateNewRSS()
@@ -113,6 +121,6 @@ struct AddRSSView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
             .preferredColorScheme(.dark)
-            .previewDevice("iPhone 11")
+            .previewDevice("iPhone 12")
     }
 }

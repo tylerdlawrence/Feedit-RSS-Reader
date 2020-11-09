@@ -52,17 +52,23 @@ struct RSSFeedListView: View {
     }
     
     var body: some View {
-//        VStack {
-        Text(rssSource.title)
-            .font(.title)
-            .fontWeight(.bold)
-        //Spacer()
-        Text(rssSource.desc)
-            .font(.subheadline)
-            .fontWeight(.semibold)
-            .multilineTextAlignment(.center)
-            .lineLimit(3)
-            .padding(.bottom)
+        VStack(alignment: .leading){
+                Text(rssSource.title)
+                    .font(.title2)
+                    .fontWeight(.heavy)
+            HStack{
+                Text("Last Sync")
+                    .font(.footnote)
+                    .fontWeight(.heavy)
+                Text(rssSource.createTimeStr)
+                    .font(.footnote)
+                    .fontWeight(.heavy)
+            }
+            Text(rssSource.desc)
+                    .font(.footnote)
+        }
+        .frame(width: 325.0, height: 90.0)
+
         VStack{
             List {
                 ForEach(self.rssFeedViewModel.items, id: \.self) { item in
@@ -71,7 +77,6 @@ struct RSSFeedListView: View {
                         .contentShape(Rectangle())
                         .onTapGesture {
                             self.selectedItem = item
-                        //}
                     }
                 }
                 VStack(alignment: .center) {
@@ -80,9 +85,9 @@ struct RSSFeedListView: View {
                         }
                     }
                 }
-                }
-                .padding(.bottom)
-        //}
+            }
+        .navigationBarTitle("", displayMode: .inline)
+        //.navigationBarHidden(true)
         .onAppear {
             self.rssFeedViewModel.fecthResults()
             self.rssFeedViewModel.fetchRemoteRSSItems()
@@ -102,10 +107,6 @@ struct RSSFeedListView: View {
             self.rssFeedViewModel.fecthResults()
             self.rssFeedViewModel.fetchRemoteRSSItems()
         }
-//        .navigationBarTitle(rssSource.title)
-//        Text(rssSource.desc)
-//            .font(.subheadline)
-//            .fontWeight(.semibold)
     }
 
     func contextmenuAction(_ item: RSSItem) {

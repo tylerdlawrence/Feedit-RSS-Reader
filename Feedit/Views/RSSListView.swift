@@ -50,11 +50,17 @@ struct RSSListView: View {
     private let rssRefreshPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("rssListNeedRefresh"))
                 
     var body: some View {
+        
         NavigationView {
+
             List {
+
                 ForEach(viewModel.items, id: \.self) { rss in
                     NavigationLink(destination: self.destinationView(rss)) {
                         RSSRow(rss: rss)
+//                        Text(rss.createTimeStr)
+//                            .font(.footnote)
+                        //Text(rss.createTimeStr)
                     }
                     .tag("RSS")
                 }
@@ -64,13 +70,9 @@ struct RSSListView: View {
                     }
                 }
             }
-        
-
-
-            .navigationBarTitle("Feeds", displayMode: .automatic)
+            .navigationBarTitle("Feeds")
             .navigationBarItems(trailing:
                 HStack {
-                    
                     Button(action: {
                         print("Reload button pressed...")
                         

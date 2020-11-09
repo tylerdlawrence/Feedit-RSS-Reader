@@ -87,15 +87,15 @@ struct ContentView: View {
                         HStack{
                             VStack{
                                 Image(systemName: "text.alignleft")
-                                    .font(.system(size: 16, weight: .black))
+                                    .font(.system(size: 24, weight: .black))
                             }
                             VStack(alignment: .leading) {
                                 Text("All Feeds")
-                                    .font(.system(size: 18, weight: .black))
-                                    .fontWeight(.regular)
+                                    .font(.headline)
+                                    .fontWeight(.heavy)
                                 Text("Updated Today")
-                                    .font(.system(size: 16, weight: .black))
-                                    .fontWeight(.regular)
+                                    .font(.subheadline)
+                                    .fontWeight(.heavy)
                                     .foregroundColor(Color.gray)
                                     
                                     
@@ -106,16 +106,22 @@ struct ContentView: View {
                         HStack{
                             VStack{
                                 Image(systemName: "tag")
-                                    .font(.system(size: 16, weight: .black))
+                                    .font(.system(size: 24, weight: .black))
                             }
                             VStack(alignment: .leading) {
                                 Text("Tagged Articles")
-                                    .font(.system(size: 18, weight: .black))
-                                    .fontWeight(.regular)
+                                    .font(.headline)
+                                    .fontWeight(.heavy)
+                                    //.opacity(0.8)
+//                                    .font(.system(size: 18, weight: .black))
+//                                    .fontWeight(.regular)
 
                                 Text("Updated Today")
-                                    .font(.system(size: 16, weight: .black))
-                                    .fontWeight(.regular)
+                                    .font(.subheadline)
+                                    .fontWeight(.heavy)
+                                    //.opacity(0.8)
+//                                    .font(.system(size: 16, weight: .black))
+//                                    .fontWeight(.regular)
                                     .foregroundColor(Color.gray)
                             }
                         }
@@ -130,8 +136,10 @@ struct ContentView: View {
                                 .aspectRatio(contentMode: .fit)
                                 .frame(width: 24, height: 24, alignment: .center)
                             Text("Settings")
-                                .font(.system(size: 18, weight: .black))
-                                .fontWeight(.regular)
+                                .font(.headline)
+                                .fontWeight(.heavy)
+                                //.foregroundColor(.gray)
+                                //.opacity(0.8)
                             }
                         }
                     }
