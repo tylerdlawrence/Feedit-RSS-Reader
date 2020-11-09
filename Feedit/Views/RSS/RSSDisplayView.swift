@@ -34,7 +34,7 @@ struct SourceDisplayView_Previews: PreviewProvider {
     static var previews: some View {
     let rss = RSS.create(url: "https://feed.podbean.com/HRpreneur/feed.xml",
                              title: "HR{preneur}",
-                            desc: "While sales, marketing, and other functions may be second nature for many business owners, HR is probably one of the more challenging aspects of running your business.",
+                            desc: "ADP small business podcast",
                              image: "", in: Persistence.current.context)
         return RSSDisplayView(rss: rss)
             

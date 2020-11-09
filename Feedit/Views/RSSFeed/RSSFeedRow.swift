@@ -12,7 +12,8 @@ struct RSSItemRow: View {
     
     @ObservedObject var itemWrapper: RSSItem
     @ObservedObject var imageLoader: ImageLoader
-    
+   // @ObservedObject var rssFeedViewModel: RSSFeedViewModel
+
     var contextMenuAction: ((RSSItem) -> Void)?
     
     init(wrapper: RSSItem, menu action: ((RSSItem) -> Void)? = nil) {
@@ -37,17 +38,24 @@ struct RSSItemRow: View {
                 .font(.custom("Gotham", size: 20))
                 .multilineTextAlignment(.leading)
                 .lineLimit(1)
-                }
+    }
+    
+    private var descView: some View {
+            Text(itemWrapper.desc)
+                .font(.subheadline)
+                .lineLimit(1)
+    }
     
     var body: some View{
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading) {
             Text(itemWrapper.title)
                 .font(.headline)
                 .lineLimit(2)
-            Spacer()
+            //Spacer()
             Text(itemWrapper.desc.trimHTMLTag.trimWhiteAndSpace)
-                .font(.custom("Gotham", size: 16))
-                .lineLimit(1)
+                .font(.subheadline)
+                .foregroundColor(Color("darkerAccent"))
+                .lineLimit(2)
                 
             
                 HStack(alignment: .center) {
@@ -67,12 +75,14 @@ struct RSSItemRow: View {
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
                                     .font(.body)
-                                    .frame(width: 15.0, height: 15.0,alignment: .center)
+                                    .frame(width: 20, height: 20,alignment: .center)
                                     .layoutPriority(10)
                                     //.animation(.easeInOut)
                                     //.padding(.trailing, 150)
 
                             }
+                            
+                            //Text(itemWrapper.title)
 
                             HStack(spacing: 10) {
                                 if itemWrapper.progress >= 1.0 {
@@ -91,7 +101,6 @@ struct RSSItemRow: View {
                                     )
                                     .frame(width: 13, height: 13, alignment: .center)
                                 }
-                                
                     
                                 Text("\(itemWrapper.createTime?.string() ?? "")")
                                     .font(.custom("Gotham", size: 14))                                    .foregroundColor(.gray)
@@ -117,10 +126,10 @@ struct RSSItemRow: View {
                 onAction: {
                     self.contextMenuAction?(self.itemWrapper)
             })
-                .font(.custom("Gotham", size: 20))
+//.font(.custom("Gotham", size: 20))
         }
     }
-            }.shadow(color: .gray, radius: 1, y: 1)
+            }
         }
     }
 

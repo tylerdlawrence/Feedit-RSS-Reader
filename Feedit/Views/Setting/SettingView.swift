@@ -50,12 +50,14 @@ struct SettingView: View {
     @State var isPrivate: Bool = true
     @State var notificationsEnabled: Bool = false
     @State private var previewIndex = 0
-
+  
     var body: some View {
-        HStack {
+
         NavigationView {
-            
             Form {
+                Text("Settings")
+                    .font(.title2)
+                    .fontWeight(.heavy)
                 Section(header: Text("ACCOUNTS")) {
                     TextField("On My iPhone", text: $accounts)
                     Toggle(isOn: $isPrivate) {
@@ -133,7 +135,7 @@ struct SettingView: View {
                     HStack {
                         Text("Feedit: RSS Reader")
                         Spacer()
-                        Text("1.1.6")
+                        Text("1.1.8")
                     }
                 }
                 
@@ -145,18 +147,15 @@ struct SettingView: View {
                     }
                 }
             }
-//            .navigationBarItems(leading: BackButton())
-
             .onAppear {
                 self.isSelected = AppEnvironment.current.useSafari
             }.toggleStyle(SwitchToggleStyle(tint: .blue))
             .onDisappear {
                 AppEnvironment.current.useSafari = self.isSelected
             }
-            //.shadow(color: .gray, radius: 1, y: 1)
         }
-        .foregroundColor(.gray)
-        }.navigationBarTitle("Settings", displayMode: .automatic)
+        .navigationBarHidden(true)
+//        .navigationBarTitle("Settings", displayMode: .inline)
     }
 }
 
