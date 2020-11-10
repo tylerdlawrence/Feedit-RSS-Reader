@@ -38,7 +38,7 @@ struct ActionContextMenu: View {
 
 struct ActionContextMenu_Previews: PreviewProvider {
     static var previews: some View {
-        ActionContextMenu(label: "Bookmark Article", systemName: "bookmark.circle")
+        ActionContextMenu(label: "Tag Article for Later", systemName: "tag")
             .preferredColorScheme(.dark)
             .previewDevice("iPhone 11 Pro Max")
     }

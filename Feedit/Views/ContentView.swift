@@ -252,13 +252,13 @@ struct ContentView: View {
 //    }
 //}
 
-extension Date {
-    func string(format: String = "MMM d, h:mm a") -> String {
-        let f = DateFormatter()
-        f.dateFormat = format
-        return f.string(from: self)
-    }
-}
+//extension Date {
+//    func string(format: String = "MMM d, h:mm a") -> String {
+//        let f = DateFormatter()
+//        f.dateFormat = format
+//        return f.string(from: self)
+//    }
+//}
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
