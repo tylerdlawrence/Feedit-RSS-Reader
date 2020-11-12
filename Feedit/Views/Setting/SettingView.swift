@@ -50,7 +50,7 @@ struct SettingView: View {
     @State var isPrivate: Bool = true
     @State var notificationsEnabled: Bool = false
     @State private var previewIndex = 0
-  
+    
     var body: some View {
 
         NavigationView {

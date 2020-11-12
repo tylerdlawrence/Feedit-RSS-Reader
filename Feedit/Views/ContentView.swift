@@ -11,7 +11,7 @@ import ModalView
 import Foundation
 
 struct ContentView: View {
-
+    @Environment(\.managedObjectContext) private var managedObjectContext
     init(){
         UITableView.appearance().backgroundColor = .clear
 //        //.secondarySystemGroupedBackground
@@ -27,15 +27,6 @@ struct ContentView: View {
     enum FeaureItem {
         case add
     }
-    
-//    @ObservedObject var itemWrapper: RSSItem
-//
-//    var contextMenuAction: ((RSSItem) -> Void)?
-//
-//    init(wrapper: RSSItem, menu action: ((RSSItem) -> Void)? = nil) {
-//        itemWrapper = wrapper
-//        contextMenuAction = action
-//    }
     
     @State private var showDetails = false
     @State private var revealDetails = false
@@ -69,7 +60,9 @@ struct ContentView: View {
     private var settingListView: some View {
         SettingView()
     }
-
+    
+//    @Environment(\.exportFiles) var exportAction
+//    @Environment(\.importFiles) var importAction
     
     var body: some View {
         NavigationView {
@@ -150,6 +143,21 @@ struct ContentView: View {
 //                            Text("Show 🥦")
 //                        }
 //                    }
+                    
+//                    Button("Export") {
+//                        let url = Bundle.main.url(forResource: "default", withExtension: "json")!
+//
+//                        exportAction(moving: url) { result in
+//                            switch result {
+//                            case .success(let url):
+//                                print("Success! Moved to: \(url)")
+//                            case .failure(let error):
+//                                print("Oops: \(error.localizedDescription)")
+//                            case .none:
+//                                print("Cancelled")
+//                            }
+//                        }
+//                    }
                 }
             }
             .font(.subheadline)
@@ -170,6 +178,7 @@ struct ContentView: View {
 //                }
 //            )
         }
+        
     }
 }
 
