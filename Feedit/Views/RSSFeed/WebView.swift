@@ -16,10 +16,10 @@ struct WebView: View {
         
         var icon: String {
             switch self {
-            case .goBack: return "chevron.left"
-            case .goForward: return "chevron.right"
+            case .goBack: return "chevron.backward.circle"
+            case .goForward: return "chevron.forward.circle"
             case .archive(let isArchived):
-                return "bookmark\(isArchived ? ".fill" : "")"
+                return "tag\(isArchived ? ".fill" : "")"
             }
         }
     }

@@ -9,23 +9,6 @@ import WidgetKit
 import SwiftUI
 import Intents
 
-//extension FileManager {
-//  static func sharedContainerURL() -> URL {
-//    return FileManager.default.containerURL(
-//      forSecurityApplicationGroupIdentifier: "group.emitron.contents"
-//    )!
-//  }
-//}
-//
-//let snapshotEntry = WidgetContent(name: "iOS Concurrency with GCD and Operations",
-//  cardViewSubtitle: "iOS & Swift",
-//  descriptionPlainText: """
-//  Learn how to add concurrency to your apps! \
-//  Keep your app’s UI responsive to give your \
-//  users a great user experience.
-//  """,
-//  releasedAtDateTimeString: "Jun 23 2020 • Video Course (3 hrs, 21 mins)")
-//
 //struct Provider: TimelineProvider {
 //  public typealias Entry = WidgetContent
 //
@@ -104,6 +87,8 @@ import Intents
 //        //"https://daringfireball.net/feeds/json"
 ////        "https://canvasjs.com/data/gallery/javascript/daily-sales-data.json"
 //
+
+
 struct Provider: TimelineProvider {
     //this is a placeholder string
     func placeholder(in context: Context) -> SimpleEntry {

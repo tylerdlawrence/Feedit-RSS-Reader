@@ -4,7 +4,7 @@
 //
 //  Created by Tyler D Lawrence on 8/10/20.
 //  BOOKMARKS Screen
-//  TODO: correct issue w/ action button only viewing 'Bookmark' - not showing 'Removing Bookmark'
+//
 
 import SwiftUI
 import WidgetKit
@@ -41,7 +41,7 @@ struct ArchiveListView: View {
                 VStack(alignment: .center) {
                     Button(action: self.viewModel.loadMore) {
                         Text(self.footer)
-                            .font(.custom("Gotham", size: 14))
+//                            .font(.custom("Gotham", size: 14))
                     }
                 }
             }
@@ -61,7 +61,7 @@ struct ArchiveListView: View {
             }
             .listStyle(PlainListStyle())
             .navigationBarTitle("Tagged Articles", displayMode: .automatic)
-            .font(.custom("Gotham", size: 14))
+//            .font(.custom("Gotham", size: 14))
             //.environment(\.horizontalSizeClass, .regular)
             .navigationBarItems(trailing: EditButton())
         }
@@ -73,12 +73,16 @@ extension ArchiveListView {
 }
 
 struct ArchiveListView_Previews: PreviewProvider {
-    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-    static var previews: some View {
-        RSSListView(viewModel: self.viewModel)
-            .preferredColorScheme(.dark)
-            .previewDevice("iPhone 12 mini")
-            
+    
+//    static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
+    
+static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+
+static let settingViewModel = SettingViewModel()
+
+static var previews: some View {
+    ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
     }
 }
+//archiveListViewModel: self.archiveListViewModel,
 

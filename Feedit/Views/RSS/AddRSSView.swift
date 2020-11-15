@@ -12,7 +12,7 @@ struct AddRSSView: View {
     @Environment(\.presentationMode) var presentationMode
     
     @ObservedObject var viewModel: AddRSSViewModel
-    
+        
     var onDoneAction: (() -> Void)?
     var onCancelAction: (() -> Void)?
     
@@ -60,6 +60,8 @@ struct AddRSSView: View {
     @State private var feedUrl: String = ""
     @State private var feedTitle: String = ""
     
+//    @Binding var isPresented: Bool
+
     init(viewModel: AddRSSViewModel,
          onDoneAction: (() -> Void)? = nil,
          onCancelAction: (() -> Void)? = nil) {
@@ -117,10 +119,12 @@ struct AddRSSView: View {
     }
 }
 
-struct AddRSSView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-            .preferredColorScheme(.dark)
-            .previewDevice("iPhone 12")
-    }
-}
+//struct AddRSSView_Previews: PreviewProvider {
+//    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+//    
+//    static var previews: some View {
+//        ContentView(viewModel: self.viewModel)
+//            .preferredColorScheme(.dark)
+//    }
+//}
+//viewModel: self.viewModel
