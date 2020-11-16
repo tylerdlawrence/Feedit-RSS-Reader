@@ -191,7 +191,6 @@ extension DataSource {
     
     func saveUpdateContext() {
         saveContext(updateContext)
-        moveSaveContext()
     }
     
     func discardUpdateContext() {
@@ -209,10 +208,6 @@ extension DataSource {
         guard context === createContext || context === updateContext else { return }
         guard context.hasChanges else { return }
         context.rollback()
-    }
-    
-    func moveSaveContext() {
-        moveSaveContext()
     }
 }
 

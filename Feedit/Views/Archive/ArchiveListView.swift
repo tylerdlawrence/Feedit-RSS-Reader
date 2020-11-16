@@ -22,7 +22,7 @@ struct ArchiveListView: View {
     }
     
     var body: some View {
-        NavigationView {
+        //NavigationView {
             List {
                 ForEach(self.archiveListViewModel.items, id: \.self) { item in
                     RSSItemRow(wrapper: item)
@@ -64,7 +64,7 @@ struct ArchiveListView: View {
 //            .font(.custom("Gotham", size: 14))
             //.environment(\.horizontalSizeClass, .regular)
             .navigationBarItems(trailing: EditButton())
-        }
+        //}
     }
 }
 

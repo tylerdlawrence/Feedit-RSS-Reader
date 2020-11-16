@@ -90,15 +90,15 @@ struct HomeView: View {
     NavigationView{
         List {
             DisclosureGroup(
-            "All Sources",
+            " ⌘  All Sources",
             tag: .RSS,
             selection: $showingContent) {
                 ForEach(viewModel.items, id: \.self) { rss in
                     NavigationLink(destination: self.destinationView(rss)) {
                         RSSRow(rss: rss)
+                        
                     }
                     .tag("RSS")
-
                 }
                 .onMove { (indexSet, index) in
                     self.items.move(fromOffsets: indexSet,
@@ -110,19 +110,18 @@ struct HomeView: View {
                     }
                 }
               }
-            
             VStack {
                 NavigationLink(destination: archiveListView) {
                     ButtonView()
                 }
              }
          }
+        .font(.headline)
         .listStyle(PlainListStyle())
-        .navigationTitle("Account")
+        .navigationTitle("Feedit") //On My iPhone
+//        .navigationBarColor(tintColor: .blue)
         .navigationBarItems(leading: EditButton(), trailing: trailingView)
      
-            
-            
 //          DisclosureGroup(
 //            "Tagged Articles",
 //            tag: .tag,
@@ -170,22 +169,18 @@ struct HomeView: View {
             self.viewModel.fecthResults()
         }
       }
+    .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
+
 struct ButtonView: View {
     var body: some View {
+        Image(systemName: "tag")
+            .imageScale(.small)
         Text("Tagged Articles")
+        
     }
 }
-                            
-//            HStack {
-//
-//                Button(action: {
-//
-//                    print("Reload button pressed...")
-//
-//                })
-
 
 extension DisclosureGroup where Label == Text {
   public init<V: Hashable, S: StringProtocol>(
@@ -239,6 +234,7 @@ struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         
         HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel)
+            
         
 //        ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
     }
