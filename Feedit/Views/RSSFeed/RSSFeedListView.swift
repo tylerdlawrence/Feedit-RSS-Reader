@@ -51,13 +51,41 @@ struct RSSFeedListView: View {
         
     }
     
+    private var archiveListView: some View {
+        Button(action: {
+            print ("Tags")
+        }) {
+            Image(systemName: "tag")
+                .imageScale(.medium)
+        }
+    }
+    
+    private var markAllRead: some View {
+        Button(action: {
+            print ("Mark all as Read")
+        }) {
+            Image(systemName: "checkmark")
+                .imageScale(.medium)
+//                .resizable()
+//                .aspectRatio(contentMode: .fit)
+//                .frame(width: 20, height: 20)
+        }
+    }
+    
+    private var trailingFeedView: some View {
+        HStack(alignment: .top, spacing: 24) {
+            archiveListView
+            markAllRead
+        }
+    }
+    
     var body: some View {
         VStack(alignment: .leading){
                 Text(rssSource.title)
                     .font(.title2)
                     .fontWeight(.heavy)
             HStack{
-                Text("Last Sync")
+                Text("Added")
                     .font(.footnote)
                     .fontWeight(.heavy)
                 Text(rssSource.createTimeStr)
@@ -67,7 +95,7 @@ struct RSSFeedListView: View {
             Text(rssSource.desc)
                     .font(.footnote)
         }
-        .frame(width: 325.0, height: 90.0)
+        .frame(width: 325.0, height: 80)
 
         VStack{
             List {
@@ -85,8 +113,10 @@ struct RSSFeedListView: View {
                         }
                     }
                 }
+            .listStyle(PlainListStyle())
             }
         .navigationBarTitle("", displayMode: .inline)
+        .navigationBarItems(trailing: trailingFeedView)
         //.navigationBarHidden(true)
         .onAppear {
             self.rssFeedViewModel.fecthResults()
@@ -123,10 +153,16 @@ extension RSSFeedListView {
 }
 
 struct RSSFeedListView_Previews: PreviewProvider {
+    
+    static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
+    
+    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+
+    static let settingViewModel = SettingViewModel()
+
     static var previews: some View {
-        ContentView()
-            .preferredColorScheme(.dark)
-            .previewDevice("iPhone 11")
-            
+        ContentView(archiveListViewModel: self.archiveListViewModel, settingViewModel: self.settingViewModel, viewModel: self.viewModel)
+        }
     }
-}
+//archiveListViewModel: self.archiveListViewModel,
+//settingViewModel: self.settingViewModel,

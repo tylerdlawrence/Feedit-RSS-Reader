@@ -4,7 +4,7 @@
 //
 //  Created by Tyler D Lawrence on 8/10/20.
 //  BOOKMARKS Screen
-//  TODO: correct issue w/ action button only viewing 'Bookmark' - not showing 'Removing Bookmark'
+//
 
 import SwiftUI
 import WidgetKit
@@ -12,19 +12,19 @@ import Intents
 
 struct ArchiveListView: View {
     
-    @ObservedObject var viewModel: ArchiveListViewModel
+    @ObservedObject var archiveListViewModel: ArchiveListViewModel
     
     @State private var selectedItem: RSSItem?
     @State var footer = "Load more articles"
     
     init(viewModel: ArchiveListViewModel) {
-        self.viewModel = viewModel
+        self.archiveListViewModel = viewModel
     }
     
     var body: some View {
-        NavigationView {
+        //NavigationView {
             List {
-                ForEach(self.viewModel.items, id: \.self) { item in
+                ForEach(self.archiveListViewModel.items, id: \.self) { item in
                     RSSItemRow(wrapper: item)
                         .onTapGesture {
                             self.selectedItem = item
@@ -34,14 +34,14 @@ struct ArchiveListView: View {
                 }
                 .onDelete { indexSet in
                     if let index = indexSet.first {
-                        let item = self.viewModel.items[index]
-                        self.viewModel.unarchive(item)
+                        let item = self.archiveListViewModel.items[index]
+                        self.archiveListViewModel.unarchive(item)
                     }
                 }
                 VStack(alignment: .center) {
-                    Button(action: self.viewModel.loadMore) {
+                    Button(action: self.archiveListViewModel.loadMore) {
                         Text(self.footer)
-                            .font(.custom("Gotham", size: 14))
+//                            .font(.custom("Gotham", size: 14))
                     }
                 }
             }
@@ -52,19 +52,19 @@ struct ArchiveListView: View {
                     WebView(
                         rssItem: item,
                         onArchiveAction: {
-                            self.viewModel.archiveOrCancel(item)
+                            self.archiveListViewModel.archiveOrCancel(item)
                     })
                 }
             })
             .onAppear {
-                self.viewModel.fecthResults()
+                self.archiveListViewModel.fecthResults()
             }
             .listStyle(PlainListStyle())
             .navigationBarTitle("Tagged Articles", displayMode: .automatic)
-            .font(.custom("Gotham", size: 14))
+//            .font(.custom("Gotham", size: 14))
             //.environment(\.horizontalSizeClass, .regular)
             .navigationBarItems(trailing: EditButton())
-        }
+        //}
     }
 }
 
@@ -73,12 +73,16 @@ extension ArchiveListView {
 }
 
 struct ArchiveListView_Previews: PreviewProvider {
-    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-    static var previews: some View {
-        RSSListView(viewModel: self.viewModel)
-            .preferredColorScheme(.dark)
-            .previewDevice("iPhone 12 mini")
-            
+    
+//    static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
+    
+static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+
+static let settingViewModel = SettingViewModel()
+
+static var previews: some View {
+    ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
     }
 }
+//archiveListViewModel: self.archiveListViewModel,
 

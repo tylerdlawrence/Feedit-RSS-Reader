@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct BatchImportModel: Codable {
+struct BatchImportModel: Decodable {
     
     var url: String
     var title: String?

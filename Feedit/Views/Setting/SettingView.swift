@@ -9,13 +9,12 @@ import SwiftUI
 import FeedKit
 import CoreData
 import Foundation
+import ModalView
 
 struct SettingView: View {
     
-    @State private var isDarkModeOn = true
-    @State private var isSettingsExpanded: Bool = true
-    @Environment(\.presentationMode) var presentationMode
-    
+//    @ObservedObject var settingViewModel: SettingViewModel
+
     enum ReadMode {
         case safari
         case webview
@@ -34,7 +33,7 @@ struct SettingView: View {
             }
         }
     }
-
+    
     @State private var isSelected: Bool = false
     
     var batchImportView: BatchImportView {
@@ -46,26 +45,25 @@ struct SettingView: View {
         let storage = DataNStorageView()
         return storage
     }
+    
+    @State private var isDarkModeOn = true
+    @State private var isSettingsExpanded: Bool = true
     @State var accounts: String = ""
     @State var isPrivate: Bool = true
     @State var notificationsEnabled: Bool = false
     @State private var previewIndex = 0
-  
+    
     var body: some View {
-
         NavigationView {
             Form {
-                Text("Settings")
-                    .font(.title2)
-                    .fontWeight(.heavy)
                 Section(header: Text("ACCOUNTS")) {
                     TextField("On My iPhone", text: $accounts)
                     Toggle(isOn: $isPrivate) {
-                        Image(systemName: "key.icloud")
+                        Image(systemName: "icloud")
                         Text("Private Account")
                     }.toggleStyle(SwitchToggleStyle(tint: .blue))
                 }
-                
+
                 Section(header: Text("DATA & Notifications")) {
                     Group {
                         HStack {
@@ -77,7 +75,7 @@ struct SettingView: View {
                                 }
                             }
                         }
-                            
+
                     Group {
                         HStack {
                             Image(systemName: "circlebadge.2")
@@ -113,7 +111,7 @@ struct SettingView: View {
                                             Toggle("Reader View", isOn: self.$isSelected)
                                         }.toggleStyle(SwitchToggleStyle(tint: .blue))
                                     }
-                                   
+
                                 HStack {
                                     HStack {
                                 Image(systemName: "circle.lefthalf.fill")
@@ -122,48 +120,31 @@ struct SettingView: View {
                                 }
                             }
                         }
-                        
+                        Section(header: Text("ABOUT")) {
+                            HStack {
+                                Text("Feedit: RSS Reader")
+                                Spacer()
+                                Text("1.1.9")
+                            }
+                        }
 
-                    //Picker(selection: $previewIndex, label: Text("Show Previews")) {
-                        //ForEach(0 ..< previewOptions.count) {
-                            //Text(self.previewOptions[$0])
-                        //}
-                    //}
-                //}
-                
-                Section(header: Text("ABOUT")) {
-                    HStack {
-                        Text("Feedit: RSS Reader")
-                        Spacer()
-                        Text("1.1.8")
-                    }
-                }
-                
-                Section {
-                    Button(action: {
-                        print("Perform an action here...")
-                    }) {
-                        Text("Reset Settings")
-                    }
-                }
             }
-            .onAppear {
-                self.isSelected = AppEnvironment.current.useSafari
-            }.toggleStyle(SwitchToggleStyle(tint: .blue))
-            .onDisappear {
-                AppEnvironment.current.useSafari = self.isSelected
-            }
+            .listStyle(GroupedListStyle())
+            .navigationBarTitle("Settings", displayMode: .automatic)
+            .environment(\.horizontalSizeClass, .regular)
         }
-        .navigationBarHidden(true)
-//        .navigationBarTitle("Settings", displayMode: .inline)
+        .onAppear {
+            self.isSelected = AppEnvironment.current.useSafari
+        }
+        .onDisappear {
+            AppEnvironment.current.useSafari = self.isSelected
+        }
     }
 }
 
-struct SettingView_Preview: PreviewProvider {
-    static var previews: some View {
-        SettingView()
-            .preferredColorScheme(.dark)
-            .previewDevice("iPhone 11")
-    }
-    
-}
+//struct SettingView_Preview: PreviewProvider {
+//    static var previews: some View {
+//        SettingView
+//    }
+//
+//}

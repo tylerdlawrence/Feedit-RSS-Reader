@@ -133,10 +133,11 @@ struct RSSItemRow: View {
         }
     }
 
-struct RSSFeedRow_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-            .preferredColorScheme(.dark)
-            .previewDevice("iPhone 12")
-    }
-}
+//struct RSSFeedRow_Previews: PreviewProvider {
+//    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+//    
+//    static var previews: some View {
+//        ContentView(viewModel: self.viewModel)
+//            .preferredColorScheme(.dark)
+//    }
+//}

@@ -164,6 +164,18 @@ extension DataSource {
         guard context === updateContext else { return }
         parentContext.quickSave()
     }
+
+
+func move(_ object: Model, saveContext: Bool) {
+    guard let context = object.managedObjectContext else { return }
+    guard context === parentContext || context === updateContext else { return }
+    
+    guard saveContext else { return }
+    context.quickSave()
+    
+    guard context === updateContext else { return }
+    parentContext.quickSave()
+    }
 }
 
 

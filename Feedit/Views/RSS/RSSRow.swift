@@ -92,10 +92,16 @@ struct RSSRow: View {
 }
 
 struct RSSRow_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-            .preferredColorScheme(.dark)
-            .previewDevice("iPhone 11")
-    }
-}
+    
+    static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
+    
+    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
 
+    static let settingViewModel = SettingViewModel()
+
+    static var previews: some View {
+        ContentView(archiveListViewModel: self.archiveListViewModel, settingViewModel: self.settingViewModel, viewModel: self.viewModel)
+        }
+    }
+//archiveListViewModel: self.archiveListViewModel,
+//settingViewModel: self.settingViewModel,
