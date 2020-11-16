@@ -30,6 +30,8 @@ struct HomeView: View {
       case unread
     }
     @ObservedObject var viewModel: RSSListViewModel
+    @ObservedObject var archiveListViewModel: ArchiveListViewModel
+
 //    @State private var activeSheet: Sheet?
     @State var showingContent: ContentViewGroup?
     @State private var selectedFeatureItem = FeaureItem.add
@@ -69,12 +71,7 @@ struct HomeView: View {
     }
     
     private var archiveListView: some View {
-        Button(action: {
-            print ("Tags")
-        }) {
-            Image(systemName: "tag")
-                .imageScale(.medium)
-        }
+        ArchiveListView(viewModel: self.archiveListViewModel)
     }
 
     private var trailingView: some View {
@@ -114,6 +111,17 @@ struct HomeView: View {
                 }
               }
             
+            VStack {
+                NavigationLink(destination: archiveListView) {
+                    ButtonView()
+                }
+             }
+         }
+        .listStyle(PlainListStyle())
+        .navigationTitle("Account")
+        .navigationBarItems(leading: EditButton(), trailing: trailingView)
+     
+            
             
 //          DisclosureGroup(
 //            "Tagged Articles",
@@ -125,8 +133,6 @@ struct HomeView: View {
 //
 //                })
 //          }
-        
-
 //          DisclosureGroup(
 //            "Unread",
 //            tag: .unread,
@@ -137,33 +143,17 @@ struct HomeView: View {
 //
 //            })
 //          }
-        }
-        .listStyle(PlainListStyle())
-        .navigationTitle("Account")
-        .navigationBarItems(leading: EditButton(), trailing: trailingView)
-//        .navigationBarItems(leading: Button(action: {
-//            activeSheet = .settings
-//        }, label: {
-//            Image(systemName: "gear")
-//            imageScale(.medium)
-//        }), trailing: Button(action: {
-//            activeSheet = .add
-//        }, label: {
-//            Image(systemName: "plus")
-//                    .imageScale(.medium)
-//        }))
-        if addRSSProgressValue > 0 && addRSSProgressValue < 1.0 {
-            LinerProgressBar(lineWidth: 3, color: .blue, progress: $addRSSProgressValue)
-                .padding(.top, 2)
-        }
-    }
+//        if addRSSProgressValue > 0 && addRSSProgressValue < 1.0 {
+//            LinerProgressBar(lineWidth: 3, color: .blue, progress: $addRSSProgressValue)
+//                .padding(.top, 2)
+//        }
 
-        .onReceive(addRSSPublisher, perform: { output in
-            guard
-                let userInfo = output.userInfo,
-                let total = userInfo["total"] as? Double else { return }
-            self.addRSSProgressValue += 1.0/total
-        })
+//        .onReceive(addRSSPublisher, perform: { output in
+//            guard
+//                let userInfo = output.userInfo,
+//                let total = userInfo["total"] as? Double else { return }
+//            self.addRSSProgressValue += 1.0/total
+//        })
         .onReceive(rssRefreshPublisher, perform: { output in
             self.viewModel.fecthResults()
         })
@@ -179,46 +169,14 @@ struct HomeView: View {
         .onAppear {
             self.viewModel.fecthResults()
         }
-//            .sheet(isPresented: $isSheetPresented, content: {
-//            AddRSSView(viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss),
-//                onDoneAction: self.onDoneAction)
-//            })
-//            .onAppear {
-//            self.viewModel.fecthResults()
-//            }
-//            .sheet(isPresented: $isSettingPresented, content: {
-//                SettingView(settingViewModel: self.settingViewModel)
-//            })
-        }
+      }
     }
-//}
-        
-//        .sheet(item: $activeSheet) { sheet in
-//            switch sheet {
-//            case .add:
-//                NavigationView {
-//                    RSSDisplayView(rss: $viewModel.rss)
-//                                .init(get: {
-//                        activeSheet == .add
-//                    }, set: { isPresented in
-//                        activeSheet = isPresented ? .add : nil
-//                    }))
-                
-//            case settings:
-//                NavigationView {
-//                    settingListView
-//            }
-//                }
-//            }
-//        }
-//    }
-//        .sheet(isPresented: $addIsPresented, content: {
-//        AddRSSView( viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss),
-//            onDoneAction: self.onDoneAction)
-//    })
-//        .onAppear {
-//        self.viewModel.fecthResults()
-//        }
+}
+struct ButtonView: View {
+    var body: some View {
+        Text("Tagged Articles")
+    }
+}
                             
 //            HStack {
 //
@@ -226,20 +184,8 @@ struct HomeView: View {
 //
 //                    print("Reload button pressed...")
 //
-//                }) {
-//                    settingButton
-////                    Image(systemName: "arrow.clockwise")
-//                }
-//                .padding(.trailing)
-//
-//                addSourceButton
-//            }
+//                })
 
-      //)
-//        }
-//
-//    }
-//}
 
 extension DisclosureGroup where Label == Text {
   public init<V: Hashable, S: StringProtocol>(
@@ -292,7 +238,7 @@ struct HomeView_Previews: PreviewProvider {
 
     static var previews: some View {
         
-        HomeView(viewModel: self.viewModel)
+        HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel)
         
 //        ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
     }

@@ -12,19 +12,19 @@ import Intents
 
 struct ArchiveListView: View {
     
-    @ObservedObject var viewModel: ArchiveListViewModel
+    @ObservedObject var archiveListViewModel: ArchiveListViewModel
     
     @State private var selectedItem: RSSItem?
     @State var footer = "Load more articles"
     
     init(viewModel: ArchiveListViewModel) {
-        self.viewModel = viewModel
+        self.archiveListViewModel = viewModel
     }
     
     var body: some View {
         NavigationView {
             List {
-                ForEach(self.viewModel.items, id: \.self) { item in
+                ForEach(self.archiveListViewModel.items, id: \.self) { item in
                     RSSItemRow(wrapper: item)
                         .onTapGesture {
                             self.selectedItem = item
@@ -34,12 +34,12 @@ struct ArchiveListView: View {
                 }
                 .onDelete { indexSet in
                     if let index = indexSet.first {
-                        let item = self.viewModel.items[index]
-                        self.viewModel.unarchive(item)
+                        let item = self.archiveListViewModel.items[index]
+                        self.archiveListViewModel.unarchive(item)
                     }
                 }
                 VStack(alignment: .center) {
-                    Button(action: self.viewModel.loadMore) {
+                    Button(action: self.archiveListViewModel.loadMore) {
                         Text(self.footer)
 //                            .font(.custom("Gotham", size: 14))
                     }
@@ -52,12 +52,12 @@ struct ArchiveListView: View {
                     WebView(
                         rssItem: item,
                         onArchiveAction: {
-                            self.viewModel.archiveOrCancel(item)
+                            self.archiveListViewModel.archiveOrCancel(item)
                     })
                 }
             })
             .onAppear {
-                self.viewModel.fecthResults()
+                self.archiveListViewModel.fecthResults()
             }
             .listStyle(PlainListStyle())
             .navigationBarTitle("Tagged Articles", displayMode: .automatic)

@@ -12,26 +12,25 @@ import Foundation
 
 struct ContentView: View {
     
-//    @ObservedObject var archiveListViewModel: ArchiveListViewModel
+    @ObservedObject var archiveListViewModel: ArchiveListViewModel
     @ObservedObject var settingViewModel: SettingViewModel
     @ObservedObject var viewModel: RSSListViewModel
     @State private var selectedTab = 0
     
     private var homeListView: some View {
-        HomeView(viewModel: self.viewModel)
+        HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel)
       }
     
-    private var archiveListView: some View {
-        ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
-    }
+//    private var archiveListView: some View {
+//        ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
+//    }
     
 //    private var settingListView: some View {
 //        SettingView(settingViewModel: self.settingViewModel)
 //    }
     
     var body: some View {
-        HomeView(viewModel: self.viewModel)
-        archiveListView
+        HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel)
     
     }
 }
@@ -300,14 +299,14 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     
-//    static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
+    static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
     
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     
     static let settingViewModel = SettingViewModel()
 
     static var previews: some View {
-        ContentView(settingViewModel: self.settingViewModel, viewModel: self.viewModel)
+        ContentView(archiveListViewModel: self.archiveListViewModel, settingViewModel: self.settingViewModel, viewModel: self.viewModel)
             
     }
 }

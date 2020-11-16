@@ -161,7 +161,7 @@ struct RSSFeedListView_Previews: PreviewProvider {
     static let settingViewModel = SettingViewModel()
 
     static var previews: some View {
-        ContentView(settingViewModel: self.settingViewModel, viewModel: self.viewModel)
+        ContentView(archiveListViewModel: self.archiveListViewModel, settingViewModel: self.settingViewModel, viewModel: self.viewModel)
         }
     }
 //archiveListViewModel: self.archiveListViewModel,
