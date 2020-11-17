@@ -7,10 +7,40 @@
 //
 
 import SwiftUI
-import WidgetKit
 import Intents
 
 struct ArchiveListView: View {
+    
+    
+
+//    enum FilterType {
+//        case all, starred, unstarred
+//    }
+//    @EnvironmentObject var sources: Sources
+//
+//    let filter: FilterType
+//
+//    var title: String {
+//        switch filter {
+//        case .all:
+//            return "All"
+//        case .starred:
+//            return "Starred"
+//        case .unstarred:
+//            return "Unstarred"
+//        }
+//    }
+//
+//    var filteredSources: [Source] {
+//        switch filter {
+//        case .all:
+//            return sources.sources
+//        case .starred:
+//            return sources.sources.filter { $0.isStarred }
+//        case .unstarred:
+//            return sources.sources.filter { !$0.isStarred }
+//        }
+//    }
     
     @ObservedObject var archiveListViewModel: ArchiveListViewModel
     
@@ -21,8 +51,8 @@ struct ArchiveListView: View {
         self.archiveListViewModel = viewModel
     }
     
+    
     var body: some View {
-        //NavigationView {
             List {
                 ForEach(self.archiveListViewModel.items, id: \.self) { item in
                     RSSItemRow(wrapper: item)
@@ -40,8 +70,13 @@ struct ArchiveListView: View {
                 }
                 VStack(alignment: .center) {
                     Button(action: self.archiveListViewModel.loadMore) {
-                        Text(self.footer)
-//                            .font(.custom("Gotham", size: 14))
+                        HStack{
+                            Text("↺")
+                            //Image(systemName: "tag")
+                            Text(self.footer)
+                                .font(.title3)
+                                .fontWeight(.bold)
+                        }
                     }
                 }
             }
@@ -61,10 +96,7 @@ struct ArchiveListView: View {
             }
             .listStyle(PlainListStyle())
             .navigationBarTitle("Tagged Articles", displayMode: .automatic)
-//            .font(.custom("Gotham", size: 14))
-            //.environment(\.horizontalSizeClass, .regular)
             .navigationBarItems(trailing: EditButton())
-        //}
     }
 }
 
@@ -74,13 +106,14 @@ extension ArchiveListView {
 
 struct ArchiveListView_Previews: PreviewProvider {
     
-//    static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
+    static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
     
 static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
 
 static let settingViewModel = SettingViewModel()
 
 static var previews: some View {
+
     ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
     }
 }

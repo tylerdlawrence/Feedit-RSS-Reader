@@ -60,9 +60,9 @@ class RSSListViewModel: NSObject, ObservableObject {
         let title: String = ""
         let children: [RSS]? = nil
         var author: String?
-        //var title: String
+        var rss: String = ""
         var urlToImage: String?
-        var url: String
+        var url: String = ""
         var image: String?
     
         enum CodingKeys: String, CodingKey {

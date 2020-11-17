@@ -42,10 +42,6 @@ struct HomeView: View {
     @State private var addRSSProgressValue = 0.0
     @State var sources: [RSS] = []
     
-//    private var settingListView: some View {
-//        SettingView(settingViewModel: self.settingViewModel)
-//    }
-    
     private var addSourceButton: some View {
         Button(action: {
             self.isSheetPresented = true
@@ -71,7 +67,7 @@ struct HomeView: View {
     }
     
     private var archiveListView: some View {
-        ArchiveListView(viewModel: self.archiveListViewModel)
+        ArchiveListView(viewModel: archiveListViewModel)
     }
 
     private var trailingView: some View {
@@ -90,16 +86,16 @@ struct HomeView: View {
     NavigationView{
         List {
             DisclosureGroup(
-            " ⌘  All Sources",
+            " 》 All Sources", //》 ♨ ☑ ○ ⌘ ♾ ⍟ ❝ ❞ ∞  ↺ ⧁ ❯ 􀣎 ⚲ 🏷 🔖
             tag: .RSS,
             selection: $showingContent) {
                 ForEach(viewModel.items, id: \.self) { rss in
                     NavigationLink(destination: self.destinationView(rss)) {
                         RSSRow(rss: rss)
-                        
                     }
                     .tag("RSS")
                 }
+                
                 .onMove { (indexSet, index) in
                     self.items.move(fromOffsets: indexSet,
                 toOffset: index)
@@ -115,11 +111,21 @@ struct HomeView: View {
                     ButtonView()
                 }
              }
-         }
+
+            VStack {
+                DisclosureGroup(
+                " ❯   Folders", //》
+                tag: .RSS,
+                selection: $showingContent) {
+                VStack {
+                        FolderView()
+
+                }
+            }
+        }
         .font(.headline)
         .listStyle(PlainListStyle())
-        .navigationTitle("Feedit") //On My iPhone
-//        .navigationBarColor(tintColor: .blue)
+        .navigationTitle("Account") //On My iPhone
         .navigationBarItems(leading: EditButton(), trailing: trailingView)
      
 //          DisclosureGroup(
@@ -169,7 +175,8 @@ struct HomeView: View {
             self.viewModel.fecthResults()
         }
       }
-    .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        }
     }
 }
 
@@ -179,6 +186,14 @@ struct ButtonView: View {
             .imageScale(.small)
         Text("Tagged Articles")
         
+    }
+}
+
+struct FolderView: View {
+    var body: some View {
+        //Image(systemName: "folder.fill.badge.gear")
+            //.imageScale(.small)
+        Text("Folders")
     }
 }
 
@@ -228,14 +243,9 @@ struct HomeView_Previews: PreviewProvider {
     static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
     
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-    
-//    static let settingViewModel = SettingViewModel()
 
     static var previews: some View {
         
         HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel)
-            
-        
-//        ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
     }
 }
