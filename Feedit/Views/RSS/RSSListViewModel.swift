@@ -12,7 +12,10 @@ import Foundation
 import CoreData
 
 class RSSListViewModel: NSObject, ObservableObject {
-
+//    override convenience init() {
+//        UITableView.appearance().backgroundColor = .green // Uses UIColor
+//        self.init()
+//    }
     @Published var items: [RSS] = []
     
     let dataSource: RSSDataSource
