@@ -109,7 +109,13 @@ struct RSSFeedListView: View {
                 }
                 VStack(alignment: .center) {
                     Button(action: self.rssFeedViewModel.loadMore) {
-                        Text(self.footer)
+                        HStack{
+                            Text("↺")
+                            Text(self.footer)
+                                .font(.title3)
+                                .fontWeight(.bold)
+                                .padding(.bottom)
+                            }
                         }
                     }
                 }
@@ -162,6 +168,7 @@ struct RSSFeedListView_Previews: PreviewProvider {
 
     static var previews: some View {
         ContentView(archiveListViewModel: self.archiveListViewModel, settingViewModel: self.settingViewModel, viewModel: self.viewModel)
+            .preferredColorScheme(.dark)
         }
     }
 //archiveListViewModel: self.archiveListViewModel,

@@ -12,6 +12,8 @@ import FeedKit
 
 struct RSSRow: View {
     
+//    @EnvironmentObject var sources: Sources
+
     @ObservedObject var imageLoader: ImageLoader
     @ObservedObject var rss: RSS
 
@@ -74,13 +76,17 @@ struct RSSRow: View {
                             
                         pureTextView
                     }
+                    
                 }
+//                .environmentObject(sources)
+
                // Text(rss.createTimeStr)
                  //   .font(.footnote)
                 //    .foregroundColor(.gray)
             }
 
         }
+
         
         
         

@@ -15,7 +15,7 @@ struct RSSItemRow: View {
    // @ObservedObject var rssFeedViewModel: RSSFeedViewModel
 
     var contextMenuAction: ((RSSItem) -> Void)?
-    
+
     init(wrapper: RSSItem, menu action: ((RSSItem) -> Void)? = nil) {
         itemWrapper = wrapper
         contextMenuAction = action
@@ -47,25 +47,29 @@ struct RSSItemRow: View {
     }
     
     var body: some View{
+    
         VStack(alignment: .leading) {
+
             Text(itemWrapper.title)
                 .font(.headline)
                 .lineLimit(2)
             //Spacer()
             Text(itemWrapper.desc.trimHTMLTag.trimWhiteAndSpace)
                 .font(.subheadline)
-                .foregroundColor(Color("darkerAccent"))
+                .foregroundColor(.gray)
+                //.foregroundColor(Color("darkerAccent"))
                 .lineLimit(2)
                 
-            
                 HStack(alignment: .center) {
                     VStack(alignment: .leading) {
                         HStack {
                             if
                                 self.imageLoader.image != nil {
                                 iconImageView(self.imageLoader.image!)
+//                                    .resizable()
+//                                    .aspectRatio(contentMode: .fit)
                                     .font(.body)
-                                    .frame(width: 30, height: 30,alignment: .center)
+                                    .frame(width: 20, height: 20,alignment: .center)
                                     .layoutPriority(10)
                                     .animation(.easeIn)
                             
@@ -110,7 +114,7 @@ struct RSSItemRow: View {
                 if itemWrapper.isArchive {
                     Image(systemName: "tag")
                         .imageScale(.small)
-                        .foregroundColor(.gray)
+                        .foregroundColor(.accentColor)
                 }
             }
         }
@@ -127,11 +131,11 @@ struct RSSItemRow: View {
                     self.contextMenuAction?(self.itemWrapper)
             })
 //.font(.custom("Gotham", size: 20))
-        }
-    }
+                }
             }
         }
     }
+}
 
 //struct RSSFeedRow_Previews: PreviewProvider {
 //    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)

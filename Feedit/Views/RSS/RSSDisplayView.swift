@@ -39,7 +39,7 @@ struct SourceDisplayView_Previews: PreviewProvider {
         return RSSDisplayView(rss: rss)
             
             //.preferredColorScheme(.dark)
-            .environment(\.sizeCategory, .small)
+            //.environment(\.sizeCategory, .small)
     }
 }
 

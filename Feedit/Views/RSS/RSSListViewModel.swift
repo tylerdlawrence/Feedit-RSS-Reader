@@ -12,7 +12,10 @@ import Foundation
 import CoreData
 
 class RSSListViewModel: NSObject, ObservableObject {
-
+//    override convenience init() {
+//        UITableView.appearance().backgroundColor = .green // Uses UIColor
+//        self.init()
+//    }
     @Published var items: [RSS] = []
     
     let dataSource: RSSDataSource
@@ -60,9 +63,9 @@ class RSSListViewModel: NSObject, ObservableObject {
         let title: String = ""
         let children: [RSS]? = nil
         var author: String?
-        //var title: String
+        var rss: String = ""
         var urlToImage: String?
-        var url: String
+        var url: String = ""
         var image: String?
     
         enum CodingKeys: String, CodingKey {

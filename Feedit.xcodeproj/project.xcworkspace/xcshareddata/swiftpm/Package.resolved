@@ -56,6 +56,15 @@
         }
       },
       {
+        "package": "SwiftUIX",
+        "repositoryURL": "https://github.com/SwiftUIX/SwiftUIX",
+        "state": {
+          "branch": "master",
+          "revision": "2b461698d3eaf51cdad1a85f1e920e1a705ce2d3",
+          "version": null
+        }
+      },
+      {
         "package": "URLImage",
         "repositoryURL": "https://github.com/dmytro-anokhin/url-image.git",
         "state": {
