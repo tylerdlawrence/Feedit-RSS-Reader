@@ -56,18 +56,20 @@ struct RSSItemRow: View {
             //Spacer()
             Text(itemWrapper.desc.trimHTMLTag.trimWhiteAndSpace)
                 .font(.subheadline)
-                .foregroundColor(Color("darkerAccent"))
+                .foregroundColor(.gray)
+                //.foregroundColor(Color("darkerAccent"))
                 .lineLimit(2)
                 
-            
                 HStack(alignment: .center) {
                     VStack(alignment: .leading) {
                         HStack {
                             if
                                 self.imageLoader.image != nil {
                                 iconImageView(self.imageLoader.image!)
+//                                    .resizable()
+//                                    .aspectRatio(contentMode: .fit)
                                     .font(.body)
-                                    .frame(width: 30, height: 30,alignment: .center)
+                                    .frame(width: 20, height: 20,alignment: .center)
                                     .layoutPriority(10)
                                     .animation(.easeIn)
                             
@@ -112,7 +114,7 @@ struct RSSItemRow: View {
                 if itemWrapper.isArchive {
                     Image(systemName: "tag")
                         .imageScale(.small)
-                        .foregroundColor(.gray)
+                        .foregroundColor(.accentColor)
                 }
             }
         }

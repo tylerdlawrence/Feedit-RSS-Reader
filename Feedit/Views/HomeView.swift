@@ -14,6 +14,9 @@ enum FeaureItem {
     case add
     case setting
 }
+enum FeatureItem {
+    case settings
+}
 
 struct HomeView: View {
     
@@ -31,9 +34,9 @@ struct HomeView: View {
 //    @State private var activeSheet: Sheet?
     @State var showingContent: ContentViewGroup?
     @State private var selectedFeatureItem = FeaureItem.add
-//    @State private var selectedFeatureItem = FeatureItem.setting
     @State private var isAddFormPresented = false
     @State private var isSettingPresented = false
+//    @State private var selectedFeaureItem = FeaureItem.setting
     @State private var isSheetPresented = false
     @State private var addRSSProgressValue = 0.0
     @State var sources: [RSS] = []
@@ -45,18 +48,36 @@ struct HomeView: View {
         }) {
             Image(systemName: "plus")
                 .imageScale(.large)
+                .contextMenu {
+                    Button(action: {
+                        // add feed
+                    }) {
+                        Text("Add Feed")
+                        Image(systemName: "plus.circle")
+                            .imageScale(.large)
+                    }
+
+                    Button(action: {
+                        // add folder
+                    }) {
+                        Text("Add Folder")
+                        Image(systemName: "folder")
+                    }
+                }
+            }
         }
-    }
+//            Image(systemName: "plus")
+//                .imageScale(.large)
+//        }
+//    }
     
     private var settingButton: some View {
         Button(action: {
             self.isSheetPresented = true
             self.selectedFeatureItem = .setting
         }) {
-            Image("settingtoggle")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 25, height: 25, alignment: .center)
+            Image(systemName: "gear")
+                .imageScale(.large)
         }
     }
     
@@ -64,12 +85,12 @@ struct HomeView: View {
         ArchiveListView(viewModel: archiveListViewModel)
     }
 
-    private var trailingView: some View {
-        HStack(alignment: .top, spacing: 24) {
-            settingButton
-            addSourceButton
-        }
-    }
+//    private var trailingView: some View {
+//        HStack(alignment: .top, spacing: 24) {
+//            settingButton
+//            addSourceButton
+//        }
+//    }
     
     private var folderListView: some View {
         NavigationView{
@@ -96,7 +117,7 @@ struct HomeView: View {
 
 
                 DisclosureGroup(
-                "○   All Sources",
+                "○  All Sources",
                 tag: .RSS,
                 selection: $showingContent) {
                     ForEach(viewModel.items, id: \.self) { rss in
@@ -128,62 +149,28 @@ struct HomeView: View {
                     .font(.headline)
                     .fontWeight(.heavy)
                     .multilineTextAlignment(.leading)
-                    NavigationLink(destination: Text("News")) {
+                    NavigationLink(destination: Text("❯  News")) {
                         VStack{
-                            HStack{
-                                Image(systemName:"folder.badge.gear")
-                                        .imageScale(.small)
-                                Text("News")
-                            }
+                            Text("❯  News")
                         }
                     }
-                    NavigationLink(destination: Text("Blogs")) {
+                    NavigationLink(destination: Text("❯  Blogs")) {
                         VStack{
-                            HStack{
-                                Image(systemName:"folder.badge.gear")
-                                    .imageScale(.small)
-                                Text("Blogs")
-                            
-                            }
+                            Text("❯  Blogs")
                         }
                     }
-                    NavigationLink(destination: Text("Technology")) {
+                    NavigationLink(destination: Text("❯  Technology")) {
                         VStack{
-                            HStack{
-                                Image(systemName:"folder.badge.gear")
-                                    .imageScale(.small)
-                                Text("Technology")
-                            
-                            }
+                            Text("❯  Technology")
                         }
                     }
-                    NavigationLink(destination: Text("Entertainment")) {
+                    NavigationLink(destination: Text("❯  Entertainment")) {
                         VStack{
-                            HStack{
-                                Image(systemName:"folder.badge.gear")
-                                    .imageScale(.small)
-                                Text("Entertainment")
-                            
-                }
+                            Text("❯  Entertainment")
+                        }
+                    }
             }
-        }
-//        .onReceive(rssRefreshPublisher, perform: { output in
-//            self.viewModel.fecthResults()
-//        })
-//        .sheet(isPresented: $isSheetPresented, content: {
-//            if FeaureItem.add == self.selectedFeatureItem {
-//                AddRSSView(
-//                    viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss),
-//                    onDoneAction: self.onDoneAction)
-//            } else if FeaureItem.setting == self.selectedFeatureItem {
-//                SettingView()
-//            }
-//        })
-//        .onAppear {
-//            self.viewModel.fecthResults()
-//        }
-
-      }.onReceive(rssRefreshPublisher, perform: { output in
+            .onReceive(rssRefreshPublisher, perform: { output in
         self.viewModel.fecthResults()
     })
     .sheet(isPresented: $isSheetPresented, content: {
@@ -191,8 +178,9 @@ struct HomeView: View {
             AddRSSView(
                 viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss),
                 onDoneAction: self.onDoneAction)
-        } else if FeaureItem.setting == self.selectedFeatureItem {
+        } else if FeaureItem.setting == self.selectedFeatureItem { //FeaureItem.setting == self.selectedFeatureItem
             SettingView()
+            //settingViewModel: self.settingViewModel
         }
     })
     .onAppear {
@@ -200,15 +188,19 @@ struct HomeView: View {
     }
         .font(.headline)
         .listStyle(PlainListStyle())
+            .navigationBarItems(trailing: addSourceButton)
         .navigationTitle("Account")
-        .navigationBarItems(trailing: trailingView)
-        .frame(maxWidth: .infinity, alignment: .leading)
-
+            .toolbar {
+                ToolbarItem(placement: .bottomBar) {
+                            Spacer()
+                        }
+                ToolbarItem(placement: .bottomBar) {
+                    settingButton
+                }
+            }
         }
-    
-  }
+    }
 }
-
 
 
 struct ButtonView: View {
@@ -284,5 +276,6 @@ struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         
         HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel)
+            .preferredColorScheme(.dark)
     }
 }

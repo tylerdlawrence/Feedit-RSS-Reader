@@ -76,7 +76,7 @@ struct AddRSSView: View {
                     HStack{
                     Image(systemName: "magnifyingglass")
                         .opacity(0.5)
-                        TextFieldView(label: "Feed URL", placeholder: "https://github.blog/feed/", text: $feedUrl)
+                        TextFieldView(label: "Feed URL", placeholder: "https://example.com/feed/", text: $feedUrl)
                             .padding(.trailing)
                         .opacity(0.5)
                         .disableAutocorrection(true)
