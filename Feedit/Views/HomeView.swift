@@ -22,15 +22,18 @@ struct HomeView: View {
     
     @State private var items = ["One", "Two", "Three", "Four", "Five"]
 
-    enum ContentViewGroup: Hashable {
+enum ContentViewGroup: Hashable {
         
-      case RSS
-      case tag
-      case folder
-    }
+    case RSS
+    case tag
+    case folder1
+    case folder2
+    case folder3
+    case folder4
+    case folder5
+}
     @ObservedObject var viewModel: RSSListViewModel
     @ObservedObject var archiveListViewModel: ArchiveListViewModel
-
 //    @State private var activeSheet: Sheet?
     @State var showingContent: ContentViewGroup?
     @State private var selectedFeatureItem = FeaureItem.add
@@ -61,15 +64,12 @@ struct HomeView: View {
                         // add folder
                     }) {
                         Text("Add Folder")
-                        Image(systemName: "folder")
+                        Image(systemName: "folder.badge.plus")
+                            .imageScale(.large)
                     }
                 }
             }
         }
-//            Image(systemName: "plus")
-//                .imageScale(.large)
-//        }
-//    }
     
     private var settingButton: some View {
         Button(action: {
@@ -109,9 +109,10 @@ struct HomeView: View {
             
             List {
                 
-                Text("Local")
+                Text("On My iPhone")
                     .font(.headline)
                     .fontWeight(.heavy)
+                    .foregroundColor(.gray)
                     .multilineTextAlignment(.leading)
 
 
@@ -144,31 +145,77 @@ struct HomeView: View {
                     }
                  }
                 Spacer()
-                
+
                 Text("Folders")
                     .font(.headline)
                     .fontWeight(.heavy)
+                    .foregroundColor(.gray)
                     .multilineTextAlignment(.leading)
-                    NavigationLink(destination: Text("❯  News")) {
-                        VStack{
-                            Text("❯  News")
+                
+                DisclosureGroup(
+                " ❯  News",
+                tag: .folder1,
+                selection: $showingContent) {
+                    ForEach(viewModel.items, id: \.self) { rss in
+                        NavigationLink(destination: self.destinationFolderView(rss)) {
+                            RSSRow(rss: rss)
                         }
+                        .tag("folder1")
                     }
-                    NavigationLink(destination: Text("❯  Blogs")) {
-                        VStack{
-                            Text("❯  Blogs")
+                }
+//                    NavigationLink(destination: Text("❯  News")) {
+//                        VStack{
+//                            Text("❯  News")
+//                        }
+//                    }
+                DisclosureGroup(
+                " ❯  Blogs",
+                tag: .folder2,
+                selection: $showingContent) {
+                    ForEach(viewModel.items, id: \.self) { rss in
+                        NavigationLink(destination: self.destinationFolderView(rss)) {
+                            RSSRow(rss: rss)
                         }
+                        .tag("folder2")
                     }
-                    NavigationLink(destination: Text("❯  Technology")) {
-                        VStack{
-                            Text("❯  Technology")
+                }
+//                    NavigationLink(destination: Text("❯  Blogs")) {
+//                        VStack{
+//                            Text("❯  Blogs")
+//                        }
+//                    }
+                DisclosureGroup(
+                " ❯  Technology",
+                tag: .folder3,
+                selection: $showingContent) {
+                    ForEach(viewModel.items, id: \.self) { rss in
+                        NavigationLink(destination: self.destinationFolderView(rss)) {
+                            RSSRow(rss: rss)
                         }
+                        .tag("folder3")
                     }
-                    NavigationLink(destination: Text("❯  Entertainment")) {
-                        VStack{
-                            Text("❯  Entertainment")
+                }
+//                    NavigationLink(destination: Text("❯  Technology")) {
+//                        VStack{
+//                            Text("❯  Technology")
+//                        }
+//                    }
+                DisclosureGroup(
+                " ❯  Entertainment",
+                tag: .folder4,
+                selection: $showingContent) {
+                    ForEach(viewModel.items, id: \.self) { rss in
+                        NavigationLink(destination: self.destinationFolderView(rss)) {
+                            RSSRow(rss: rss)
                         }
+                        .tag("folder4")
                     }
+                }
+//                    NavigationLink(destination: Text("❯  Entertainment")) {
+//                        VStack{
+//                            Text("❯  Entertainment")
+//                        }
+//                    }
             }
             .onReceive(rssRefreshPublisher, perform: { output in
         self.viewModel.fecthResults()
@@ -258,6 +305,10 @@ extension HomeView {
     }
     
     private func destinationView(_ rss: RSS) -> some View {
+        RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
+            .environmentObject(DataSourceService.current.rss)
+    }
+    private func destinationFolderView(_ rss: RSS) -> some View {
         RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
             .environmentObject(DataSourceService.current.rss)
     }
