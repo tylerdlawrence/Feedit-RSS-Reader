@@ -71,8 +71,8 @@ struct ArchiveListView: View {
                 VStack(alignment: .center) {
                     Button(action: self.archiveListViewModel.loadMore) {
                         HStack{
-                            Text("↺")
-                            //Image(systemName: "tag")
+//                            Text("↺")
+                            Image(systemName: "arrow.counterclockwise")
                             Text(self.footer)
                                 .font(.title3)
                                 .fontWeight(.bold)

@@ -20,6 +20,9 @@ enum FeatureItem {
 
 struct HomeView: View {
     
+
+    @FetchRequest(entity: Category.entity(), sortDescriptors: []) var categories: FetchedResults<Category>
+    
     @State private var items = ["One", "Two", "Three", "Four", "Five"]
 
 enum ContentViewGroup: Hashable {
@@ -51,30 +54,15 @@ enum ContentViewGroup: Hashable {
         }) {
             Image(systemName: "plus")
                 .imageScale(.large)
-                .contextMenu {
-                    Button(action: {
-                        // add feed
-                    }) {
-                        Text("Add Feed")
-                        Image(systemName: "plus.circle")
-                            .imageScale(.large)
-                    }
-
-                    Button(action: {
-                        // add folder
-                    }) {
-                        Text("Add Folder")
-                        Image(systemName: "folder.badge.plus")
-                            .imageScale(.large)
-                    }
-                }
             }
         }
     
     private var settingButton: some View {
         Button(action: {
-            self.isSheetPresented = true
+//            self.isSettingPresented = true
             self.selectedFeatureItem = .setting
+            self.isSheetPresented = true
+//            self.selectedFeatureItem = .setting
         }) {
             Image(systemName: "gear")
                 .imageScale(.large)
@@ -109,7 +97,7 @@ enum ContentViewGroup: Hashable {
             
             List {
                 
-                Text("On My iPhone")
+                Text("Local")
                     .font(.headline)
                     .fontWeight(.heavy)
                     .foregroundColor(.gray)
@@ -126,11 +114,6 @@ enum ContentViewGroup: Hashable {
                             RSSRow(rss: rss)
                         }
                         .tag("RSS")
-                    }
-                    
-                    .onMove { (indexSet, index) in
-                        self.items.move(fromOffsets: indexSet,
-                    toOffset: index)
                     }
                     .onDelete { indexSet in
                         if let index = indexSet.first {
@@ -231,7 +214,9 @@ enum ContentViewGroup: Hashable {
         }
     })
     .onAppear {
+        UITableView.appearance().separatorStyle = .none
         self.viewModel.fecthResults()
+        
     }
         .font(.headline)
         .listStyle(PlainListStyle())
@@ -262,12 +247,7 @@ struct ButtonView: View {
 struct FolderView: View {
     var body: some View{
     VStack {
-        NavigationLink(destination: FolderView()) {
-            VStack{
-                Text("iFolders")
-                Image("folder.badge.gear")
-                }
-            }
+        CategoriesView()
         }
     }
 }

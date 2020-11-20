@@ -116,18 +116,21 @@ struct SettingView: View {
                                     HStack {
                                 Image(systemName: "circle.lefthalf.fill")
                                     Toggle("Dark Mode", isOn: $isDarkModeOn)
-                                    }
+                                    }.toggleStyle(SwitchToggleStyle(tint: .blue))
                                 }
                             }
                         }
-                        Section(header: Text("ABOUT")) {
-                            HStack {
-                                Text("Feedit: RSS Reader")
-                                Spacer()
-                                Text("1.1.9")
-                            }
-                        }
-
+                HStack(alignment: .center) {
+                        Image("launch")
+                            .resizable()
+                            .frame(width: 35, height: 35)
+                        Text("Feedit")
+                        Text("version 1.01")
+                        Text("build 0.0020")
+                }
+//                HStack(alignment: .center) {
+//                    Text("  created by Tyler D Lawrence")
+//                }
             }
             .listStyle(GroupedListStyle())
             .navigationBarTitle("Settings", displayMode: .automatic)
