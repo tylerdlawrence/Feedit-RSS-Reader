@@ -9,7 +9,13 @@ import SwiftUI
 import ModalView
 import FeedKit
 import Foundation
+import CoreData
+import MobileCoreServices
 
+struct Item: Identifiable {
+    let id = UUID()
+    let title: String
+}
 enum FeaureItem {
     case add
     case setting
@@ -20,32 +26,23 @@ enum FeatureItem {
 
 struct HomeView: View {
     
-
-    @FetchRequest(entity: Category.entity(), sortDescriptors: []) var categories: FetchedResults<Category>
-    
-    @State private var items = ["One", "Two", "Three", "Four", "Five"]
-
 enum ContentViewGroup: Hashable {
-        
     case RSS
     case tag
-    case folder1
-    case folder2
-    case folder3
-    case folder4
-    case folder5
 }
+    
+    @State var sources: [RSS] = []
+
     @ObservedObject var viewModel: RSSListViewModel
     @ObservedObject var archiveListViewModel: ArchiveListViewModel
-//    @State private var activeSheet: Sheet?
+    
     @State var showingContent: ContentViewGroup?
     @State private var selectedFeatureItem = FeaureItem.add
     @State private var isAddFormPresented = false
     @State private var isSettingPresented = false
-//    @State private var selectedFeaureItem = FeaureItem.setting
     @State private var isSheetPresented = false
     @State private var addRSSProgressValue = 0.0
-    @State var sources: [RSS] = []
+    @State private var previewIndex = 0
     
     private var addSourceButton: some View {
         Button(action: {
@@ -59,10 +56,8 @@ enum ContentViewGroup: Hashable {
     
     private var settingButton: some View {
         Button(action: {
-//            self.isSettingPresented = true
             self.selectedFeatureItem = .setting
             self.isSheetPresented = true
-//            self.selectedFeatureItem = .setting
         }) {
             Image(systemName: "gear")
                 .imageScale(.large)
@@ -80,33 +75,62 @@ enum ContentViewGroup: Hashable {
 //        }
 //    }
     
-    private var folderListView: some View {
-        NavigationView{
-            NavigationLink(destination: Text("Folders")) {
-                Image("folder.badge.gear")
-            }
-        }
-    }
-    
     private let addRSSPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("addNewRSSPublisher"))
     private let rssRefreshPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("rssListNeedRefresh"))
     
+    @State private var rss: [Item] = []
+    @State private var editMode = EditMode.inactive
+    private static var count = 0
+    
+    private var addButton: some View {
+        switch editMode {
+        case .inactive:
+            return AnyView(Button(action: onAdd) { Image(systemName: "plus.circle.fill") })
+        default:
+            return AnyView(EmptyView())
+        }
+    }
+
+    private func onDelete(offsets: IndexSet) {
+        rss.remove(atOffsets: offsets)
+    }
+
+    private func onMove(source: IndexSet, destination: Int) {
+        rss.move(fromOffsets: source, toOffset: destination)
+    }
+
+    private func onInsert(at offset: Int, itemProvider: [NSItemProvider]) {
+        for provider in itemProvider {
+            if provider.canLoadObject(ofClass: URL.self) {
+                _ = provider.loadObject(ofClass: URL.self) { url, error in
+                    DispatchQueue.main.async {
+                        url.map { self.rss.insert(Item(title: $0.absoluteString), at: offset) }
+                    }
+                }
+            }
+        }
+    }
+
+    private func onAdd() {
+        rss.append(Item(title: "Folder\(Self.count)"))
+        Self.count += 1
+    }
+    
   var body: some View {
-        
         NavigationView{
-            
             List {
+                HStack{
+                    Image("launch")
+                        .resizable()
+                        .frame(width: 35.0, height: 35.0)
+                    Text("Local: On My iPhone")
+                        .font(.custom("Gotham", size: 18))
+                }
                 
-                Text("Local")
-                    .font(.headline)
-                    .fontWeight(.heavy)
-                    .foregroundColor(.gray)
-                    .multilineTextAlignment(.leading)
-
-
+                Spacer()
 
                 DisclosureGroup(
-                "○  All Sources",
+               "○  All Sources", //○
                 tag: .RSS,
                 selection: $showingContent) {
                     ForEach(viewModel.items, id: \.self) { rss in
@@ -115,124 +139,163 @@ enum ContentViewGroup: Hashable {
                         }
                         .tag("RSS")
                     }
+                    .onMove(perform: onMove)
                     .onDelete { indexSet in
                         if let index = indexSet.first {
                             self.viewModel.delete(at: index)
-                        }
                     }
-                    
-                  }
-                VStack {
-                    NavigationLink(destination: archiveListView) {
-                        ButtonView()
+                }
+            }
+            VStack {
+                NavigationLink(destination: archiveListView) {
+                    ButtonView()
                     }
                  }
                 Spacer()
-
-                Text("Folders")
-                    .font(.headline)
-                    .fontWeight(.heavy)
-                    .foregroundColor(.gray)
-                    .multilineTextAlignment(.leading)
+                    }
+                .onAppear {
+                    UITableView.appearance().separatorStyle = .none
+                }
+                .onReceive(rssRefreshPublisher, perform: { output in
+                    self.viewModel.fecthResults()
+                })
+                .sheet(isPresented: $isSheetPresented, content: {
+                    if FeaureItem.add == self.selectedFeatureItem {
+                        AddRSSView(
+                            viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss),
+                            onDoneAction: self.onDoneAction)
+                    } else if FeaureItem.setting == self.selectedFeatureItem {
+                        SettingView()
+                    }
+                })
+                .onAppear {
+                    UITableView.appearance().separatorStyle = .none
+                    self.viewModel.fecthResults()
+                }
+                .font(.custom("Gotham", size: 17))
+                .listStyle(PlainListStyle())
+                .navigationBarItems(leading: EditButton(), trailing: addSourceButton)
+                .navigationTitle("Account")
+                    .toolbar {
+                        ToolbarItem(placement: .bottomBar) {
+                                    Spacer()
+                                }
+                        ToolbarItem(placement: .bottomBar) {
+                            settingButton
                 
-                DisclosureGroup(
-                " ❯  News",
-                tag: .folder1,
-                selection: $showingContent) {
-                    ForEach(viewModel.items, id: \.self) { rss in
-                        NavigationLink(destination: self.destinationFolderView(rss)) {
-                            RSSRow(rss: rss)
-                        }
-                        .tag("folder1")
-                    }
-                }
-//                    NavigationLink(destination: Text("❯  News")) {
-//                        VStack{
-//                            Text("❯  News")
-//                        }
-//                    }
-                DisclosureGroup(
-                " ❯  Blogs",
-                tag: .folder2,
-                selection: $showingContent) {
-                    ForEach(viewModel.items, id: \.self) { rss in
-                        NavigationLink(destination: self.destinationFolderView(rss)) {
-                            RSSRow(rss: rss)
-                        }
-                        .tag("folder2")
-                    }
-                }
-//                    NavigationLink(destination: Text("❯  Blogs")) {
-//                        VStack{
-//                            Text("❯  Blogs")
-//                        }
-//                    }
-                DisclosureGroup(
-                " ❯  Technology",
-                tag: .folder3,
-                selection: $showingContent) {
-                    ForEach(viewModel.items, id: \.self) { rss in
-                        NavigationLink(destination: self.destinationFolderView(rss)) {
-                            RSSRow(rss: rss)
-                        }
-                        .tag("folder3")
-                    }
-                }
-//                    NavigationLink(destination: Text("❯  Technology")) {
-//                        VStack{
-//                            Text("❯  Technology")
-//                        }
-//                    }
-                DisclosureGroup(
-                " ❯  Entertainment",
-                tag: .folder4,
-                selection: $showingContent) {
-                    ForEach(viewModel.items, id: \.self) { rss in
-                        NavigationLink(destination: self.destinationFolderView(rss)) {
-                            RSSRow(rss: rss)
-                        }
-                        .tag("folder4")
-                    }
-                }
-//                    NavigationLink(destination: Text("❯  Entertainment")) {
-//                        VStack{
-//                            Text("❯  Entertainment")
-//                        }
-//                    }
-            }
-            .onReceive(rssRefreshPublisher, perform: { output in
-        self.viewModel.fecthResults()
-    })
-    .sheet(isPresented: $isSheetPresented, content: {
-        if FeaureItem.add == self.selectedFeatureItem {
-            AddRSSView(
-                viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss),
-                onDoneAction: self.onDoneAction)
-        } else if FeaureItem.setting == self.selectedFeatureItem { //FeaureItem.setting == self.selectedFeatureItem
-            SettingView()
-            //settingViewModel: self.settingViewModel
-        }
-    })
-    .onAppear {
-        UITableView.appearance().separatorStyle = .none
-        self.viewModel.fecthResults()
-        
-    }
-        .font(.headline)
-        .listStyle(PlainListStyle())
-            .navigationBarItems(trailing: addSourceButton)
-        .navigationTitle("Account")
-            .toolbar {
-                ToolbarItem(placement: .bottomBar) {
-                            Spacer()
-                        }
-                ToolbarItem(placement: .bottomBar) {
-                    settingButton
                 }
             }
         }
     }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+//    Text("Folders")
+//        .font(.headline)
+//        .fontWeight(.heavy)
+//        .foregroundColor(.gray)
+//        .multilineTextAlignment(.leading)
+//
+//                DisclosureGroup(
+//                " ❯  News",
+//                tag: .folder1,
+//                selection: $showingContent) {
+//                    ForEach(viewModel.items, id: \.self) { rss in
+//                        NavigationLink(destination: self.destinationFolderView(rss)) {
+//                            RSSRow(rss: rss)
+//                        }
+//                        .tag("folder1")
+//                    }
+//                }
+////                    NavigationLink(destination: Text("❯  News")) {
+////                        VStack{
+////                            Text("❯  News")
+////                        }
+////                    }
+//                DisclosureGroup(
+//                " ❯  Blogs",
+//                tag: .folder2,
+//                selection: $showingContent) {
+//                    ForEach(viewModel.items, id: \.self) { rss in
+//                        NavigationLink(destination: self.destinationFolderView(rss)) {
+//                            RSSRow(rss: rss)
+//                        }
+//                        .tag("folder2")
+//                    }
+//                }
+////                    NavigationLink(destination: Text("❯  Blogs")) {
+////                        VStack{
+////                            Text("❯  Blogs")
+////                        }
+////                    }
+//                DisclosureGroup(
+//                " ❯  Technology",
+//                tag: .folder3,
+//                selection: $showingContent) {
+//                    ForEach(viewModel.items, id: \.self) { rss in
+//                        NavigationLink(destination: self.destinationFolderView(rss)) {
+//                            RSSRow(rss: rss)
+//                        }
+//                        .tag("folder3")
+//                    }
+//                }
+////                    NavigationLink(destination: Text("❯  Technology")) {
+////                        VStack{
+////                            Text("❯  Technology")
+////                        }
+////                    }
+//                DisclosureGroup(
+//                " ❯  Entertainment",
+//                tag: .folder4,
+//                selection: $showingContent) {
+//                    ForEach(viewModel.items, id: \.self) { rss in
+//                        NavigationLink(destination: self.destinationFolderView(rss)) {
+//                            RSSRow(rss: rss)
+//                        }
+//                        .tag("folder4")
+//                    }
+//                }
+////                    NavigationLink(destination: Text("❯  Entertainment")) {
+////                        VStack{
+////                            Text("❯  Entertainment")
+////                        }
+////                    }
+           // }
+//            .onAppear {
+//                UITableView.appearance().separatorStyle = .none
+//            }
+//            .onReceive(rssRefreshPublisher, perform: { output in
+//        self.viewModel.fecthResults()
+//    })
+//    .sheet(isPresented: $isSheetPresented, content: {
+//        if FeaureItem.add == self.selectedFeatureItem {
+//            AddRSSView(
+//                viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss),
+//                onDoneAction: self.onDoneAction)
+//        } else if FeaureItem.setting == self.selectedFeatureItem {
+//            SettingView()
+//        }
+//    })
+//    .onAppear {
+//        UITableView.appearance().separatorStyle = .none
+//        self.viewModel.fecthResults()
+//
+//    }
+//        .font(.headline)
+//        .listStyle(PlainListStyle())
+//            //leading: EditButton(),
+//            .navigationBarItems(trailing: addSourceButton)
+//        .navigationTitle("Account")
+//            .toolbar {
+//                ToolbarItem(placement: .bottomBar) {
+//                            Spacer()
+//                        }
+//                ToolbarItem(placement: .bottomBar) {
+//                    settingButton
+//                }
+//            }
+        //}
 
 
 struct ButtonView: View {
@@ -243,15 +306,6 @@ struct ButtonView: View {
         
     }
 }
-
-struct FolderView: View {
-    var body: some View{
-    VStack {
-        CategoriesView()
-        }
-    }
-}
-
 
 extension DisclosureGroup where Label == Text {
   public init<V: Hashable, S: StringProtocol>(
@@ -277,6 +331,7 @@ extension DisclosureGroup where Label == Text {
     )
   }
 }
+
 
 extension HomeView {
     

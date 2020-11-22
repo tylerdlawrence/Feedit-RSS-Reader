@@ -6,6 +6,7 @@
 //
 
 import CoreData
+import Foundation
 
 class RSSDataSource: NSObject, DataSource {
     
@@ -20,6 +21,8 @@ class RSSDataSource: NSObject, DataSource {
     var newObject: RSS?
     
     var updateObject: RSS?
+    
+    
     
     required init(parentContext: NSManagedObjectContext) {
         self.parentContext = parentContext

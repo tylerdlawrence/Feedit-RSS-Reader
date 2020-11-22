@@ -4,11 +4,10 @@
 //
 //  Created by Tyler D Lawrence on 8/10/20.
 //
-
 //import SwiftUI
-//import UIKit
 //import CoreData
-//
+//import Foundation
+//import UIKit
 //@UIApplicationMain
 //class AppDelegate: UIResponder, UIApplicationDelegate {
 //    var window: UIWindow?

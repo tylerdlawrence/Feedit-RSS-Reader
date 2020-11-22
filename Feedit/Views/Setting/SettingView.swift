@@ -137,6 +137,7 @@ struct SettingView: View {
             .environment(\.horizontalSizeClass, .regular)
         }
         .onAppear {
+            UITableView.appearance().separatorStyle = .none
             self.isSelected = AppEnvironment.current.useSafari
         }
         .onDisappear {

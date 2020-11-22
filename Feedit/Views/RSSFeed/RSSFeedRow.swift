@@ -75,11 +75,12 @@ struct RSSItemRow: View {
                             
                             } else {
                                 
-                                Image("Thumbnail")
+                                Image("launch")
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
                                     .font(.body)
                                     .frame(width: 20, height: 20,alignment: .center)
+                                    .border(Color.gray, width: 1)
                                     .layoutPriority(10)
                                     //.animation(.easeInOut)
                                     //.padding(.trailing, 150)

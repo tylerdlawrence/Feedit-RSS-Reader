@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17511" systemVersion="20A5384c" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Folder" representedClassName="Folder" syncable="YES" codeGenerationType="class">
+        <attribute name="blogs" optional="YES"/>
+        <attribute name="design" optional="YES"/>
+        <attribute name="entertainment" optional="YES"/>
+        <attribute name="feeds" optional="YES"/>
+        <attribute name="news" optional="YES"/>
+        <attribute name="newsletters" optional="YES"/>
+        <attribute name="pages" optional="YES"/>
+        <attribute name="sources" optional="YES"/>
+        <attribute name="tech" optional="YES"/>
+    </entity>
+    <elements>
+        <element name="Folder" positionX="-10108.87121582031" positionY="-15831.70446777344" width="128" height="178"/>
+    </elements>
+</model>

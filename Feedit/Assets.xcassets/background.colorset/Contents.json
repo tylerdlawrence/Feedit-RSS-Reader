@@ -2,28 +2,10 @@
   "colors" : [
     {
       "color" : {
-        "color-space" : "srgb",
-        "components" : {
-          "alpha" : "1.000",
-          "blue" : "0.142",
-          "green" : "0.125",
-          "red" : "0.145"
-        }
-      },
-      "idiom" : "universal"
-    },
-    {
-      "appearances" : [
-        {
-          "appearance" : "luminosity",
-          "value" : "light"
-        }
-      ],
-      "color" : {
         "platform" : "ios",
-        "reference" : "tertiaryLabelColor"
+        "reference" : "groupTableViewBackgroundColor"
       },
-      "idiom" : "universal"
+      "idiom" : "iphone"
     },
     {
       "appearances" : [
@@ -33,10 +15,15 @@
         }
       ],
       "color" : {
-        "platform" : "ios",
-        "reference" : "secondarySystemFillColor"
+        "color-space" : "srgb",
+        "components" : {
+          "alpha" : "1.000",
+          "blue" : "0.145",
+          "green" : "0.125",
+          "red" : "0.145"
+        }
       },
-      "idiom" : "universal"
+      "idiom" : "iphone"
     }
   ],
   "info" : {

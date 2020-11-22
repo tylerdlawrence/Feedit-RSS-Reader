@@ -80,6 +80,10 @@ struct ArchiveListView: View {
                     }
                 }
             }
+            .listStyle(PlainListStyle())
+            .navigationBarTitle("Tagged Articles", displayMode: .automatic)
+            .navigationBarItems(trailing: EditButton())
+
             .sheet(item: $selectedItem, content: { item in
                 if AppEnvironment.current.useSafari {
                     SafariView(url: URL(string: item.url)!)
@@ -91,12 +95,12 @@ struct ArchiveListView: View {
                     })
                 }
             })
+            
             .onAppear {
+                 UITableView.appearance().separatorStyle = .none
+                
                 self.archiveListViewModel.fecthResults()
-            }
-            .listStyle(PlainListStyle())
-            .navigationBarTitle("Tagged Articles", displayMode: .automatic)
-            .navigationBarItems(trailing: EditButton())
+        }
     }
 }
 

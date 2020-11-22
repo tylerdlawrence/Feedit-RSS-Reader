@@ -26,8 +26,8 @@ class OPMLParserTests: XCTestCase {
     }
     
     func readContent(path: String) -> String {
-        let rs = try! String(contentsOf: URL(fileURLWithPath: path), encoding: .utf8)
-        return rs
+        let rss = try! String(contentsOf: URL(fileURLWithPath: path), encoding: .utf8)
+        return rss
     }
     
     func testExample() throws {
