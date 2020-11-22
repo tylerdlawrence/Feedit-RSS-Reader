@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17510.1" systemVersion="20A5384c" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17511" systemVersion="20C5048k" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="FolderList" representedClassName="FolderList" syncable="YES" codeGenerationType="class">
+        <attribute name="folderDescription" optional="YES" attributeType="String"/>
+        <attribute name="folderTitle" optional="YES" attributeType="String"/>
+    </entity>
     <entity name="RSS" representedClassName="RSS" syncable="YES">
         <attribute name="createTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="desc" optional="YES" attributeType="String" defaultValueString=""/>
@@ -33,7 +37,8 @@
         </uniquenessConstraints>
     </entity>
     <elements>
-        <element name="RSS" positionX="-35.4847412109375" positionY="-204.6489562988281" width="119.2158813476562" height="208"/>
-        <element name="RSSItem" positionX="-50.126220703125" positionY="51" width="124.126220703125" height="223"/>
+        <element name="FolderList" positionX="1.34918212890625" positionY="-89.20159912109375" width="128" height="59"/>
+        <element name="RSS" positionX="-175.832275390625" positionY="-199.9352722167968" width="119.2158813476562" height="194"/>
+        <element name="RSSItem" positionX="-174.26806640625" positionY="37.69049072265625" width="124.126220703125" height="223"/>
     </elements>
 </model>

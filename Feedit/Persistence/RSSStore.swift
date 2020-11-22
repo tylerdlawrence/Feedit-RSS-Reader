@@ -77,8 +77,8 @@ class RSSStore: NSObject {
         let predicate = NSPredicate(format: "uuid = %@", argumentArray: [uuid])
         fetchRequest.predicate = predicate
         do {
-            let rs = try fetchedResultsController.managedObjectContext.fetch(fetchRequest)
-            if let rss = rs.first {
+            let rss = try fetchedResultsController.managedObjectContext.fetch(fetchRequest)
+            if let rss = rss.first {
                 rss.title = item.title
                 rss.desc = item.desc
                 rss.url = item.url

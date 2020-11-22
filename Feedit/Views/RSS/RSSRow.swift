@@ -29,7 +29,7 @@ struct RSSRow: View {
             .frame(width: 30, height: 30,alignment: .center)
             .cornerRadius(1)
             //.animation(.easeInOut)
-            .border(Color.secondary, width: 1)
+            .border(Color.gray, width: 1)
         
     }
 
@@ -66,11 +66,12 @@ struct RSSRow: View {
                         
                     } else {
                         
-                        Image("Thumbnail")
+                        Image("launch")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .font(.body)
                             .frame(width: 30, height: 30,alignment: .center)
+                            .border(Color.gray, width: 1)
                             .layoutPriority(10)
                             .animation(.easeInOut)
                             
@@ -107,7 +108,8 @@ struct RSSRow_Previews: PreviewProvider {
 
     static var previews: some View {
         ContentView(archiveListViewModel: self.archiveListViewModel, settingViewModel: self.settingViewModel, viewModel: self.viewModel)
+        
+
         }
     }
-//archiveListViewModel: self.archiveListViewModel,
-//settingViewModel: self.settingViewModel,
+

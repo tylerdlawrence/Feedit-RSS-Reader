@@ -21,9 +21,6 @@ struct FeeditApp: App {
     var body: some Scene {
         WindowGroup {
             HomeView(viewModel: FeeditApp.viewModel, archiveListViewModel: FeeditApp.archiveListViewModel)
-//            HomeView(viewModel: FeeditApp.viewModel)
-            //archiveListViewModel: FeeditApp.archiveListViewModel,
-            //settingViewModel: self.settingViewModel,
         }
         .onChange(of: scenePhase) { (newScenePhase) in
             switch newScenePhase {

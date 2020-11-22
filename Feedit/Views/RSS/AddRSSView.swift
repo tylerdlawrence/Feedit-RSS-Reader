@@ -10,9 +10,13 @@ import SwiftUI
 struct AddRSSView: View {
     
     @Environment(\.presentationMode) var presentationMode
+    @Environment(\.managedObjectContext) var managedObjectContext
+    
+    @FetchRequest(entity: Category.entity(), sortDescriptors: []) var categories: FetchedResults<Category>
     
     @ObservedObject var viewModel: AddRSSViewModel
-        
+    @State private var previewIndex = 0
+
     var onDoneAction: (() -> Void)?
     var onCancelAction: (() -> Void)?
     
@@ -38,16 +42,26 @@ struct AddRSSView: View {
         }
     }
     
+    private var trailingView: some View {
+        HStack(alignment: .top, spacing: 24) {
+            doneButton
+        }
+    }
+    
     private var sectionHeader: some View {
-        HStack {
-            Text("")//input//search
-            Spacer()
-            Button(action: self.fetchDetail) {
-                Text("FIND")
-                    .padding(.all, 0)
-                
+        VStack(alignment: .center) {
+            HStack {
+                Text("")//input//search
+                Spacer()
+                Button(action: self.fetchDetail) {
+                    Text("Search")
+                        .font(.headline)
+                        .fontWeight(.bold)
+                        .multilineTextAlignment(.center)
+                    
+                }
             }
-            .frame(width: 50, height: 30)
+            .padding(.trailing, 125.0)
         }
     }
     
@@ -72,25 +86,67 @@ struct AddRSSView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section(header: sectionHeader) {
+                Section() { //header: sectionHeader
                     HStack{
-                    Image(systemName: "magnifyingglass")
-                        .opacity(0.5)
-                        TextFieldView(label: "Feed URL", placeholder: "https://example.com/feed/", text: $feedUrl)
-                            .padding(.trailing)
-                        .opacity(0.5)
-                        .disableAutocorrection(true)
+                        Image(systemName: "magnifyingglass")
+                            .opacity(0.4)
+                            TextField("Feed URL", text: $feedUrl)
+                                .padding(.trailing)
+                            .opacity(0.4)
+                            .disableAutocorrection(true)
+                    }
+                    HStack{
+                        sectionHeader
                     }
                 }
+            
+                    Picker("  ❯   Folders", selection: $previewIndex) {
+                        ForEach(0 ..< categories.count) {
+                            Text(categories[$0].name)
+                        }
+                    }
+                //}
+//                        VStack {
+//                            List(categories, id: \.self) { category in
+//                                VStack(alignment: .leading) {
+//                                    Text(category.name)
+//                                        .font(.system(size: 12))
+//                                        .padding(EdgeInsets(top: 4, leading: 7, bottom: 4, trailing: 7))
+//                                        .background(Color(category.color))
+//                                        .cornerRadius(3)
+//                                    Text("Number of articles: \(category.articlesCount)")
+//                                        .font(.footnote)
+//                                }
+//                            }
+//                        }
+//                        .navigationBarTitle("Folders")
+//                        .navigationBarItems(leading:
+//                            HStack {
+//                                Button("Add") {
+//                                    Category.insertSample(into: managedObjectContext)
+//                                }
+//                                Button("Rename") {
+//                                    self.renameCategory()
+//                                }
+//                            }, trailing:
+//                                Button("Save") {
+//                                    try! self.managedObjectContext.save()
+//                                }
+//                            )
+//                    }
+//                    .font(.body)
+//                }
+                
+
                 Section(header: Text("") //result
                             ) {
                     if !hasFetchResult {
-                        Text("")
-                            .opacity(0.3)
+                        Text("Search results will show here")
+                            .opacity(0.4)
+                            .multilineTextAlignment(.center)
                     } else {
                         if viewModel.rss != nil {
                             RSSDisplayView(rss: viewModel.rss!)
-                        }
                     }
                 }
             }
@@ -101,30 +157,40 @@ struct AddRSSView: View {
             self.viewModel.cancelCreateNewRSS()
         }
     }
-    
-    func fetchDetail() {
-        guard let url = URL(string: self.feedUrl),
-            let rss = viewModel.rss else {
-            return
-        }
-        updateNewRSS(url: url, for: rss) { result in
-            switch result {
-            case .success(let rss):
-                self.viewModel.rss = rss
-                self.hasFetchResult = true
-            case .failure(let error):
-                print("fetchDetail error = \(error)")
+}
+func fetchDetail() {
+    guard let url = URL(string: self.feedUrl),
+        let rss = viewModel.rss else {
+        return
+    }
+    updateNewRSS(url: url, for: rss) { result in
+        switch result {
+        case .success(let rss):
+            self.viewModel.rss = rss
+            self.hasFetchResult = true
+        case .failure(let error):
+            print("fetchDetail error = \(error)")
             }
         }
     }
 }
-
-//struct AddRSSView_Previews: PreviewProvider {
-//    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-//    
-//    static var previews: some View {
-//        ContentView(viewModel: self.viewModel)
-//            .preferredColorScheme(.dark)
+//}
+//    private func renameCategory() {
+//        guard let category = categories.first else { return }
+//        if category.name == "News" {
+//            category.name = "Blogs"
+//        } else {
+//            category.name = "Technology"
+//        }
 //    }
 //}
-//viewModel: self.viewModel
+
+
+struct AddRSSView_Previews: PreviewProvider {
+    static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
+    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+    static var previews: some View {
+        HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel)
+            .preferredColorScheme(.dark)
+    }
+}

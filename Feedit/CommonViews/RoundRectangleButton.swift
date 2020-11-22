@@ -45,11 +45,14 @@ struct RoundRectangeButton: View {
              self.action(self.status)
          }) {
              Text(text)
-                 .foregroundColor(.black)
+                 .foregroundColor(.white)
+                .font(.title3)
+                .fontWeight(.heavy)
          }
-         .frame(width: UIScreen.main.bounds.width - 40, height: 40)
+         .frame(width: 200, height: 60, alignment: .center)
+         //.frame(width: UIScreen.main.bounds.width - 40, height: 40)
          .background(status.backgroundColor)
-         .cornerRadius(15)
+         .cornerRadius(25)
      }
  }
 
