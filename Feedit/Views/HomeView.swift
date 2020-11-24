@@ -151,11 +151,8 @@ enum ContentViewGroup: Hashable {
                     ButtonView()
                     }
                  }
-                Spacer()
+                //Spacer()
                     }
-                .onAppear {
-                    UITableView.appearance().separatorStyle = .none
-                }
                 .onReceive(rssRefreshPublisher, perform: { output in
                     self.viewModel.fecthResults()
                 })
@@ -356,12 +353,12 @@ extension HomeView {
 struct HomeView_Previews: PreviewProvider {
     
     static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
-    
+
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
 
     static var previews: some View {
         
         HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel)
-            .preferredColorScheme(.dark)
     }
 }
+

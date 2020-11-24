@@ -11,8 +11,6 @@ import FeedKit
 
 
 struct RSSRow: View {
-    
-//    @EnvironmentObject var sources: Sources
 
     @ObservedObject var imageLoader: ImageLoader
     @ObservedObject var rss: RSS
@@ -66,7 +64,7 @@ struct RSSRow: View {
                         
                     } else {
                         
-                        Image("launch")
+                        Image("i")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .font(.body)
@@ -104,10 +102,10 @@ struct RSSRow_Previews: PreviewProvider {
     
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
 
-    static let settingViewModel = SettingViewModel()
+    //static let settingViewModel = SettingViewModel()
 
     static var previews: some View {
-        ContentView(archiveListViewModel: self.archiveListViewModel, settingViewModel: self.settingViewModel, viewModel: self.viewModel)
+        ContentView(archiveListViewModel: self.archiveListViewModel, viewModel: self.viewModel)
         
 
         }

@@ -13,11 +13,13 @@ import FeedKit
 extension RSS {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<RSS> {
+          
         return NSFetchRequest<RSS>(entityName: "RSS")
     }
 
-    @NSManaged public var author: String
-    @NSManaged public var urlToImage: String
+    @NSManaged public var author: String?
+    @NSManaged public var urlString: String?
+    //@NSManaged public var urlToImage: String?
     @NSManaged public var url: String
     @NSManaged public var title: String
     @NSManaged public var desc: String
@@ -28,6 +30,7 @@ extension RSS {
     @NSManaged public var image: String
     @NSManaged public var isFetched: Bool
     
+    
     public var rssURL: URL? {
         return URL(string: url)
     }
@@ -36,12 +39,12 @@ extension RSS {
         return "\(self.createTime?.string() ?? "")"
     }
     
-    static func create(url: String = "", title: String = "", desc: String = "", image: String = "", in context: NSManagedObjectContext) -> RSS {
+    static func create(url: String = "", title: String = "", desc: String = "", urlToImage: String = "", in context: NSManagedObjectContext) -> RSS {
         let rss = RSS(context: context)
         rss.title = title
         rss.desc = desc
         rss.url = url
-        rss.image = image
+        //rss.urlToImage = urlToImage
         rss.uuid = UUID()
         rss.createTime = Date()
         rss.updateTime = Date()
@@ -51,7 +54,7 @@ extension RSS {
     
     static func simple(image: String = "") -> RSS {
         let rss = RSS(context: Persistence.current.context)
-        rss.image = "AppIconBot"
+        rss.image = "f"
         rss.title = "Daring Fireball"
         rss.desc = "description of RSS feed"
         rss.url = "https://daringfireball.net/feeds/main"
@@ -82,14 +85,11 @@ extension RSS {
         let rss = self
         switch feed {
         case .atom(let atomFeed):
-            //rss.image = atomFeed.image ?? ""
             rss.title = atomFeed.title ?? ""
         case .json(let jsonFeed):
-            //rss.image = jsonFeed.image ?? ""
             rss.title = jsonFeed.title ?? ""
             rss.desc = jsonFeed.description?.trimWhiteAndSpace ?? ""
         case .rss(let rssFeed):
-            //rss.image = rssFeed.image ?? ""
             rss.title = rssFeed.title ?? ""
             rss.desc = rssFeed.description?.trimWhiteAndSpace ?? ""
         }

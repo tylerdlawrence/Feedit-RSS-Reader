@@ -21,7 +21,7 @@
 //    @State private var newFolderDescription = ""
 //
 //    // ℹ️ Two sections: Add Blog Idea at the top, followed by a listing of the ideas in the persistent store
-
+//
 //    var body: some View {
 //            Section(header: Text("Add Blog Idea")) {
 //            VStack {
@@ -32,8 +32,8 @@
 //                        .textFieldStyle(RoundedBorderTextFieldStyle())
 //                }
 //            }
-
-
+//
+//
 //                VStack {
 //                    Button(action: ({
 //                        // ❇️ Initializes new BlogIdea and saves using the @Environment's managedObjectContext
@@ -58,13 +58,10 @@
 //                            Text("Add Idea")
 //                        }
 //                    }
-//                    //.padding()
 //                }
 //            }
 //        }
-//        .font(.headline)
-//
-//        Section(header: Text("Blog Ideas")) {
+//    Section(header: Text,("Blog Ideas")) {
 //            ForEach(self.folderLists) { rssFolderList in
 //                NavigationLink(destination: EditView(rssFolderList: rssFolderList)) {
 //                    VStack(alignment: .leading) {

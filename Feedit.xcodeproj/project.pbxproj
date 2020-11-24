@@ -390,10 +390,11 @@
 			isa = PBXGroup;
 			children = (
 				61967EC824E204FB00AA647C /* AppEnvironment.swift */,
-				61967ECA24E204FB00AA647C /* ImageServices.swift */,
-				61967EC924E204FB00AA647C /* Request.swift */,
 				61C818D524E1F70900593939 /* DataSourceService.swift */,
+				61967EC924E204FB00AA647C /* Request.swift */,
 				616CAF5F24F7131000690804 /* OPMLParser.swift */,
+				61967ECA24E204FB00AA647C /* ImageServices.swift */,
+				6161FE5625393FA400CB0F00 /* UrlImageModel.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -502,7 +503,6 @@
 				61967EEF24E2061100AA647C /* RSSFeedRow.swift */,
 				61967EEE24E2061100AA647C /* RSSFeedViewModel.swift */,
 				61967EF024E2061100AA647C /* WebView.swift */,
-				6161FE5625393FA400CB0F00 /* UrlImageModel.swift */,
 			);
 			path = RSSFeed;
 			sourceTree = "<group>";
@@ -994,7 +994,7 @@
 				CODE_SIGN_ENTITLEMENTS = Feedit/Feedit.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20;
+				CURRENT_PROJECT_VERSION = 21;
 				DEVELOPMENT_ASSET_PATHS = "\"Feedit/Preview Content\"";
 				DEVELOPMENT_TEAM = 7Z3Z6D3TH7;
 				ENABLE_PREVIEWS = YES;
@@ -1025,7 +1025,7 @@
 				CODE_SIGN_ENTITLEMENTS = Feedit/Feedit.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20;
+				CURRENT_PROJECT_VERSION = 21;
 				DEVELOPMENT_ASSET_PATHS = "\"Feedit/Preview Content\"";
 				DEVELOPMENT_TEAM = 7Z3Z6D3TH7;
 				ENABLE_PREVIEWS = YES;

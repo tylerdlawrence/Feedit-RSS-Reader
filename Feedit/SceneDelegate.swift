@@ -11,17 +11,21 @@ import SwiftUI
 @main
 struct FeeditApp: App {
     @Environment(\.scenePhase) private var scenePhase
+//    let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext
+//
+//    window.rootViewController = UIHostingController(rootView: ContentView().environment(\.managedObjectContext, context))
     
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-    
+
     static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
-    
+
     static let settingViewModel = SettingViewModel()
 
     var body: some Scene {
         WindowGroup {
             HomeView(viewModel: FeeditApp.viewModel, archiveListViewModel: FeeditApp.archiveListViewModel)
         }
+        //(viewModel: FeeditApp.viewModel, archiveListViewModel: FeeditApp.archiveListViewModel)
         .onChange(of: scenePhase) { (newScenePhase) in
             switch newScenePhase {
             case .active:

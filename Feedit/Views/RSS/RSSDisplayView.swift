@@ -35,7 +35,7 @@ struct SourceDisplayView_Previews: PreviewProvider {
     let rss = RSS.create(url: "https://feed.podbean.com/HRpreneur/feed.xml",
                              title: "HR{preneur}",
                             desc: "ADP small business podcast",
-                             image: "", in: Persistence.current.context)
+                             urlToImage: "", in: Persistence.current.context)
         return RSSDisplayView(rss: rss)
             
             //.preferredColorScheme(.dark)

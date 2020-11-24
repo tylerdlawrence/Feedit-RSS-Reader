@@ -60,7 +60,7 @@ struct SettingView: View {
                     TextField("On My iPhone", text: $accounts)
                     Toggle(isOn: $isPrivate) {
                         Image(systemName: "icloud")
-                        Text("Private Account")
+                        Text("iCloud Sync")
                     }.toggleStyle(SwitchToggleStyle(tint: .blue))
                 }
 
@@ -78,7 +78,7 @@ struct SettingView: View {
 
                     Group {
                         HStack {
-                            Image(systemName: "circlebadge.2")
+                            Image(systemName: "app.badge")
                                 fixedSize()
                             Toggle(isOn: $notificationsEnabled) {
                                 Text("Notifications")

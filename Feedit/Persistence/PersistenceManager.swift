@@ -24,7 +24,7 @@ class Persistence {
     
     init(directory: FileManager.SearchPathDirectory = .documentDirectory,
          domainMask: FileManager.SearchPathDomainMask = .userDomainMask,
-         version vNumber: UInt) {
+         version vNumber: UInt) { //Uint
         let version = Version(vNumber)
         container = NSPersistentContainer(name: version.modelName)
         if let url = version.dbFileURL(directory, domainMask) {
@@ -43,9 +43,9 @@ class Persistence {
 
 extension Persistence {
     struct Version {
-        private let number: UInt
+        private let number: UInt //Uint
 
-        init(_ number: UInt) {
+        init(_ number: UInt) { //Uint
             self.number = number
         }
 

@@ -11,8 +11,10 @@ import Combine
 
 struct RSSFeedListView: View {
     
+    var urlString: String?
+
     public static let shared = ImageService()
-    
+
     public func fetchImage(url: URL) -> AnyPublisher<UIImage?, Never> {
         return URLSession.shared.dataTaskPublisher(for: url)
             .tryMap { (data, response) -> UIImage? in
@@ -164,10 +166,10 @@ struct RSSFeedListView_Previews: PreviewProvider {
     
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
 
-    static let settingViewModel = SettingViewModel()
+    //static let settingViewModel = SettingViewModel()
 
     static var previews: some View {
-        ContentView(archiveListViewModel: self.archiveListViewModel, settingViewModel: self.settingViewModel, viewModel: self.viewModel)
+        ContentView(archiveListViewModel: self.archiveListViewModel, viewModel: self.viewModel)
             .preferredColorScheme(.dark)
 
         }

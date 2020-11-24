@@ -26,7 +26,7 @@ struct ContentView: View {
 
 
     @ObservedObject var archiveListViewModel: ArchiveListViewModel
-    @ObservedObject var settingViewModel: SettingViewModel
+    //@ObservedObject var settingViewModel: SettingViewModel
     @ObservedObject var viewModel: RSSListViewModel
 
     @State private var selectedTab = 0
@@ -35,12 +35,13 @@ struct ContentView: View {
         HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel)
       }
 
+    
     var body: some View {
         HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel)
+
         //RSSFolderView()
     }
 }
-
 
 struct ContentView_Previews: PreviewProvider {
 
@@ -48,13 +49,34 @@ struct ContentView_Previews: PreviewProvider {
 
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
 
-    static let settingViewModel = SettingViewModel()
+    //static let settingViewModel = SettingViewModel()
 
     static var previews: some View {
-        ContentView(archiveListViewModel: self.archiveListViewModel, settingViewModel: self.settingViewModel, viewModel: self.viewModel)
-
+        ContentView(archiveListViewModel: self.archiveListViewModel, viewModel: self.viewModel)
     }
 }
+//(archiveListViewModel: self.archiveListViewModel, settingViewModel: self.settingViewModel, viewModel: self.viewModel)
+
+//init() {
+//        UITableView.appearance().separatorColor = .clear
+//    }
+//            .listSeparatorStyleNone()
+//public struct ListSeparatorStyleNoneModifier: ViewModifier {
+//    public func body(content: Content) -> some View {
+//        content.onAppear {
+//            UITableView.appearance().separatorStyle = .none
+//        }.onDisappear {
+//            UITableView.appearance().separatorStyle = .singleLine
+//        }
+//    }
+//}
+//
+//extension View {
+//    public func listSeparatorStyleNone() -> some View {
+//        modifier(ListSeparatorStyleNoneModifier())
+//    }
+//}
+
 
 //#if DEBUG
 //struct ContentView_Previews: PreviewProvider {

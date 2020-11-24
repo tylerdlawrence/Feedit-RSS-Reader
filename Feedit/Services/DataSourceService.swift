@@ -14,5 +14,4 @@ class DataSourceService: NSObject {
     
     var rss = RSSDataSource(parentContext: Persistence.current.context)
     var rssItem = RSSItemDataSource(parentContext: Persistence.current.context)
-
 }
