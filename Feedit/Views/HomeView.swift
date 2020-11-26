@@ -6,9 +6,8 @@
 //
 
 import SwiftUI
-import ModalView
 import FeedKit
-import Foundation
+import KingfisherSwiftUI
 import CoreData
 import MobileCoreServices
 
@@ -25,6 +24,8 @@ enum FeatureItem {
 }
 
 struct HomeView: View {
+    
+    @Environment(\.managedObjectContext) var moc
     
 enum ContentViewGroup: Hashable {
     case RSS
@@ -146,6 +147,8 @@ enum ContentViewGroup: Hashable {
                     }
                 }
             }
+//
+//
             VStack {
                 NavigationLink(destination: archiveListView) {
                     ButtonView()
@@ -297,9 +300,10 @@ enum ContentViewGroup: Hashable {
 
 struct ButtonView: View {
     var body: some View {
-        Image(systemName: "tag")
+        Image(systemName: "bookmark.fill")
+            .foregroundColor(.blue)
             .imageScale(.small)
-        Text("Tagged Articles")
+        Text("Bookmarked Articles")
         
     }
 }

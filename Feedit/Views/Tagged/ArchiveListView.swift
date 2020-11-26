@@ -81,7 +81,7 @@ struct ArchiveListView: View {
                 }
             }
             .listStyle(PlainListStyle())
-            .navigationBarTitle("Tagged Articles", displayMode: .automatic)
+            .navigationBarTitle("Bookmarked Articles", displayMode: .automatic)
             .navigationBarItems(trailing: EditButton())
 
             .sheet(item: $selectedItem, content: { item in
