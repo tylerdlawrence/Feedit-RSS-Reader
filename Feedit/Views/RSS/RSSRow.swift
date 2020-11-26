@@ -25,9 +25,9 @@ struct RSSRow: View {
         .resizable()
             .aspectRatio(contentMode: .fit)
             .frame(width: 30, height: 30,alignment: .center)
-            .cornerRadius(1)
+            .cornerRadius(5)
             //.animation(.easeInOut)
-            .border(Color.gray, width: 1)
+            .border(Color.clear, width: 1)
         
     }
 
@@ -64,12 +64,13 @@ struct RSSRow: View {
                         
                     } else {
                         
-                        Image("i")
+                        Image("3dicon")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .font(.body)
                             .frame(width: 30, height: 30,alignment: .center)
-                            .border(Color.gray, width: 1)
+                            .cornerRadius(5)
+                            .border(Color.clear, width: 1)
                             .layoutPriority(10)
                             .animation(.easeInOut)
                             

@@ -23,6 +23,7 @@
         <attribute name="desc" optional="YES" attributeType="String" defaultValueString=""/>
         <attribute name="folder" optional="YES" attributeType="String"/>
         <attribute name="image" optional="YES" attributeType="String" defaultValueString=""/>
+        <attribute name="imageUrl" optional="YES" attributeType="String"/>
         <attribute name="isArchive" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="progress" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="rssUUID" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
@@ -39,6 +40,6 @@
     <elements>
         <element name="FolderList" positionX="1.34918212890625" positionY="-89.20159912109375" width="128" height="59"/>
         <element name="RSS" positionX="-175.832275390625" positionY="-199.9352722167968" width="119.2158813476562" height="194"/>
-        <element name="RSSItem" positionX="-174.26806640625" positionY="37.69049072265625" width="124.126220703125" height="223"/>
+        <element name="RSSItem" positionX="-174.26806640625" positionY="37.69049072265625" width="124.126220703125" height="224"/>
     </elements>
 </model>

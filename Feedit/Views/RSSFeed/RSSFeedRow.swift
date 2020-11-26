@@ -7,6 +7,7 @@
 
 import SwiftUI
 import FeedKit
+import KingfisherSwiftUI
 
 struct RSSItemRow: View {
     
@@ -26,9 +27,9 @@ struct RSSItemRow: View {
     func iconImageView(_ image: UIImage) -> some View {
         Image(uiImage: image)
         .resizable()
-            .cornerRadius(3)
+            .cornerRadius(5)
             .animation(.easeInOut)
-            .border(Color.white, width: 1)
+            .border(Color.clear, width: 1)
         
     }
     
@@ -75,12 +76,13 @@ struct RSSItemRow: View {
                             
                             } else {
                                 
-                                Image("launch")
+                                Image("3dicon")
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
                                     .font(.body)
                                     .frame(width: 20, height: 20,alignment: .center)
-                                    .border(Color.gray, width: 1)
+                                    .border(Color.clear, width: 1)
+                                    .cornerRadius(5)
                                     .layoutPriority(10)
                                     //.animation(.easeInOut)
                                     //.padding(.trailing, 150)
@@ -131,7 +133,6 @@ struct RSSItemRow: View {
                 onAction: {
                     self.contextMenuAction?(self.itemWrapper)
             })
-//.font(.custom("Gotham", size: 20))
                 }
             }
         }
