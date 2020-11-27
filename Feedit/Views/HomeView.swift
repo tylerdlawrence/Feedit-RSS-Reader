@@ -22,9 +22,21 @@ enum FeaureItem {
 enum FeatureItem {
     case settings
 }
+enum ContentViewSheet: Identifiable {
+  case plus
+  case settings
 
+  var id: Int {
+    switch self {
+    case .plus:
+      return 1
+    case .settings:
+      return 2
+    }
+  }
+}
 struct HomeView: View {
-    
+    @State private var showingSheet: ContentViewSheet?
     @Environment(\.managedObjectContext) var moc
     
 enum ContentViewGroup: Hashable {
@@ -45,8 +57,11 @@ enum ContentViewGroup: Hashable {
     @State private var addRSSProgressValue = 0.0
     @State private var previewIndex = 0
     
+    @FetchRequest(entity: Category.entity(), sortDescriptors: []) var categories: FetchedResults<Category>
+    
     private var addSourceButton: some View {
         Button(action: {
+            self.showingSheet = .plus
             self.isSheetPresented = true
             self.selectedFeatureItem = .add
         }) {
@@ -57,6 +72,7 @@ enum ContentViewGroup: Hashable {
     
     private var settingButton: some View {
         Button(action: {
+            self.showingSheet = .settings
             self.selectedFeatureItem = .setting
             self.isSheetPresented = true
         }) {
@@ -64,7 +80,17 @@ enum ContentViewGroup: Hashable {
                 .imageScale(.large)
         }
     }
-    
+    @ViewBuilder
+    private func presentSheet(for sheet: ContentViewSheet) -> some View {
+      switch sheet {
+      case .plus:
+        AddRSSView(
+            viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss),
+            onDoneAction: self.onDoneAction)
+      case .settings:
+        SettingView()
+      }
+    }
     private var archiveListView: some View {
         ArchiveListView(viewModel: archiveListViewModel)
     }
@@ -116,7 +142,7 @@ enum ContentViewGroup: Hashable {
         rss.append(Item(title: "Folder\(Self.count)"))
         Self.count += 1
     }
-    
+
   var body: some View {
         NavigationView{
             List {
@@ -131,7 +157,7 @@ enum ContentViewGroup: Hashable {
                 Spacer()
 
                 DisclosureGroup(
-               "○  All Sources", //○
+               " ❯   All Sources", //○♾️☰🔵🔲☁
                 tag: .RSS,
                 selection: $showingContent) {
                     ForEach(viewModel.items, id: \.self) { rss in
@@ -140,22 +166,40 @@ enum ContentViewGroup: Hashable {
                         }
                         .tag("RSS")
                     }
-                    .onMove(perform: onMove)
+                    //.onMove(perform: onMove)
                     .onDelete { indexSet in
                         if let index = indexSet.first {
                             self.viewModel.delete(at: index)
+                            }
+                        }
                     }
-                }
-            }
-//
-//
-            VStack {
-                NavigationLink(destination: archiveListView) {
-                    ButtonView()
-                    }
-                 }
+                VStack {
+                    NavigationLink(destination: archiveListView) {
+                        ButtonView()
+                        }
+                     }
                 //Spacer()
-                    }
+                
+//                Picker("Folders", selection: $previewIndex) {
+//                    ForEach(0 ..< categories.count) {
+//                        Text(categories[$0].name)
+//                        NavigationView {
+//                            VStack {
+//                                List(categories, id: \.self) { category in
+//                                    VStack(alignment: .leading) {
+//                                        Text(category.name)
+//                                            .font(.system(size: 12))
+//                                            .padding(EdgeInsets(top: 4, leading: 7, bottom: 4, trailing: 7))
+//                                            .cornerRadius(3)
+//
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+
+                }
                 .onReceive(rssRefreshPublisher, perform: { output in
                     self.viewModel.fecthResults()
                 })
@@ -183,19 +227,12 @@ enum ContentViewGroup: Hashable {
                         ToolbarItem(placement: .bottomBar) {
                             settingButton
                 
+                    }
                 }
             }
         }
     }
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
-//    Text("Folders")
-//        .font(.headline)
-//        .fontWeight(.heavy)
-//        .foregroundColor(.gray)
-//        .multilineTextAlignment(.leading)
+ 
 //
 //                DisclosureGroup(
 //                " ❯  News",
@@ -213,96 +250,35 @@ enum ContentViewGroup: Hashable {
 ////                            Text("❯  News")
 ////                        }
 ////                    }
-//                DisclosureGroup(
-//                " ❯  Blogs",
-//                tag: .folder2,
-//                selection: $showingContent) {
-//                    ForEach(viewModel.items, id: \.self) { rss in
-//                        NavigationLink(destination: self.destinationFolderView(rss)) {
-//                            RSSRow(rss: rss)
-//                        }
-//                        .tag("folder2")
-//                    }
-//                }
-////                    NavigationLink(destination: Text("❯  Blogs")) {
-////                        VStack{
-////                            Text("❯  Blogs")
-////                        }
-////                    }
-//                DisclosureGroup(
-//                " ❯  Technology",
-//                tag: .folder3,
-//                selection: $showingContent) {
-//                    ForEach(viewModel.items, id: \.self) { rss in
-//                        NavigationLink(destination: self.destinationFolderView(rss)) {
-//                            RSSRow(rss: rss)
-//                        }
-//                        .tag("folder3")
-//                    }
-//                }
-////                    NavigationLink(destination: Text("❯  Technology")) {
-////                        VStack{
-////                            Text("❯  Technology")
-////                        }
-////                    }
-//                DisclosureGroup(
-//                " ❯  Entertainment",
-//                tag: .folder4,
-//                selection: $showingContent) {
-//                    ForEach(viewModel.items, id: \.self) { rss in
-//                        NavigationLink(destination: self.destinationFolderView(rss)) {
-//                            RSSRow(rss: rss)
-//                        }
-//                        .tag("folder4")
-//                    }
-//                }
-////                    NavigationLink(destination: Text("❯  Entertainment")) {
-////                        VStack{
-////                            Text("❯  Entertainment")
-////                        }
-////                    }
-           // }
-//            .onAppear {
-//                UITableView.appearance().separatorStyle = .none
-//            }
-//            .onReceive(rssRefreshPublisher, perform: { output in
-//        self.viewModel.fecthResults()
-//    })
-//    .sheet(isPresented: $isSheetPresented, content: {
-//        if FeaureItem.add == self.selectedFeatureItem {
-//            AddRSSView(
-//                viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss),
-//                onDoneAction: self.onDoneAction)
-//        } else if FeaureItem.setting == self.selectedFeatureItem {
-//            SettingView()
-//        }
-//    })
-//    .onAppear {
-//        UITableView.appearance().separatorStyle = .none
-//        self.viewModel.fecthResults()
-//
-//    }
-//        .font(.headline)
-//        .listStyle(PlainListStyle())
-//            //leading: EditButton(),
-//            .navigationBarItems(trailing: addSourceButton)
-//        .navigationTitle("Account")
-//            .toolbar {
-//                ToolbarItem(placement: .bottomBar) {
-//                            Spacer()
-//                        }
-//                ToolbarItem(placement: .bottomBar) {
-//                    settingButton
-//                }
-//            }
-        //}
+
+struct HeaderView: View {
+  let title: String
+
+  var body: some View {
+    Text(title)
+      .font(.title)
+      .fontWeight(.bold)
+      .padding()
+      .frame(maxWidth: .infinity, alignment: .leading)
+  }
+}
+
+struct RowView: View {
+  let text: String
+
+  var body: some View {
+    Text(text)
+      .padding()
+      .frame(maxWidth: .infinity, alignment: .leading)
+  }
+}
 
 
 struct ButtonView: View {
     var body: some View {
-        Image(systemName: "bookmark.fill")
+        Image(systemName: "bookmark")
             .foregroundColor(.blue)
-            .imageScale(.small)
+            .imageScale(.medium)
         Text("Bookmarked Articles")
         
     }

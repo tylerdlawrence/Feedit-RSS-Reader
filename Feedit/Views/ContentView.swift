@@ -11,35 +11,30 @@ import FeedKit
 
 struct ContentView: View {
 
-//    // ❇️ Core Data property wrappers
-//    @Environment(\.managedObjectContext) var managedObjectContext
-//
-//    // ❇️ The BlogIdea class has an `allIdeasFetchRequest` static function that can be used here
-//    @FetchRequest(fetchRequest: RSSFolderList.allRSSFoldersFetchRequest()) var rssFolderLists: FetchedResults<RSSFolderList>
-//
-//    // ℹ️ Temporary in-memory storage for adding new blog ideas
-//    @State private var newFolderTitle = ""
-//    @State private var newFolderDescription = ""
-//
-//    // ℹ️ Two sections: Add Blog Idea at the top, followed by a listing of the ideas in the persistent store
+    init() {
+        UINavigationBar.appearance().barTintColor = #colorLiteral(red: 0.109796904, green: 0.1098076925, blue: 0.113863565, alpha: 1)
+        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
+        UINavigationBar.appearance().isTranslucent = false
 
-
-
-    @ObservedObject var archiveListViewModel: ArchiveListViewModel
-    //@ObservedObject var settingViewModel: SettingViewModel
-    @ObservedObject var viewModel: RSSListViewModel
-
-    @State private var selectedTab = 0
-
-    private var homeListView: some View {
-        HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel)
-      }
-
+        // Use expanded view's color as the ScrollView background color to make it look better when the cell expands/collapses
+        UIScrollView.appearance().backgroundColor = UIColor(Color(#colorLiteral(red: 0.1097864285, green: 0.1058807895, blue: 0.1140159145, alpha: 1)))
+    }
     
-    var body: some View {
-        HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel)
+//    @ObservedObject var archiveListViewModel: ArchiveListViewModel
+//    //@ObservedObject var settingViewModel: SettingViewModel
+//    @ObservedObject var viewModel: RSSListViewModel
 
-        //RSSFolderView()
+    //@State private var selectedTab = 0
+
+//    private var homeListView: some View {
+//        HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel)
+//      }
+//
+//
+    var body: some View {
+        ContentView()
+//        HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel)
+
     }
 }
 
@@ -52,7 +47,7 @@ struct ContentView_Previews: PreviewProvider {
     //static let settingViewModel = SettingViewModel()
 
     static var previews: some View {
-        ContentView(archiveListViewModel: self.archiveListViewModel, viewModel: self.viewModel)
+        ContentView()
     }
 }
 //(archiveListViewModel: self.archiveListViewModel, settingViewModel: self.settingViewModel, viewModel: self.viewModel)

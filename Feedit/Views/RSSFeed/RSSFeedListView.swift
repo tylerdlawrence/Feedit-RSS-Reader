@@ -169,7 +169,7 @@ struct RSSFeedListView_Previews: PreviewProvider {
     //static let settingViewModel = SettingViewModel()
 
     static var previews: some View {
-        ContentView(archiveListViewModel: self.archiveListViewModel, viewModel: self.viewModel)
+        ContentView()
             .preferredColorScheme(.dark)
 
         }

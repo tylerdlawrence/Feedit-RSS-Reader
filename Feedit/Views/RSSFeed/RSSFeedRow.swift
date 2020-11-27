@@ -52,13 +52,13 @@ struct RSSItemRow: View {
 
             Text(itemWrapper.title)
                 .font(.headline)
-                .lineLimit(2)
+                .lineLimit(3)
             //Spacer()
             Text(itemWrapper.desc.trimHTMLTag.trimWhiteAndSpace)
                 .font(.subheadline)
                 .foregroundColor(.gray)
                 //.foregroundColor(Color("darkerAccent"))
-                .lineLimit(2)
+                .lineLimit(1)
 
                 HStack(alignment: .center) {
                     VStack(alignment: .leading) {
@@ -128,7 +128,7 @@ struct RSSItemRow: View {
         .contextMenu {
             ActionContextMenu(
                 label: itemWrapper.isArchive ? "Untag" : "Tag",
-                systemName: "tag\(itemWrapper.isArchive ? "" : ".slash")",
+                systemName: "bookmark\(itemWrapper.isArchive ? "" : ".slash")",
                 onAction: {
                     self.contextMenuAction?(self.itemWrapper)
             })

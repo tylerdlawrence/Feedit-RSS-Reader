@@ -11,37 +11,6 @@ import Intents
 
 struct ArchiveListView: View {
     
-    
-
-//    enum FilterType {
-//        case all, starred, unstarred
-//    }
-//    @EnvironmentObject var sources: Sources
-//
-//    let filter: FilterType
-//
-//    var title: String {
-//        switch filter {
-//        case .all:
-//            return "All"
-//        case .starred:
-//            return "Starred"
-//        case .unstarred:
-//            return "Unstarred"
-//        }
-//    }
-//
-//    var filteredSources: [Source] {
-//        switch filter {
-//        case .all:
-//            return sources.sources
-//        case .starred:
-//            return sources.sources.filter { $0.isStarred }
-//        case .unstarred:
-//            return sources.sources.filter { !$0.isStarred }
-//        }
-//    }
-    
     @ObservedObject var archiveListViewModel: ArchiveListViewModel
     
     @State private var selectedItem: RSSItem?
@@ -81,7 +50,7 @@ struct ArchiveListView: View {
                 }
             }
             .listStyle(PlainListStyle())
-            .navigationBarTitle("Bookmarked Articles", displayMode: .automatic)
+            .navigationBarTitle("Bookmarked", displayMode: .automatic)
             .navigationBarItems(trailing: EditButton())
 
             .sheet(item: $selectedItem, content: { item in

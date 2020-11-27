@@ -38,17 +38,19 @@ struct RSSRow: View {
                 .multilineTextAlignment(.leading)
                 .lineLimit(1)
                 }
+    }
 // below are options to have parsed feed description and last updated time
         
+
             //Text(rss.desc)
                 //.font(.subheadline)
                 //.lineLimit(1)
-                        
+
             //Text(rss.createTimeStr)
                 //.font(.footnote)
                 //.foregroundColor(.gray)
             
-        }
+        
     
     
     var body: some View {
@@ -78,11 +80,7 @@ struct RSSRow: View {
                     }
                     
                 }
-//                .environmentObject(sources)
 
-               // Text(rss.createTimeStr)
-                 //   .font(.footnote)
-                //    .foregroundColor(.gray)
             }
 
         }
@@ -93,7 +91,7 @@ struct RSSRow: View {
 //        .padding(.top, 10)
 //        .padding(.bottom, 10)
         //.frame(maxWidth: .infinity, alignment: .leading)
-        //.background(Color(red: 32/255, green: 32/255, blue: 32/255))
+//        .background(Color(red: 32/255, green: 32/255, blue: 32/255))
     }
 }
 
@@ -106,7 +104,7 @@ struct RSSRow_Previews: PreviewProvider {
     //static let settingViewModel = SettingViewModel()
 
     static var previews: some View {
-        ContentView(archiveListViewModel: self.archiveListViewModel, viewModel: self.viewModel)
+        ContentView()
         
 
         }

@@ -49,10 +49,10 @@ struct AddRSSView: View {
     }
     
     private var sectionHeader: some View {
-        VStack(alignment: .center) {
-            HStack {
-                Text("")//input//search
-                //Spacer()
+        VStack {
+            HStack(alignment: .center) {
+//                Text("")//input//search
+               // Spacer()
                 Button(action: self.fetchDetail) {
                     Text("Search")
                         .font(.headline)
@@ -61,9 +61,11 @@ struct AddRSSView: View {
                 }
             }
             .multilineTextAlignment(.center)
-            .padding(.leading, 110)
+
+            .padding(.leading, 28)
         }
     }
+    
     
     private var helpButton: some View {
         Button(action: {
@@ -107,39 +109,41 @@ struct AddRSSView: View {
         NavigationView {
             Form {
                 Section() { //header: sectionHeader
-                    HStack{
+                    HStack(alignment: .center){
                         Image(systemName: "magnifyingglass")
                             .opacity(0.4)
                             TextField("Feed URL", text: $feedUrl)
                                 .padding(.trailing)
+                                .multilineTextAlignment(.leading)
                             .opacity(0.4)
                             .disableAutocorrection(true)
                     }
-                    HStack{
+                    HStack(alignment: .center){
                         sectionHeader
+                    
                     }
                 }
-                    Picker("Manage Folders", selection: $previewIndex) {
-                        ForEach(0 ..< categories.count) {
-                            Text(categories[$0].name)
-                            NavigationView {
-                                VStack {
-                                    List(categories, id: \.self) { category in
-                                        VStack(alignment: .leading) {
-                                            Text(category.name)
-                                                .font(.system(size: 12))
-                                                .padding(EdgeInsets(top: 4, leading: 7, bottom: 4, trailing: 7))
-                                                .foregroundColor(.white)
-                                                .background(Color(category.color))
-                                                .cornerRadius(3)
-                                            Text("Number of articles: \(category.articlesCount)")
-                                                .font(.footnote)
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+//                    Picker("Manage Folders", selection: $previewIndex) {
+//                        ForEach(0 ..< categories.count) {
+//                            Text(categories[$0].name)
+//                            NavigationView {
+//                                VStack {
+//                                    List(categories, id: \.self) { category in
+//                                        VStack(alignment: .leading) {
+//                                            Text(category.name)
+//                                                .font(.system(size: 12))
+//                                                .padding(EdgeInsets(top: 4, leading: 7, bottom: 4, trailing: 7))
+//                                                .foregroundColor(.white)
+//                                                .background(Color(category.color))
+//                                                .cornerRadius(3)
+//                                            Text("Number of articles: \(category.articlesCount)")
+//                                                .font(.footnote)
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
 //                    .frame(width: 300, height: 50)
                     .font(.headline)
                     .padding(.leading, 85)
