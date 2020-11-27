@@ -62,7 +62,7 @@ struct AddRSSView: View {
             }
             .multilineTextAlignment(.center)
 
-            .padding(.leading, 28)
+            .padding(.leading, 120)
         }
     }
     
@@ -123,52 +123,42 @@ struct AddRSSView: View {
                     
                     }
                 }
-//                    Picker("Manage Folders", selection: $previewIndex) {
-//                        ForEach(0 ..< categories.count) {
-//                            Text(categories[$0].name)
-//                            NavigationView {
-//                                VStack {
-//                                    List(categories, id: \.self) { category in
-//                                        VStack(alignment: .leading) {
-//                                            Text(category.name)
-//                                                .font(.system(size: 12))
-//                                                .padding(EdgeInsets(top: 4, leading: 7, bottom: 4, trailing: 7))
-//                                                .foregroundColor(.white)
-//                                                .background(Color(category.color))
-//                                                .cornerRadius(3)
-//                                            Text("Number of articles: \(category.articlesCount)")
-//                                                .font(.footnote)
-//                                        }
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//                    .frame(width: 300, height: 50)
-                    .font(.headline)
-                    .padding(.leading, 85)
-                //} //folders, id: \.self) { folders in
-//                        VStack {
-//                            Section() {
-//                                Text("News")
-//                                    .font(.system(size: 12))
-//                                    .padding(EdgeInsets(top: 4, leading: 7, bottom: 4, trailing: 7))
-//                                    .cornerRadius(3)
-//                               //("Number of articles: \(folders.folderTitle)")
-//                                Text("Name of folder")
-//                                    .font(.footnote)
-//                            }
-//                        }
-//                        .navigationBarTitle("Folders", displayMode: .inline)
-//                        .navigationBarItems(leading: cancelButton, trailing: doneButton)
-                //Section { //(header: Text("") //result
+                    Picker("Manage Folders", selection: $previewIndex) {
+                        ForEach(0 ..< categories.count) {
+                            Text(categories[$0].name)
+                            NavigationView {
+                                VStack {
+                                    List(categories, id: \.self) { category in
+                                        VStack(alignment: .center) {
+                                            Text(category.name)
+                                                .cornerRadius(3)
+                                            Text("Number of articles: \(category.articlesCount)")
+                                                .font(.footnote)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    .frame(width: 300, height: 35)
+                    .font(.body)
+                    .padding(.leading, 90.0)
+                
                     if !hasFetchResult {
                         EmptyView()
-//                        Text("press search to view result")
-//                            .opacity(0.4)
+
                     } else {
                         if viewModel.rss != nil {
-                            RSSDisplayView(rss: viewModel.rss!)
+                            //Spacer()
+                            Section(header: Text("Search Results")
+                                        .font(.subheadline)
+                                        .fontWeight(.heavy)
+                                        .multilineTextAlignment(.center)
+                                        .padding(.leading, 100.0)
+                                        ){
+                                RSSDisplayView(rss: viewModel.rss!)
+                                    .font(.subheadline)
+                            }
                     }
                 }
             }
@@ -177,7 +167,6 @@ struct AddRSSView: View {
         }
         .onDisappear {
             self.viewModel.cancelCreateNewRSS()
-        //}
     }
 }
     @State private var showingAlert = false
@@ -198,17 +187,6 @@ func fetchDetail() {
         }
     }
 }
-//}
-//    private func renameCategory() {
-//        guard let category = categories.first else { return }
-//        if category.name == "News" {
-//            category.name = "Blogs"
-//        } else {
-//            category.name = "Technology"
-//        }
-//    }
-//}
-
 
 struct AddRSSView_Previews: PreviewProvider {
     static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)

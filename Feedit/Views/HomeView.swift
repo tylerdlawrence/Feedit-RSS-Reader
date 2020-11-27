@@ -146,16 +146,14 @@ enum ContentViewGroup: Hashable {
   var body: some View {
         NavigationView{
             List {
-                HStack{
-                    Image("launch")
-                        .resizable()
-                        .frame(width: 35.0, height: 35.0)
-                    Text("Local: On My iPhone")
-                        .font(.custom("Gotham", size: 18))
-                }
-                
-                Spacer()
-
+//                HStack{
+//                    Image("launch")
+//                        .resizable()
+//                        .frame(width: 35.0, height: 35.0)
+//                    Text("Local: On My iPhone")
+//                        .font(.custom("Gotham", size: 18))
+//                }
+//                Spacer()
                 DisclosureGroup(
                " ❯   All Sources", //○♾️☰🔵🔲☁
                 tag: .RSS,
@@ -176,57 +174,57 @@ enum ContentViewGroup: Hashable {
                 VStack {
                     NavigationLink(destination: archiveListView) {
                         ButtonView()
-                        }
-                     }
-                //Spacer()
-                
-//                Picker("Folders", selection: $previewIndex) {
-//                    ForEach(0 ..< categories.count) {
-//                        Text(categories[$0].name)
-//                        NavigationView {
-//                            VStack {
-//                                List(categories, id: \.self) { category in
-//                                    VStack(alignment: .leading) {
-//                                        Text(category.name)
-//                                            .font(.system(size: 12))
-//                                            .padding(EdgeInsets(top: 4, leading: 7, bottom: 4, trailing: 7))
-//                                            .cornerRadius(3)
-//
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-
-                }
-                .onReceive(rssRefreshPublisher, perform: { output in
-                    self.viewModel.fecthResults()
-                })
-                .sheet(isPresented: $isSheetPresented, content: {
-                    if FeaureItem.add == self.selectedFeatureItem {
-                        AddRSSView(
-                            viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss),
-                            onDoneAction: self.onDoneAction)
-                    } else if FeaureItem.setting == self.selectedFeatureItem {
-                        SettingView()
-                    }
-                })
-                .onAppear {
-                    UITableView.appearance().separatorStyle = .none
-                    self.viewModel.fecthResults()
-                }
-                .font(.custom("Gotham", size: 17))
-                .listStyle(PlainListStyle())
-                .navigationBarItems(leading: EditButton(), trailing: addSourceButton)
-                .navigationTitle("Account")
-                    .toolbar {
-                        ToolbarItem(placement: .bottomBar) {
-                                    Spacer()
                                 }
-                        ToolbarItem(placement: .bottomBar) {
-                            settingButton
-                
+                            }
+                        }
+                        .onReceive(rssRefreshPublisher, perform: { output in
+                            self.viewModel.fecthResults()
+                        })
+                        .sheet(isPresented: $isSheetPresented, content: {
+                            if FeaureItem.add == self.selectedFeatureItem {
+                                AddRSSView(
+                                    viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss),
+                                    onDoneAction: self.onDoneAction)
+                            } else if FeaureItem.setting == self.selectedFeatureItem {
+                                SettingView()
+                            }
+                        })
+                        .onAppear {
+                            UITableView.appearance().separatorStyle = .none
+                            self.viewModel.fecthResults()
+                        }
+                        .font(.custom("Gotham", size: 17))
+                        .listStyle(PlainListStyle())
+                        .navigationBarItems(leading: EditButton(), trailing: addSourceButton)
+                        .navigationTitle("Account")
+                            .toolbar {
+                                ToolbarItem(placement: .bottomBar) {
+                                            Spacer()
+                                        }
+                                ToolbarItem(placement: .bottomBar) {
+                                    settingButton
+                        
+                    }
+                }
+                Picker("Manage Folders", selection: $previewIndex) {
+                    ForEach(0 ..< categories.count) {
+                        Text(categories[$0].name)
+                        NavigationView {
+                            VStack {
+                                List(categories, id: \.self) { category in
+                                    VStack(alignment: .leading) {
+                                        Text(category.name)
+                                            .font(.system(size: 12))
+                                            .padding(EdgeInsets(top: 4, leading: 7, bottom: 4, trailing: 7))
+                                            .foregroundColor(.white)
+                                            .background(Color(category.color))
+                                            .cornerRadius(3)
+                                        Text("Number of articles: \(category.articlesCount)")
+                                            .font(.footnote)
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -272,7 +270,6 @@ struct RowView: View {
       .frame(maxWidth: .infinity, alignment: .leading)
   }
 }
-
 
 struct ButtonView: View {
     var body: some View {
@@ -339,6 +336,7 @@ struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         
         HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel)
+            .preferredColorScheme(.dark)
     }
 }
 
