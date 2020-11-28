@@ -155,9 +155,10 @@ enum ContentViewGroup: Hashable {
 //                }
 //                Spacer()
                 DisclosureGroup(
-               " ❯   All Sources", //○♾️☰🔵🔲☁
+                "♾️     All Sources", //○♾️☰🔵🔲☁❯
                 tag: .RSS,
-                selection: $showingContent) {
+                    selection: $showingContent){
+                //ScrollView{
                     ForEach(viewModel.items, id: \.self) { rss in
                         NavigationLink(destination: self.destinationView(rss)) {
                             RSSRow(rss: rss)
@@ -170,11 +171,17 @@ enum ContentViewGroup: Hashable {
                             self.viewModel.delete(at: index)
                             }
                         }
-                    }
+                //}
+                
+                
+                }
+                .padding(.leading)
+
                 VStack {
                     NavigationLink(destination: archiveListView) {
                         ButtonView()
-                                }
+                    }
+                    .padding(.leading)
                             }
                         }
                         .onReceive(rssRefreshPublisher, perform: { output in
@@ -193,9 +200,16 @@ enum ContentViewGroup: Hashable {
                             UITableView.appearance().separatorStyle = .none
                             self.viewModel.fecthResults()
                         }
-                        .font(.custom("Gotham", size: 17))
+                        .font(.custom("Gotham", size: 18))
                         .listStyle(PlainListStyle())
-                        .navigationBarItems(leading: EditButton(), trailing: addSourceButton)
+                        .navigationBarItems(leading:
+                                HStack{
+                                    Image("launch")
+                                        .resizable()
+                                        .frame(width: 35, height: 35)
+//                                    Text("Feedit: RSS Reader") //Account: Local
+//                                        .font(.custom("Gotham", size: 18))
+                                }, trailing: addSourceButton)
                         .navigationTitle("Account")
                             .toolbar {
                                 ToolbarItem(placement: .bottomBar) {
@@ -203,28 +217,6 @@ enum ContentViewGroup: Hashable {
                                         }
                                 ToolbarItem(placement: .bottomBar) {
                                     settingButton
-                        
-                    }
-                }
-                Picker("Manage Folders", selection: $previewIndex) {
-                    ForEach(0 ..< categories.count) {
-                        Text(categories[$0].name)
-                        NavigationView {
-                            VStack {
-                                List(categories, id: \.self) { category in
-                                    VStack(alignment: .leading) {
-                                        Text(category.name)
-                                            .font(.system(size: 12))
-                                            .padding(EdgeInsets(top: 4, leading: 7, bottom: 4, trailing: 7))
-                                            .foregroundColor(.white)
-                                            .background(Color(category.color))
-                                            .cornerRadius(3)
-                                        Text("Number of articles: \(category.articlesCount)")
-                                            .font(.footnote)
-                                    }
-                                }
-                            }
-                        }
                     }
                 }
             }
@@ -273,10 +265,15 @@ struct RowView: View {
 
 struct ButtonView: View {
     var body: some View {
-        Image(systemName: "bookmark")
-            .foregroundColor(.blue)
-            .imageScale(.medium)
+        Image("bookmark-tag")
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 20, height: 20,alignment: .trailing)
+            .cornerRadius(5)
+            .border(Color.clear, width: 1)
         Text("Bookmarked Articles")
+            .padding(.leading)
+        
         
     }
 }

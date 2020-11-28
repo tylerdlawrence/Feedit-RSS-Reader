@@ -34,7 +34,7 @@ struct RSSRow: View {
     private var pureTextView: some View {
         VStack(spacing: 0.0) {
             Text(rss.title)
-                .font(.custom("Gotham", size: 18))
+                .font(.custom("Gotham", size: 16))
                 .multilineTextAlignment(.leading)
                 .lineLimit(1)
                 }
