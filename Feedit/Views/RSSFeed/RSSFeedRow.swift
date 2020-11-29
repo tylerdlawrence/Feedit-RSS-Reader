@@ -75,15 +75,15 @@ struct RSSItemRow: View {
 
                             } else {
 
-                                Image("3dicon")
+                                //Image("3dicon")
+                                Image("3icon")
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
-                                    .font(.body)
-                                    .frame(width: 20, height: 20,alignment: .center)
+                                    .frame(width: 25, height: 25,alignment: .center)
                                     .border(Color.clear, width: 1)
                                     .cornerRadius(5)
                                     .layoutPriority(10)
-                                    //.animation(.easeInOut)
+                                    .animation(.easeInOut)
                                     //.padding(.trailing, 150)
 
                             }

@@ -158,95 +158,95 @@ enum ContentViewGroup: Hashable {
     }
 
   var body: some View {
-        NavigationView{
-            List {
-//                VStack(spacing: 0) {
-//                    // SearchBar
-//                    SearchBar(searching: $searching, mainList: $rssList, searchedList: $searchedRSSList)
-//                HStack{
-//                    Image("launch")
-//                        .resizable()
-//                        .frame(width: 35.0, height: 35.0)
-//                    Text("Local: On My iPhone")
-//                        .font(.custom("Gotham", size: 18))
-//                }
-                Spacer()
-                DisclosureGroup(
-                "♾️     All Sources", //○♾️☰🔵🔲☁❯
-                tag: .RSS,
-                    selection: $showingContent){
-                ScrollView{
-                    VStack(spacing: 0) {
-                        // SearchBar
-                        SearchBar(searching: $searching, mainList: $rssRow, searchedList: $searchedRSSRow)
-                    }
-
-                    ForEach(viewModel.items, id: \.self) { rss in
-                        NavigationLink(destination: self.destinationView(rss)) {
-                            RSSRow(rss: rss)
+        ZStack{
+            
+            
+            NavigationView {
+                List {
+    //                VStack(spacing: 0) {
+    //                    // SearchBar
+    //                    SearchBar(searching: $searching, mainList: $rssList, searchedList: $searchedRSSList)
+    //                HStack{
+    //                    Image("launch")
+    //                        .resizable()
+    //                        .frame(width: 35.0, height: 35.0)
+    //                    Text("Local: On My iPhone")
+    //                        .font(.custom("Gotham", size: 18))
+    //                }
+                    Spacer()
+                    DisclosureGroup(
+                    "♾️     All Sources", //○♾️☰🔵🔲☁❯
+                    tag: .RSS,
+                        selection: $showingContent){
+                    ScrollView{
+                        VStack(spacing: 0) {
+                            // SearchBar
+                            SearchBar(searching: $searching, mainList: $rssRow, searchedList: $searchedRSSRow)
                         }
+                        ForEach(viewModel.items, id: \.self) { rss in
+                            NavigationLink(destination: self.destinationView(rss)) {
+                                RSSRow(rss: rss)
+                            }
+                            .padding(.leading)
+                        
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(Color.clear)
+                            .tag("RSS")
+                        }
+                        .onDelete { indexSet in
+                            if let index = indexSet.first {
+                                self.viewModel.delete(at: index)
+                                }
+                            }
+                        }
+                    .padding(.leading, -40.0)
+
                     
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color.clear)
-                        .tag("RSS")
                     }
-                    .onDelete { indexSet in
-                        if let index = indexSet.first {
-                            self.viewModel.delete(at: index)
-                            }
-                        }
-                    }
-                .padding(.leading, -40.0)
-
-                
-                }
-                .background(Color.clear)
-                .padding(.leading)
-
-                VStack {
-                    NavigationLink(destination: archiveListView) {
-                        ButtonView()
-                    }
+                    .background(Color.clear)
                     .padding(.leading)
-                            }
+
+                    VStack {
+                        NavigationLink(destination: archiveListView) {
+                            ButtonView()
                         }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color.clear)
-                        .onReceive(rssRefreshPublisher, perform: { output in
-                            self.viewModel.fecthResults()
-                        })
-                        .sheet(isPresented: $isSheetPresented, content: {
-                            if FeaureItem.add == self.selectedFeatureItem {
-                                AddRSSView(
-                                    viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss),
-                                    onDoneAction: self.onDoneAction)
-                            } else if FeaureItem.setting == self.selectedFeatureItem {
-                                SettingView()
+                        .padding(.leading)
+                                }
                             }
-                        })
-                        .onAppear(perform: {
-                            listOfFeeds()
-                            self.viewModel.fecthResults()
-                            
-                        })
-            //                        .font(.custom("Gotham()", size: 18))
-                        //}
-                        .listStyle(PlainListStyle())
-                        .navigationBarItems(leading:
-                                HStack{
-                                    Image("launch")
-                                        .resizable()
-                                        .frame(width: 35, height: 35)
-//                                    Text("Feedit: RSS Reader") //Account: Local
-//                                        .font(.custom("Gotham", size: 18))
-                                }, trailing: addSourceButton)
-                        .navigationTitle("Account")
-                            .toolbar {
-                                ToolbarItem(placement: .bottomBar) {
-                                            Spacer()
-                                        }
-                                ToolbarItem(placement: .bottomBar) {
-                                    settingButton
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color(#colorLiteral(red: 0.1058652624, green: 0.1019589826, blue: 0.1100945398, alpha: 1))).ignoresSafeArea()
+                            .onReceive(rssRefreshPublisher, perform: { output in
+                                self.viewModel.fecthResults()
+                            })
+                            .sheet(isPresented: $isSheetPresented, content: {
+                                if FeaureItem.add == self.selectedFeatureItem {
+                                    AddRSSView(
+                                        viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss),
+                                        onDoneAction: self.onDoneAction)
+                                } else if FeaureItem.setting == self.selectedFeatureItem {
+                                    SettingView()
+                                }
+                            })
+                            .onAppear(perform: {
+                                listOfFeeds()
+                                self.viewModel.fecthResults()
+                                
+                            })
+                            .listStyle(PlainListStyle())
+                            .navigationBarItems(leading:
+                                    HStack{
+                                        Image("launch")
+                                            .resizable()
+                                            .frame(width: 35, height: 35)
+                                    }, trailing: addSourceButton)
+                            .navigationTitle("Account")
+                                .toolbar {
+                                    ToolbarItem(placement: .bottomBar) {
+                                                Spacer()
+                                            }
+                                    ToolbarItem(placement: .bottomBar) {
+                                        settingButton
+                        }
                     }
                 }
             }

@@ -414,7 +414,6 @@
 		61C818D124E1F65D00593939 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				61C5C56F257357CF00333B50 /* SearchBar */,
 				61C818F024E1FB4F00593939 /* Setting */,
 				61C818DC24E1F7AE00593939 /* Tagged */,
 				61C818F124E1FB6600593939 /* RSSFeed */,
@@ -515,6 +514,7 @@
 				61CDCF5C24E84645007654C5 /* TextView.swift */,
 				61CDCF5E24E8466C007654C5 /* WKWebViewWrapper.swift */,
 				61967EE824E205DD00AA647C /* SectionView.swift */,
+				61C5C56F257357CF00333B50 /* SearchBar */,
 			);
 			path = CommonViews;
 			sourceTree = "<group>";

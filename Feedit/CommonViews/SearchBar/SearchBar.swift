@@ -25,6 +25,7 @@ struct SearchBar: View {
                     // Magnifying Glass Icon
                     Image(systemName: "magnifyingglass")
                         .foregroundColor(Color(#colorLiteral(red: 0.2509489655, green: 0.2509984672, blue: 0.2509458363, alpha: 1)))
+                        .imageScale(.medium)
 
                     // Search Area TextField
                     TextField("", text: $searchInput)
@@ -36,7 +37,8 @@ struct SearchBar: View {
                         //.accentColor(.white)
                         //.foregroundColor(.white)
                 }
-                .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
+                .padding(.leading)
+                //.padding(EdgeInsets(top: 5, leading: 12, bottom: 5, trailing: 5))
                 //.background(Color(#colorLiteral(red: 0.1019341871, green: 0.09804331511, blue: 0.1021005884, alpha: 1)).cornerRadius(8.0))
 
                 // 'Cancel' Button

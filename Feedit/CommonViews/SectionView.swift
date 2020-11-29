@@ -23,6 +23,12 @@ struct SectionView<Content: View>: View {
                         Text(title!)
                             .font(.headline)
                     }
+                    Section {
+                        if urlToImage == nil {
+                            Image(urlToImage!)
+                            
+                        }
+                    }
                     content()
                 }
             } else {
@@ -30,6 +36,11 @@ struct SectionView<Content: View>: View {
                     if title != nil {
                         Text(title!)
                             .font(.headline)
+                    }
+                    Section {
+                    if urlToImage == nil {
+                        Image(systemName: "chart.bar.doc.horizontal").font(.system(size: 16, weight: .regular)).foregroundColor(.secondary)
+                        }
                     }
                     content()
                 }

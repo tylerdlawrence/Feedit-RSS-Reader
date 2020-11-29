@@ -11,8 +11,8 @@ import FeedKit
 
 struct ContentView: View {
     
-    @State private var rssList = [String]() //countryList
-    @State private var searchedRSSList = [String]() //searchedCountryList
+    @State private var rssList = [String]() 
+    @State private var searchedRSSList = [String]()
     @State private var searching = false
 
     init() {

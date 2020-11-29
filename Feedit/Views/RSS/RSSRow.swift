@@ -66,7 +66,7 @@ struct RSSRow: View {
                         
                     } else {
                         
-                        Image("3dicon")
+                        Image("3icon")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .font(.body)
