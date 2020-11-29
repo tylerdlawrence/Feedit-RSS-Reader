@@ -36,6 +36,11 @@ enum ContentViewSheet: Identifiable {
   }
 }
 struct HomeView: View {
+    
+    @State private var rssRow = [String]() //countryList
+    @State private var searchedRSSRow = [String]() //searchedCountryList
+    @State private var searching = false
+    
     @State private var showingSheet: ContentViewSheet?
     @Environment(\.managedObjectContext) var moc
     
@@ -58,6 +63,15 @@ enum ContentViewGroup: Hashable {
     @State private var previewIndex = 0
     
     @FetchRequest(entity: Category.entity(), sortDescriptors: []) var categories: FetchedResults<Category>
+    
+    func listOfFeeds() {
+        for code in NSLocale.isoCountryCodes as [String] {
+            let id = NSLocale.localeIdentifier(fromComponents: [NSLocale.Key.countryCode.rawValue: code])
+            let name = NSLocale(localeIdentifier: "en").displayName(forKey: NSLocale.Key.identifier, value: id) ?? "No results for: \(code)"
+            rssRow.append(name + " ")
+            //rssList.append(name + " " + countryFlag(country: code))
+        }
+    }
     
     private var addSourceButton: some View {
         Button(action: {
@@ -146,6 +160,9 @@ enum ContentViewGroup: Hashable {
   var body: some View {
         NavigationView{
             List {
+//                VStack(spacing: 0) {
+//                    // SearchBar
+//                    SearchBar(searching: $searching, mainList: $rssList, searchedList: $searchedRSSList)
 //                HStack{
 //                    Image("launch")
 //                        .resizable()
@@ -153,28 +170,37 @@ enum ContentViewGroup: Hashable {
 //                    Text("Local: On My iPhone")
 //                        .font(.custom("Gotham", size: 18))
 //                }
-//                Spacer()
+                Spacer()
                 DisclosureGroup(
                 "♾️     All Sources", //○♾️☰🔵🔲☁❯
                 tag: .RSS,
                     selection: $showingContent){
-                //ScrollView{
+                ScrollView{
+                    VStack(spacing: 0) {
+                        // SearchBar
+                        SearchBar(searching: $searching, mainList: $rssRow, searchedList: $searchedRSSRow)
+                    }
+
                     ForEach(viewModel.items, id: \.self) { rss in
                         NavigationLink(destination: self.destinationView(rss)) {
                             RSSRow(rss: rss)
                         }
+                    
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color.clear)
                         .tag("RSS")
                     }
-                    //.onMove(perform: onMove)
                     .onDelete { indexSet in
                         if let index = indexSet.first {
                             self.viewModel.delete(at: index)
                             }
                         }
-                //}
-                
+                    }
+                .padding(.leading, -40.0)
+
                 
                 }
+                .background(Color.clear)
                 .padding(.leading)
 
                 VStack {
@@ -184,6 +210,8 @@ enum ContentViewGroup: Hashable {
                     .padding(.leading)
                             }
                         }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color.clear)
                         .onReceive(rssRefreshPublisher, perform: { output in
                             self.viewModel.fecthResults()
                         })
@@ -196,11 +224,13 @@ enum ContentViewGroup: Hashable {
                                 SettingView()
                             }
                         })
-                        .onAppear {
-                            UITableView.appearance().separatorStyle = .none
+                        .onAppear(perform: {
+                            listOfFeeds()
                             self.viewModel.fecthResults()
-                        }
-                        .font(.custom("Gotham", size: 18))
+                            
+                        })
+            //                        .font(.custom("Gotham()", size: 18))
+                        //}
                         .listStyle(PlainListStyle())
                         .navigationBarItems(leading:
                                 HStack{
@@ -222,6 +252,7 @@ enum ContentViewGroup: Hashable {
             }
         }
     }
+
  
 //
 //                DisclosureGroup(
@@ -240,6 +271,7 @@ enum ContentViewGroup: Hashable {
 ////                            Text("❯  News")
 ////                        }
 ////                    }
+
 
 struct HeaderView: View {
   let title: String

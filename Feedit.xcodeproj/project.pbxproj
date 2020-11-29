@@ -102,6 +102,8 @@
 		61967F0124E2068400AA647C /* AddRSSViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61967EFD24E2068400AA647C /* AddRSSViewModel.swift */; };
 		61967F0324E2068400AA647C /* RSSDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61967EFF24E2068400AA647C /* RSSDisplayView.swift */; };
 		61967F0924E20D6200AA647C /* RSS.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 61967F0724E20D6200AA647C /* RSS.xcdatamodeld */; };
+		61C5C56D2573577000333B50 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C5C56C2573577000333B50 /* SearchBar.swift */; };
+		61C5C571257357E100333B50 /* ListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C5C570257357E100333B50 /* ListCell.swift */; };
 		61C8189624E1F3FB00593939 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C8189524E1F3FB00593939 /* AppDelegate.swift */; };
 		61C8189824E1F3FB00593939 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C8189724E1F3FB00593939 /* SceneDelegate.swift */; };
 		61C8189F24E1F3FD00593939 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 61C8189E24E1F3FD00593939 /* Assets.xcassets */; };
@@ -226,6 +228,8 @@
 		61967EFF24E2068400AA647C /* RSSDisplayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RSSDisplayView.swift; sourceTree = "<group>"; };
 		61967F0624E2096100AA647C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		61967F0824E20D6200AA647C /* RSS.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = RSS.xcdatamodel; sourceTree = "<group>"; };
+		61C5C56C2573577000333B50 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
+		61C5C570257357E100333B50 /* ListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCell.swift; sourceTree = "<group>"; };
 		61C8189224E1F3FB00593939 /* Feedit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Feedit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		61C8189524E1F3FB00593939 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		61C8189724E1F3FB00593939 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -347,6 +351,15 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		61C5C56F257357CF00333B50 /* SearchBar */ = {
+			isa = PBXGroup;
+			children = (
+				61C5C570257357E100333B50 /* ListCell.swift */,
+				61C5C56C2573577000333B50 /* SearchBar.swift */,
+			);
+			path = SearchBar;
+			sourceTree = "<group>";
+		};
 		61C8188924E1F3FB00593939 = {
 			isa = PBXGroup;
 			children = (
@@ -401,6 +414,7 @@
 		61C818D124E1F65D00593939 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				61C5C56F257357CF00333B50 /* SearchBar */,
 				61C818F024E1FB4F00593939 /* Setting */,
 				61C818DC24E1F7AE00593939 /* Tagged */,
 				61C818F124E1FB6600593939 /* RSSFeed */,
@@ -737,6 +751,7 @@
 				618610CF256EF7500083A96D /* Common Utils.swift in Sources */,
 				616CAF6524F7158200690804 /* RFC3339DateFormatter.swift in Sources */,
 				615096EB2564BF420001C0D9 /* NavigationBarModifier.swift in Sources */,
+				61C5C571257357E100333B50 /* ListCell.swift in Sources */,
 				61967EE924E205DD00AA647C /* ActionContextMenu.swift in Sources */,
 				618D823D2570327F0061292F /* FeedImageView.swift in Sources */,
 				618610D0256EF7500083A96D /* HTMLScarperUtility.swift in Sources */,
@@ -773,6 +788,7 @@
 				618610C5256EE3AB0083A96D /* ArticleViewModel.swift in Sources */,
 				61967EE224E205AD00AA647C /* RSSItemStore.swift in Sources */,
 				615E98402533AFAE00891083 /* ContentView.swift in Sources */,
+				61C5C56D2573577000333B50 /* SearchBar.swift in Sources */,
 				61967F0924E20D6200AA647C /* RSS.xcdatamodeld in Sources */,
 				61967EF324E2061100AA647C /* RSSFeedRow.swift in Sources */,
 				61C818E424E1F91B00593939 /* RSSDataSource.swift in Sources */,
