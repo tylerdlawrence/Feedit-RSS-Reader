@@ -109,12 +109,12 @@ enum ContentViewGroup: Hashable {
         ArchiveListView(viewModel: archiveListViewModel)
     }
 
-//    private var trailingView: some View {
-//        HStack(alignment: .top, spacing: 24) {
-//            settingButton
-//            addSourceButton
-//        }
-//    }
+    private var trailingView: some View {
+        HStack(alignment: .top, spacing: 24) {
+            EditButton()
+            addSourceButton
+        }
+    }
     
     private let addRSSPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("addNewRSSPublisher"))
     private let rssRefreshPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("rssListNeedRefresh"))
@@ -178,11 +178,11 @@ enum ContentViewGroup: Hashable {
                     "♾️     All Sources", //○♾️☰🔵🔲☁❯
                     tag: .RSS,
                         selection: $showingContent){
-                    ScrollView{
-                        VStack(spacing: 0) {
-                            // SearchBar
-                            SearchBar(searching: $searching, mainList: $rssRow, searchedList: $searchedRSSRow)
-                        }
+                    //ScrollView{
+//                        VStack(spacing: 0) {
+//                            // SearchBar
+//                            SearchBar(searching: $searching, mainList: $rssRow, searchedList: $searchedRSSRow)
+//                        }
                         ForEach(viewModel.items, id: \.self) { rss in
                             NavigationLink(destination: self.destinationView(rss)) {
                                 RSSRow(rss: rss)
@@ -198,7 +198,7 @@ enum ContentViewGroup: Hashable {
                                 self.viewModel.delete(at: index)
                                 }
                             }
-                        }
+                        //}
                     .padding(.leading, -40.0)
 
                     
@@ -238,7 +238,7 @@ enum ContentViewGroup: Hashable {
                                         Image("launch")
                                             .resizable()
                                             .frame(width: 35, height: 35)
-                                    }, trailing: addSourceButton)
+                                    }, trailing: trailingView)
                             .navigationTitle("Account")
                                 .toolbar {
                                     ToolbarItem(placement: .bottomBar) {
