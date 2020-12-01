@@ -11,7 +11,7 @@ import FeedKit
 
 struct ContentView: View {
     
-    @State private var rssList = [String]() 
+    @State private var rss = [String]() 
     @State private var searchedRSSList = [String]()
     @State private var searching = false
 
@@ -38,7 +38,7 @@ struct ContentView: View {
         NavigationView {
                     VStack(spacing: 0) {
                         // SearchBar
-                        SearchBar(searching: $searching, mainList: $rssList, searchedList: $searchedRSSList)
+                        SearchBar(searching: $searching, title: $rss, searchedList: $searchedRSSList)
 
                         // ...
                         
@@ -54,7 +54,7 @@ struct ContentView: View {
                 for code in NSLocale.isoCountryCodes as [String] {
                     let id = NSLocale.localeIdentifier(fromComponents: [NSLocale.Key.countryCode.rawValue: code])
                     let name = NSLocale(localeIdentifier: "en").displayName(forKey: NSLocale.Key.identifier, value: id) ?? "No results for: \(code)"
-                    rssList.append(name + " ")
+                    rss.append(name + " ")
                     //rssList.append(name + " " + countryFlag(country: code))
                 }
             }

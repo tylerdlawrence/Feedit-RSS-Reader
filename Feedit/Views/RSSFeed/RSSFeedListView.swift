@@ -96,6 +96,7 @@ struct RSSFeedListView: View {
             }
             Text(rssSource.desc)
                     .font(.footnote)
+            
         }
         .frame(width: 325.0, height: 80)
 

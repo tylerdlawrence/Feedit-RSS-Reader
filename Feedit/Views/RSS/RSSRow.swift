@@ -101,8 +101,6 @@ struct RSSRow_Previews: PreviewProvider {
     
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
 
-    //static let settingViewModel = SettingViewModel()
-
     static var previews: some View {
         ContentView()
         

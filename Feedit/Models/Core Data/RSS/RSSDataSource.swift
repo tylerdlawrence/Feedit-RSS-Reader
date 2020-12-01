@@ -8,7 +8,7 @@
 import CoreData
 import Foundation
 
-class RSSDataSource: NSObject, DataSource {
+class RSSDataSource: NSObject, DataSource, NSFetchedResultsControllerDelegate {
     
     var parentContext: NSManagedObjectContext
     
@@ -29,7 +29,7 @@ class RSSDataSource: NSObject, DataSource {
         createContext = parentContext.newChildContext()
         updateContext = parentContext.newChildContext()
         
-        let request = Model.fetchRequest() as NSFetchRequest<RSS>
+        let request = RSS.fetchRequest() as NSFetchRequest<RSS>
         request.sortDescriptors = []
             
         fetchedResult = .init(

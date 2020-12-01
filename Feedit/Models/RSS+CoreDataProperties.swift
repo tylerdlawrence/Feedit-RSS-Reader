@@ -19,7 +19,7 @@ extension RSS {
 
     @NSManaged public var author: String?
     @NSManaged public var urlString: String?
-    //@NSManaged public var urlToImage: String?
+    @NSManaged public var imageURL: String
     @NSManaged public var url: String
     @NSManaged public var title: String
     @NSManaged public var desc: String
@@ -39,12 +39,12 @@ extension RSS {
         return "\(self.createTime?.string() ?? "")"
     }
     
-    static func create(url: String = "", title: String = "", desc: String = "", urlToImage: String = "", in context: NSManagedObjectContext) -> RSS {
+    static func create(url: String = "", title: String = "", desc: String = "", imageURL: String = "", in context: NSManagedObjectContext) -> RSS {
         let rss = RSS(context: context)
         rss.title = title
         rss.desc = desc
         rss.url = url
-        //rss.urlToImage = urlToImage
+        rss.imageURL = imageURL
         rss.uuid = UUID()
         rss.createTime = Date()
         rss.updateTime = Date()
@@ -52,7 +52,7 @@ extension RSS {
         return rss
     }
     
-    static func simple(image: String = "") -> RSS {
+    static func simple(imageURL: String = "") -> RSS {
         let rss = RSS(context: Persistence.current.context)
         rss.image = "f"
         rss.title = "Daring Fireball"

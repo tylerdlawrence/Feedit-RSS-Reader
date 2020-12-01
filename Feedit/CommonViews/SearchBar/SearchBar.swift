@@ -11,7 +11,7 @@ struct SearchBar: View {
     @State private var searchInput: String = ""
 
     @Binding var searching: Bool
-    @Binding var mainList: [String]
+    @Binding var title: [String]
     @Binding var searchedList: [String]
 
     var body: some View {
@@ -31,7 +31,7 @@ struct SearchBar: View {
                     TextField("", text: $searchInput)
                         .onChange(of: searchInput, perform: { searchText in
                             searching = true
-                            searchedList = mainList.filter { $0.lowercased().prefix(searchText.count) == searchText.lowercased() || $0.contains(searchText) }
+                            searchedList = title.filter { $0.lowercased().prefix(searchText.count) == searchText.lowercased() || $0.contains(searchText) }
 
                         })
                         //.accentColor(.white)
@@ -63,6 +63,6 @@ struct SearchBar: View {
 
 struct SearchBar_Previews: PreviewProvider {
     static var previews: some View {
-        SearchBar(searching: .constant(true), mainList: .constant(["Lorem ipsum", "Lorem ipsum", "Lorem ipsum"]), searchedList: .constant(["Lorem ipsum", "Lorem ipsum", "Lorem ipsum"]))
+        SearchBar(searching: .constant(true), title: .constant(["Lorem ipsum", "Lorem ipsum", "Lorem ipsum"]), searchedList: .constant(["Lorem ipsum", "Lorem ipsum", "Lorem ipsum"]))
     }
 }

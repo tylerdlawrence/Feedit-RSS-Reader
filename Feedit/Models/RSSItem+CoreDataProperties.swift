@@ -24,7 +24,7 @@ extension RSSItem {
         return NSFetchRequest<RSSItem>(entityName: "RSSItem")
     }
 
-    @NSManaged public var urlToImage: String
+    //@NSManaged public var imageURL: String
     @NSManaged public var updateTime: Date?
     @NSManaged public var createTime: Date?
     @NSManaged public var desc: String
@@ -56,8 +56,11 @@ extension RSSItem {
         item.createTime = createTime
         item.progress = 0
         item.isArchive = false
+        //item.imageURL = image
         return item
     }
+    
+    //static var placeholder = RSSItem.self
     
     static func requestObjects(rssUUID: UUID, start: Int = 0, limit: Int = 20) -> NSFetchRequest<RSSItem> {
         let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>

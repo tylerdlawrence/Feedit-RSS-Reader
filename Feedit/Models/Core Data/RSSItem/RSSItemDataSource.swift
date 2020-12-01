@@ -8,7 +8,7 @@
 import CoreData
 import Foundation
 
-class RSSItemDataSource: NSObject, DataSource {
+class RSSItemDataSource: NSObject, DataSource, NSFetchedResultsControllerDelegate {
     
     var parentContext: NSManagedObjectContext
     
@@ -45,7 +45,8 @@ class RSSItemDataSource: NSObject, DataSource {
 extension RSSItemDataSource {
     func simple() -> RSSItem? {
         let item = RSSItem.init(context: createContext)
-        item.url = "https://www.github.com"
+        item.url = "https://github.blog/feed"
+        item.image = "launch"
         return item
     }
 }

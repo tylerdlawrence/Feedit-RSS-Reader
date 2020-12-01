@@ -5,6 +5,7 @@
         <attribute name="desc" optional="YES" attributeType="String" defaultValueString=""/>
         <attribute name="folder" optional="YES" attributeType="String"/>
         <attribute name="image" optional="YES" attributeType="String" defaultValueString=""/>
+        <attribute name="imageURL" optional="YES" attributeType="String"/>
         <attribute name="isFetched" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="lastFetchTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="order" optional="YES" attributeType="String"/>
@@ -34,7 +35,7 @@
         </uniquenessConstraints>
     </entity>
     <elements>
-        <element name="RSS" positionX="-175.832275390625" positionY="-199.9352722167968" width="119.2158813476562" height="194"/>
+        <element name="RSS" positionX="-175.832275390625" positionY="-199.9352722167968" width="119.2158813476562" height="209"/>
         <element name="RSSItem" positionX="-174.26806640625" positionY="37.69049072265625" width="124.126220703125" height="224"/>
     </elements>
 </model>

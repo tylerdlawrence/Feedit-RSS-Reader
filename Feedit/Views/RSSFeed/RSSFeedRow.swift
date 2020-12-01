@@ -9,7 +9,9 @@ import KingfisherSwiftUI
 import FeedKit
 
 struct RSSItemRow: View {
-
+    
+    let image = NSCache<AnyObject, AnyObject>()
+    
     @ObservedObject var itemWrapper: RSSItem
     @ObservedObject var imageLoader: ImageLoader
    // @ObservedObject var rssFeedViewModel: RSSFeedViewModel
@@ -20,25 +22,46 @@ struct RSSItemRow: View {
         itemWrapper = wrapper
         contextMenuAction = action
         self.imageLoader = ImageLoader(path: wrapper.image)
+        //loadImage(url: itemWrapper.image)
 
     }
+    
+//    func iconImageView(url: String) {
+//        if let imageFromCache = imageCache.object(forKey: url as AnyObject) as? UIImage {
+//            self.imageLoader.image = imageFromCache
+//        } else {
+//            if let imageURL = URL(string: url) {
+//                let task = URLSession.shared.dataTask(with: imageURL) { data, response, error in
+//                    guard let data = data, error == nil else { return }
+//                    if let imageToCache = UIImage(data: data) {
+//                        DispatchQueue.main.async {
+//                            self.imageCache.setObject(imageToCache, forKey: url as AnyObject)
+//                            self.imageLoader.image = imageToCache
+//                        }
+//                    }
+//                }
+//                task.resume()
+//            }
+//        }
+//    }
 
-    func iconImageView(_ image: UIImage) -> some View {
+    private func iconImageView(_ image: UIImage) -> some View {
         Image(uiImage: image)
         .resizable()
-            .cornerRadius(5)
-            .animation(.easeInOut)
-            .border(Color.clear, width: 1)
-
+        .frame(width: 80, height: 80, alignment: .center)
+        .cornerRadius(4)
+        .animation(.easeInOut)
     }
 
     private var pureTextView: some View {
 
             Text(itemWrapper.title)
-                .font(.custom("Gotham", size: 20))
+//                .font(.custom("Gotham", size: 20))
                 .multilineTextAlignment(.leading)
                 .lineLimit(1)
     }
+    
+
 
     private var descView: some View {
             Text(itemWrapper.desc)
@@ -47,105 +70,113 @@ struct RSSItemRow: View {
     }
 
     var body: some View{
-
-        VStack(alignment: .leading) {
-
-            Text(itemWrapper.title)
-                .font(.headline)
-                .lineLimit(3)
-            //Spacer()
-            Text(itemWrapper.desc.trimHTMLTag.trimWhiteAndSpace)
-                .font(.subheadline)
-                .foregroundColor(.gray)
-                //.foregroundColor(Color("darkerAccent"))
-                .lineLimit(1)
-
-                HStack(alignment: .center) {
-                    VStack(alignment: .leading) {
-                        HStack {
-                            if
-                                self.imageLoader.image != nil {
-                                iconImageView(self.imageLoader.image!)
-//                                    .resizable()
-//                                    .aspectRatio(contentMode: .fit)
-                                    .font(.body)
-                                    .frame(width: 20, height: 20,alignment: .center)
-                                    .layoutPriority(10)
-                                    .animation(.easeIn)
-
-                            } else {
-
-                                //Image("3dicon")
-                                Image("3icon")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 25, height: 25,alignment: .center)
-                                    .border(Color.clear, width: 1)
-                                    .cornerRadius(5)
-                                    .layoutPriority(10)
-                                    .animation(.easeInOut)
-                                    //.padding(.trailing, 150)
-
-                            }
-
-                            //Text(itemWrapper.title)
-
-                            HStack(spacing: 10) {
-                                if itemWrapper.progress >= 1.0 {
-                                    Text("DONE")
-                                        .font(.footnote)
-                                        .foregroundColor(.blue)
-
-                                } else if itemWrapper.progress > 0 {
-
-                                    ProgressBar(
-                                        boardWidth: 4,
-                                        font: Font.system(size: 9),
-                                        color: .blue,
-                                        content: false,
-                                        progress: self.$itemWrapper.progress
-                                    )
-                                    .frame(width: 13, height: 13, alignment: .center)
-                                }
-
-                                Text("\(itemWrapper.createTime?.string() ?? "")")
-                                    .font(.custom("Gotham", size: 14))                                    .foregroundColor(.gray)
-                                    .multilineTextAlignment(.trailing)
-
-                //Spacer(minLength: 10)
-                if itemWrapper.isArchive {
-                    Image(systemName: "tag")
-                        .imageScale(.small)
-                        .foregroundColor(.accentColor)
-                }
-            }
+        HStack{
+            VStack(alignment: .leading, spacing: 8) {
+                Text(itemWrapper.title)
+                    .font(.headline)
+                    .lineLimit(3)
+                Text(itemWrapper.desc.trimHTMLTag.trimWhiteAndSpace)
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+                    .lineLimit(1)
+            }.padding(.horizontal, 12)
+            KFImage(URL(string: itemWrapper.image)) //"3icon"
+                .placeholder({
+                    ZStack{
+                        ProgressView()
+                        iconImageView(self.imageLoader.image ?? UIImage(imageLiteralResourceName: "launch"))
+                    }
+                })
+                .resizable()
+                .scaledToFit()
+                .frame(width: 90, height: 90)
+                .clipped()
+                .cornerRadius(12)
+                .multilineTextAlignment(.trailing)
+                
+//                    HStack(alignment: .center) {
+//                        VStack(alignment: .leading) {
+//                            HStack {
+//                            //if
+////                                self.imageLoader.image != nil {
+////                                iconImageView(self.imageLoader.image!)
+//////                                    .resizable()
+//////                                    .aspectRatio(contentMode: .fit)
+////                                    .font(.body)
+////                                    .frame(width: 20, height: 20,alignment: .center)
+////                                    .layoutPriority(10)
+////                                    .animation(.easeIn)
+////
+////                            } else {
+////
+////                                //Image("3dicon")
+////                                Image("3icon")
+////                                    .resizable()
+////                                    .aspectRatio(contentMode: .fit)
+////                                    .frame(width: 25, height: 25,alignment: .center)
+////                                    .border(Color.clear, width: 1)
+////                                    .cornerRadius(5)
+////                                    .layoutPriority(10)
+////                                    .animation(.easeInOut)
+////                                    //.padding(.trailing, 150)
+////
+////                            }
+//                                HStack(spacing: 10) {
+//                                    if itemWrapper.progress >= 1.0 {
+//                                        Text("DONE")
+//                                            .font(.footnote)
+//                                            .foregroundColor(.blue)
+//
+//                                    } else if itemWrapper.progress > 0 {
+//
+//                                        ProgressBar(
+//                                            boardWidth: 4,
+//                                            font: Font.system(size: 9),
+//                                            color: .blue,
+//                                            content: false,
+//                                            progress: self.$itemWrapper.progress
+//                                        )
+//                                        .frame(width: 13, height: 13, alignment: .center)
+//                                    }
+//
+//                                    Text("\(itemWrapper.createTime?.string() ?? "")")
+//                                        .font(.custom("Gotham", size: 14))                                    .foregroundColor(.gray)
+//                                        .multilineTextAlignment(.trailing)
+//
+//
+//                    if itemWrapper.isArchive {
+//                        Image(systemName: "tag")
+//                            .imageScale(.small)
+//                    }
+//                }
+//            }
         }
-    }
+        .padding(5)
 
 
-        .padding(.top, 8)
-        .padding(.bottom, 8)
-        .contextMenu {
-            ActionContextMenu(
-                label: itemWrapper.isArchive ? "Untag" : "Tag",
-                systemName: "bookmark\(itemWrapper.isArchive ? "" : ".slash")",
-                onAction: {
-                    self.contextMenuAction?(self.itemWrapper)
-            })
-                }
-            }
-        }
+//            .padding(.top, 8)
+//            .padding(.bottom, 8)
+//            .contextMenu {
+//                ActionContextMenu(
+//                    label: itemWrapper.isArchive ? "Untag" : "Tag",
+//                    systemName: "bookmark\(itemWrapper.isArchive ? "" : ".slash")",
+//                    onAction: {
+//                        self.contextMenuAction?(self.itemWrapper)
+//                })
     }
 }
-
-//struct RSSFeedRow_Previews: PreviewProvider {
-//    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-//
-//    static var previews: some View {
-//        ContentView(viewModel: self.viewModel)
-//            .preferredColorScheme(.dark)
+//            }
+//        }
 //    }
 //}
+
+//struct RSSFeedRow_Previews: PreviewProvider {
+//    static var previews: some View {
+//        let simple = DataSourceService.current.rssItem.simple()
+//        return RSSItemRow(wrapper: simple!)
+//    }
+//}
+
 //        HStack{
 //            VStack(alignment: .leading, spacing: 8) {
 //                Text(itemWrapper.title)
