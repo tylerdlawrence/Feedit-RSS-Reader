@@ -178,101 +178,85 @@ enum ContentViewGroup: Hashable {
 //                        }
     
   var body: some View {
-
-            //Color(#colorLiteral(red: 0.1058652624, green: 0.1019589826, blue: 0.1100945398, alpha: 1))
-            NavigationView {
-                //ZStack{
-                //VStack(alignment: .leading) {
-
-                    List {
-                        VStack(alignment: .leading) {
-                            HStack {
-                                Text("All Items")
-                                    .font(.title3)
-                                    .fontWeight(.semibold)
-                                    .multilineTextAlignment(.leading)
-                                    .padding(.leading, 0)
-                                    
-                                }                        .listRowBackground(Color("accent"))
-
-                            
-                            
-                            }
-                        .listRowBackground(Color("accent"))
-                        .edgesIgnoringSafeArea(.all)
-                            //Divider()
-                            HStack {
-                                NavigationLink(destination: archiveListView) {
-                                    BookmarkView()
-                                }
-                                .listRowBackground(Color("accent"))
-
-                        }
-                        .listRowBackground(Color("accent"))
-                        .edgesIgnoringSafeArea(.all)
-    //                    DisclosureGroup(
-    //                    "❯  Feeds", //☰𝝣
-    //                    tag: .RSS,
-    //                    selection: $showingContent) {
-                       // Spacer()
-                        Section(header: Text("❯     Feeds")
-                                    .font(.headline)
-                                    .fontWeight(.semibold)
-                                    .foregroundColor(Color("darkerAccent"))
-                                    .multilineTextAlignment(.leading)) {
-                            ForEach(viewModel.items, id: \.self) { rss in
-                                NavigationLink(destination: self.destinationView(rss)) {
-                                    RSSRow(rss: rss)
-                                }
-                                .tag("RSS")
-                            }
-                            .onDelete { indexSet in
-                                if let index = indexSet.first {
-                                    self.viewModel.delete(at: index)
-                                    }
-                                }
-                        }
-                        .textCase(nil)
-                        .listRowBackground(Color("accent"))
-                        .edgesIgnoringSafeArea(.all)
-                        //.listRowBackground(Color(#colorLiteral(red: 0.1058652624, green: 0.1019589826, blue: 0.1100945398, alpha: 1)))
-                        .padding(.leading)
-                    }
-
-                    .onReceive(rssRefreshPublisher, perform: { output in
-                        self.viewModel.fecthResults()
-                    })
-                    .sheet(isPresented: $isSheetPresented, content: {
-                        if FeaureItem.add == self.selectedFeatureItem {
-                            AddRSSView(
-                                viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss),
-                                onDoneAction: self.onDoneAction)
-                        } else if FeaureItem.setting == self.selectedFeatureItem {
-                            SettingView()
-                        }
-                    })
-                    .onAppear(perform: {
-                        listOfFeeds()
-                        self.viewModel.fecthResults()
+    NavigationView {
+        List {
+            VStack(alignment: .leading) {
+                HStack {
+                    Text("All Items")
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                        .multilineTextAlignment(.leading)
+                        .padding(.leading, 0)
                         
-                    })
- 
+                    }.listRowBackground(Color("accent"))
+                }
+                .listRowBackground(Color("accent"))
+                .edgesIgnoringSafeArea(.all)
+                    HStack {
+                        NavigationLink(destination: archiveListView) {
+                            BookmarkView()
+                    }
+                    .listRowBackground(Color("accent"))
+                }
+                .listRowBackground(Color("accent"))
+                .edgesIgnoringSafeArea(.all)
+//                    DisclosureGroup(
+//                    "❯  Feeds", //☰𝝣
+//                    tag: .RSS,
+//                    selection: $showingContent) {
+               // Spacer()
+                Section(header: Text("❯     Feeds")
+                            .font(.headline)
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color("darkerAccent"))
+                            .multilineTextAlignment(.leading)) {
+                    ForEach(viewModel.items, id: \.self) { rss in
+                        NavigationLink(destination: self.destinationView(rss)) {
+                            RSSRow(rss: rss)
+                        }
+                        .tag("RSS")
+                    }
+                    .onDelete { indexSet in
+                        if let index = indexSet.first {
+                            self.viewModel.delete(at: index)
+                            }
+                        }
+                    }
+                    .textCase(nil)
+                    .listRowBackground(Color("accent"))
+                    .edgesIgnoringSafeArea(.all)
+                    .padding(.leading)
+                }
+                .onReceive(rssRefreshPublisher, perform: { output in
+                    self.viewModel.fecthResults()
+                })
+                .sheet(isPresented: $isSheetPresented, content: {
+                    if FeaureItem.add == self.selectedFeatureItem {
+                        AddRSSView(
+                            viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss),
+                            onDoneAction: self.onDoneAction)
+                    } else if FeaureItem.setting == self.selectedFeatureItem {
+                        SettingView()
+                    }
+                })
+                .onAppear(perform: {
+                    listOfFeeds()
+                    self.viewModel.fecthResults()
+                    
+                })
 //                     .listStyle(PlainListStyle())
 //                    .listStyle(SidebarListStyle())
 //                    .listStyle(InsetGroupedListStyle())
-                    .navigationTitle("")
-                    .navigationBarItems(trailing: trailingView)
-                        .toolbar {
-                            ToolbarItem(placement: .bottomBar) {
-                                        Spacer()
-                                    }
-                            ToolbarItem(placement: .bottomBar) {
-                                settingButton
+            .navigationTitle("")
+            .navigationBarItems(trailing: trailingView)
+                .toolbar {
+                    ToolbarItem(placement: .bottomBar) {
+                                Spacer()
                             }
-                        }
-                    //}
-
-                //}
+                    ToolbarItem(placement: .bottomBar) {
+                        settingButton
+                    }
+                }
             }
         }
     }

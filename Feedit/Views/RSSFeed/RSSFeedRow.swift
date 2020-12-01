@@ -4,6 +4,7 @@
 //
 //  Created by Tyler D Lawrence on 8/10/20.
 //  View once you choose Feed on Main Screen
+
 import SwiftUI
 import KingfisherSwiftUI
 import FeedKit
@@ -14,7 +15,6 @@ struct RSSItemRow: View {
     
     @ObservedObject var itemWrapper: RSSItem
     @ObservedObject var imageLoader: ImageLoader
-   // @ObservedObject var rssFeedViewModel: RSSFeedViewModel
 
     var contextMenuAction: ((RSSItem) -> Void)?
 
@@ -84,7 +84,7 @@ struct RSSItemRow: View {
                 .placeholder({
                     ZStack{
                         ProgressView()
-                        iconImageView(self.imageLoader.image ?? UIImage(imageLiteralResourceName: "launch"))
+//                        iconImageView(self.imageLoader.image ?? UIImage(imageLiteralResourceName: "launch"))
                     }
                 })
                 .resizable()
@@ -93,34 +93,7 @@ struct RSSItemRow: View {
                 .clipped()
                 .cornerRadius(12)
                 .multilineTextAlignment(.trailing)
-                
-//                    HStack(alignment: .center) {
-//                        VStack(alignment: .leading) {
-//                            HStack {
-//                            //if
-////                                self.imageLoader.image != nil {
-////                                iconImageView(self.imageLoader.image!)
-//////                                    .resizable()
-//////                                    .aspectRatio(contentMode: .fit)
-////                                    .font(.body)
-////                                    .frame(width: 20, height: 20,alignment: .center)
-////                                    .layoutPriority(10)
-////                                    .animation(.easeIn)
-////
-////                            } else {
-////
-////                                //Image("3dicon")
-////                                Image("3icon")
-////                                    .resizable()
-////                                    .aspectRatio(contentMode: .fit)
-////                                    .frame(width: 25, height: 25,alignment: .center)
-////                                    .border(Color.clear, width: 1)
-////                                    .cornerRadius(5)
-////                                    .layoutPriority(10)
-////                                    .animation(.easeInOut)
-////                                    //.padding(.trailing, 150)
-////
-////                            }
+
 //                                HStack(spacing: 10) {
 //                                    if itemWrapper.progress >= 1.0 {
 //                                        Text("DONE")
@@ -149,22 +122,23 @@ struct RSSItemRow: View {
 //                            .imageScale(.small)
 //                    }
 //                }
-//            }
+            }
+        
+        
+
+
+            .padding(.top, 8)
+            .padding(.bottom, 8)
+            .contextMenu {
+                ActionContextMenu(
+                    label: itemWrapper.isArchive ? "Untag" : "Tag",
+                    systemName: "bookmark\(itemWrapper.isArchive ? "" : ".slash")",
+                    onAction: {
+                        self.contextMenuAction?(self.itemWrapper)
+                })
+            }
         }
-        .padding(5)
-
-
-//            .padding(.top, 8)
-//            .padding(.bottom, 8)
-//            .contextMenu {
-//                ActionContextMenu(
-//                    label: itemWrapper.isArchive ? "Untag" : "Tag",
-//                    systemName: "bookmark\(itemWrapper.isArchive ? "" : ".slash")",
-//                    onAction: {
-//                        self.contextMenuAction?(self.itemWrapper)
-//                })
     }
-}
 //            }
 //        }
 //    }
