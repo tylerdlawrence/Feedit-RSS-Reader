@@ -187,7 +187,7 @@ enum ContentViewGroup: Hashable {
                         .fontWeight(.semibold)
                         .multilineTextAlignment(.leading)
                         .padding(.leading, 0)
-                        
+
                     }.listRowBackground(Color("accent"))
                 }
                 .listRowBackground(Color("accent"))
@@ -200,10 +200,10 @@ enum ContentViewGroup: Hashable {
                 }
                 .listRowBackground(Color("accent"))
                 .edgesIgnoringSafeArea(.all)
-//                    DisclosureGroup(
-//                    "❯  Feeds", //☰𝝣
-//                    tag: .RSS,
-//                    selection: $showingContent) {
+////                    DisclosureGroup(
+////                    "❯  Feeds", //☰𝝣
+////                    tag: .RSS,
+////                    selection: $showingContent) {
                // Spacer()
                 Section(header: Text("❯     Feeds")
                             .font(.headline)
@@ -242,11 +242,11 @@ enum ContentViewGroup: Hashable {
                 .onAppear(perform: {
                     listOfFeeds()
                     self.viewModel.fecthResults()
-                    
+
                 })
-//                     .listStyle(PlainListStyle())
-//                    .listStyle(SidebarListStyle())
-//                    .listStyle(InsetGroupedListStyle())
+////                     .listStyle(PlainListStyle())
+////                    .listStyle(SidebarListStyle())
+////                    .listStyle(InsetGroupedListStyle())
             .navigationTitle("")
             .navigationBarItems(trailing: trailingView)
                 .toolbar {
@@ -335,7 +335,7 @@ struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         
         HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel)
-//            .preferredColorScheme(.dark)
+            .preferredColorScheme(.dark)
     }
 }
 

@@ -56,7 +56,6 @@ struct RSSItemRow: View {
     private var pureTextView: some View {
 
             Text(itemWrapper.title)
-//                .font(.custom("Gotham", size: 20))
                 .multilineTextAlignment(.leading)
                 .lineLimit(1)
     }
@@ -79,20 +78,65 @@ struct RSSItemRow: View {
                     .font(.subheadline)
                     .foregroundColor(.gray)
                     .lineLimit(1)
-            }.padding(.horizontal, 12)
-            KFImage(URL(string: itemWrapper.image)) //"3icon"
-                .placeholder({
-                    ZStack{
-                        ProgressView()
-//                        iconImageView(self.imageLoader.image ?? UIImage(imageLiteralResourceName: "launch"))
+                HStack{
+                    
+                    Text("\(itemWrapper.createTime?.string() ?? "")")
+                        .font(.custom("Gotham", size: 14))
+                        .foregroundColor(.gray)
+                        .multilineTextAlignment(.trailing)
+                    
+                    if itemWrapper.progress >= 1.0 {
+                        Text("DONE")
+                            .font(.footnote)
+                            .foregroundColor(.blue)
+
+                    } else if itemWrapper.progress > 0 {
+
+                        ProgressBar(
+                            boardWidth: 4,
+                            font: Font.system(size: 9),
+                            color: .blue,
+                            content: false,
+                            progress: self.$itemWrapper.progress
+                        )
+                        .frame(width: 13, height: 13, alignment: .center)
+                        }
+
+                        if itemWrapper.isArchive {
+                            Image(systemName: "tag")
+                                .imageScale(.small)
+                        }
                     }
-                })
-                .resizable()
-                .scaledToFit()
-                .frame(width: 90, height: 90)
-                .clipped()
-                .cornerRadius(12)
-                .multilineTextAlignment(.trailing)
+                }
+                .padding(.top, 8)
+                .padding(.bottom, 8)
+                .contextMenu {
+                    ActionContextMenu(
+                        label: itemWrapper.isArchive ? "Untag" : "Tag",
+                        systemName: "bookmark\(itemWrapper.isArchive ? "" : ".slash")",
+                        onAction: {
+                            self.contextMenuAction?(self.itemWrapper)
+                        })
+                    }
+                    .padding(.horizontal, 12)
+                        KFImage(URL(string: itemWrapper.image)) //"3icon"
+                            .placeholder({
+                                ZStack{
+                                    //ProgressView()
+                                    iconImageView(self.imageLoader.image ?? UIImage(imageLiteralResourceName: "launch"))
+                                        .opacity(0.7)
+                                }
+                            })
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 90, height: 90)
+                            .clipped()
+                            .cornerRadius(12)
+                            .multilineTextAlignment(.trailing)
+                            }
+                        }
+                    }
+    //}
 
 //                                HStack(spacing: 10) {
 //                                    if itemWrapper.progress >= 1.0 {
@@ -122,27 +166,24 @@ struct RSSItemRow: View {
 //                            .imageScale(.small)
 //                    }
 //                }
-            }
+//            }
         
         
 
 
-            .padding(.top, 8)
-            .padding(.bottom, 8)
-            .contextMenu {
-                ActionContextMenu(
-                    label: itemWrapper.isArchive ? "Untag" : "Tag",
-                    systemName: "bookmark\(itemWrapper.isArchive ? "" : ".slash")",
-                    onAction: {
-                        self.contextMenuAction?(self.itemWrapper)
-                })
-            }
-        }
-    }
+//            .padding(.top, 8)
+//            .padding(.bottom, 8)
+//            .contextMenu {
+//                ActionContextMenu(
+//                    label: itemWrapper.isArchive ? "Untag" : "Tag",
+//                    systemName: "bookmark\(itemWrapper.isArchive ? "" : ".slash")",
+//                    onAction: {
+//                        self.contextMenuAction?(self.itemWrapper)
+//                })
 //            }
 //        }
 //    }
-//}
+
 
 //struct RSSFeedRow_Previews: PreviewProvider {
 //    static var previews: some View {
