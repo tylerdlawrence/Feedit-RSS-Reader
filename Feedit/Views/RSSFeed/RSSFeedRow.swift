@@ -6,6 +6,7 @@
 //  View once you choose Feed on Main Screen
 
 import SwiftUI
+import Combine
 import KingfisherSwiftUI
 import FeedKit
 
@@ -14,16 +15,15 @@ struct RSSItemRow: View {
     let image = NSCache<AnyObject, AnyObject>()
     
     @ObservedObject var itemWrapper: RSSItem
-    @ObservedObject var imageLoader: ImageLoader
+//    @ObservedObject var imageLoader: ImageLoader!
+    private var imageLoader: ImageLoader!
 
     var contextMenuAction: ((RSSItem) -> Void)?
 
     init(wrapper: RSSItem, menu action: ((RSSItem) -> Void)? = nil) {
         itemWrapper = wrapper
         contextMenuAction = action
-        self.imageLoader = ImageLoader(path: wrapper.image)
-        //loadImage(url: itemWrapper.image)
-
+        self.imageLoader = ImageLoader(path: wrapper.imageURL)
     }
     
 //    func iconImageView(url: String) {
@@ -44,7 +44,9 @@ struct RSSItemRow: View {
 //            }
 //        }
 //    }
-
+    public var imageURL: UIImage? = nil
+    
+    
     private func iconImageView(_ image: UIImage) -> some View {
         Image(uiImage: image)
         .resizable()
@@ -79,12 +81,11 @@ struct RSSItemRow: View {
                     .foregroundColor(.gray)
                     .lineLimit(1)
                 HStack{
-                    
+
                     Text("\(itemWrapper.createTime?.string() ?? "")")
                         .font(.custom("Gotham", size: 14))
                         .foregroundColor(.gray)
                         .multilineTextAlignment(.trailing)
-                    
                     if itemWrapper.progress >= 1.0 {
                         Text("DONE")
                             .font(.footnote)
@@ -101,7 +102,6 @@ struct RSSItemRow: View {
                         )
                         .frame(width: 13, height: 13, alignment: .center)
                         }
-
                         if itemWrapper.isArchive {
                             Image(systemName: "tag")
                                 .imageScale(.small)
@@ -119,14 +119,21 @@ struct RSSItemRow: View {
                         })
                     }
                     .padding(.horizontal, 12)
-                        KFImage(URL(string: itemWrapper.image)) //"3icon"
+            KFImage(URL(string: self.itemWrapper.imageURL)) //"3icon"
                             .placeholder({
                                 ZStack{
-                                    //ProgressView()
-                                    iconImageView(self.imageLoader.image ?? UIImage(imageLiteralResourceName: "launch"))
-                                        .opacity(0.7)
+                                    Image("3icon")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .font(.body)
+                                        .frame(width: 90, height: 90,alignment: .center)
+                                        .opacity(0.2)
+                                        .cornerRadius(5)
+//                                        .border(Color.clear, width: 1)
+//                                      ProgressView()
                                 }
                             })
+                            .cancelOnDisappear(true)
                             .resizable()
                             .scaledToFit()
                             .frame(width: 90, height: 90)
@@ -136,7 +143,7 @@ struct RSSItemRow: View {
                             }
                         }
                     }
-    //}
+
 
 //                                HStack(spacing: 10) {
 //                                    if itemWrapper.progress >= 1.0 {

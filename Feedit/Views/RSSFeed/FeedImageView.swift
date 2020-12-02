@@ -30,7 +30,7 @@ struct FeedImageView: View {
                     .font(.system(size: 13, weight: .medium, design: .rounded))
                     .multilineTextAlignment(.leading)
             }.padding(.horizontal, 12)
-            KFImage(URL(string: itemWrapper.image))
+            KFImage(URL(string: itemWrapper.imageURL))
                             .placeholder({
                                 ProgressView()
                             })

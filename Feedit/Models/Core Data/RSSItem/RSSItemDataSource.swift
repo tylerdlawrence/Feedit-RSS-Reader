@@ -46,7 +46,7 @@ extension RSSItemDataSource {
     func simple() -> RSSItem? {
         let item = RSSItem.init(context: createContext)
         item.url = "https://github.blog/feed"
-        item.image = "launch"
+        item.imageURL = ""
         return item
     }
 }

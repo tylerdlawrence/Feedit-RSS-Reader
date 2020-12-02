@@ -35,7 +35,7 @@ extension RSSItem {
     @NSManaged public var uuid: UUID?
     @NSManaged public var author: String
     @NSManaged public var isArchive: Bool
-    @NSManaged public var image: String
+    @NSManaged public var imageURL: String
 
     
     public override func awakeFromInsert() {
@@ -43,12 +43,12 @@ extension RSSItem {
         uuid = UUID()
     }
     
-    static func create(uuid: UUID, image: String, title: String = "", desc: String = "", author: String = "", url: String = "",
+    static func create(uuid: UUID, imageURL: String, title: String = "", desc: String = "", author: String = "", url: String = "",
                        createTime: Date = Date(), progress: Double = 0, in context: NSManagedObjectContext) -> RSSItem {
         let item = RSSItem(context: context)
         item.rssUUID = uuid
         item.uuid = UUID()
-        item.image = image
+        item.imageURL = imageURL
         item.title = title
         item.desc = desc
         item.author = author
