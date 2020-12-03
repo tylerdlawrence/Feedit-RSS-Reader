@@ -118,12 +118,12 @@ enum ContentViewGroup: Hashable {
     
        private var feedView: some View {
         HStack{
-            Image("3icon")
+            Image("i")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(width: 25, height: 25)
+                .frame(width: 20, height: 20)
                 .cornerRadius(5)
-            Text("Feeds")
+            Text("All Items")
                 .font(.title3)
                 .fontWeight(.semibold)
         }
@@ -182,11 +182,12 @@ enum ContentViewGroup: Hashable {
         List {
             VStack(alignment: .leading) {
                 HStack {
-                    Text("All Items")
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                        .multilineTextAlignment(.leading)
-                        .padding(.leading, 0)
+                    feedView
+//                    Text("      All Items")
+//                        .font(.title2)
+//                        .fontWeight(.semibold)
+//                        .multilineTextAlignment(.leading)
+//                        .padding(.leading, 0)
 
                     }.listRowBackground(Color("accent"))
                 }
@@ -205,9 +206,10 @@ enum ContentViewGroup: Hashable {
 ////                    tag: .RSS,
 ////                    selection: $showingContent) {
                // Spacer()
-                Section(header: Text("❯     Feeds")
-                            .font(.headline)
-                            .fontWeight(.semibold)
+                Section(header: Text("❯    Feeds")
+                            .font(.system(size: 16, weight: .bold))
+//                            .font(.headline)
+//                            .fontWeight(.semibold)
                             .foregroundColor(Color("darkerAccent"))
                             .multilineTextAlignment(.leading)) {
                     ForEach(viewModel.items, id: \.self) { rss in
@@ -244,9 +246,9 @@ enum ContentViewGroup: Hashable {
                     self.viewModel.fecthResults()
 
                 })
-////                     .listStyle(PlainListStyle())
-////                    .listStyle(SidebarListStyle())
-////                    .listStyle(InsetGroupedListStyle())
+//            .listStyle(PlainListStyle())
+            .listStyle(SidebarListStyle())
+//            .listStyle(GroupedListStyle())
             .navigationTitle("")
             .navigationBarItems(trailing: trailingView)
                 .toolbar {
@@ -263,15 +265,15 @@ enum ContentViewGroup: Hashable {
 
 struct BookmarkView: View {
     var body: some View {
-        Image(systemName: "bookmark").font(.system(size: 16, weight: .medium))
+        Image(systemName: "bookmark").font(.system(size: 16, weight: .bold))
         
 //        Image("bookmark-tag")
 //            .resizable()
 //            .aspectRatio(contentMode: .fit)
 //            .frame(width: 20, height: 20)
 //            .cornerRadius(5)
-        Text("  Bookmarked")
-            .font(.headline)
+        Text(" Bookmarked")
+            .font(.system(size: 16, weight: .bold))
         
         
         
@@ -328,6 +330,8 @@ extension HomeView {
 
 struct HomeView_Previews: PreviewProvider {
     
+    static let current = DataSourceService()
+    
     static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
 
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
@@ -338,4 +342,3 @@ struct HomeView_Previews: PreviewProvider {
             .preferredColorScheme(.dark)
     }
 }
-

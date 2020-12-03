@@ -5,6 +5,7 @@
 //  Created by Tyler D Lawrence on 8/10/20.
 //  View once you choose Feed on Main Screen
 
+import UIKit
 import SwiftUI
 import Combine
 import KingfisherSwiftUI
@@ -16,7 +17,7 @@ struct RSSItemRow: View {
     
     @ObservedObject var itemWrapper: RSSItem
 //    @ObservedObject var imageLoader: ImageLoader!
-    private var imageLoader: ImageLoader!
+    var imageLoader: ImageLoader!
 
     var contextMenuAction: ((RSSItem) -> Void)?
 
@@ -129,7 +130,7 @@ struct RSSItemRow: View {
                                         .frame(width: 90, height: 90,alignment: .center)
                                         .opacity(0.2)
                                         .cornerRadius(5)
-//                                        .border(Color.clear, width: 1)
+                                        .border(Color.clear, width: 2)
 //                                      ProgressView()
                                 }
                             })

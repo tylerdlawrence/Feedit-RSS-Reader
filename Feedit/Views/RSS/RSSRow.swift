@@ -24,7 +24,7 @@ struct RSSRow: View {
         Image(uiImage: image)
         .resizable()
             .aspectRatio(contentMode: .fit)
-            .frame(width: 30, height: 30,alignment: .center)
+            .frame(width: 25, height: 25,alignment: .center)
             .cornerRadius(5)
             //.animation(.easeInOut)
             .border(Color.clear, width: 1)
@@ -60,7 +60,7 @@ struct RSSRow: View {
                     if
                         self.imageLoader.image != nil {
                         iconImageView(self.imageLoader.image!)
-                            .frame(width: 30, height: 30,alignment: .center)
+                            .frame(width: 25, height: 25,alignment: .center)
                             //.layoutPriority(10)
                         pureTextView
                         
@@ -70,7 +70,7 @@ struct RSSRow: View {
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .font(.body)
-                            .frame(width: 30, height: 30,alignment: .center)
+                            .frame(width: 25, height: 25,alignment: .center)
                             .cornerRadius(5)
                             .border(Color.clear, width: 1)
                             .layoutPriority(10)

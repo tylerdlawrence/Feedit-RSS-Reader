@@ -57,7 +57,16 @@ struct RSSFeedListView: View {
         Button(action: {
             print ("Tags")
         }) {
-            Image(systemName: "tag")
+            Image(systemName: "arrow.counterclockwise")
+                .imageScale(.medium)
+        }
+    }
+    
+    private var infoListView: some View {
+        Button(action: {
+            print ("Tags")
+        }) {
+            Image(systemName: "info.circle")
                 .imageScale(.medium)
         }
     }
@@ -78,6 +87,7 @@ struct RSSFeedListView: View {
         HStack(alignment: .top, spacing: 24) {
             archiveListView
             markAllRead
+            infoListView
         }
     }
     
@@ -115,9 +125,9 @@ struct RSSFeedListView: View {
                         HStack{
                             Text("↺")
                             Text(self.footer)
-                                .font(.title3)
+                                .font(.title2)
                                 .fontWeight(.bold)
-                                .padding(.bottom)
+                                
                             }
                         }
                     }
