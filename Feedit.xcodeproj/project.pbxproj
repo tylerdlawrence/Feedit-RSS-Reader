@@ -15,6 +15,7 @@
 		6117365924E83C9F00A2DEA5 /* BatchImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6117365824E83C9F00A2DEA5 /* BatchImportView.swift */; };
 		6117365B24E83CC500A2DEA5 /* BatchImportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6117365A24E83CC500A2DEA5 /* BatchImportViewModel.swift */; };
 		612FB85A2540F04200D9822B /* RSSListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612FB83D2540F04000D9822B /* RSSListView.swift */; };
+		61340BD52579867800362175 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61340BD42579867400362175 /* CardView.swift */; };
 		61453B17255CC5920060EBB6 /* URLImage in Frameworks */ = {isa = PBXBuildFile; productRef = 61453B16255CC5920060EBB6 /* URLImage */; };
 		615096E3256377E00001C0D9 /* SwiftUIX in Frameworks */ = {isa = PBXBuildFile; productRef = 615096E2256377E00001C0D9 /* SwiftUIX */; };
 		615096EB2564BF420001C0D9 /* NavigationBarModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615096EA2564BF420001C0D9 /* NavigationBarModifier.swift */; };
@@ -168,6 +169,7 @@
 		6117365824E83C9F00A2DEA5 /* BatchImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchImportView.swift; sourceTree = "<group>"; };
 		6117365A24E83CC500A2DEA5 /* BatchImportViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchImportViewModel.swift; sourceTree = "<group>"; };
 		612FB83D2540F04000D9822B /* RSSListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RSSListView.swift; path = Feedit/Views/RSSListView.swift; sourceTree = SOURCE_ROOT; };
+		61340BD42579867400362175 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		615096EA2564BF420001C0D9 /* NavigationBarModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarModifier.swift; sourceTree = "<group>"; };
 		615E961825300E5C00891083 /* AppearenceSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearenceSection.swift; sourceTree = "<group>"; };
 		615E961C2530116600891083 /* AppearenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearenceView.swift; sourceTree = "<group>"; };
@@ -420,6 +422,7 @@
 				61C818D724E1F73C00593939 /* RSS */,
 				615E983F2533AFAE00891083 /* ContentView.swift */,
 				617E4C53255DE8F20010CEE8 /* HomeView.swift */,
+				61340BD42579867400362175 /* CardView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -780,6 +783,7 @@
 				61967ED524E2053D00AA647C /* String+Ext.swift in Sources */,
 				61CDCF5724E8459B007654C5 /* LinerProgressBar.swift in Sources */,
 				618F9021250DC63B00D5A03E /* RSSRow.swift in Sources */,
+				61340BD52579867800362175 /* CardView.swift in Sources */,
 				6117365524E83C3E00A2DEA5 /* DataNStorageView.swift in Sources */,
 				61967ED224E2053D00AA647C /* Date+Ext.swift in Sources */,
 				61967EEB24E205DD00AA647C /* TextFieldView.swift in Sources */,

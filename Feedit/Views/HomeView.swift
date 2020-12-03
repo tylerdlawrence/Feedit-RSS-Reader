@@ -9,73 +9,28 @@ import SwiftUI
 import FeedKit
 import KingfisherSwiftUI
 import CoreData
-import MobileCoreServices
 
-struct Item: Identifiable {
-    let id = UUID()
-    let title: String
-}
-enum FeaureItem {
-    case add
-    case setting
-}
-enum FeatureItem {
-    case settings
-}
-enum ContentViewSheet: Identifiable {
-  case plus
-  case settings
-
-  var id: Int {
-    switch self {
-    case .plus:
-      return 1
-    case .settings:
-      return 2
-    }
-  }
-}
 struct HomeView: View {
-    
-    @State private var rssRow = [String]() //countryList
-    @State private var searchedRSSRow = [String]() //searchedCountryList
-    @State private var searching = false
-    
-    @State private var showingSheet: ContentViewSheet?
-    @Environment(\.managedObjectContext) var moc
-    
-enum ContentViewGroup: Hashable {
-    case RSS
-    case tag
-}
+
+    enum FeaureItem {
+        case add
+        case setting
+    }
     
     @State var sources: [RSS] = []
 
     @ObservedObject var viewModel: RSSListViewModel
     @ObservedObject var archiveListViewModel: ArchiveListViewModel
     
-    @State var showingContent: ContentViewGroup?
     @State private var selectedFeatureItem = FeaureItem.add
     @State private var isAddFormPresented = false
     @State private var isSettingPresented = false
     @State private var isSheetPresented = false
     @State private var addRSSProgressValue = 0.0
     @State private var previewIndex = 0
-    
-    @FetchRequest(entity: Category.entity(), sortDescriptors: []) var categories: FetchedResults<Category>
-    
-    func listOfFeeds() {
-        for code in NSLocale.isoCountryCodes as [String] {
-            let id = NSLocale.localeIdentifier(fromComponents: [NSLocale.Key.countryCode.rawValue: code])
-            let name = NSLocale(localeIdentifier: "en").displayName(forKey: NSLocale.Key.identifier, value: id) ?? "No results for: \(code)"
-            rssRow.append(name + " ")
-            //rssList.append(name + " " + countryFlag(country: code))
-        }
-    }
-    
+
     private var addSourceButton: some View {
         Button(action: {
-            self.showingSheet = .plus
             self.isSheetPresented = true
             self.selectedFeatureItem = .add
         }) {
@@ -83,27 +38,15 @@ enum ContentViewGroup: Hashable {
                 .imageScale(.large)
             }
         }
-    
     private var settingButton: some View {
         Button(action: {
-            self.showingSheet = .settings
             self.selectedFeatureItem = .setting
             self.isSheetPresented = true
         }) {
-            Image(systemName: "gear")
+            Image(systemName: "gear").font(.system(size: 16, weight: .heavy))
                 .imageScale(.large)
+                .foregroundColor(Color("darkShadow"))
         }
-    }
-    @ViewBuilder
-    private func presentSheet(for sheet: ContentViewSheet) -> some View {
-      switch sheet {
-      case .plus:
-        AddRSSView(
-            viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss),
-            onDoneAction: self.onDoneAction)
-      case .settings:
-        SettingView()
-      }
     }
     private var archiveListView: some View {
         ArchiveListView(viewModel: archiveListViewModel)
@@ -111,18 +54,17 @@ enum ContentViewGroup: Hashable {
 
     private var trailingView: some View {
         HStack(alignment: .top, spacing: 24) {
-            EditButton()
+            //EditButton()
             addSourceButton
         }
+        .foregroundColor(Color("darkShadow"))
     }
     
        private var feedView: some View {
         HStack{
-            Image("i")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 20, height: 20)
-                .cornerRadius(5)
+            Image(systemName: "text.justifyleft").font(.system(size: 16, weight: .heavy))
+                .foregroundColor(Color("darkShadow"))
+                .imageScale(.large)
             Text("All Items")
                 .font(.title3)
                 .fontWeight(.semibold)
@@ -132,68 +74,29 @@ enum ContentViewGroup: Hashable {
     private let addRSSPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("addNewRSSPublisher"))
     private let rssRefreshPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("rssListNeedRefresh"))
     
-    @State private var rss: [Item] = []
-    @State private var editMode = EditMode.inactive
-    private static var count = 0
-    
-    private var addButton: some View {
-        switch editMode {
-        case .inactive:
-            return AnyView(Button(action: onAdd) { Image(systemName: "plus.circle.fill") })
-        default:
-            return AnyView(EmptyView())
-        }
-    }
-
-    private func onDelete(offsets: IndexSet) {
-        rss.remove(atOffsets: offsets)
-    }
-
-    private func onMove(source: IndexSet, destination: Int) {
-        rss.move(fromOffsets: source, toOffset: destination)
-    }
-
-    private func onInsert(at offset: Int, itemProvider: [NSItemProvider]) {
-        for provider in itemProvider {
-            if provider.canLoadObject(ofClass: URL.self) {
-                _ = provider.loadObject(ofClass: URL.self) { url, error in
-                    DispatchQueue.main.async {
-                        url.map { self.rss.insert(Item(title: $0.absoluteString), at: offset) }
-                    }
-                }
-            }
-        }
-    }
-
-    private func onAdd() {
-        rss.append(Item(title: "Folder\(Self.count)"))
-        Self.count += 1
-    }
-    
-    
-
-//                        VStack(spacing: 0) {
-//                            // SearchBar
-//                            SearchBar(searching: $searching, mainList: $rssRow, searchedList: $searchedRSSRow)
-//                        }
-    
   var body: some View {
     NavigationView {
         List {
+            HStack(alignment: .top){
+                VStack(alignment: .center){
+//                    Image("launch")
+                    Image(systemName: "icloud")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 120.0, height: 120.0)
+//                    Text("On My iPhone")
+//                        .font(.title3)
+//                        .fontWeight(.semibold)
+                }.frame(width: 320.0).listRowBackground(Color("accent"))
+            }.listRowBackground(Color("accent"))
             VStack(alignment: .leading) {
                 HStack {
                     feedView
-//                    Text("      All Items")
-//                        .font(.title2)
-//                        .fontWeight(.semibold)
-//                        .multilineTextAlignment(.leading)
-//                        .padding(.leading, 0)
-
-                    }.listRowBackground(Color("accent"))
+                    }.listRowBackground(Color("darkShadow"))
                 }
                 .listRowBackground(Color("accent"))
                 .edgesIgnoringSafeArea(.all)
-                    HStack {
+            HStack(alignment: .center) {
                         NavigationLink(destination: archiveListView) {
                             BookmarkView()
                     }
@@ -205,29 +108,26 @@ enum ContentViewGroup: Hashable {
 ////                    "❯  Feeds", //☰𝝣
 ////                    tag: .RSS,
 ////                    selection: $showingContent) {
-               // Spacer()
-                Section(header: Text("❯    Feeds")
-                            .font(.system(size: 16, weight: .bold))
-//                            .font(.headline)
-//                            .fontWeight(.semibold)
-                            .foregroundColor(Color("darkerAccent"))
-                            .multilineTextAlignment(.leading)) {
-                    ForEach(viewModel.items, id: \.self) { rss in
-                        NavigationLink(destination: self.destinationView(rss)) {
-                            RSSRow(rss: rss)
-                        }
-                        .tag("RSS")
+            Section(header: Text("   □     Feeds")
+                        .font(.system(size: 16, weight: .bold))
+                        .foregroundColor(Color("darkerAccent"))
+                        .multilineTextAlignment(.center)) {
+                ForEach(viewModel.items, id: \.self) { rss in
+                    NavigationLink(destination: self.destinationView(rss)) {
+                        RSSRow(rss: rss)
                     }
-                    .onDelete { indexSet in
-                        if let index = indexSet.first {
-                            self.viewModel.delete(at: index)
-                            }
+                    .tag("RSS")
+                }
+                .onDelete { indexSet in
+                    if let index = indexSet.first {
+                        self.viewModel.delete(at: index)
                         }
                     }
-                    .textCase(nil)
-                    .listRowBackground(Color("accent"))
-                    .edgesIgnoringSafeArea(.all)
-                    .padding(.leading)
+                }
+                .textCase(nil)
+                .listRowBackground(Color("accent"))
+                .accentColor(Color("darkShadow"))
+                .edgesIgnoringSafeArea(.all)
                 }
                 .onReceive(rssRefreshPublisher, perform: { output in
                     self.viewModel.fecthResults()
@@ -241,46 +141,40 @@ enum ContentViewGroup: Hashable {
                         SettingView()
                     }
                 })
-                .onAppear(perform: {
-                    listOfFeeds()
-                    self.viewModel.fecthResults()
-
-                })
-//            .listStyle(PlainListStyle())
-            .listStyle(SidebarListStyle())
-//            .listStyle(GroupedListStyle())
-            .navigationTitle("")
-            .navigationBarItems(trailing: trailingView)
-                .toolbar {
-                    ToolbarItem(placement: .bottomBar) {
-                                Spacer()
-                            }
-                    ToolbarItem(placement: .bottomBar) {
-                        settingButton
+        .listStyle(SidebarListStyle())
+        //.listStyle(GroupedListStyle())
+        .navigationTitle("")
+        .navigationBarItems(trailing: trailingView)
+            .toolbar {
+                ToolbarItem(placement: .bottomBar) {
+                            Spacer()
+                        }
+                ToolbarItem(placement: .bottomBar) {
+                    settingButton
+                        }
                     }
                 }
-            }
+            .onAppear {
+                self.viewModel.fecthResults()
         }
-    }
-
-struct BookmarkView: View {
-    var body: some View {
-        Image(systemName: "bookmark").font(.system(size: 16, weight: .bold))
-        
-//        Image("bookmark-tag")
-//            .resizable()
-//            .aspectRatio(contentMode: .fit)
-//            .frame(width: 20, height: 20)
-//            .cornerRadius(5)
-        Text(" Bookmarked")
-            .font(.system(size: 16, weight: .bold))
-        
-        
-        
     }
 }
 
-
+struct BookmarkView: View {
+    var body: some View {
+//        Image(systemName: "bookmark").font(.system(size: 16, weight: .bold))
+//            .foregroundColor(Color("darkShadow"))
+//            .imageScale(.medium)
+        Image("bookmark-tag")
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 20, height: 20)
+            .cornerRadius(5)
+        Text("  Bookmarked")
+            .font(.system(size: 16, weight: .semibold))
+            .fontWeight(.medium)
+    }
+}
 
 extension DisclosureGroup where Label == Text {
   public init<V: Hashable, S: StringProtocol>(
@@ -306,7 +200,6 @@ extension DisclosureGroup where Label == Text {
     )
   }
 }
-
 
 extension HomeView {
     

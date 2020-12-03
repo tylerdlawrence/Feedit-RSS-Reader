@@ -10,34 +10,12 @@ import FeedKit
 import Combine
 
 struct RSSFeedListView: View {
-    
-    var urlString: String?
 
-    public static let shared = ImageService()
-
-    public func fetchImage(url: URL) -> AnyPublisher<UIImage?, Never> {
-        return URLSession.shared.dataTaskPublisher(for: url)
-            .tryMap { (data, response) -> UIImage? in
-                return UIImage(data: data)
-                
-        }.catch { error in
-            
-            return Just(nil)
-            
-        }
-        
-            .eraseToAnyPublisher()
-    
-    }
-    
-    
     var rssSource: RSS {
         return self.rssFeedViewModel.rss
-        
     }
     
     @EnvironmentObject var rssDataSource: RSSDataSource
-    
     @ObservedObject var rssFeedViewModel: RSSFeedViewModel
     
     @Environment(\.colorScheme) var colorScheme
@@ -50,9 +28,7 @@ struct RSSFeedListView: View {
     
     init(viewModel: RSSFeedViewModel) {
         self.rssFeedViewModel = viewModel
-        
     }
-    
     private var archiveListView: some View {
         Button(action: {
             print ("Tags")
@@ -61,7 +37,6 @@ struct RSSFeedListView: View {
                 .imageScale(.medium)
         }
     }
-    
     private var infoListView: some View {
         Button(action: {
             print ("Tags")
@@ -70,19 +45,14 @@ struct RSSFeedListView: View {
                 .imageScale(.medium)
         }
     }
-    
     private var markAllRead: some View {
         Button(action: {
             print ("Mark all as Read")
         }) {
             Image(systemName: "checkmark")
                 .imageScale(.medium)
-//                .resizable()
-//                .aspectRatio(contentMode: .fit)
-//                .frame(width: 20, height: 20)
         }
     }
-    
     private var trailingFeedView: some View {
         HStack(alignment: .top, spacing: 24) {
             archiveListView
@@ -90,7 +60,6 @@ struct RSSFeedListView: View {
             infoListView
         }
     }
-    
     var body: some View {
         VStack(alignment: .leading){
                 Text(rssSource.title)
@@ -106,7 +75,6 @@ struct RSSFeedListView: View {
             }
 //            Text(rssSource.desc)
 //                    .font(.footnote)
-            
         }
         .frame(width: 325.0, height: 80)
 
@@ -127,7 +95,6 @@ struct RSSFeedListView: View {
                             Text(self.footer)
                                 .font(.title2)
                                 .fontWeight(.bold)
-                                
                             }
                         }
                     }
@@ -136,11 +103,6 @@ struct RSSFeedListView: View {
             }
         .navigationBarTitle("", displayMode: .inline)
         .navigationBarItems(trailing: trailingFeedView)
-        //.navigationBarHidden(true)
-        .onAppear {
-            self.rssFeedViewModel.fecthResults()
-            self.rssFeedViewModel.fetchRemoteRSSItems()
-        }
         .sheet(item: $selectedItem, content: { item in
             if AppEnvironment.current.useSafari {
                 SafariView(url: URL(string: item.url)!)
@@ -157,32 +119,14 @@ struct RSSFeedListView: View {
             self.rssFeedViewModel.fetchRemoteRSSItems()
         }
     }
-
     func contextmenuAction(_ item: RSSItem) {
         rssFeedViewModel.archiveOrCancel(item)
     }
 }
 
 extension RSSFeedListView {
-    
     private func destinationView(_ rss: RSS) -> some View {
         RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
             .environmentObject(DataSourceService.current.rss)
     }
 }
-
-struct RSSFeedListView_Previews: PreviewProvider {
-    
-    static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
-    
-    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-
-    //static let settingViewModel = SettingViewModel()
-
-    static var previews: some View {
-        ContentView()
-            .preferredColorScheme(.dark)
-
-        }
-    }
-

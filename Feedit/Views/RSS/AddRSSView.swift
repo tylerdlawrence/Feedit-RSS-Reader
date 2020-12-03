@@ -37,7 +37,8 @@ struct AddRSSView: View {
             self.onCancelAction?()
             self.presentationMode.wrappedValue.dismiss()
         }) {
-            Image(systemName: "chevron.left") //xmark
+            Image(systemName: "chevron.left")
+            //Text("All Items") //xmark
             //Text("Cancel")
         }
     }
