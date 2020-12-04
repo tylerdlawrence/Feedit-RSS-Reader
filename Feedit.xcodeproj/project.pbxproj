@@ -318,6 +318,7 @@
 		6182212B25053FEE005636B2 /* rssTests */ = {
 			isa = PBXGroup;
 			children = (
+				6161FEE42539CF9200CB0F00 /* default.json */,
 				6182213C250542E9005636B2 /* Subscriptions-test.opml */,
 				6182212C25053FEE005636B2 /* rssTests.swift */,
 				6105657625599D8B007DCAA1 /* Subscriptions-OnMyiPhone.opml */,
@@ -443,7 +444,6 @@
 		61C818D724E1F73C00593939 /* RSS */ = {
 			isa = PBXGroup;
 			children = (
-				6161FEE42539CF9200CB0F00 /* default.json */,
 				61967EFC24E2068400AA647C /* AddRSSView.swift */,
 				61967EFD24E2068400AA647C /* AddRSSViewModel.swift */,
 				61967EFE24E2068400AA647C /* RSSRow.swift */,

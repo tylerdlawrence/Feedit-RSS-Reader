@@ -45,7 +45,7 @@ struct HomeView: View {
         }) {
             Image(systemName: "gear").font(.system(size: 16, weight: .heavy))
                 .imageScale(.large)
-                .foregroundColor(Color("darkShadow"))
+                .foregroundColor(Color("lightShadow"))
         }
     }
     private var archiveListView: some View {
@@ -57,19 +57,30 @@ struct HomeView: View {
             //EditButton()
             addSourceButton
         }
-        .foregroundColor(Color("darkShadow"))
+        .foregroundColor(Color("lightShadow"))
     }
     
-       private var feedView: some View {
+    private var feedView: some View {
         HStack{
             Image(systemName: "text.justifyleft").font(.system(size: 16, weight: .heavy))
-                .foregroundColor(Color("darkShadow"))
+                .foregroundColor(Color("lightShadow"))
                 .imageScale(.large)
             Text("All Items")
                 .font(.title3)
                 .fontWeight(.semibold)
         }
     }
+    
+    private var feedSection: some View {
+        HStack{
+             Image(systemName: "note.text").font(.system(size: 20, weight: .medium))
+                 .foregroundColor(Color("lightShadow"))
+                 .imageScale(.large)
+             Text("Feeds")
+                 .font(.title3)
+                 .fontWeight(.semibold)
+         }
+     }
     
     private let addRSSPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("addNewRSSPublisher"))
     private let rssRefreshPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("rssListNeedRefresh"))
@@ -83,35 +94,48 @@ struct HomeView: View {
                     Image(systemName: "icloud")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: 120.0, height: 120.0)
-//                    Text("On My iPhone")
-//                        .font(.title3)
-//                        .fontWeight(.semibold)
+                        .frame(width: 75, height: 75)
+                    Text("On My iPhone")
+                        .font(.title3)
+                        .fontWeight(.bold)
+                    Text("Today at ").font(.system(.headline)) +
+                        Text(Date(), style: .time)
                 }.frame(width: 320.0).listRowBackground(Color("accent"))
             }.listRowBackground(Color("accent"))
-            VStack(alignment: .leading) {
-                HStack {
-                    feedView
-                    }.listRowBackground(Color("darkShadow"))
+//            VStack(alignment: .leading) {
+//                HStack {
+//                    feedView
+//                    }.listRowBackground(Color("darkShadow"))
+//                }
+//                .listRowBackground(Color("accent"))
+//                .edgesIgnoringSafeArea(.all)
+            Section(header: feedView) {
+//                        .font(.system(size: 16, weight: .bold))
+//                        .foregroundColor(Color("darkerAccent"))
+//                        .multilineTextAlignment(.center))
+//                HStack(alignment: .center) {
+                
+                NavigationLink(destination: archiveListView) {
+                    BookmarkView()
+                        }
+                NavigationLink(destination: EmptyView()) {
+                    TagView()
                 }
-                .listRowBackground(Color("accent"))
-                .edgesIgnoringSafeArea(.all)
-            HStack(alignment: .center) {
-                        NavigationLink(destination: archiveListView) {
-                            BookmarkView()
                     }
+                    .textCase(nil)
+                    .accentColor(Color("darkShadow"))
+                    .foregroundColor(Color("darkerAccent"))
                     .listRowBackground(Color("accent"))
-                }
-                .listRowBackground(Color("accent"))
-                .edgesIgnoringSafeArea(.all)
+                    .edgesIgnoringSafeArea(.all)
 ////                    DisclosureGroup(
 ////                    "❯  Feeds", //☰𝝣
 ////                    tag: .RSS,
 ////                    selection: $showingContent) {
-            Section(header: Text("   □     Feeds")
-                        .font(.system(size: 16, weight: .bold))
-                        .foregroundColor(Color("darkerAccent"))
-                        .multilineTextAlignment(.center)) {
+            Section(header: feedSection) {
+//                        Text("   □     Feeds")
+//                        .font(.system(size: 16, weight: .bold))
+//                        .foregroundColor(Color("darkerAccent"))
+//                        .multilineTextAlignment(.center)) {
                 ForEach(viewModel.items, id: \.self) { rss in
                     NavigationLink(destination: self.destinationView(rss)) {
                         RSSRow(rss: rss)
@@ -126,7 +150,7 @@ struct HomeView: View {
                 }
                 .textCase(nil)
                 .listRowBackground(Color("accent"))
-                .accentColor(Color("darkShadow"))
+                .accentColor(Color("darkShadow")).foregroundColor(Color("darkerAccent"))
                 .edgesIgnoringSafeArea(.all)
                 }
                 .onReceive(rssRefreshPublisher, perform: { output in
@@ -162,20 +186,37 @@ struct HomeView: View {
 
 struct BookmarkView: View {
     var body: some View {
-//        Image(systemName: "bookmark").font(.system(size: 16, weight: .bold))
-//            .foregroundColor(Color("darkShadow"))
-//            .imageScale(.medium)
-        Image("bookmark-tag")
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(width: 20, height: 20)
-            .cornerRadius(5)
-        Text("  Bookmarked")
-            .font(.system(size: 16, weight: .semibold))
-            .fontWeight(.medium)
+        VStack(alignment: .leading){
+            HStack{
+                Image(systemName: "bookmark.circle").font(.system(size: 14, weight: .bold))
+                    .foregroundColor(Color("lightShadow"))
+                    .imageScale(.large)
+        //        Image("bookmark-tag")
+        //            .resizable()
+        //            .aspectRatio(contentMode: .fit)
+        //            .frame(width: 20, height: 20)
+        //            .cornerRadius(5)
+                Text("Bookmarked")
+                    .font(.system(size: 16, weight: .semibold))
+                    .fontWeight(.semibold)
+            }
+        }
     }
 }
-
+struct TagView: View {
+    var body: some View {
+        VStack(alignment: .leading){
+            HStack{
+                Image(systemName: "tag").font(.system(size: 14, weight: .bold))
+                    .foregroundColor(Color("lightShadow"))
+                    .imageScale(.medium)
+                Text("Tags")
+                    .font(.system(size: 16, weight: .semibold))
+                    .fontWeight(.semibold)
+            }
+        }
+    }
+}
 extension DisclosureGroup where Label == Text {
   public init<V: Hashable, S: StringProtocol>(
     _ label: S,

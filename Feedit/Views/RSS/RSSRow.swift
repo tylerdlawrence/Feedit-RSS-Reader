@@ -37,22 +37,15 @@ struct RSSRow: View {
                 .font(.custom("Gotham", size: 16))
                 .multilineTextAlignment(.leading)
                 .lineLimit(1)
+//            Text(rss.desc)
+//                .font(.subheadline)
+//                .lineLimit(1)
+//            Text(rss.createTimeStr)
+//                .font(.custom("Gotham", size: 12))
+//                .multilineTextAlignment(.leading)
+//                .lineLimit(1)
                 }
     }
-// below are options to have parsed feed description and last updated time
-        
-
-            //Text(rss.desc)
-                //.font(.subheadline)
-                //.lineLimit(1)
-
-            //Text(rss.createTimeStr)
-                //.font(.footnote)
-                //.foregroundColor(.gray)
-            
-        
-    
-    
     var body: some View {
         HStack() {
             VStack(alignment: .center) {
