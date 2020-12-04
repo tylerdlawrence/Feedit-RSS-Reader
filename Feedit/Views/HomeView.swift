@@ -12,9 +12,20 @@ import CoreData
 
 struct HomeView: View {
 
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    
+    let list = [GridItem(.flexible(minimum: 320))]
+    
+    let grid = [
+        GridItem(.flexible(minimum: 160)),
+        GridItem(.flexible(minimum: 160)),
+        GridItem(.flexible(minimum: 160)),
+    ]
+    
     enum FeaureItem {
         case add
         case setting
+        case card
     }
     
     @State var sources: [RSS] = []
@@ -28,14 +39,15 @@ struct HomeView: View {
     @State private var isSheetPresented = false
     @State private var addRSSProgressValue = 0.0
     @State private var previewIndex = 0
-
-    private var addSourceButton: some View {
+    @State private var isCardPresented = false
+    
+    private var cardButton: some View {
         Button(action: {
-            self.isSheetPresented = true
-            self.selectedFeatureItem = .add
+            self.isCardPresented = true
+            self.selectedFeatureItem = .card
         }) {
-            Image(systemName: "plus")
-                .imageScale(.large)
+            CardView()
+                .frame(width: 170.0, height: 50.0)
             }
         }
     private var settingButton: some View {
@@ -48,6 +60,15 @@ struct HomeView: View {
                 .foregroundColor(Color("lightShadow"))
         }
     }
+    private var addSourceButton: some View {
+        Button(action: {
+            self.isSheetPresented = true
+            self.selectedFeatureItem = .add
+        }) {
+            Image(systemName: "plus")
+                .imageScale(.large)
+            }
+        }
     private var archiveListView: some View {
         ArchiveListView(viewModel: archiveListViewModel)
     }
@@ -65,9 +86,9 @@ struct HomeView: View {
             Image(systemName: "archivebox").font(.system(size: 16, weight: .bold))
                 .foregroundColor(Color("bg"))
                 .imageScale(.large)
-            Text("All Items")
-                .font(.title3)
-                .fontWeight(.semibold)
+            Text("All Items").font(.system(size: 18, weight: .semibold))
+//                .font(.title3)
+//                .fontWeight(.semibold)
         }
     }
     
@@ -76,20 +97,20 @@ struct HomeView: View {
              Image(systemName: "text.justifyleft").font(.system(size: 16, weight: .bold))
                 .foregroundColor(Color("bg"))
                 .imageScale(.large)
-             Text("Feeds")
-                 .font(.title3)
-                 .fontWeight(.semibold)
+             Text("Feeds").font(.system(size: 18, weight: .semibold))
+//                 .font(.title3)
+//                 .fontWeight(.semibold)
          }
      }
     
     private var folderSection: some View {
         HStack{
-             Image(systemName: "folder.badge.gear").font(.system(size: 16, weight: .semibold))
+             Image(systemName: "folder").font(.system(size: 16, weight: .semibold))
                 .foregroundColor(Color("bg"))
                 .imageScale(.large)
-             Text("Folders")
-                 .font(.title3)
-                 .fontWeight(.semibold)
+             Text("Folders").font(.system(size: 18, weight: .semibold))
+                 //.font(.title3)
+                 //.fontWeight(.semibold)
          }
      }
     
@@ -188,13 +209,35 @@ struct HomeView: View {
                     SettingView()
                 }
             })
-    .listStyle(SidebarListStyle())
-    //.listStyle(GroupedListStyle())
+    //.listStyle(SidebarListStyle())
+//    .listStyle(GroupedListStyle())
     .navigationTitle("")
     .navigationBarItems(trailing: trailingView)
         .toolbar {
             ToolbarItem(placement: .bottomBar) {
-                        Spacer()
+                LazyHStack {
+                    Button(action: {
+                        print("All")
+                    }) {
+                        Image(systemName: "text.justifyleft").font(.system(size: 16, weight: .heavy))
+                            .frame(width: 30, height: 30)
+                    }
+                    Button(action: {
+                        print("Unread")
+                    }) {
+                        Image(systemName: "circle.fill")
+                            .frame(width: 30, height: 30)
+                    }
+                    Button(action: {
+                        print("Filters")
+                    }) {
+                        Image(systemName: "chevron.up").font(.system(size: 16, weight: .heavy))
+                            .frame(width: 30, height: 30)
+                    }
+                }
+            }
+            ToolbarItem(placement: .bottomBar) {
+                Spacer()
                     }
             ToolbarItem(placement: .bottomBar) {
                 settingButton

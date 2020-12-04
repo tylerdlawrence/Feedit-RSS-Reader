@@ -8,29 +8,32 @@
 import SwiftUI
 
 struct CardView: View {
-    let width = 80 ..< 100
+    let width = 5 ..< 30
     
     var body: some View {
-        HStack {
-            RoundedRectangle(cornerRadius: 18)
-                .frame(width: 100, height: 100)
-            VStack(alignment: .leading) {
-                ForEach(0 ..< 6) { item in
-                    RoundedRectangle(cornerRadius: 18)
-                        .frame(width: CGFloat(width.randomElement()!), height: 8)
-                }
-            }
-            Spacer()
+        LazyHStack {
+            Image(systemName: "text.justifyleft")
+                .frame(width: 30, height: 30)
+            Image(systemName: "circle.fill")
+                .frame(width: 30, height: 30)
+            Image(systemName: "bookmark.fill")
+                .frame(width: 30, height: 30)
+            Image(systemName: "chevron.up")
+                .frame(width: 30, height: 30)
         }
-        .padding()
-        .background(Color("bg"))
-        .cornerRadius(18)
-        .padding()
+        .frame(width: 170, height: 50, alignment: .center)
+        //Spacer()
+        //.padding()
+        //.foregroundColor(Color("bg"))
+        //.background(.clear) //(Color("accent"))
+        .cornerRadius(7)
     }
 }
 
 struct CardView_Previews: PreviewProvider {
     static var previews: some View {
         CardView()
+        CardView()
+            .preferredColorScheme(.dark)
     }
 }
