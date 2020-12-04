@@ -57,13 +57,13 @@ struct HomeView: View {
             //EditButton()
             addSourceButton
         }
-        .foregroundColor(Color("lightShadow"))
+        .foregroundColor(Color("bg"))
     }
     
     private var feedView: some View {
         HStack{
-            Image(systemName: "text.justifyleft").font(.system(size: 16, weight: .heavy))
-                .foregroundColor(Color("lightShadow"))
+            Image(systemName: "archivebox").font(.system(size: 16, weight: .bold))
+                .foregroundColor(Color("bg"))
                 .imageScale(.large)
             Text("All Items")
                 .font(.title3)
@@ -73,10 +73,21 @@ struct HomeView: View {
     
     private var feedSection: some View {
         HStack{
-             Image(systemName: "note.text").font(.system(size: 20, weight: .medium))
-                 .foregroundColor(Color("lightShadow"))
-                 .imageScale(.large)
+             Image(systemName: "text.justifyleft").font(.system(size: 16, weight: .bold))
+                .foregroundColor(Color("bg"))
+                .imageScale(.large)
              Text("Feeds")
+                 .font(.title3)
+                 .fontWeight(.semibold)
+         }
+     }
+    
+    private var folderSection: some View {
+        HStack{
+             Image(systemName: "folder.badge.gear").font(.system(size: 16, weight: .semibold))
+                .foregroundColor(Color("bg"))
+                .imageScale(.large)
+             Text("Folders")
                  .font(.title3)
                  .fontWeight(.semibold)
          }
@@ -94,6 +105,7 @@ struct HomeView: View {
                     Image(systemName: "icloud")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
+                        .foregroundColor(Color("bg"))
                         .frame(width: 75, height: 75)
                     Text("On My iPhone")
                         .font(.title3)
@@ -152,34 +164,45 @@ struct HomeView: View {
                 .listRowBackground(Color("accent"))
                 .accentColor(Color("darkShadow")).foregroundColor(Color("darkerAccent"))
                 .edgesIgnoringSafeArea(.all)
+
+            Section(header: folderSection) {
+                List {
+                    Text("Folders are coming.")
                 }
-                .onReceive(rssRefreshPublisher, perform: { output in
-                    self.viewModel.fecthResults()
-                })
-                .sheet(isPresented: $isSheetPresented, content: {
-                    if FeaureItem.add == self.selectedFeatureItem {
-                        AddRSSView(
-                            viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss),
-                            onDoneAction: self.onDoneAction)
-                    } else if FeaureItem.setting == self.selectedFeatureItem {
-                        SettingView()
-                    }
-                })
-        .listStyle(SidebarListStyle())
-        //.listStyle(GroupedListStyle())
-        .navigationTitle("")
-        .navigationBarItems(trailing: trailingView)
-            .toolbar {
-                ToolbarItem(placement: .bottomBar) {
-                            Spacer()
-                        }
-                ToolbarItem(placement: .bottomBar) {
-                    settingButton
-                        }
-                    }
-                }
-            .onAppear {
+            }
+            .textCase(nil)
+            .accentColor(Color("darkShadow"))
+            .foregroundColor(Color("darkerAccent"))
+            .listRowBackground(Color("accent"))
+            .edgesIgnoringSafeArea(.all)
+            }
+            .onReceive(rssRefreshPublisher, perform: { output in
                 self.viewModel.fecthResults()
+            })
+            .sheet(isPresented: $isSheetPresented, content: {
+                if FeaureItem.add == self.selectedFeatureItem {
+                    AddRSSView(
+                        viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss),
+                        onDoneAction: self.onDoneAction)
+                } else if FeaureItem.setting == self.selectedFeatureItem {
+                    SettingView()
+                }
+            })
+    .listStyle(SidebarListStyle())
+    //.listStyle(GroupedListStyle())
+    .navigationTitle("")
+    .navigationBarItems(trailing: trailingView)
+        .toolbar {
+            ToolbarItem(placement: .bottomBar) {
+                        Spacer()
+                    }
+            ToolbarItem(placement: .bottomBar) {
+                settingButton
+                    }
+                }
+            }
+        .onAppear {
+            self.viewModel.fecthResults()
         }
     }
 }
@@ -188,17 +211,14 @@ struct BookmarkView: View {
     var body: some View {
         VStack(alignment: .leading){
             HStack{
-                Image(systemName: "bookmark.circle").font(.system(size: 14, weight: .bold))
-                    .foregroundColor(Color("lightShadow"))
-                    .imageScale(.large)
-        //        Image("bookmark-tag")
-        //            .resizable()
-        //            .aspectRatio(contentMode: .fit)
-        //            .frame(width: 20, height: 20)
-        //            .cornerRadius(5)
+                Image(systemName: "bookmark").font(.system(size: 16, weight: .bold))
+                    .foregroundColor(Color("bg"))
+                    .imageScale(.medium)
                 Text("Bookmarked")
                     .font(.system(size: 16, weight: .semibold))
                     .fontWeight(.semibold)
+                    //.foregroundColor(Color("bg"))
+
             }
         }
     }
@@ -208,11 +228,12 @@ struct TagView: View {
         VStack(alignment: .leading){
             HStack{
                 Image(systemName: "tag").font(.system(size: 14, weight: .bold))
-                    .foregroundColor(Color("lightShadow"))
+                    .foregroundColor(Color("bg"))
                     .imageScale(.medium)
                 Text("Tags")
                     .font(.system(size: 16, weight: .semibold))
                     .fontWeight(.semibold)
+                    //.foregroundColor(Color("bg"))
             }
         }
     }
