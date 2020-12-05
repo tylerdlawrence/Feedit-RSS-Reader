@@ -27,6 +27,7 @@
 		61595D11257B1DBE000D6B22 /* RSParser in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 61595D0F257B1DBE000D6B22 /* RSParser */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		61595D15257B1EB6000D6B22 /* RSWeb in Frameworks */ = {isa = PBXBuildFile; productRef = 61595D14257B1EB6000D6B22 /* RSWeb */; };
 		61595D16257B1EB6000D6B22 /* RSWeb in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 61595D14257B1EB6000D6B22 /* RSWeb */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		61595D25257B3A4D000D6B22 /* DefaultFeedsImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61595D24257B3A4C000D6B22 /* DefaultFeedsImporter.swift */; };
 		615E961925300E5C00891083 /* AppearenceSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615E961825300E5C00891083 /* AppearenceSection.swift */; };
 		615E961D2530116600891083 /* AppearenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615E961C2530116600891083 /* AppearenceView.swift */; };
 		615E971F25323C1900891083 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615E971E25323C1900891083 /* Reachability.swift */; };
@@ -182,6 +183,12 @@
 		612FB83D2540F04000D9822B /* RSSListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RSSListView.swift; path = Feedit/Views/RSSListView.swift; sourceTree = SOURCE_ROOT; };
 		615096EA2564BF420001C0D9 /* NavigationBarModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarModifier.swift; sourceTree = "<group>"; };
 		61595CF5257B18EE000D6B22 /* DefaultFeeds.opml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = DefaultFeeds.opml; sourceTree = "<group>"; };
+		61595D19257B32AE000D6B22 /* Articles */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Articles; sourceTree = "<group>"; };
+		61595D1A257B32AF000D6B22 /* ArticlesDatabase */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ArticlesDatabase; sourceTree = "<group>"; };
+		61595D1B257B32AF000D6B22 /* Secrets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Secrets; sourceTree = "<group>"; };
+		61595D1C257B32AF000D6B22 /* Account */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Account; sourceTree = "<group>"; };
+		61595D1D257B32AF000D6B22 /* SyncDatabase */ = {isa = PBXFileReference; lastKnownFileType = folder; path = SyncDatabase; sourceTree = "<group>"; };
+		61595D24257B3A4C000D6B22 /* DefaultFeedsImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultFeedsImporter.swift; sourceTree = "<group>"; };
 		615E961825300E5C00891083 /* AppearenceSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearenceSection.swift; sourceTree = "<group>"; };
 		615E961C2530116600891083 /* AppearenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearenceView.swift; sourceTree = "<group>"; };
 		615E971E25323C1900891083 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
@@ -332,7 +339,6 @@
 		6182212B25053FEE005636B2 /* rssTests */ = {
 			isa = PBXGroup;
 			children = (
-				61595CF5257B18EE000D6B22 /* DefaultFeeds.opml */,
 				6182213C250542E9005636B2 /* Subscriptions-test.opml */,
 				6182212C25053FEE005636B2 /* rssTests.swift */,
 				6105657625599D8B007DCAA1 /* Subscriptions-OnMyiPhone.opml */,
@@ -384,6 +390,11 @@
 				6182212B25053FEE005636B2 /* rssTests */,
 				61C8189324E1F3FB00593939 /* Products */,
 				61C818CD24E1F4A900593939 /* Frameworks */,
+				61595D1C257B32AF000D6B22 /* Account */,
+				61595D19257B32AE000D6B22 /* Articles */,
+				61595D1A257B32AF000D6B22 /* ArticlesDatabase */,
+				61595D1B257B32AF000D6B22 /* Secrets */,
+				61595D1D257B32AF000D6B22 /* SyncDatabase */,
 			);
 			sourceTree = "<group>";
 		};
@@ -437,6 +448,8 @@
 				61C818D724E1F73C00593939 /* RSS */,
 				615E983F2533AFAE00891083 /* ContentView.swift */,
 				617E4C53255DE8F20010CEE8 /* HomeView.swift */,
+				61595D24257B3A4C000D6B22 /* DefaultFeedsImporter.swift */,
+				61595CF5257B18EE000D6B22 /* DefaultFeeds.opml */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -616,6 +629,11 @@
 			buildRules = (
 			);
 			dependencies = (
+				61595D30257B3B38000D6B22 /* PBXTargetDependency */,
+				61595D2E257B3B32000D6B22 /* PBXTargetDependency */,
+				61595D2C257B3B2C000D6B22 /* PBXTargetDependency */,
+				61595D2A257B3B26000D6B22 /* PBXTargetDependency */,
+				61595D28257B3B20000D6B22 /* PBXTargetDependency */,
 				618610D8256EF7AB0083A96D /* PBXTargetDependency */,
 				618610B6256ED5EC0083A96D /* PBXTargetDependency */,
 				615096E62563781A0001C0D9 /* PBXTargetDependency */,
@@ -795,6 +813,7 @@
 				616CAF6324F7154600690804 /* DateSpec.swift in Sources */,
 				618F902C250DCD4F00D5A03E /* RSS+CoreDataClass.swift in Sources */,
 				6117364924E83C0600A2DEA5 /* DataUnitView.swift in Sources */,
+				61595D25257B3A4D000D6B22 /* DefaultFeedsImporter.swift in Sources */,
 				61967F0324E2068400AA647C /* RSSDisplayView.swift in Sources */,
 				61967EC724E204BC00AA647C /* UserDefaultWrapper.swift in Sources */,
 				617B5DF025670F5C00228B1D /* Article.swift in Sources */,
@@ -848,6 +867,26 @@
 		615096E62563781A0001C0D9 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = 615096E52563781A0001C0D9 /* SwiftUIX */;
+		};
+		61595D28257B3B20000D6B22 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 61595D27257B3B20000D6B22 /* Account */;
+		};
+		61595D2A257B3B26000D6B22 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 61595D29257B3B26000D6B22 /* Articles */;
+		};
+		61595D2C257B3B2C000D6B22 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 61595D2B257B3B2C000D6B22 /* ArticlesDatabase */;
+		};
+		61595D2E257B3B32000D6B22 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 61595D2D257B3B32000D6B22 /* Secrets */;
+		};
+		61595D30257B3B38000D6B22 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 61595D2F257B3B38000D6B22 /* SyncDatabase */;
 		};
 		615E989F2534046A00891083 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1333,6 +1372,26 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 61595D13257B1EB6000D6B22 /* XCRemoteSwiftPackageReference "RSWeb" */;
 			productName = RSWeb;
+		};
+		61595D27257B3B20000D6B22 /* Account */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Account;
+		};
+		61595D29257B3B26000D6B22 /* Articles */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Articles;
+		};
+		61595D2B257B3B2C000D6B22 /* ArticlesDatabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ArticlesDatabase;
+		};
+		61595D2D257B3B32000D6B22 /* Secrets */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Secrets;
+		};
+		61595D2F257B3B38000D6B22 /* SyncDatabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SyncDatabase;
 		};
 		615E989E2534046A00891083 /* OAuthSwift */ = {
 			isa = XCSwiftPackageProductDependency;

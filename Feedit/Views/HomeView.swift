@@ -146,9 +146,10 @@ struct HomeView: View {
         VStack{
             //Spacer()
             HStack{
-                 Image(systemName: "chevron.right").font(.system(size: 12, weight: .heavy))
-                    .foregroundColor(Color("bg"))
-                    .imageScale(.large)
+                Image("disclosure")
+//                 Image(systemName: "chevron.right").font(.system(size: 12, weight: .heavy))
+//                    .foregroundColor(Color("bg"))
+//                    .imageScale(.large)
                  Text("Folders").font(.system(size: 18, weight: .semibold))
                      //.font(.title3)
                      //.fontWeight(.semibold)
@@ -306,9 +307,14 @@ struct BookmarkView: View {
     var body: some View {
         VStack(alignment: .leading){
             HStack{
-                Image(systemName: "bookmark").font(.system(size: 16, weight: .bold))
-                    .foregroundColor(Color("bg"))
-                    .imageScale(.medium)
+                Image("star")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 20, height: 20, alignment: .center)
+//                Image(systemName: "bookmark")
+//                    .font(.system(size: 16, weight: .bold))
+//                    .foregroundColor(Color("bg"))
+//                    .imageScale(.medium)
                 Text("Bookmarked")
                     .font(.system(size: 16, weight: .semibold))
                     .fontWeight(.semibold)
@@ -322,9 +328,13 @@ struct TagView: View {
     var body: some View {
         VStack(alignment: .leading){
             HStack{
-                Image(systemName: "tag").font(.system(size: 14, weight: .bold))
-                    .foregroundColor(Color("bg"))
-                    .imageScale(.medium)
+                Image("smartFeedUnread")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 20, height: 20, alignment: .center)
+//                Image(systemName: "tag").font(.system(size: 14, weight: .bold))
+//                    .foregroundColor(Color("bg"))
+//                    .imageScale(.medium)
                 Text("Tags")
                     .font(.system(size: 16, weight: .semibold))
                     .fontWeight(.semibold)
