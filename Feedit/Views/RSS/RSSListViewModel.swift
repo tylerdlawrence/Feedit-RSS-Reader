@@ -8,10 +8,9 @@
 import SwiftUI
 import UIKit
 
-class RSSListViewModel: NSObject, ObservableObject {
+class RSSListViewModel: NSObject, ObservableObject{
 
     @Published var items: [RSS] = []
-    
     let dataSource: RSSDataSource
     var start = 0
     

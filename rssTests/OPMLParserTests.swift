@@ -20,7 +20,7 @@ class OPMLParserTests: XCTestCase {
     
     func loadFile() -> String {
         let bundle = Bundle(for: OPMLParserTests.self)
-        let filePath = bundle.path(forResource: "Subscriptions-OnMyiPhone", ofType: "opml")
+        let filePath = bundle.path(forResource: "DefaultFeeds", ofType: "opml")
         assert(filePath != nil, "opml file is not exist")
         return filePath!
     }

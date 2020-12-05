@@ -17,7 +17,7 @@ struct RSSDisplayView: View {
             TextFieldView(label: "Title", placeholder: "", text: $rss.title)
             TextFieldView(label: "Description", placeholder: "", text: $rss.desc)
             TextFieldView(label: "Feed URL", placeholder: "", text: $rss.url)
-            TextFieldView(label: "Icon Image", placeholder: "", text: $rss.imageURL)
+            TextFieldView(label: "Image URL", placeholder: "", text: $rss.imageURL)
            // Image("3icon")
         }
     }

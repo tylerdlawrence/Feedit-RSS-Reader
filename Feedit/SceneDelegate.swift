@@ -22,7 +22,7 @@ struct FeeditApp: App {
     static let settingViewModel = SettingViewModel()
 
     var body: some Scene {
-        WindowGroup {
+        WindowGroup{
             HomeView(viewModel: FeeditApp.viewModel, archiveListViewModel: FeeditApp.archiveListViewModel)
         }
         //(viewModel: FeeditApp.viewModel, archiveListViewModel: FeeditApp.archiveListViewModel)

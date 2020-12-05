@@ -12,44 +12,58 @@ import CoreData
 
 struct HomeView: View {
 
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    
-    let list = [GridItem(.flexible(minimum: 320))]
-    
-    let grid = [
-        GridItem(.flexible(minimum: 160)),
-        GridItem(.flexible(minimum: 160)),
-        GridItem(.flexible(minimum: 160)),
-    ]
-    
     enum FeaureItem {
         case add
         case setting
-        case card
     }
     
     @State var sources: [RSS] = []
 
     @ObservedObject var viewModel: RSSListViewModel
     @ObservedObject var archiveListViewModel: ArchiveListViewModel
-    
+        
     @State private var selectedFeatureItem = FeaureItem.add
     @State private var isAddFormPresented = false
     @State private var isSettingPresented = false
     @State private var isSheetPresented = false
     @State private var addRSSProgressValue = 0.0
     @State private var previewIndex = 0
-    @State private var isCardPresented = false
     
-    private var cardButton: some View {
-        Button(action: {
-            self.isCardPresented = true
-            self.selectedFeatureItem = .card
-        }) {
-            CardView()
-                .frame(width: 170.0, height: 50.0)
-            }
-        }
+//    private var cardButton: some View {
+//        Menu {
+//            Button(action: {
+//                print("All")
+//            }, label: {
+//                HStack{
+//                    Text("All")
+//                    Image(systemName: "text.justifyleft")
+//                        //.font(.system(size: 16, weight: .heavy))
+//                }
+//            })
+//
+//            Button(action: {
+//                print("Unread")
+//            }, label: {
+//                HStack{
+//                    Text("Unread")
+//                    Image(systemName: "circle.fill").font(.system(size: 16, weight: .heavy))
+//                }
+//            })
+//            Button(action: {
+//                print("Filters")
+//            }, label: {
+//                HStack{
+//                    Text("Filters")
+//                    Image(systemName: "chevron.up").font(.system(size: 16, weight: .heavy))
+//                }
+//            })
+//        } label: {
+//            Label(
+//                title: { Text("")},
+//                icon: { Image(systemName: "chevron.up").font(.system(size: 16, weight: .heavy)) }
+//            )
+//        }
+//    }
     private var settingButton: some View {
         Button(action: {
             self.selectedFeatureItem = .setting
@@ -61,14 +75,37 @@ struct HomeView: View {
         }
     }
     private var addSourceButton: some View {
-        Button(action: {
-            self.isSheetPresented = true
-            self.selectedFeatureItem = .add
-        }) {
-            Image(systemName: "plus")
-                .imageScale(.large)
+            Menu {
+                Button(action: {
+                    self.isSheetPresented = true
+                    self.selectedFeatureItem = .add
+                }, label: {
+                    HStack{
+                        Text("Add Feed")
+                        Image(systemName: "plus")
+                            .imageScale(.large)
+                            .font(.system(size: 16, weight: .heavy))
+                    }
+                })
+                
+                Button(action: {
+                    print("Add Folder")
+                }, label: {
+                    HStack{
+                        Text("Add Folder")
+                        Image(systemName: "folder").font(.system(size: 16, weight: .heavy))
+                    }
+                })
+            } label: {
+                Label(
+                    title: { Text("")},
+                    icon: { Image(systemName: "plus")
+                        .imageScale(.large)
+                    }
+                )
             }
         }
+
     private var archiveListView: some View {
         ArchiveListView(viewModel: archiveListViewModel)
     }
@@ -87,6 +124,7 @@ struct HomeView: View {
                 .foregroundColor(Color("bg"))
                 .imageScale(.large)
             Text("All Items").font(.system(size: 18, weight: .semibold))
+                //.foregroundColor(Color("bg"))
 //                .font(.title3)
 //                .fontWeight(.semibold)
         }
@@ -98,21 +136,25 @@ struct HomeView: View {
                 .foregroundColor(Color("bg"))
                 .imageScale(.large)
              Text("Feeds").font(.system(size: 18, weight: .semibold))
+                //.foregroundColor(Color("bg"))
 //                 .font(.title3)
 //                 .fontWeight(.semibold)
          }
      }
     
     private var folderSection: some View {
-        HStack{
-             Image(systemName: "folder").font(.system(size: 16, weight: .semibold))
-                .foregroundColor(Color("bg"))
-                .imageScale(.large)
-             Text("Folders").font(.system(size: 18, weight: .semibold))
-                 //.font(.title3)
-                 //.fontWeight(.semibold)
-         }
-     }
+        VStack{
+            //Spacer()
+            HStack{
+                 Image(systemName: "chevron.right").font(.system(size: 12, weight: .heavy))
+                    .foregroundColor(Color("bg"))
+                    .imageScale(.large)
+                 Text("Folders").font(.system(size: 18, weight: .semibold))
+                     //.font(.title3)
+                     //.fontWeight(.semibold)
+            }
+        }
+    }
     
     private let addRSSPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("addNewRSSPublisher"))
     private let rssRefreshPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("rssListNeedRefresh"))
@@ -185,10 +227,38 @@ struct HomeView: View {
                 .listRowBackground(Color("accent"))
                 .accentColor(Color("darkShadow")).foregroundColor(Color("darkerAccent"))
                 .edgesIgnoringSafeArea(.all)
-
             Section(header: folderSection) {
-                List {
-                    Text("Folders are coming.")
+                NavigationLink(destination: Text("News Folder")) {
+                    HStack{
+                        Image(systemName: "chevron.right").font(.system(size: 10, weight: .heavy))
+                            .foregroundColor(Color("bg"))
+                            .imageScale(.large)
+                        Text("News")
+                    }
+                }
+                NavigationLink(destination: Text("Blogs Folder")) {
+                    HStack{
+                        Image(systemName: "chevron.right").font(.system(size: 10, weight: .heavy))
+                            .foregroundColor(Color("bg"))
+                            .imageScale(.large)
+                        Text("Blogs")
+                    }
+                }
+                NavigationLink(destination: Text("Entertainment Folder")) {
+                    HStack{
+                        Image(systemName: "chevron.right").font(.system(size: 10, weight: .heavy))
+                            .foregroundColor(Color("bg"))
+                            .imageScale(.large)
+                        Text("Entertainment")
+                    }
+                }
+                NavigationLink(destination: Text("Technology Folder")) {
+                    HStack{
+                        Image(systemName: "chevron.right").font(.system(size: 10, weight: .heavy))
+                            .foregroundColor(Color("bg"))
+                            .imageScale(.large)
+                        Text("Technology")
+                    }
                 }
             }
             .textCase(nil)
@@ -214,28 +284,9 @@ struct HomeView: View {
     .navigationTitle("")
     .navigationBarItems(trailing: trailingView)
         .toolbar {
-            ToolbarItem(placement: .bottomBar) {
-                LazyHStack {
-                    Button(action: {
-                        print("All")
-                    }) {
-                        Image(systemName: "text.justifyleft").font(.system(size: 16, weight: .heavy))
-                            .frame(width: 30, height: 30)
-                    }
-                    Button(action: {
-                        print("Unread")
-                    }) {
-                        Image(systemName: "circle.fill")
-                            .frame(width: 30, height: 30)
-                    }
-                    Button(action: {
-                        print("Filters")
-                    }) {
-                        Image(systemName: "chevron.up").font(.system(size: 16, weight: .heavy))
-                            .frame(width: 30, height: 30)
-                    }
-                }
-            }
+//            ToolbarItem(placement: .bottomBar) {
+//                cardButton
+//            }
             ToolbarItem(placement: .bottomBar) {
                 Spacer()
                     }
@@ -247,6 +298,7 @@ struct HomeView: View {
         .onAppear {
             self.viewModel.fecthResults()
         }
+    
     }
 }
 
@@ -260,7 +312,7 @@ struct BookmarkView: View {
                 Text("Bookmarked")
                     .font(.system(size: 16, weight: .semibold))
                     .fontWeight(.semibold)
-                    //.foregroundColor(Color("bg"))
+                    .foregroundColor(Color("bg"))
 
             }
         }
@@ -276,7 +328,7 @@ struct TagView: View {
                 Text("Tags")
                     .font(.system(size: 16, weight: .semibold))
                     .fontWeight(.semibold)
-                    //.foregroundColor(Color("bg"))
+                    .foregroundColor(Color("bg"))
             }
         }
     }

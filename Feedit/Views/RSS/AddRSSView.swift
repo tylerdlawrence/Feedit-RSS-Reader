@@ -124,26 +124,26 @@ struct AddRSSView: View {
                     
                     }
                 }
-                    Picker("Manage Folders", selection: $previewIndex) {
-                        ForEach(0 ..< categories.count) {
-                            Text(categories[$0].name)
-                            NavigationView {
-                                VStack {
-                                    List(categories, id: \.self) { category in
-                                        VStack(alignment: .center) {
-                                            Text(category.name)
-                                                .cornerRadius(3)
-                                            Text("Number of articles: \(category.articlesCount)")
-                                                .font(.footnote)
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    .frame(width: 300, height: 35)
-                    .font(.body)
-                    .padding(.leading, 90.0)
+//                    Picker("Manage Folders", selection: $previewIndex) {
+//                        ForEach(0 ..< categories.count) {
+//                            Text(categories[$0].name)
+//                            NavigationView {
+//                                VStack {
+//                                    List(categories, id: \.self) { category in
+//                                        VStack(alignment: .center) {
+//                                            Text(category.name)
+//                                                .cornerRadius(3)
+//                                            Text("Number of articles: \(category.articlesCount)")
+//                                                .font(.footnote)
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                    .frame(width: 300, height: 35)
+//                    .font(.body)
+//                    .padding(.leading, 90.0)
                 
                     if !hasFetchResult {
                         EmptyView()

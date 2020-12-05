@@ -15,10 +15,18 @@
 		6117365924E83C9F00A2DEA5 /* BatchImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6117365824E83C9F00A2DEA5 /* BatchImportView.swift */; };
 		6117365B24E83CC500A2DEA5 /* BatchImportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6117365A24E83CC500A2DEA5 /* BatchImportViewModel.swift */; };
 		612FB85A2540F04200D9822B /* RSSListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612FB83D2540F04000D9822B /* RSSListView.swift */; };
-		61340BD52579867800362175 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61340BD42579867400362175 /* CardView.swift */; };
 		61453B17255CC5920060EBB6 /* URLImage in Frameworks */ = {isa = PBXBuildFile; productRef = 61453B16255CC5920060EBB6 /* URLImage */; };
 		615096E3256377E00001C0D9 /* SwiftUIX in Frameworks */ = {isa = PBXBuildFile; productRef = 615096E2256377E00001C0D9 /* SwiftUIX */; };
 		615096EB2564BF420001C0D9 /* NavigationBarModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615096EA2564BF420001C0D9 /* NavigationBarModifier.swift */; };
+		61595CF6257B18EE000D6B22 /* DefaultFeeds.opml in Resources */ = {isa = PBXBuildFile; fileRef = 61595CF5257B18EE000D6B22 /* DefaultFeeds.opml */; };
+		61595D06257B1C6E000D6B22 /* RSCore in Frameworks */ = {isa = PBXBuildFile; productRef = 61595D05257B1C6E000D6B22 /* RSCore */; };
+		61595D07257B1C6E000D6B22 /* RSCore in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 61595D05257B1C6E000D6B22 /* RSCore */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		61595D0B257B1D4F000D6B22 /* RSDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 61595D0A257B1D4F000D6B22 /* RSDatabase */; };
+		61595D0C257B1D4F000D6B22 /* RSDatabase in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 61595D0A257B1D4F000D6B22 /* RSDatabase */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		61595D10257B1DBE000D6B22 /* RSParser in Frameworks */ = {isa = PBXBuildFile; productRef = 61595D0F257B1DBE000D6B22 /* RSParser */; };
+		61595D11257B1DBE000D6B22 /* RSParser in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 61595D0F257B1DBE000D6B22 /* RSParser */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		61595D15257B1EB6000D6B22 /* RSWeb in Frameworks */ = {isa = PBXBuildFile; productRef = 61595D14257B1EB6000D6B22 /* RSWeb */; };
+		61595D16257B1EB6000D6B22 /* RSWeb in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 61595D14257B1EB6000D6B22 /* RSWeb */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		615E961925300E5C00891083 /* AppearenceSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615E961825300E5C00891083 /* AppearenceSection.swift */; };
 		615E961D2530116600891083 /* AppearenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615E961C2530116600891083 /* AppearenceView.swift */; };
 		615E971F25323C1900891083 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615E971E25323C1900891083 /* Reachability.swift */; };
@@ -29,7 +37,6 @@
 		616121EC2553678B0074F061 /* AFNetworking in Frameworks */ = {isa = PBXBuildFile; productRef = 616121EB2553678B0074F061 /* AFNetworking */; };
 		616121F0255367B60074F061 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 616121EF255367B60074F061 /* SDWebImageSwiftUI */; };
 		6161FE6125393FA400CB0F00 /* UrlImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6161FE5625393FA400CB0F00 /* UrlImageModel.swift */; };
-		6161FEEF2539CF9300CB0F00 /* default.json in Resources */ = {isa = PBXBuildFile; fileRef = 6161FEE42539CF9200CB0F00 /* default.json */; };
 		616CAF6024F7131000690804 /* OPMLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616CAF5F24F7131000690804 /* OPMLParser.swift */; };
 		616CAF6324F7154600690804 /* DateSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616CAF6224F7154600690804 /* DateSpec.swift */; };
 		616CAF6524F7158200690804 /* RFC3339DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616CAF6424F7158200690804 /* RFC3339DateFormatter.swift */; };
@@ -144,6 +151,10 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				61595D16257B1EB6000D6B22 /* RSWeb in Embed Frameworks */,
+				61595D11257B1DBE000D6B22 /* RSParser in Embed Frameworks */,
+				61595D0C257B1D4F000D6B22 /* RSDatabase in Embed Frameworks */,
+				61595D07257B1C6E000D6B22 /* RSCore in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -169,14 +180,13 @@
 		6117365824E83C9F00A2DEA5 /* BatchImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchImportView.swift; sourceTree = "<group>"; };
 		6117365A24E83CC500A2DEA5 /* BatchImportViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchImportViewModel.swift; sourceTree = "<group>"; };
 		612FB83D2540F04000D9822B /* RSSListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RSSListView.swift; path = Feedit/Views/RSSListView.swift; sourceTree = SOURCE_ROOT; };
-		61340BD42579867400362175 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		615096EA2564BF420001C0D9 /* NavigationBarModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarModifier.swift; sourceTree = "<group>"; };
+		61595CF5257B18EE000D6B22 /* DefaultFeeds.opml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = DefaultFeeds.opml; sourceTree = "<group>"; };
 		615E961825300E5C00891083 /* AppearenceSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearenceSection.swift; sourceTree = "<group>"; };
 		615E961C2530116600891083 /* AppearenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearenceView.swift; sourceTree = "<group>"; };
 		615E971E25323C1900891083 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		615E983F2533AFAE00891083 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContentView.swift; path = Feedit/Views/ContentView.swift; sourceTree = SOURCE_ROOT; };
 		6161FE5625393FA400CB0F00 /* UrlImageModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UrlImageModel.swift; sourceTree = "<group>"; };
-		6161FEE42539CF9200CB0F00 /* default.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = default.json; sourceTree = "<group>"; };
 		616CAF5F24F7131000690804 /* OPMLParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OPMLParser.swift; sourceTree = "<group>"; };
 		616CAF6224F7154600690804 /* DateSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateSpec.swift; sourceTree = "<group>"; };
 		616CAF6424F7158200690804 /* RFC3339DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RFC3339DateFormatter.swift; sourceTree = "<group>"; };
@@ -268,11 +278,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				61595D10257B1DBE000D6B22 /* RSParser in Frameworks */,
+				61595D06257B1C6E000D6B22 /* RSCore in Frameworks */,
 				615096E3256377E00001C0D9 /* SwiftUIX in Frameworks */,
 				618610DC256EF8420083A96D /* Reachability in Frameworks */,
 				616121E8255367590074F061 /* PureLayout in Frameworks */,
+				61595D0B257B1D4F000D6B22 /* RSDatabase in Frameworks */,
 				616121EC2553678B0074F061 /* AFNetworking in Frameworks */,
 				616121E42553670B0074F061 /* FeedKit in Frameworks */,
+				61595D15257B1EB6000D6B22 /* RSWeb in Frameworks */,
 				618610B3256ED5BE0083A96D /* KingfisherSwiftUI in Frameworks */,
 				616121F0255367B60074F061 /* SDWebImageSwiftUI in Frameworks */,
 				616121D7255366A00074F061 /* ModalView in Frameworks */,
@@ -318,7 +332,7 @@
 		6182212B25053FEE005636B2 /* rssTests */ = {
 			isa = PBXGroup;
 			children = (
-				6161FEE42539CF9200CB0F00 /* default.json */,
+				61595CF5257B18EE000D6B22 /* DefaultFeeds.opml */,
 				6182213C250542E9005636B2 /* Subscriptions-test.opml */,
 				6182212C25053FEE005636B2 /* rssTests.swift */,
 				6105657625599D8B007DCAA1 /* Subscriptions-OnMyiPhone.opml */,
@@ -423,7 +437,6 @@
 				61C818D724E1F73C00593939 /* RSS */,
 				615E983F2533AFAE00891083 /* ContentView.swift */,
 				617E4C53255DE8F20010CEE8 /* HomeView.swift */,
-				61340BD42579867400362175 /* CardView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -626,6 +639,10 @@
 				618610B2256ED5BE0083A96D /* KingfisherSwiftUI */,
 				618610D4256EF7A00083A96D /* SwiftSoup */,
 				618610DB256EF8420083A96D /* Reachability */,
+				61595D05257B1C6E000D6B22 /* RSCore */,
+				61595D0A257B1D4F000D6B22 /* RSDatabase */,
+				61595D0F257B1DBE000D6B22 /* RSParser */,
+				61595D14257B1EB6000D6B22 /* RSWeb */,
 			);
 			productName = Feedit;
 			productReference = 61C8189224E1F3FB00593939 /* Feedit.app */;
@@ -669,6 +686,10 @@
 				618610B1256ED5BE0083A96D /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				618610D3256EF7A00083A96D /* XCRemoteSwiftPackageReference "SwiftSoup" */,
 				618610DA256EF8420083A96D /* XCRemoteSwiftPackageReference "Reachability.swift" */,
+				61595D04257B1C6E000D6B22 /* XCRemoteSwiftPackageReference "RSCore" */,
+				61595D09257B1D4F000D6B22 /* XCRemoteSwiftPackageReference "RSDatabase" */,
+				61595D0E257B1DBE000D6B22 /* XCRemoteSwiftPackageReference "RSParser" */,
+				61595D13257B1EB6000D6B22 /* XCRemoteSwiftPackageReference "RSWeb" */,
 			);
 			productRefGroup = 61C8189324E1F3FB00593939 /* Products */;
 			projectDirPath = "";
@@ -686,6 +707,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6182213D250542E9005636B2 /* Subscriptions-test.opml in Resources */,
+				61595CF6257B18EE000D6B22 /* DefaultFeeds.opml in Resources */,
 				6105657725599D8B007DCAA1 /* Subscriptions-OnMyiPhone.opml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -695,7 +717,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				61C818A524E1F3FD00593939 /* LaunchScreen.storyboard in Resources */,
-				6161FEEF2539CF9300CB0F00 /* default.json in Resources */,
 				61C8189F24E1F3FD00593939 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -783,7 +804,6 @@
 				61967ED524E2053D00AA647C /* String+Ext.swift in Sources */,
 				61CDCF5724E8459B007654C5 /* LinerProgressBar.swift in Sources */,
 				618F9021250DC63B00D5A03E /* RSSRow.swift in Sources */,
-				61340BD52579867800362175 /* CardView.swift in Sources */,
 				6117365524E83C3E00A2DEA5 /* DataNStorageView.swift in Sources */,
 				61967ED224E2053D00AA647C /* Date+Ext.swift in Sources */,
 				61967EEB24E205DD00AA647C /* TextFieldView.swift in Sources */,
@@ -1151,6 +1171,38 @@
 				kind = branch;
 			};
 		};
+		61595D04257B1C6E000D6B22 /* XCRemoteSwiftPackageReference "RSCore" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Ranchero-Software/RSCore.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = "1.0.0-beta9";
+			};
+		};
+		61595D09257B1D4F000D6B22 /* XCRemoteSwiftPackageReference "RSDatabase" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Ranchero-Software/RSDatabase.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = "1.0.0-beta1";
+			};
+		};
+		61595D0E257B1DBE000D6B22 /* XCRemoteSwiftPackageReference "RSParser" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Ranchero-Software/RSParser.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = "2.0.0-beta3";
+			};
+		};
+		61595D13257B1EB6000D6B22 /* XCRemoteSwiftPackageReference "RSWeb" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Ranchero-Software/RSWeb.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = "1.0.0-beta8";
+			};
+		};
 		615E989A253403D600891083 /* XCRemoteSwiftPackageReference "OAuthSwift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Ranchero-Software/OAuthSwift.git";
@@ -1261,6 +1313,26 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 615096E1256377DE0001C0D9 /* XCRemoteSwiftPackageReference "SwiftUIX" */;
 			productName = SwiftUIX;
+		};
+		61595D05257B1C6E000D6B22 /* RSCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 61595D04257B1C6E000D6B22 /* XCRemoteSwiftPackageReference "RSCore" */;
+			productName = RSCore;
+		};
+		61595D0A257B1D4F000D6B22 /* RSDatabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 61595D09257B1D4F000D6B22 /* XCRemoteSwiftPackageReference "RSDatabase" */;
+			productName = RSDatabase;
+		};
+		61595D0F257B1DBE000D6B22 /* RSParser */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 61595D0E257B1DBE000D6B22 /* XCRemoteSwiftPackageReference "RSParser" */;
+			productName = RSParser;
+		};
+		61595D14257B1EB6000D6B22 /* RSWeb */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 61595D13257B1EB6000D6B22 /* XCRemoteSwiftPackageReference "RSWeb" */;
+			productName = RSWeb;
 		};
 		615E989E2534046A00891083 /* OAuthSwift */ = {
 			isa = XCSwiftPackageProductDependency;

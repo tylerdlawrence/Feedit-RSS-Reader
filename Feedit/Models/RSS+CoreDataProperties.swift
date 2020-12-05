@@ -30,6 +30,10 @@ extension RSS {
     @NSManaged public var image: String
     @NSManaged public var isFetched: Bool
     
+    @NSManaged public var name: String
+    @NSManaged public var order: Int32
+    @NSManaged public var selected: Bool
+    //@NSManaged public var attribute: Attribute
     
     public var rssURL: URL? {
         return URL(string: url)
