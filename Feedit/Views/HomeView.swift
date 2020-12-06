@@ -11,6 +11,8 @@ import KingfisherSwiftUI
 import CoreData
 
 struct HomeView: View {
+    
+    let defaultFeeds: [DefaultFeeds] = Bundle.main.decode("DefaultFeeds.json")
 
     enum FeaureItem {
         case add
@@ -109,6 +111,10 @@ struct HomeView: View {
     private var archiveListView: some View {
         ArchiveListView(viewModel: archiveListViewModel)
     }
+    
+    private var defaultFeedsListView: some View {
+        DefaultFeedsListView(viewModel: viewModel)
+    }
 
     private var trailingView: some View {
         HStack(alignment: .top, spacing: 24) {
@@ -124,9 +130,6 @@ struct HomeView: View {
                 .foregroundColor(Color("bg"))
                 .imageScale(.large)
             Text("All Items").font(.system(size: 18, weight: .semibold))
-                //.foregroundColor(Color("bg"))
-//                .font(.title3)
-//                .fontWeight(.semibold)
         }
     }
     
@@ -136,23 +139,14 @@ struct HomeView: View {
                 .foregroundColor(Color("bg"))
                 .imageScale(.large)
              Text("Feeds").font(.system(size: 18, weight: .semibold))
-                //.foregroundColor(Color("bg"))
-//                 .font(.title3)
-//                 .fontWeight(.semibold)
          }
      }
     
     private var folderSection: some View {
         VStack{
-            //Spacer()
             HStack{
                 Image("disclosure")
-//                 Image(systemName: "chevron.right").font(.system(size: 12, weight: .heavy))
-//                    .foregroundColor(Color("bg"))
-//                    .imageScale(.large)
-                 Text("Folders").font(.system(size: 18, weight: .semibold))
-                     //.font(.title3)
-                     //.fontWeight(.semibold)
+                Text("Folders").font(.system(size: 18, weight: .semibold))
             }
         }
     }
@@ -165,7 +159,6 @@ struct HomeView: View {
         List {
             HStack(alignment: .top){
                 VStack(alignment: .center){
-//                    Image("launch")
                     Image(systemName: "icloud")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
@@ -176,25 +169,14 @@ struct HomeView: View {
                         .fontWeight(.bold)
                     Text("Today at ").font(.system(.headline)) +
                         Text(Date(), style: .time)
+                        .fontWeight(.bold)
                 }.frame(width: 320.0).listRowBackground(Color("accent"))
             }.listRowBackground(Color("accent"))
-//            VStack(alignment: .leading) {
-//                HStack {
-//                    feedView
-//                    }.listRowBackground(Color("darkShadow"))
-//                }
-//                .listRowBackground(Color("accent"))
-//                .edgesIgnoringSafeArea(.all)
             Section(header: feedView) {
-//                        .font(.system(size: 16, weight: .bold))
-//                        .foregroundColor(Color("darkerAccent"))
-//                        .multilineTextAlignment(.center))
-//                HStack(alignment: .center) {
-                
                 NavigationLink(destination: archiveListView) {
                     BookmarkView()
                         }
-                NavigationLink(destination: EmptyView()) {
+                NavigationLink(destination: Tag.demoTags.randomElement()!) {
                     TagView()
                 }
                     }
@@ -208,10 +190,6 @@ struct HomeView: View {
 ////                    tag: .RSS,
 ////                    selection: $showingContent) {
             Section(header: feedSection) {
-//                        Text("   □     Feeds")
-//                        .font(.system(size: 16, weight: .bold))
-//                        .foregroundColor(Color("darkerAccent"))
-//                        .multilineTextAlignment(.center)) {
                 ForEach(viewModel.items, id: \.self) { rss in
                     NavigationLink(destination: self.destinationView(rss)) {
                         RSSRow(rss: rss)
@@ -229,6 +207,17 @@ struct HomeView: View {
                 .accentColor(Color("darkShadow")).foregroundColor(Color("darkerAccent"))
                 .edgesIgnoringSafeArea(.all)
             Section(header: folderSection) {
+                
+                NavigationLink(destination: defaultFeedsListView) {
+                    HStack{
+                        Image(systemName: "chevron.right").font(.system(size: 10, weight: .heavy))
+                            .foregroundColor(Color("bg"))
+                            .imageScale(.large)
+                        Text("Default Feeds")
+                        Spacer()
+                        Text("\(defaultFeeds.count)")
+                    }
+                }
                 NavigationLink(destination: Text("News Folder")) {
                     HStack{
                         Image(systemName: "chevron.right").font(.system(size: 10, weight: .heavy))
@@ -311,11 +300,7 @@ struct BookmarkView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 20, height: 20, alignment: .center)
-//                Image(systemName: "bookmark")
-//                    .font(.system(size: 16, weight: .bold))
-//                    .foregroundColor(Color("bg"))
-//                    .imageScale(.medium)
-                Text("Bookmarked")
+                Text("Starred")
                     .font(.system(size: 16, weight: .semibold))
                     .fontWeight(.semibold)
                     .foregroundColor(Color("bg"))
@@ -332,9 +317,6 @@ struct TagView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 20, height: 20, alignment: .center)
-//                Image(systemName: "tag").font(.system(size: 14, weight: .bold))
-//                    .foregroundColor(Color("bg"))
-//                    .imageScale(.medium)
                 Text("Tags")
                     .font(.system(size: 16, weight: .semibold))
                     .fontWeight(.semibold)
@@ -397,8 +379,10 @@ struct HomeView_Previews: PreviewProvider {
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
 
     static var previews: some View {
-        
+        ZStack {
+            Color(.systemBackground)
         HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel)
             .preferredColorScheme(.dark)
+        }
     }
 }

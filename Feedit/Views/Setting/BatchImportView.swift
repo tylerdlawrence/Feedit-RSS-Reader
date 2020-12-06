@@ -15,8 +15,11 @@ struct BatchImportView: View {
 
     let viewModel: BatchImportViewModel
 
-    let type = UTType(filenameExtension: "opml")
-
+    let type = UTType(filenameExtension: "json")
+    
+    @State private var fileName = ""
+    @State private var openFile = false
+    @State private var saveFile = false
     @State private var isSheetPresented = false
     @State private var isJSONHintPresented = false
     @State private var buttonStatus: RoundRectangeButton.Status = .normal("Select File")
@@ -30,8 +33,56 @@ struct BatchImportView: View {
     }
 
     var body: some View {
+        //OPEN AND SAVE
+//        VStack {
+//            Text(fileName)
+//                .fontWeight(.bold)
+//
+//            Button(action: {
+//                openFile.toggle()
+//            }, label: {
+//                Text("Open")
+//                    .foregroundColor(.white)
+//                    .padding(.vertical, 10)
+//                    .padding(.horizontal, 35)
+//                    .background(Color.blue)
+//                    .clipShape(Capsule())
+//            })
+//
+//            Button(action: {
+//                saveFile.toggle()
+//            }, label: {
+//                Text("Save")
+//                    .foregroundColor(.white)
+//                    .padding(.vertical, 10)
+//                    .padding(.horizontal, 35)
+//                    .background(Color.blue)
+//                    .clipShape(Capsule())
+//            })
+//        }
+//        .fileImporter(isPresented: self.$openFile, allowedContentTypes: [.json]) { (result) in
+//            do {
+//                let fileURL = try result.get()
+//                self.fileName = fileURL.lastPathComponent
+//            } catch {
+//                print(error.localizedDescription)
+//            }
+//        }
+//        .fileExporter(isPresented: self.$saveFile, document: DocumentPicker(viewModel: Bundle.main.path(forResource: "default", ofType: "json")!), contentType: .json) { (result) in
+//            do {
+//                let fileURL = try result.get()
+//                print(fileURL)
+//            } catch {
+//                print(error.localizedDescription)
+//            }
+//        }
+//
+        
+        
+        
+        
         VStack(spacing: 12) {
-            Text("Import/ Export")
+            Text("Import")
                 .font(.largeTitle)
                 .fontWeight(.black)
 
@@ -79,6 +130,24 @@ struct BatchImportView: View {
         .onDisappear {
             self.viewModel.discardCreateContext()
         }
+    }
+}
+
+struct DocumentManager: FileDocument {
+    var url: String
+    static var readableContentTypes: [UTType] { [.audio] }
+    
+    init(url: String)  {
+        self.url = url
+    }
+    
+    init(configuration: ReadConfiguration) throws {
+        url = ""
+    }
+    
+    func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
+        let file = try! FileWrapper(url: URL(fileURLWithPath: url), options: .immediate)
+        return file
     }
 }
 

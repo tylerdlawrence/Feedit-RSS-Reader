@@ -14,9 +14,12 @@ struct RSSRow: View {
 
     @ObservedObject var imageLoader: ImageLoader
     @ObservedObject var rss: RSS
+    
+    var contextMenuAction: ((RSS) -> Void)?
 
-    init(rss: RSS) {
+    init(rss: RSS, menu action: ((RSS) -> Void)? = nil) {
         self.rss = rss
+        contextMenuAction = action
         self.imageLoader = ImageLoader(path: rss.image)
     }
     
@@ -26,7 +29,7 @@ struct RSSRow: View {
             .aspectRatio(contentMode: .fit)
             .frame(width: 25, height: 25,alignment: .center)
             .cornerRadius(5)
-            //.animation(.easeInOut)
+            .animation(.easeInOut)
             .border(Color.clear, width: 1)
         
     }
@@ -54,7 +57,7 @@ struct RSSRow: View {
                         self.imageLoader.image != nil {
                         iconImageView(self.imageLoader.image!)
                             .frame(width: 25, height: 25,alignment: .center)
-                            //.layoutPriority(10)
+                            .layoutPriority(10)
                         pureTextView
                         
                     } else {
@@ -71,33 +74,16 @@ struct RSSRow: View {
                             
                         pureTextView
                     }
-                    
                 }
-
             }
-
         }
-
-        
-        
-        
-//        .padding(.top, 10)
-//        .padding(.bottom, 10)
-        //.frame(maxWidth: .infinity, alignment: .leading)
-//        .background(Color(red: 32/255, green: 32/255, blue: 32/255))
     }
 }
 
 struct RSSRow_Previews: PreviewProvider {
-    
     static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
-    
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-
     static var previews: some View {
         ContentView()
-        
-
-        }
     }
-
+}

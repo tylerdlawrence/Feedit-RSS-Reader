@@ -6,12 +6,15 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 import UIKit
 import Foundation
 
 class DocumentPickerViewModel: ObservableObject {
 
     @State var fileName = ""
+    @State private var openFile = false
+    @State private var saveFile = false
     @Published var jsonURL: URL?
 }
 

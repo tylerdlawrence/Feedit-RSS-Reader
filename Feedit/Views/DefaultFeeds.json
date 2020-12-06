@@ -1,0 +1,104 @@
+[
+    {
+        "id": "36氪",
+        "desc": "",
+        "htmlUrl": "http://36kr.com/",
+        "xmlUrl": "http://36kr.com/feed"
+    },
+    {
+        "id": "Accidentally in Code",
+       	"desc": "",
+        "htmlUrl": "",
+        "xmlUrl": "https://cate.blog/feed/"
+    },
+    {
+        "id": "Becky Hansmeyer",
+        "desc": "",
+        "htmlUrl": "",
+        "xmlUrl": "https://beckyhansmeyer.com/feed/"
+    },
+    {
+        "id": "Craig Hockenberry",
+        "desc": "",
+        "htmlUrl": "",
+        "xmlUrl": "https://furbo.org/feed/json"
+    },
+    {
+        "id": "Daring Fireball",
+        "desc": "",
+        "htmlUrl": "",
+        "xmlUrl": "https://daringfireball.net/feeds/json"
+    },
+    {
+        "id": "Erica Sadun",
+        "desc": "",
+        "htmlUrl": "",
+        "xmlUrl": "https://ericasadun.com/feed/"
+    },
+    {
+        "id": "inessential",
+        "desc": "",
+        "htmlUrl": "",
+        "xmlUrl": "https://inessential.com/feed.json"
+    },
+    {
+        "id": "Jason Kottke",
+        "desc": "",
+        "htmlUrl": "",
+        "xmlUrl": "http://feeds.kottke.org/json"
+    },
+    {
+        "id": "Julia Evans",
+        "desc": "",
+        "htmlUrl": "",
+        "xmlUrl": "https://jvns.ca/atom.xml"
+    },
+    {
+        "id": "Loop Insight",
+        "desc": "",
+        "htmlUrl": "",
+        "xmlUrl": "https://www.loopinsight.com/feed/"
+    },
+    {
+        "id": "Manton Reece",
+        "desc": "",
+        "htmlUrl": "",
+        "xmlUrl": "https://www.manton.org/feed/json"
+    },
+    {
+        "id": "Michael Tsai",
+        "desc": "",
+        "htmlUrl": "",
+        "xmlUrl": "https://mjtsai.com/blog/feed/"
+    },
+    {
+        "id": "NetNewsWire Blog",
+        "desc": "",
+        "htmlUrl": "",
+        "xmlUrl": "https://nnw.ranchero.com/feed.json"
+    },
+    {
+        "id": "One Foot Tsunami",
+        "desc": "",
+        "htmlUrl": "",
+        "xmlUrl": "https://onefoottsunami.com/feed/json/"
+    },
+    {
+        "id": "Rosemary Orchard",
+        "desc": "",
+        "htmlUrl": "",
+        "xmlUrl": "https://rosemaryorchard.com/blog/feed/"
+    },
+    {
+        "id": "Six Colors",
+        "desc": "",
+        "htmlUrl": "",
+        "xmlUrl": "https://sixcolors.com/feed.json"
+    },
+    {
+        "id": "The Shape of Everything",
+        "desc": "",
+        "htmlUrl": "",
+        "xmlUrl": "https://shapeof.com/feed.json"
+    }
+]

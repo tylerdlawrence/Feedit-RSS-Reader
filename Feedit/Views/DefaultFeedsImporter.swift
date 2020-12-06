@@ -11,8 +11,8 @@ import RSCore
 
 struct DefaultFeedsImporter {
     
-    static func importDefaultFeeds(account: Account) {
-        _ = Bundle.main.url(forResource: "DefaultFeeds", withExtension: "opml")!
+    static func importDefaultFeeds(rss: RSS) {
+        _ = Bundle.main.url(forResource: "DefaultFeeds", withExtension: "json")!
         //AccountManager.shared.defaultAccount.importOPML(defaultFeedsURL) { result in }
     }
 }
