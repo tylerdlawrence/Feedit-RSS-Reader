@@ -111,10 +111,6 @@ struct HomeView: View {
     private var archiveListView: some View {
         ArchiveListView(viewModel: archiveListViewModel)
     }
-    
-    private var defaultFeedsListView: some View {
-        DefaultFeedsListView(viewModel: viewModel)
-    }
 
     private var trailingView: some View {
         HStack(alignment: .top, spacing: 24) {
@@ -207,8 +203,9 @@ struct HomeView: View {
                 .accentColor(Color("darkShadow")).foregroundColor(Color("darkerAccent"))
                 .edgesIgnoringSafeArea(.all)
             Section(header: folderSection) {
-                
-                NavigationLink(destination: defaultFeedsListView) {
+                NavigationLink(destination: DefaultFeedsListView()) {
+                    //Text("\(defaultFeeds.description)"))
+                    //Text("\(defaultFeeds.count)")) {
                     HStack{
                         Image(systemName: "chevron.right").font(.system(size: 10, weight: .heavy))
                             .foregroundColor(Color("bg"))
@@ -216,8 +213,9 @@ struct HomeView: View {
                         Text("Default Feeds")
                         Spacer()
                         Text("\(defaultFeeds.count)")
+                            .font(.footnote)
                     }
-                }
+                };
                 NavigationLink(destination: Text("News Folder")) {
                     HStack{
                         Image(systemName: "chevron.right").font(.system(size: 10, weight: .heavy))
@@ -225,7 +223,7 @@ struct HomeView: View {
                             .imageScale(.large)
                         Text("News")
                     }
-                }
+                };
                 NavigationLink(destination: Text("Blogs Folder")) {
                     HStack{
                         Image(systemName: "chevron.right").font(.system(size: 10, weight: .heavy))
@@ -233,7 +231,7 @@ struct HomeView: View {
                             .imageScale(.large)
                         Text("Blogs")
                     }
-                }
+                };
                 NavigationLink(destination: Text("Entertainment Folder")) {
                     HStack{
                         Image(systemName: "chevron.right").font(.system(size: 10, weight: .heavy))
@@ -241,7 +239,7 @@ struct HomeView: View {
                             .imageScale(.large)
                         Text("Entertainment")
                     }
-                }
+                };
                 NavigationLink(destination: Text("Technology Folder")) {
                     HStack{
                         Image(systemName: "chevron.right").font(.system(size: 10, weight: .heavy))

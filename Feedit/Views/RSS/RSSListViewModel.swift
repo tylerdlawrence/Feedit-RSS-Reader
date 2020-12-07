@@ -9,6 +9,8 @@ import SwiftUI
 import UIKit
 
 class RSSListViewModel: NSObject, ObservableObject{
+    
+    let defaultFeeds: [DefaultFeeds] = Bundle.main.decode("DefaultFeeds.json")
 
     @Published var items: [RSS] = []
     let dataSource: RSSDataSource
@@ -60,6 +62,16 @@ class RSSListViewModel: NSObject, ObservableObject{
     
         enum CodingKeys: String, CodingKey {
             case title, url, imageURL
+        }
+    }
+    struct DefaultFeeds: Codable, Identifiable {
+        let id: String
+        let desc: String
+        let htmlUrl: String
+        let xmlUrl: String
+        
+        var displayName: String {
+            "\(id)"
         }
     }
 }
