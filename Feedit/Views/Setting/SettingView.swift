@@ -126,14 +126,14 @@ struct SettingView: View {
                             .frame(width: 35, height: 35)
                         Text("Feedit")
                         Text("version 1.01")
-                        Text("build 0.0020")
+                        Text("build 0.0023")
                 }
 //                HStack(alignment: .center) {
 //                    Text("  created by Tyler D Lawrence")
 //                }
             }
             .listStyle(GroupedListStyle())
-            .navigationBarTitle("Settings", displayMode: .automatic)
+            .navigationBarTitle("Settings", displayMode: .inline)
             .environment(\.horizontalSizeClass, .regular)
         }
         .onAppear {
@@ -146,9 +146,9 @@ struct SettingView: View {
     }
 }
 
-//struct SettingView_Preview: PreviewProvider {
-//    static var previews: some View {
-//        SettingView
-//    }
-//
-//}
+struct SettingView_Preview: PreviewProvider {
+    static var previews: some View {
+        SettingView()
+    }
+
+}

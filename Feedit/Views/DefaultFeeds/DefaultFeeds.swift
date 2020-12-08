@@ -40,6 +40,7 @@ struct DefaultFeedsListView: View {
 //    @ObservedObject var rss: RSS
     
     var contextMenuAction: ((RSS) -> Void)?
+    @State private var selectedItem: DefaultFeeds?
 
 //    init(rss: RSS, menu action: ((RSS) -> Void)? = nil) {
 //        self.rss = rss
@@ -66,31 +67,14 @@ struct DefaultFeedsListView: View {
         List(defaultFeeds) { defaultFeeds in
             Section(header: Text(defaultFeeds.displayName)) {
                 NavigationLink(destination: Text(defaultFeeds.xmlUrl)) {
-//                    HStack(alignment: .top) {
-//                        VStack(alignment: .leading) {
-//                            HStack {
-//                                if self.imageLoader.image != nil {
-//                                    iconImageView(self.imageLoader.image!)
-//                                    defaultFeeds.displayName
-//                                } else {
-//                                    defaultFeeds.displayName
-//                                }
-//                            }
-//                            Spacer()
-//                            Text(rss.createTimeStr)
-//                                .font(.footnote)
-//                                .foregroundColor(.gray)
-//                        }
-//
+//                    .onTapGesture {
+//                        self.selectedItem = defaultFeeds
 //                    }
-//                VStack(alignment: .leading) {
-//                    Text(defaultFeeds.displayName)
-                    //Text(defaultFeeds.xmlUrl)
                 }
             }
             .navigationTitle("Default Feeds")
         }
-
+        
     }
 }
 

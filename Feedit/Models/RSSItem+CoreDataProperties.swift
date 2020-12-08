@@ -36,6 +36,7 @@ extension RSSItem {
     @NSManaged public var author: String
     @NSManaged public var isArchive: Bool
     @NSManaged public var imageURL: String
+    
 
     
     public override func awakeFromInsert() {
@@ -56,6 +57,7 @@ extension RSSItem {
         item.createTime = createTime
         item.progress = 0
         item.isArchive = false
+//        item.configurations = configurations
         //item.imageURL = image
         return item
     }

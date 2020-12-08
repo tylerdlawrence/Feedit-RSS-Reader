@@ -62,15 +62,17 @@ struct RSSItemRow: View {
                         .frame(width: 13, height: 13, alignment: .center)
                         }
                         if itemWrapper.isArchive {
-                            Image(systemName: "tag")
-                                .imageScale(.small)
+                            Image("star")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 15, height: 15)
                         }
                     }
                 }.padding(.horizontal, 12)
             KFImage(URL(string: self.itemWrapper.imageURL)) //"3icon"
                             .placeholder({
                                 ZStack{
-                                    Image("3icon")
+                                    Image("launch")
                                         .resizable()
                                         .aspectRatio(contentMode: .fit)
                                         .font(.body)
@@ -94,9 +96,9 @@ struct RSSItemRow: View {
                 .contextMenu {
                     ActionContextMenu(
                         label: itemWrapper.isArchive ? "Untag" : "Tag",
-                        systemName: "bookmark\(itemWrapper.isArchive ? "" : ".slash")",
+                        systemName: "star\(itemWrapper.isArchive ? "" : "star")",
                         onAction: { //self.
-                            contextMenuAction?(self.itemWrapper)
+                            self.contextMenuAction?(self.itemWrapper)
                         })
                     }
                 }

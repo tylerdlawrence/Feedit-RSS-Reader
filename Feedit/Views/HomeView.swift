@@ -131,9 +131,9 @@ struct HomeView: View {
     
     private var feedSection: some View {
         HStack{
-             Image(systemName: "text.justifyleft").font(.system(size: 16, weight: .bold))
-                .foregroundColor(Color("bg"))
-                .imageScale(.large)
+//             Image(systemName: "text.justifyleft").font(.system(size: 16, weight: .bold))
+//                .foregroundColor(Color("bg"))
+//                .imageScale(.large)
              Text("Feeds").font(.system(size: 18, weight: .semibold))
          }
      }
@@ -141,7 +141,7 @@ struct HomeView: View {
     private var folderSection: some View {
         VStack{
             HStack{
-                Image("disclosure")
+                //Image("disclosure")
                 Text("Folders").font(.system(size: 18, weight: .semibold))
             }
         }
@@ -377,11 +377,11 @@ struct HomeView_Previews: PreviewProvider {
     static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
 
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-
+    
     static var previews: some View {
         ZStack {
             Color(.systemBackground)
-        HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel)
+            HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel)
             .preferredColorScheme(.dark)
         }
     }

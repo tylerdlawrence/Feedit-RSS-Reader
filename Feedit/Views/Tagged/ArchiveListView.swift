@@ -14,7 +14,7 @@ struct ArchiveListView: View {
     @ObservedObject var archiveListViewModel: ArchiveListViewModel
     
     @State private var selectedItem: RSSItem?
-    @State var footer = "Load more articles"
+    @State var footer = "Refresh more articles"
     
     init(viewModel: ArchiveListViewModel) {
         self.archiveListViewModel = viewModel
@@ -39,18 +39,20 @@ struct ArchiveListView: View {
                 }
                 VStack(alignment: .center) {
                     Button(action: self.archiveListViewModel.loadMore) {
-                        HStack{
-//                            Text("↺")
+                        HStack(alignment: .center){
+                            Spacer()
                             Image(systemName: "arrow.counterclockwise")
+                                .imageScale(.small)
                             Text(self.footer)
-                                .font(.title3)
+                                .font(.subheadline)
                                 .fontWeight(.bold)
+
                         }
                     }
                 }
             }
             .listStyle(PlainListStyle())
-            .navigationBarTitle("Starred", displayMode: .automatic)
+            .navigationBarTitle("Starred", displayMode: .automatic) //☆
             .navigationBarItems(trailing: EditButton())
 
             .sheet(item: $selectedItem, content: { item in

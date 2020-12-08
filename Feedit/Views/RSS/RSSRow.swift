@@ -64,13 +64,13 @@ struct RSSRow: View {
                         
                     } else {
                         
-                        Image("3icon")
+                        Image("Thumbnail") //3icon
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .font(.body)
                             .frame(width: 25, height: 25,alignment: .center)
                             .cornerRadius(5)
-                            .opacity(0.6)
+                            .opacity(0.8)
                             .border(Color.clear, width: 1)
                             .layoutPriority(10)
                             .animation(.easeInOut)
