@@ -10,14 +10,19 @@ import SwiftUI
 struct ActionContextMenu: View {
     
     private var label: String
-    //private var mark: String
     private var systemName: String
     
     var onAction: (() -> Void)?
     
+    var onRead: (() -> UnreadCountProvider)?
+    
+    var onTag: (() -> Tag)?
+    
     init(label: String, systemName: String, onAction: (() -> Void)? = nil) {
+        //onRead: (() -> UnreadCountProvider)?, onTag: (() -> Tag)?
         self.label = "Tag Article"
-//        self.mark = "Mark as Read"
+        self.label = "Toggle Starred"
+        self.label = "Mark as Read"
         self.systemName = systemName
         self.onAction = onAction
     }
@@ -25,30 +30,40 @@ struct ActionContextMenu: View {
     var body: some View {
         VStack {
             Button(action: {
-                self.onAction?()
-            }) {
-                HStack() {
-                    Text(self.label)
-                    Image(systemName: "tag")
-                        .imageScale(.small)
-//                        .foregroundColor(Color("darkerAccent"))
-                        .foregroundColor(.blue)
-//                    Text(self.mark)
-//                    Image("mark")
-//                        .resizable()
-//                        .aspectRatio(contentMode: .fit)
-//                        .frame(width: 20, height: 20)
+                self.onTag?()
+            }, label: {
+                HStack{
+                    Text("Tag Article")
+                    Image("smartFeedUnread")
                 }
-            }
+            })
+            Button(action: {
+                self.onAction?()
+            }, label: {
+                HStack{
+                    Text("Toggle Starred")
+                    Image("star") //systemName: "star.fill")
+                        .imageScale(.large)
+                        .font(.system(size: 16))
+                }
+            })
+            
+            Button(action: {
+                self.onRead?()
+            }, label: {
+                HStack{
+                    Text("Toggle Read")
+                    Image(systemName: "circle.fill").font(.system(size: 16, weight: .heavy))
+                }
+            })
         }
+
     }
 }
 
-struct ActionContextMenu_Previews: PreviewProvider {
-    static var previews: some View {
-        ActionContextMenu(label: "Tag Article", systemName: "tag")
-                          //, mark: "mark")
-            //.preferredColorScheme(.dark)
-            //.previewDevice("iPhone 11 Pro Max")
-    }
-}
+//struct ActionContextMenu_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ActionContextMenu(label: "Toggle Starred", systemName: "star.fill")
+////        ActionContextMenu(read: "Mark As Read", systemName: "circle.fill")
+//    }
+//}
