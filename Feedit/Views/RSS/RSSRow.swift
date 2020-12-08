@@ -20,7 +20,9 @@ struct RSSRow: View {
     init(rss: RSS, menu action: ((RSS) -> Void)? = nil) {
         self.rss = rss
         contextMenuAction = action
-        self.imageLoader = ImageLoader(path: rss.image)
+        self.imageLoader = ImageLoader(path: rss.imageURL)
+//works^
+//        self.imageLoader = ImageLoader(path: rss.image) // doesn't work
     }
     
     private func iconImageView(_ image: UIImage) -> some View {
@@ -68,6 +70,7 @@ struct RSSRow: View {
                             .font(.body)
                             .frame(width: 25, height: 25,alignment: .center)
                             .cornerRadius(5)
+                            .opacity(0.6)
                             .border(Color.clear, width: 1)
                             .layoutPriority(10)
                             .animation(.easeInOut)

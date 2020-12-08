@@ -12,6 +12,9 @@ import Combine
 
 class RSSFeedViewModel: NSObject, ObservableObject {
     
+    let defaultFeeds: [DefaultFeeds] = Bundle.main.decode("DefaultFeeds.json")
+    @Published var sources: [DefaultFeeds] = []
+    
     @Published var items: [RSSItem] = []
     
     let dataSource: RSSItemDataSource
@@ -21,6 +24,7 @@ class RSSFeedViewModel: NSObject, ObservableObject {
     init(rss: RSS, dataSource: RSSItemDataSource) {
         self.dataSource = dataSource
         self.rss = rss
+//        self.sources = defaultFeeds
         super.init()
     }
     

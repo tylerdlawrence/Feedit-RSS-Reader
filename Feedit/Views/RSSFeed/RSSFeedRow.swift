@@ -95,8 +95,8 @@ struct RSSItemRow: View {
                     ActionContextMenu(
                         label: itemWrapper.isArchive ? "Untag" : "Tag",
                         systemName: "bookmark\(itemWrapper.isArchive ? "" : ".slash")",
-                        onAction: {
-                            self.contextMenuAction?(self.itemWrapper)
+                        onAction: { //self.
+                            contextMenuAction?(self.itemWrapper)
                         })
                     }
                 }

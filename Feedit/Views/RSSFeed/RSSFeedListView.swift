@@ -17,7 +17,6 @@ struct RSSFeedListView: View {
     
     @EnvironmentObject var rssDataSource: RSSDataSource
     @ObservedObject var rssFeedViewModel: RSSFeedViewModel
-    
     @Environment(\.colorScheme) var colorScheme
 
     @State private var selectedItem: RSSItem?
@@ -65,14 +64,18 @@ struct RSSFeedListView: View {
                 Text(rssSource.title)
                     .font(.title2)
                     .fontWeight(.heavy)
-            HStack{
-                Text("Added")
-                    .font(.footnote)
-                    .fontWeight(.heavy)
-                Text(rssSource.createTimeStr)
-                    .font(.footnote)
-                    .fontWeight(.heavy)
-            }
+            Text("Today at ").font(.system(.headline)) +
+                Text(Date(), style: .time)
+                .fontWeight(.bold)
+            
+//            HStack{
+//                Text("Added")
+//                    .font(.footnote)
+//                    .fontWeight(.heavy)
+//                Text(rssSource.createTimeStr)
+//                    .font(.footnote)
+//                    .fontWeight(.heavy)
+//            }
 //            Text(rssSource.desc)
 //                    .font(.footnote)
         }

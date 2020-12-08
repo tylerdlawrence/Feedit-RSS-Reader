@@ -50,7 +50,7 @@ struct ArchiveListView: View {
                 }
             }
             .listStyle(PlainListStyle())
-            .navigationBarTitle("Bookmarked", displayMode: .automatic)
+            .navigationBarTitle("Starred", displayMode: .automatic)
             .navigationBarItems(trailing: EditButton())
 
             .sheet(item: $selectedItem, content: { item in

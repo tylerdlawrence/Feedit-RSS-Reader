@@ -35,103 +35,72 @@ struct DefaultFeeds: Codable, Identifiable {
 
 struct DefaultFeedsListView: View {
     
-    let defaultFeeds: [DefaultFeeds] = Bundle.main.decode("DefaultFeeds.json")
-   
+
+//    @ObservedObject var imageLoader: ImageLoader
+//    @ObservedObject var rss: RSS
+    
+    var contextMenuAction: ((RSS) -> Void)?
+
+//    init(rss: RSS, menu action: ((RSS) -> Void)? = nil) {
+//        self.rss = rss
+//        contextMenuAction = action
+//        self.imageLoader = ImageLoader(path: rss.imageURL)
+//        //WORKING^
+//    }
     @State var sources: [DefaultFeeds] = []
 
+    let defaultFeeds: [DefaultFeeds] = Bundle.main.decode("DefaultFeeds.json")
+    
+//    private func iconImageView(_ image: UIImage) -> some View {
+//        Image(uiImage: image)
+//        .resizable()
+//            .aspectRatio(contentMode: .fit)
+//            .frame(width: 25, height: 25,alignment: .center)
+//            .cornerRadius(5)
+//            .animation(.easeInOut)
+//            .border(Color.clear, width: 1)
+//        
+//    }
+    
     var body: some View {
         List(defaultFeeds) { defaultFeeds in
-            NavigationLink(destination: AnyView(_fromValue: DefaultFeedsListView.self)) {
-                Section(header: Text(defaultFeeds.displayName)) {
+            Section(header: Text(defaultFeeds.displayName)) {
+                NavigationLink(destination: Text(defaultFeeds.xmlUrl)) {
+//                    HStack(alignment: .top) {
+//                        VStack(alignment: .leading) {
+//                            HStack {
+//                                if self.imageLoader.image != nil {
+//                                    iconImageView(self.imageLoader.image!)
+//                                    defaultFeeds.displayName
+//                                } else {
+//                                    defaultFeeds.displayName
+//                                }
+//                            }
+//                            Spacer()
+//                            Text(rss.createTimeStr)
+//                                .font(.footnote)
+//                                .foregroundColor(.gray)
+//                        }
+//
+//                    }
+//                VStack(alignment: .leading) {
+//                    Text(defaultFeeds.displayName)
+                    //Text(defaultFeeds.xmlUrl)
                 }
             }
             .navigationTitle("Default Feeds")
         }
+
     }
 }
 
-struct DefaultFeedsListView_Previews: PreviewProvider {
-    
-    static let defaultFeeds: [DefaultFeeds] = Bundle.main.decode("DefaultFeeds.json")
-    
-    @State var sources: [DefaultFeeds] = []
-
-    static var previews: some View {
-        DefaultFeedsListView(sources: defaultFeeds)
-    }
-}
-
-//import Foundation
-//import SwiftUI
-//import Combine
-//import FeedKit
-//import UIKit
-//import KingfisherSwiftUI
-//import Foundation
-//import RSCore
+//struct DefaultFeedsListView_Previews: PreviewProvider {
 //
-//struct DefaultFeeds: Codable, Identifiable {
-//    let id: String
-//    let desc: String
-//    let htmlUrl: String
-//    let xmlUrl: String
-//
-//    var displayName: String {
-//        "\(id)"
-//    }
-//
-//    var description: String {
-//        "\(desc)"
-//    }
-//
-//    var xml: String {
-//        "\(xmlUrl)"
-//    }
-//}
-//
-//struct DefaultFeedsListView: View {
-//
-//    @ObservedObject var viewModel: RSSListViewModel
-//    @ObservedObject var rss: RSS
-//
-//    let defaultFeeds: [DefaultFeeds] = Bundle.main.decode("DefaultFeeds.json")
+//    static let defaultFeeds: [DefaultFeeds] = Bundle.main.decode("DefaultFeeds.json")
 //
 //    @State var sources: [DefaultFeeds] = []
 //
-//    var body: some View {
-//        List(defaultFeeds) { defaultFeeds in
-//            NavigationLink(destination: AnyView(_fromValue: DefaultFeedsListView.self)) {
-//                Section(header: Text(defaultFeeds.displayName)) {
-//                    RSSRow(rss: rss)
-//                }
-//            }
-//            .navigationTitle("Default Feeds")
-//        }
+//    static var previews: some View {
+//        DefaultFeedsListView(sources: defaultFeeds)
 //    }
 //}
-//extension DefaultFeedsListView {
-//
-//    func onDoneAction() {
-//        self.viewModel.fecthResults()
-//    }
-//
-//    private func destinationView(_ rss: RSS) -> some View {
-//        RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
-//            .environmentObject(DataSourceService.current.rss)
-//    }
-//
-//}
-//
-////struct DefaultFeedsListView_Previews: PreviewProvider {
-////
-////    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-////
-////    static let defaultFeeds: [DefaultFeeds] = Bundle.main.decode("DefaultFeeds.json")
-////
-////    @State var sources: [DefaultFeeds] = []
-////
-////    static var previews: some View {
-////        DefaultFeedsListView(viewModel: RSSListViewModel, rss: RSS)
-////            //viewModel: self.viewModel, rss: RSS, sources: defaultFeeds)
-////    }
-////}
