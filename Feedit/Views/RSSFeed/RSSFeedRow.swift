@@ -77,7 +77,7 @@ struct RSSItemRow: View {
                                         .aspectRatio(contentMode: .fit)
                                         .font(.body)
                                         .frame(width: 90, height: 90,alignment: .center)
-                                        .opacity(0.2)
+                                        .opacity(0.5)
                                         .cornerRadius(5)
                                         .border(Color.clear, width: 2)
 //                                      ProgressView()

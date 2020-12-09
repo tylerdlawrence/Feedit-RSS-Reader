@@ -30,11 +30,12 @@ struct ActionContextMenu: View {
     var body: some View {
         VStack {
             Button(action: {
-                self.onTag?()
+                self.onRead?()
             }, label: {
                 HStack{
-                    Text("Tag Article")
-                    Image("smartFeedUnread")
+                    Text("Toggle Read")
+                    Image(systemName: "circle")
+                        .imageScale(.small)
                 }
             })
             Button(action: {
@@ -42,18 +43,18 @@ struct ActionContextMenu: View {
             }, label: {
                 HStack{
                     Text("Toggle Starred")
-                    Image("star") //systemName: "star.fill")
-                        .imageScale(.large)
-                        .font(.system(size: 16))
+                    Image(systemName: "star.fill") //"star") //
+                        .imageScale(.small)
                 }
             })
-            
             Button(action: {
-                self.onRead?()
+                self.onTag?()
             }, label: {
                 HStack{
-                    Text("Toggle Read")
-                    Image(systemName: "circle.fill").font(.system(size: 16, weight: .heavy))
+                    Text("Tag Article")
+                    Image(systemName: "circlebadge.2")
+                        .imageScale(.small)
+                    //Image("smartFeedUnread")
                 }
             })
         }
