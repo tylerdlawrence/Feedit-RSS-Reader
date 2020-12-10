@@ -37,10 +37,10 @@ struct ArchiveListView: View {
                         self.archiveListViewModel.unarchive(item)
                     }
                 }
-                VStack(alignment: .center) {
+                //VStack(alignment: .center) {
                     Button(action: self.archiveListViewModel.loadMore) {
                         HStack(alignment: .center){
-                            Spacer()
+                            //Spacer()
                             Image(systemName: "arrow.counterclockwise")
                                 .imageScale(.small)
                             Text(self.footer)
@@ -49,7 +49,8 @@ struct ArchiveListView: View {
 
                         }
                     }
-                }
+                    .padding(.leading)
+                //}
             }
             .listStyle(PlainListStyle())
             .navigationBarTitle("Starred", displayMode: .automatic) //☆

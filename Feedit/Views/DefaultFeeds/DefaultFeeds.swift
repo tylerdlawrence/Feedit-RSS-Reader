@@ -64,17 +64,18 @@ struct DefaultFeedsListView: View {
 //    }
     
     var body: some View {
-        List(defaultFeeds) { defaultFeeds in
-            Section(header: Text(defaultFeeds.displayName)) {
-                NavigationLink(destination: Text(defaultFeeds.xmlUrl)) {
-//                    .onTapGesture {
-//                        self.selectedItem = defaultFeeds
-//                    }
-                }
+        Form {
+            ForEach(0 ..< 17) { defaultFeeds in
+                Text("Row \(0)")
+//        List(defaultFeeds) { defaultFeeds in
+//            Section(header: Text("\(defaultFeeds.displayName)")) {                NavigationLink(destination: Text(defaultFeeds.xmlUrl)) {
+                    
+//                }
+//            }
+//            .navigationTitle("Default Feeds")
+            
             }
-            .navigationTitle("Default Feeds")
         }
-        
     }
 }
 

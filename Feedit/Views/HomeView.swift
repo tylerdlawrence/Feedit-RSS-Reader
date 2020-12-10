@@ -12,6 +12,8 @@ import CoreData
 
 struct HomeView: View {
     
+//    @Environment(\.injected) private var injected: DIContainer
+    
     let defaultFeeds: [DefaultFeeds] = Bundle.main.decode("DefaultFeeds.json")
 
     enum FeaureItem {
@@ -66,6 +68,20 @@ struct HomeView: View {
 //            )
 //        }
 //    }
+    private var leadingView: some View {
+        Button(action: {
+            print("On My iPhone")
+        }) {
+            Image("launch")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 30, height: 30, alignment: .center)
+                .border(Color.clear, width: 2)
+                .cornerRadius(3.0)
+
+        }
+    }
+    
     private var settingButton: some View {
         Button(action: {
             self.selectedFeatureItem = .setting
@@ -122,7 +138,14 @@ struct HomeView: View {
     
     private var feedView: some View {
         HStack{
-            Image(systemName: "archivebox").font(.system(size: 16, weight: .bold))
+            Image("3icon")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 25, height: 25, alignment: .center)
+                .border(Color.clear, width: 3)
+                .cornerRadius(5.0)
+                .shadow(radius: 3)
+//            (systemName: "archivebox").font(.system(size: 16, weight: .bold))
                 .foregroundColor(Color("bg"))
                 .imageScale(.large)
             Text("All Items").font(.system(size: 18, weight: .semibold))
@@ -144,6 +167,18 @@ struct HomeView: View {
                 //Image("disclosure")
                 Text("Folders").font(.system(size: 18, weight: .semibold))
             }
+        }
+    }
+    
+    private var defaultFeedSection: some View {
+        HStack{
+            Image(systemName: "chevron.right").font(.system(size: 10, weight: .heavy))
+                .foregroundColor(Color("bg"))
+                .imageScale(.large)
+            Text("Default Feeds")
+            Spacer()
+            Text("\(defaultFeeds.count)")
+                .font(.footnote)
         }
     }
     
@@ -204,52 +239,50 @@ struct HomeView: View {
                 .listRowBackground(Color("accent"))
                 .accentColor(Color("darkShadow")).foregroundColor(Color("darkerAccent"))
                 .edgesIgnoringSafeArea(.all)
+            
             Section(header: folderSection) {
-                NavigationLink(destination: DefaultFeedsListView()) {
-                    //Text("\(defaultFeeds.description)"))
-                    //Text("\(defaultFeeds.count)")) {
-                    HStack{
-                        Image(systemName: "chevron.right").font(.system(size: 10, weight: .heavy))
-                            .foregroundColor(Color("bg"))
-                            .imageScale(.large)
-                        Text("Default Feeds")
-                        Spacer()
-                        Text("\(defaultFeeds.count)")
-                            .font(.footnote)
-                    }
-                };
-                NavigationLink(destination: Text("News Folder")) {
-                    HStack{
-                        Image(systemName: "chevron.right").font(.system(size: 10, weight: .heavy))
-                            .foregroundColor(Color("bg"))
-                            .imageScale(.large)
-                        Text("News")
-                    }
-                };
-                NavigationLink(destination: Text("Blogs Folder")) {
-                    HStack{
-                        Image(systemName: "chevron.right").font(.system(size: 10, weight: .heavy))
-                            .foregroundColor(Color("bg"))
-                            .imageScale(.large)
-                        Text("Blogs")
-                    }
-                };
-                NavigationLink(destination: Text("Entertainment Folder")) {
-                    HStack{
-                        Image(systemName: "chevron.right").font(.system(size: 10, weight: .heavy))
-                            .foregroundColor(Color("bg"))
-                            .imageScale(.large)
-                        Text("Entertainment")
-                    }
-                };
-                NavigationLink(destination: Text("Technology Folder")) {
-                    HStack{
-                        Image(systemName: "chevron.right").font(.system(size: 10, weight: .heavy))
-                            .foregroundColor(Color("bg"))
-                            .imageScale(.large)
-                        Text("Technology")
+                Section(header: defaultFeedSection) {
+                    ForEach(viewModel.items, id: \.self) { rss in
+                        NavigationLink(destination: self.destinationView(rss)) {
+                            RSSRow(rss: rss)//TODO: make DefaultFeedRow
+                        }
+                        .padding(.leading)
+                        .tag("diplayName")
                     }
                 }
+                 //;
+//                NavigationLink(destination: Text("News Folder")) {
+//                    HStack{
+//                        Image(systemName: "chevron.right").font(.system(size: 10, weight: .heavy))
+//                            .foregroundColor(Color("bg"))
+//                            .imageScale(.large)
+//                        Text("News")
+//                    }
+//                };
+//                NavigationLink(destination: Text("Blogs Folder")) {
+//                    HStack{
+//                        Image(systemName: "chevron.right").font(.system(size: 10, weight: .heavy))
+//                            .foregroundColor(Color("bg"))
+//                            .imageScale(.large)
+//                        Text("Blogs")
+//                    }
+//                };
+//                NavigationLink(destination: Text("Entertainment Folder")) {
+//                    HStack{
+//                        Image(systemName: "chevron.right").font(.system(size: 10, weight: .heavy))
+//                            .foregroundColor(Color("bg"))
+//                            .imageScale(.large)
+//                        Text("Entertainment")
+//                    }
+//                };
+//                NavigationLink(destination: Text("Technology Folder")) {
+//                    HStack{
+//                        Image(systemName: "chevron.right").font(.system(size: 10, weight: .heavy))
+//                            .foregroundColor(Color("bg"))
+//                            .imageScale(.large)
+//                        Text("Technology")
+//                    }
+//                }
             }
             .textCase(nil)
             .accentColor(Color("darkShadow"))
@@ -272,7 +305,7 @@ struct HomeView: View {
     //.listStyle(SidebarListStyle())
 //    .listStyle(GroupedListStyle())
     .navigationTitle("")
-    .navigationBarItems(trailing: trailingView)
+        .navigationBarItems(leading: leadingView, trailing: trailingView)
         .toolbar {
 //            ToolbarItem(placement: .bottomBar) {
 //                cardButton
