@@ -30,7 +30,7 @@ struct ArchiveListView: View {
     var body: some View {
             List {
                 ForEach(self.archiveListViewModel.items, id: \.self) { item in
-                    RSSItemRow(wrapper: item)
+                    RSSItemRow(rssViewModel: rssFeedViewModel, wrapper: item)
                         .onTapGesture {
                             self.selectedItem = item
 

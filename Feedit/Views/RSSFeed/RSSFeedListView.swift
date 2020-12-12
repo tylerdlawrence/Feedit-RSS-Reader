@@ -91,7 +91,7 @@ struct RSSFeedListView: View {
         VStack{
             List {
                 ForEach(self.rssFeedViewModel.items, id: \.self) { item in
-                    RSSItemRow(wrapper: item,
+                    RSSItemRow(rssViewModel: rssFeedViewModel, wrapper: item,
                                menu: self.contextmenuAction(_:))
                         .contentShape(Rectangle())
                         .onTapGesture {

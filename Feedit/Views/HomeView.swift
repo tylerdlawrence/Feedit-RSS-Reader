@@ -443,20 +443,21 @@ extension HomeView {
     }
 }
 
-//struct HomeView_Previews: PreviewProvider {
-//
-//
-//    static let current = DataSourceService()
-//    static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
-//    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-//    static var previews: some View {
-//        ZStack {
-//            Color(.systemBackground)
-//            HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel)
-//            .preferredColorScheme(.dark)
-//        }
-//    }
-//}
+struct HomeView_Previews: PreviewProvider {
+
+
+    static let current = DataSourceService()
+    static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
+    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+    static let rssFeedViewModel = RSSFeedViewModel(rss: RSS.simple(), dataSource: DataSourceService.current.rssItem)
+    static var previews: some View {
+        ZStack {
+            Color(.systemBackground)
+            HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel, rssFeedViewModel: self.rssFeedViewModel)
+            .preferredColorScheme(.dark)
+        }
+    }
+}
 
 struct UnreadCountView: View {
     var count: Int

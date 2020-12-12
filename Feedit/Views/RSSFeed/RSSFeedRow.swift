@@ -12,12 +12,16 @@ import KingfisherSwiftUI
 import FeedKit
 
 struct RSSItemRow: View {
-    
+    var rssSource: RSS {
+        return self.rssFeedViewModel.rss
+    }
+    @ObservedObject var rssFeedViewModel: RSSFeedViewModel
     @ObservedObject var itemWrapper: RSSItem
     var contextMenuAction: ((RSSItem) -> Void)?
     var imageLoader: ImageLoader!
 
-    init(wrapper: RSSItem, menu action: ((RSSItem) -> Void)? = nil) {
+    init(rssViewModel: RSSFeedViewModel, wrapper: RSSItem, menu action: ((RSSItem) -> Void)? = nil) {
+        self.rssFeedViewModel = rssViewModel
         itemWrapper = wrapper
         contextMenuAction = action
         self.imageLoader = ImageLoader(path: wrapper.imageURL)
@@ -69,7 +73,8 @@ struct RSSItemRow: View {
                         }
                     }
                 }.padding(.horizontal, 12)
-            KFImage(URL(string: self.itemWrapper.imageURL)) //"3icon"
+//            KFImage(URL(string: self.itemWrapper.imageURL)) //"3icon"
+            KFImage(URL(string: self.rssSource.imageURL))
                             .placeholder({
                                 ZStack{
                                     Image("launch")
@@ -103,10 +108,10 @@ struct RSSItemRow: View {
             }
         }
     }
-struct RSSFeedRow_Previews: PreviewProvider {
-    static var previews: some View {
-        let simple = DataSourceService.current.rssItem.simple()
-//        return RSSItemRow(wrapper: simple!)
-        RSSItemRow(wrapper: simple!)
-    }
-}
+//struct RSSFeedRow_Previews: PreviewProvider {
+//    static var previews: some View {
+//        let simple = DataSourceService.current.rssItem.simple()
+////        return RSSItemRow(wrapper: simple!)
+//        RSSItemRow(rssViewModel: rssFeedViewModel, wrapper: simple!)
+//    }
+//}
