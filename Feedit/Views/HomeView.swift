@@ -9,10 +9,11 @@ import SwiftUI
 import FeedKit
 import KingfisherSwiftUI
 import CoreData
+import Combine
 
 struct HomeView: View {
     
-//    @Environment(\.injected) private var injected: DIContainer
+    @EnvironmentObject var rssDataSource: RSSDataSource
     
     let defaultFeeds: [DefaultFeeds] = Bundle.main.decode("DefaultFeeds.json")
 
@@ -23,15 +24,10 @@ struct HomeView: View {
     
     @State var sources: [RSS] = []
     
-//    @Binding var content: Int
-//    let rssDataSource: RSSDataSource
-//    let rssItemDataSource: RSSItemDataSource
-//    var rssCount: Int = 0
-//    var rssItemCount: Int = 0
-    
     @ObservedObject var viewModel: RSSListViewModel
     @ObservedObject var archiveListViewModel: ArchiveListViewModel
-        
+    @State var rssFeedViewModel: RSSFeedViewModel
+
     @State private var selectedFeatureItem = FeaureItem.add
     @State private var isAddFormPresented = false
     @State private var isSettingPresented = false
@@ -134,7 +130,7 @@ struct HomeView: View {
         }
 
     private var archiveListView: some View {
-        ArchiveListView(viewModel: archiveListViewModel)
+        ArchiveListView(viewModel: archiveListViewModel, rssFeedViewModel: self.rssFeedViewModel)
     }
 
     private var trailingView: some View {
@@ -221,7 +217,7 @@ struct HomeView: View {
     
     private let addRSSPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("addNewRSSPublisher"))
     private let rssRefreshPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("rssListNeedRefresh"))
-        
+    
   var body: some View {
     NavigationView {
         List {
@@ -263,16 +259,14 @@ struct HomeView: View {
             .foregroundColor(Color("darkerAccent"))
             .listRowBackground(Color("accent"))
             .edgesIgnoringSafeArea(.all)
-////                    DisclosureGroup(
-////                    "❯  Feeds", //☰𝝣
-////                    tag: .RSS,
-////                    selection: $showingContent) {
+//                    DisclosureGroup(
+//                    "❯  Feeds",
+//                    tag: .RSS,
+//                    selection: $showingContent) {
             Section(header: feedsAll) {
                 ForEach(viewModel.items, id: \.self) { rss in
                     NavigationLink(destination: self.destinationView(rss)) {
                         RSSRow(rss: rss)
-//                        Spacer()
-//                        Text(verbatim: String(count))
                     }
                     .padding(.leading)
                     .tag("RSS")
@@ -288,7 +282,6 @@ struct HomeView: View {
                 .accentColor(Color("darkShadow"))
                 .foregroundColor(Color("darkerAccent"))
                 .edgesIgnoringSafeArea(.all)
-            
 //            Section(header: folderSection) {
 //                Section(header: defaultFeedSection) {
 //                    ForEach(viewModel.items, id: \.self) { rss in
@@ -353,7 +346,7 @@ struct HomeView: View {
             })
     //.listStyle(SidebarListStyle())
 //    .listStyle(GroupedListStyle())
-    .navigationTitle("")
+        .navigationTitle("")
         .navigationBarItems(leading: leadingView, trailing: trailingView)
         .toolbar {
 //            ToolbarItem(placement: .bottomBar) {
@@ -367,8 +360,8 @@ struct HomeView: View {
                     }
                 }
             }
-        .onAppear {
-            self.viewModel.fecthResults()
+            .onAppear {
+                self.viewModel.fecthResults()
         }
     
     }
@@ -386,13 +379,11 @@ struct BookmarkView: View {
                     .font(.system(size: 16, weight: .semibold))
                     .fontWeight(.semibold)
                     .foregroundColor(Color("bg"))
-
-
-
             }
         }
     }
 }
+
 struct TagView: View {
     var body: some View {
         VStack(alignment: .leading){
@@ -409,6 +400,7 @@ struct TagView: View {
         }
     }
 }
+
 extension DisclosureGroup where Label == Text {
   public init<V: Hashable, S: StringProtocol>(
     _ label: S,
@@ -435,45 +427,39 @@ extension DisclosureGroup where Label == Text {
 }
 
 extension HomeView {
-    
     func onDoneAction() {
         self.viewModel.fecthResults()
     }
-    
     private func destinationView(_ rss: RSS) -> some View {
-        RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
+        RSSFeedListView(rssViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
             .environmentObject(DataSourceService.current.rss)
     }
     private func destinationFolderView(_ rss: RSS) -> some View {
-        RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
+        RSSFeedListView(rssViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
             .environmentObject(DataSourceService.current.rss)
     }
-
     func deleteItems(at offsets: IndexSet) {
         viewModel.items.remove(atOffsets: offsets)
     }
 }
 
-struct HomeView_Previews: PreviewProvider {
+//struct HomeView_Previews: PreviewProvider {
+//
+//
+//    static let current = DataSourceService()
+//    static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
+//    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+//    static var previews: some View {
+//        ZStack {
+//            Color(.systemBackground)
+//            HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel)
+//            .preferredColorScheme(.dark)
+//        }
+//    }
+//}
 
-    static let current = DataSourceService()
-
-    static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
-
-    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-
-    static var previews: some View {
-        ZStack {
-            Color(.systemBackground)
-            HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel)
-            .preferredColorScheme(.dark)
-        }
-    }
-}
 struct UnreadCountView: View {
-    
     var count: Int
-    
     var body: some View {
         Text(verbatim: String(count))
             .font(.caption)
@@ -482,14 +468,6 @@ struct UnreadCountView: View {
             .padding(.vertical, 1)
             .background(Color("background"))
             .foregroundColor(.blue)
-            //.background(AppAssets.sidebarUnreadCountBackground)
-            //.foregroundColor(AppAssets.sidebarUnreadCountForeground)
             .cornerRadius(8)
     }
 }
-
-//struct UnreadCountView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        UnreadCountView(count: 123)
-//    }
-//}

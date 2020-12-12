@@ -189,11 +189,11 @@ func fetchDetail() {
     }
 }
 
-struct AddRSSView_Previews: PreviewProvider {
-    static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
-    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-    static var previews: some View {
-        HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel)
-            .preferredColorScheme(.dark)
-    }
-}
+//struct AddRSSView_Previews: PreviewProvider {
+//    static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
+//    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+//    static var previews: some View {
+//        HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel, rssFeedViewModel: self.rssFeedViewModel)
+//            .preferredColorScheme(.dark)
+//    }
+//}

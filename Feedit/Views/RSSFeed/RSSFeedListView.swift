@@ -8,6 +8,7 @@
 import SwiftUI
 import FeedKit
 import Combine
+import KingfisherSwiftUI
 
 struct RSSFeedListView: View {
 
@@ -25,17 +26,17 @@ struct RSSFeedListView: View {
     @State private var footer: String = "Refresh more articles"
     @State var cancellables = Set<AnyCancellable>()
     
-    init(viewModel: RSSFeedViewModel) {
-        self.rssFeedViewModel = viewModel
+    init(rssViewModel: RSSFeedViewModel) {
+        self.rssFeedViewModel = rssViewModel
     }
-    private var archiveListView: some View {
-        Button(action: {
-            print ("Tags")
-        }) {
-            Image(systemName: "arrow.counterclockwise")
-                .imageScale(.medium)
-        }
-    }
+//    private var archiveListView: some View {
+//        Button(action: {
+//            print ("Tags")
+//        }) {
+//            Image(systemName: "arrow.counterclockwise")
+//                .imageScale(.medium)
+//        }
+//    }
     private var infoListView: some View {
         Button(action: {
             print ("Tags")
@@ -48,18 +49,24 @@ struct RSSFeedListView: View {
         Button(action: {
             print ("Mark all as Read")
         }) {
-            Image(systemName: "checkmark")
-                .imageScale(.medium)
+            Image("MarkAllAsRead")
+                //.imageScale(.medium)
         }
     }
     private var trailingFeedView: some View {
         HStack(alignment: .top, spacing: 24) {
-            archiveListView
+            //infoListView
             markAllRead
-            infoListView
         }
     }
     var body: some View {
+        HStack{
+            KFImage(URL(string: self.rssSource.imageURL))
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 50, height: 50)
+                .cornerRadius(5.0)
+        
         VStack(alignment: .leading){
                 Text(rssSource.title)
                     .font(.title2)
@@ -67,7 +74,7 @@ struct RSSFeedListView: View {
             Text("Today at ").font(.system(.headline)) +
                 Text(Date(), style: .time)
                 .fontWeight(.bold)
-            
+        }
 //            HStack{
 //                Text("Added")
 //                    .font(.footnote)
@@ -111,7 +118,7 @@ struct RSSFeedListView: View {
                 SafariView(url: URL(string: item.url)!)
             } else {
                 WebView(
-                    wrapper: item, rss: RSS.simple(), rssItem: item,
+                    rssViewModel: rssFeedViewModel, wrapper: item, rss: RSS.simple(), rssItem: item,
                     onArchiveAction: {
                         self.rssFeedViewModel.archiveOrCancel(item)
                 })
@@ -129,7 +136,7 @@ struct RSSFeedListView: View {
 
 extension RSSFeedListView {
     private func destinationView(_ rss: RSS) -> some View {
-        RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
+        RSSFeedListView(rssViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
             .environmentObject(DataSourceService.current.rss)
     }
 }

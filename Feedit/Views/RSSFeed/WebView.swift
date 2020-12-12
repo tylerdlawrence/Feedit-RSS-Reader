@@ -6,8 +6,15 @@
 //
 
 import SwiftUI
+import KingfisherSwiftUI
 
 struct WebView: View {
+    
+    @EnvironmentObject var rssDataSource: RSSDataSource
+    @ObservedObject var rssFeedViewModel: RSSFeedViewModel
+    var rssSource: RSS {
+        return self.rssFeedViewModel.rss
+    }
     
     enum FeatureItem {
         case goBack
@@ -33,7 +40,8 @@ struct WebView: View {
     var webViewWrapper: WKWebViewWrapper
     var onArchiveAction: (() -> Void)?
     
-    init(wrapper: RSSItem, rss: RSS, rssItem: RSSItem, onArchiveAction: (() -> Void)? = nil) {
+    init(rssViewModel: RSSFeedViewModel, wrapper: RSSItem, rss: RSS, rssItem: RSSItem, onArchiveAction: (() -> Void)? = nil) {
+        self.rssFeedViewModel = rssViewModel
         let viewModel = WKWebViewModel(rssItem: rssItem)
         itemWrapper = wrapper
         self.rss = rss
@@ -91,6 +99,12 @@ struct WebView: View {
         
     }
     
+
+    
+    private var imageView: some View {
+            KFImage(URL(string: self.itemWrapper.imageURL)!) //"3icon"
+    }
+    
     private var pureTextView: some View {
         VStack(spacing: 0.0) {
             Text(rss.desc)
@@ -99,6 +113,8 @@ struct WebView: View {
                 .lineLimit(1)
         }
     }
+    
+
     
     var body: some View {
 //        VStack(alignment: .leading) {
@@ -132,15 +148,19 @@ struct WebView: View {
 //                Spacer()
 //            }
 //        }
+        
         GeometryReader { geometry in
             ZStack(alignment: .topLeading) {
                 HStack{
+                    
                     if
                         self.imageLoader.image != nil {
                         iconImageView(self.imageLoader.image!)
                             .frame(width: 25, height: 25,alignment: .center)
                             .layoutPriority(10)
                             .offset(x: 10, y: 8)
+                        
+                        imageView
 
                         pureTextView
                         
@@ -266,16 +286,59 @@ extension WebView {
     }
 }
 
-struct WebView_Previews: PreviewProvider {
-
-    static var previews: some View {
-
-        let simple = DataSourceService.current.rssItem.simple()
-
-        return WebView(wrapper: simple!, rss: RSS.simple(), rssItem: simple!, onArchiveAction: {
-
-        })
-        .preferredColorScheme(.dark)
-        
+struct ImageView: View {
+    var body: some View {
+        GeometryReader { geometry in
+            ZStack(alignment: .topLeading) {
+                ScrollView {
+                    Spacer()    // TODO: replace with the actual content
+                }
+                
+                // TODO: Unsupported element class: UIVisualEffectView
+                
+                Text("")
+                    .font(.body)
+                    .multilineTextAlignment(.center)
+                    .offset(x: 0, y: 854)
+                    .frame(width: 414, height: 0)
+                
+                Button(action: {
+                    //share()
+                }) {
+                    Image(systemName: "square.and.arrow.up.fill")
+                        .frame(width: 44, height: 44, alignment: .center)
+                }
+                .aspectRatio(contentMode: .fill)
+                .accentColor(Color.blue)
+                .offset(x: 362, y: 44)
+                
+                Button(action: {
+                    //done()
+                }) {
+                    Image(systemName: "multiply.circle.fill")
+                        .frame(width: 44, height: 44, alignment: .center)
+                }
+                .clipped()
+                .accentColor(Color.blue)
+                .offset(x: 8, y: 44)
+            }
+            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
+        }
     }
 }
+
+//struct WebView_Previews: PreviewProvider {
+//    var rssSource: RSS {
+//        return self.rssFeedViewModel.rss
+//    }
+//    static var previews: some View {
+//
+//        let simple = DataSourceService.current.rssItem.simple()
+//
+//        return WebView(viewModel: self.rssFeedViewModel.rss, wrapper: simple!, rss: RSS.simple(), rssItem: simple!, onArchiveAction: {
+//
+//        })
+//        .preferredColorScheme(.dark)
+//
+//    }
+//}

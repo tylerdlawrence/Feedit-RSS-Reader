@@ -10,14 +10,20 @@ import SwiftUI
 import Intents
 
 struct ArchiveListView: View {
+    var rssSource: RSS {
+        return self.rssFeedViewModel.rss
+    }
     
+    @EnvironmentObject var rssDataSource: RSSDataSource
+    @ObservedObject var rssFeedViewModel: RSSFeedViewModel
     @ObservedObject var archiveListViewModel: ArchiveListViewModel
     
     @State private var selectedItem: RSSItem?
     @State var footer = "Refresh more articles"
     
-    init(viewModel: ArchiveListViewModel) {
+    init(viewModel: ArchiveListViewModel, rssFeedViewModel: RSSFeedViewModel) {
         self.archiveListViewModel = viewModel
+        self.rssFeedViewModel = rssFeedViewModel
     }
     
     
@@ -61,7 +67,7 @@ struct ArchiveListView: View {
                     SafariView(url: URL(string: item.url)!)
                 } else {
                     WebView(
-                        wrapper: item, rss: RSS.simple(), rssItem: item,
+                        rssViewModel: rssFeedViewModel, wrapper: item, rss: RSS.simple(), rssItem: item,
                         onArchiveAction: {
                             self.archiveListViewModel.archiveOrCancel(item)
                     })
@@ -80,18 +86,19 @@ extension ArchiveListView {
     
 }
 
-struct ArchiveListView_Previews: PreviewProvider {
-    
-    static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
-    
-static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-
-static let settingViewModel = SettingViewModel()
-
-static var previews: some View {
-
-    ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
-    }
-}
-//archiveListViewModel: self.archiveListViewModel,
+//struct ArchiveListView_Previews: PreviewProvider {
+//
+//    static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
+//
+//    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+//
+//    static let rssFeedViewModel = RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem)
+//
+//    static let settingViewModel = SettingViewModel()
+//
+//    static var previews: some View {
+//
+//    ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: self.rssFeedViewModel)
+//    }
+//}
 

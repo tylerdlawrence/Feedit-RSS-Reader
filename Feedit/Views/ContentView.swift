@@ -11,11 +11,6 @@ struct ContentView: View {
 //    @ObservedObject var archiveListViewModel: ArchiveListViewModel
 //    @ObservedObject var settingViewModel: SettingViewModel
 //    @ObservedObject var viewModel: RSSListViewModel
-    
-//    private var homeListView: some View {
-//        HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel)
-//      }
-//
 
     var body: some View {
         ContentView()
