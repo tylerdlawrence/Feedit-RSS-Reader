@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "iphone-any-slice.pdf",
+      "filename" : "iphone-any-slice.png",
       "idiom" : "universal"
     },
     {
@@ -11,7 +11,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "iphone-dark-slice.pdf",
+      "filename" : "iphone-any-slice-1.png",
       "idiom" : "universal"
     }
   ],

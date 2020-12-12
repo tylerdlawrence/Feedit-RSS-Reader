@@ -8,23 +8,24 @@ import SwiftUI
 import UIKit
 import Intents
 import FeedKit
-
+import Combine
 
 struct RSSRow: View {
 
     @ObservedObject var imageLoader: ImageLoader
     @ObservedObject var rss: RSS
-    
+
     var contextMenuAction: ((RSS) -> Void)?
 
     init(rss: RSS, menu action: ((RSS) -> Void)? = nil) {
+
         self.rss = rss
-        contextMenuAction = action
         self.imageLoader = ImageLoader(path: rss.imageURL)
 //works^
-//        self.imageLoader = ImageLoader(path: rss.image) // doesn't work
+        contextMenuAction = action
+
     }
-    
+
     private func iconImageView(_ image: UIImage) -> some View {
         Image(uiImage: image)
         .resizable()
@@ -42,6 +43,9 @@ struct RSSRow: View {
                 .font(.custom("Gotham", size: 16))
                 .multilineTextAlignment(.leading)
                 .lineLimit(1)
+            //Spacer()
+//            Text("\(content)")
+//                .font(.footnote)
 //            Text(rss.desc)
 //                .font(.subheadline)
 //                .lineLimit(1)

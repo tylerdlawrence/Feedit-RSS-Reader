@@ -111,7 +111,7 @@ struct RSSFeedListView: View {
                 SafariView(url: URL(string: item.url)!)
             } else {
                 WebView(
-                    rssItem: item,
+                    wrapper: item, rss: RSS.simple(), rssItem: item,
                     onArchiveAction: {
                         self.rssFeedViewModel.archiveOrCancel(item)
                 })

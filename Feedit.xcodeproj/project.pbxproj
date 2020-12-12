@@ -86,6 +86,8 @@
 		618610DC256EF8420083A96D /* Reachability in Frameworks */ = {isa = PBXBuildFile; productRef = 618610DB256EF8420083A96D /* Reachability */; };
 		618610DF256EFD8D0083A96D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618610DE256EFD8D0083A96D /* Constants.swift */; };
 		618D823D2570327F0061292F /* FeedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618D823C2570327F0061292F /* FeedImageView.swift */; };
+		618F73DC2584291500CA36B4 /* Image-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618F73DB2584291500CA36B4 /* Image-Extensions.swift */; };
+		618F73DF2584293E00CA36B4 /* HiddenModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618F73DE2584293E00CA36B4 /* HiddenModifier.swift */; };
 		618F9021250DC63B00D5A03E /* RSSRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61967EFE24E2068400AA647C /* RSSRow.swift */; };
 		618F902B250DCD4F00D5A03E /* ModelHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618F9026250DCD4F00D5A03E /* ModelHelper.swift */; };
 		618F902C250DCD4F00D5A03E /* RSS+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618F9027250DCD4F00D5A03E /* RSS+CoreDataClass.swift */; };
@@ -242,6 +244,8 @@
 		618610CE256EF7500083A96D /* NetworkReachabilty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkReachabilty.swift; sourceTree = "<group>"; };
 		618610DE256EFD8D0083A96D /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		618D823C2570327F0061292F /* FeedImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageView.swift; sourceTree = "<group>"; };
+		618F73DB2584291500CA36B4 /* Image-Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Image-Extensions.swift"; sourceTree = "<group>"; };
+		618F73DE2584293E00CA36B4 /* HiddenModifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HiddenModifier.swift; sourceTree = "<group>"; };
 		618F9026250DCD4F00D5A03E /* ModelHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelHelper.swift; sourceTree = "<group>"; };
 		618F9027250DCD4F00D5A03E /* RSS+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RSS+CoreDataClass.swift"; sourceTree = "<group>"; };
 		618F9028250DCD4F00D5A03E /* RSS+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RSS+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -493,6 +497,7 @@
 				61C818DC24E1F7AE00593939 /* Tagged */,
 				61C818F124E1FB6600593939 /* RSSFeed */,
 				61C818D724E1F73C00593939 /* RSS */,
+				618F73DB2584291500CA36B4 /* Image-Extensions.swift */,
 				615E983F2533AFAE00891083 /* ContentView.swift */,
 				617E4C53255DE8F20010CEE8 /* HomeView.swift */,
 			);
@@ -522,6 +527,7 @@
 				61967EFF24E2068400AA647C /* RSSDisplayView.swift */,
 				612FB83D2540F04000D9822B /* RSSListView.swift */,
 				61C818DA24E1F77C00593939 /* RSSListViewModel.swift */,
+				618F73DE2584293E00CA36B4 /* HiddenModifier.swift */,
 			);
 			path = RSS;
 			sourceTree = "<group>";
@@ -845,6 +851,7 @@
 				616CAF6524F7158200690804 /* RFC3339DateFormatter.swift in Sources */,
 				615096EB2564BF420001C0D9 /* NavigationBarModifier.swift in Sources */,
 				61967EE924E205DD00AA647C /* ActionContextMenu.swift in Sources */,
+				618F73DF2584293E00CA36B4 /* HiddenModifier.swift in Sources */,
 				618D823D2570327F0061292F /* FeedImageView.swift in Sources */,
 				618610D0256EF7500083A96D /* HTMLScarperUtility.swift in Sources */,
 				615E961D2530116600891083 /* AppearenceView.swift in Sources */,
@@ -882,6 +889,7 @@
 				61967ED224E2053D00AA647C /* Date+Ext.swift in Sources */,
 				61967EEB24E205DD00AA647C /* TextFieldView.swift in Sources */,
 				61967ECD24E204FB00AA647C /* ImageServices.swift in Sources */,
+				618F73DC2584291500CA36B4 /* Image-Extensions.swift in Sources */,
 				61CDCF5D24E84645007654C5 /* TextView.swift in Sources */,
 				618610C5256EE3AB0083A96D /* ArticleViewModel.swift in Sources */,
 				61967EE224E205AD00AA647C /* RSSItemStore.swift in Sources */,

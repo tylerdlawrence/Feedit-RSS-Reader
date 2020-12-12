@@ -91,21 +91,22 @@ struct RSSItemRow: View {
                             .cornerRadius(12)
                             .multilineTextAlignment(.trailing)
                             }
-//                .padding(.top, 8)
-//                .padding(.bottom, 8)
-                .contextMenu {
-                    ActionContextMenu(
-                        label: itemWrapper.isArchive ? "Untag" : "Tag",
-                        systemName: "star\(itemWrapper.isArchive ? "" : "star")",
-                        onAction: { //self.
-                            self.contextMenuAction?(self.itemWrapper)
-                        })
-                    }
-                }
+
+
+        .contextMenu {
+            ActionContextMenu(
+                label: itemWrapper.isArchive ? "Untag" : "Tag",
+                systemName: "star\(itemWrapper.isArchive ? "" : "star")",
+                onAction: { //self.
+                    self.contextMenuAction?(self.itemWrapper)
+                })
             }
+        }
+    }
 struct RSSFeedRow_Previews: PreviewProvider {
     static var previews: some View {
         let simple = DataSourceService.current.rssItem.simple()
-        return RSSItemRow(wrapper: simple!)
+//        return RSSItemRow(wrapper: simple!)
+        RSSItemRow(wrapper: simple!)
     }
 }

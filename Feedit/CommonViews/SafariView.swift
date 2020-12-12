@@ -5,21 +5,70 @@
 //  Created by Tyler D Lawrence on 8/10/20.
 //
 
+//import SwiftUI
+//import SafariServices
+//
+//struct SafariView: UIViewControllerRepresentable {
+//
+//    let url: URL
+//
+//    func makeUIViewController(context: UIViewControllerRepresentableContext<SafariView>) -> SFSafariViewController {
+//        let config = SFSafariViewController.Configuration()
+//        config.entersReaderIfAvailable = true
+//        return SFSafariViewController(url: url, configuration: config)
+//    }
+//
+//    func updateUIViewController(_ uiViewController: SFSafariViewController, context: UIViewControllerRepresentableContext<SafariView>) {
+//
+//    }
+//}
 import SwiftUI
 import SafariServices
 
-struct SafariView: UIViewControllerRepresentable {
+
+private final class Safari: UIViewControllerRepresentable {
     
-    let url: URL
-
-    func makeUIViewController(context: UIViewControllerRepresentableContext<SafariView>) -> SFSafariViewController {
-        let config = SFSafariViewController.Configuration()
-        config.entersReaderIfAvailable = true
-        return SFSafariViewController(url: url, configuration: config)
+    var urlToLoad: URL
+    
+    init(url: URL) {
+        self.urlToLoad = url
     }
+    
+    func makeUIViewController(context: Context) -> SFSafariViewController {
+        let viewController = SFSafariViewController(url: urlToLoad)
+        viewController.delegate = context.coordinator
+        return viewController
+    }
+    
+    func updateUIViewController(_ uiViewController: SFSafariViewController, context: Context) {
+        
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+    
+    class Coordinator: NSObject, SFSafariViewControllerDelegate {
+        var parent: Safari
+            
+        init(_ parent: Safari) {
+            self.parent = parent
+        }
+        
+        func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+            
+        }
+        
+    }
+    
+}
 
-    func updateUIViewController(_ uiViewController: SFSafariViewController, context: UIViewControllerRepresentableContext<SafariView>) {
-
+struct SafariView: View {
+    
+    var url: URL
+    
+    var body: some View {
+        Safari(url: url)
     }
 }
 

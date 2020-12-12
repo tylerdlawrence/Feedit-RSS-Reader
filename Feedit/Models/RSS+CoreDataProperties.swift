@@ -56,12 +56,12 @@ extension RSS {
         return rss
     }
     
-    static func simple(imageURL: String = "") -> RSS {
+    static func simple(rss: String = "") -> RSS {
         let rss = RSS(context: Persistence.current.context)
-        rss.image = "f"
-        rss.title = "Daring Fireball"
-        rss.desc = "description of RSS feed"
-        rss.url = "https://daringfireball.net/feeds/main"
+        rss.image = ""
+        rss.title = ""
+        rss.desc = ""
+        rss.url = ""
         return rss
     }
     

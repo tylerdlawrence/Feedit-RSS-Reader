@@ -77,7 +77,7 @@ struct BatchImportView: View {
     let viewModel: BatchImportViewModel
     
     @State private var isSheetPresented = false
-    @State private var isJSONHintPresented = true
+    @State private var isJSONHintPresented = false
     @State private var buttonStatus: RoundRectangeButton.Status = .normal("Select File")
     @State private var JSONText = ""
     
@@ -122,7 +122,7 @@ struct BatchImportView: View {
                     .frame(width: UIScreen.main.bounds.width - 40, height: (UIScreen.main.bounds.width - 40)/1.6)
                     .cornerRadius(8)
             }
-            TextView(text: $JSONText, textStyle: .constant(.body))
+            TextEditor(text: $JSONText) //, textStyle: .constant(.body))
                 .frame(height: 300)
                 .border(Color.gray, width: 1.0)
                 .padding(.leading, 20)

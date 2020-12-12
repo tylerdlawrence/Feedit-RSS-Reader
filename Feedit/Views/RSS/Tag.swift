@@ -71,7 +71,7 @@ struct Tag: View, Identifiable {
 
 
 struct Tag_Previews: PreviewProvider {
-    
+
     static var previews: some View {
         Tag.demoTags.randomElement()!
     }
@@ -82,11 +82,11 @@ extension Tag {
     static func makeTags(for tagNames: [String]) -> [Tag] {
         tagNames.map({Tag(tagName: $0)})
     }
-    static var demoTags: [Tag] = Tag.makeTags(for: ["love", "blessed", "summer", "hot", "TIFU", "TIL", "photooftheday", "fashion", "beautiful", "selfie", "happy", "art", "tbt", "covid20", "like4like", "nature", "girl", "family", "travel", "fun"])
-//    static func demoTags(_ count: Int = __demoTags.count) -> [Tag] {
-//        let count = min(count, __demoTags.count)
-//        return Array(repeating: __demoTags.randomElement()!, count: count)
-//    }
+    static var demoTags: [Tag] = Tag.makeTags(for: ["newsletters", "podcasts", "feeds", "blogs", "link list", "productivity", "work", "design", "technology", "photography", "stream", "art", "tbt", "covid20", "news", "nature", "politics", "family", "travel", "interesting"])
+    static func demoTags(_ count: Int = demoTags.count) -> [Tag] {
+        let count = min(count, demoTags.count)
+        return Array(repeating: demoTags.randomElement()!, count: count)
+    }
 }
 /*
 //Top hashtags from Twitter
