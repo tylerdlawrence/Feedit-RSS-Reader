@@ -2,13 +2,8 @@
   "colors" : [
     {
       "color" : {
-        "color-space" : "srgb",
-        "components" : {
-          "alpha" : "1.000",
-          "blue" : "0.886",
-          "green" : "0.749",
-          "red" : "0.035"
-        }
+        "platform" : "ios",
+        "reference" : "secondarySystemFillColor"
       },
       "idiom" : "universal"
     },
@@ -23,9 +18,9 @@
         "color-space" : "srgb",
         "components" : {
           "alpha" : "1.000",
-          "blue" : "0.886",
-          "green" : "0.749",
-          "red" : "0.035"
+          "blue" : "0.000",
+          "green" : "0.000",
+          "red" : "0.000"
         }
       },
       "idiom" : "universal"
@@ -41,9 +36,9 @@
         "color-space" : "srgb",
         "components" : {
           "alpha" : "1.000",
-          "blue" : "0.886",
-          "green" : "0.749",
-          "red" : "0.035"
+          "blue" : "0.969",
+          "green" : "0.949",
+          "red" : "0.949"
         }
       },
       "idiom" : "universal"

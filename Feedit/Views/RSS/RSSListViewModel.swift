@@ -7,17 +7,12 @@
 
 import SwiftUI
 import UIKit
-import FeedKit
-import Foundation
-import CoreData
 
-class RSSListViewModel: NSObject, ObservableObject {
-//    override convenience init() {
-//        UITableView.appearance().backgroundColor = .green // Uses UIColor
-//        self.init()
-//    }
-    @Published var items: [RSS] = []
+class RSSListViewModel: NSObject, ObservableObject{
     
+    let defaultFeeds: [DefaultFeeds] = Bundle.main.decode("DefaultFeeds.json")
+
+    @Published var items: [RSS] = []
     let dataSource: RSSDataSource
     var start = 0
     
@@ -54,25 +49,30 @@ class RSSListViewModel: NSObject, ObservableObject {
     
     class FeedsAPIResponse: Codable {
         var status: String
-        var articles: [RSSListItem]?
+        var items: [RSSListItem]?
     }
     
     class RSSListItem: Identifiable, Codable {
         var uuid = UUID()
-        //var item = String?.self
         let title: String = ""
         let children: [RSS]? = nil
-        var author: String?
         var rss: String = ""
-        var urlToImage: String?
+        var imageURL: String?
         var url: String = ""
-        var image: String?
     
         enum CodingKeys: String, CodingKey {
-            case author, title, urlToImage, url, image
+            case title, url, imageURL
         }
     }
-    
-    
+    struct DefaultFeeds: Codable, Identifiable {
+        let id: String
+        let desc: String
+        let htmlUrl: String
+        let xmlUrl: String
+        
+        var displayName: String {
+            "\(id)"
+        }
+    }
 }
 

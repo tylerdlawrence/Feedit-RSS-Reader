@@ -8,51 +8,53 @@ import SwiftUI
 import UIKit
 import Intents
 import FeedKit
-
+import Combine
 
 struct RSSRow: View {
-    
-//    @EnvironmentObject var sources: Sources
 
     @ObservedObject var imageLoader: ImageLoader
     @ObservedObject var rss: RSS
 
-    init(rss: RSS) {
+    var contextMenuAction: ((RSS) -> Void)?
+
+    init(rss: RSS, menu action: ((RSS) -> Void)? = nil) {
+
         self.rss = rss
-        self.imageLoader = ImageLoader(path: rss.image)
+        self.imageLoader = ImageLoader(path: rss.imageURL)
+//works^
+        contextMenuAction = action
+
     }
-    
+
     private func iconImageView(_ image: UIImage) -> some View {
         Image(uiImage: image)
         .resizable()
             .aspectRatio(contentMode: .fit)
-            .frame(width: 30, height: 30,alignment: .center)
-            .cornerRadius(1)
-            //.animation(.easeInOut)
-            .border(Color.gray, width: 1)
+            .frame(width: 25, height: 25,alignment: .center)
+            .cornerRadius(5)
+            .animation(.easeInOut)
+            .border(Color.clear, width: 1)
         
     }
 
     private var pureTextView: some View {
         VStack(spacing: 0.0) {
             Text(rss.title)
-                .font(.custom("Gotham", size: 18))
+                .font(.custom("Gotham", size: 16))
                 .multilineTextAlignment(.leading)
                 .lineLimit(1)
+            //Spacer()
+//            Text("\(content)")
+//                .font(.footnote)
+//            Text(rss.desc)
+//                .font(.subheadline)
+//                .lineLimit(1)
+//            Text(rss.createTimeStr)
+//                .font(.custom("Gotham", size: 12))
+//                .multilineTextAlignment(.leading)
+//                .lineLimit(1)
                 }
-// below are options to have parsed feed description and last updated time
-        
-            //Text(rss.desc)
-                //.font(.subheadline)
-                //.lineLimit(1)
-                        
-            //Text(rss.createTimeStr)
-                //.font(.footnote)
-                //.foregroundColor(.gray)
-            
-        }
-    
-    
+    }
     var body: some View {
         HStack() {
             VStack(alignment: .center) {
@@ -60,56 +62,35 @@ struct RSSRow: View {
                     if
                         self.imageLoader.image != nil {
                         iconImageView(self.imageLoader.image!)
-                            .frame(width: 30, height: 30,alignment: .center)
-                            //.layoutPriority(10)
+                            .frame(width: 25, height: 25,alignment: .center)
+                            .layoutPriority(10)
                         pureTextView
                         
                     } else {
                         
-                        Image("launch")
+                        Image("Thumbnail") //3icon
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .font(.body)
-                            .frame(width: 30, height: 30,alignment: .center)
-                            .border(Color.gray, width: 1)
+                            .frame(width: 25, height: 25,alignment: .center)
+                            .cornerRadius(5)
+                            .opacity(0.8)
+                            .border(Color.clear, width: 1)
                             .layoutPriority(10)
                             .animation(.easeInOut)
                             
                         pureTextView
                     }
-                    
                 }
-//                .environmentObject(sources)
-
-               // Text(rss.createTimeStr)
-                 //   .font(.footnote)
-                //    .foregroundColor(.gray)
             }
-
         }
-
-        
-        
-        
-//        .padding(.top, 10)
-//        .padding(.bottom, 10)
-        //.frame(maxWidth: .infinity, alignment: .leading)
-        //.background(Color(red: 32/255, green: 32/255, blue: 32/255))
     }
 }
 
 struct RSSRow_Previews: PreviewProvider {
-    
     static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
-    
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-
-    static let settingViewModel = SettingViewModel()
-
     static var previews: some View {
-        ContentView(archiveListViewModel: self.archiveListViewModel, settingViewModel: self.settingViewModel, viewModel: self.viewModel)
-        
-
-        }
+        ContentView()
     }
-
+}

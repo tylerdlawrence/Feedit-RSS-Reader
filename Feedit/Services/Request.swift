@@ -38,16 +38,16 @@ func updateNewRSS(url: URL,
                     rss.title = atomFeed.title ?? ""
                     if let id = atomFeed.id, var url = URL(string: id), let icon = atomFeed.icon {
                         url.appendPathComponent(icon)
-                        rss.image = url.absoluteString
+                        rss.imageURL = url.absoluteString
                     }
                 case .json(let jsonFeed):
                     rss.title = jsonFeed.title ?? ""
                     rss.desc = jsonFeed.description?.trimWhiteAndSpace ?? ""
-                    rss.image = jsonFeed.icon ?? ""
+                    rss.imageURL = jsonFeed.icon ?? ""
                 case .rss(let rssFeed):
                     rss.title = rssFeed.title ?? ""
                     rss.desc = rssFeed.description?.trimWhiteAndSpace ?? ""
-                    rss.image = rssFeed.image?.url ?? ""
+                    rss.imageURL = rssFeed.image?.url ?? ""
                 }
                 completionHandler(.success(rss))
             case .failure(let error):

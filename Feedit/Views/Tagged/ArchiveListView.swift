@@ -7,58 +7,33 @@
 //
 
 import SwiftUI
+import KingfisherSwiftUI
 import Intents
 
 struct ArchiveListView: View {
+    var rssSource: RSS {
+        return self.rssFeedViewModel.rss
+    }
     
-    
-
-//    enum FilterType {
-//        case all, starred, unstarred
-//    }
-//    @EnvironmentObject var sources: Sources
-//
-//    let filter: FilterType
-//
-//    var title: String {
-//        switch filter {
-//        case .all:
-//            return "All"
-//        case .starred:
-//            return "Starred"
-//        case .unstarred:
-//            return "Unstarred"
-//        }
-//    }
-//
-//    var filteredSources: [Source] {
-//        switch filter {
-//        case .all:
-//            return sources.sources
-//        case .starred:
-//            return sources.sources.filter { $0.isStarred }
-//        case .unstarred:
-//            return sources.sources.filter { !$0.isStarred }
-//        }
-//    }
-    
+    @EnvironmentObject var rssDataSource: RSSDataSource
+    @ObservedObject var rssFeedViewModel: RSSFeedViewModel
     @ObservedObject var archiveListViewModel: ArchiveListViewModel
     
     @State private var selectedItem: RSSItem?
-    @State var footer = "Load more articles"
+    @State var footer = "Refresh more articles"
     
-    init(viewModel: ArchiveListViewModel) {
+    init(viewModel: ArchiveListViewModel, rssFeedViewModel: RSSFeedViewModel) {
         self.archiveListViewModel = viewModel
+        self.rssFeedViewModel = rssFeedViewModel
     }
     
     
     var body: some View {
             List {
                 ForEach(self.archiveListViewModel.items, id: \.self) { item in
-                    RSSItemRow(wrapper: item)
+                    RSSItemRow(rssViewModel: rssFeedViewModel, wrapper: item)
                         .onTapGesture {
                             self.selectedItem = item
-
                     }
                     
                 }
@@ -68,20 +43,23 @@ struct ArchiveListView: View {
                         self.archiveListViewModel.unarchive(item)
                     }
                 }
-                VStack(alignment: .center) {
+                //VStack(alignment: .center) {
                     Button(action: self.archiveListViewModel.loadMore) {
-                        HStack{
-//                            Text("↺")
+                        HStack(alignment: .center){
+                            //Spacer()
                             Image(systemName: "arrow.counterclockwise")
+                                .imageScale(.small)
                             Text(self.footer)
-                                .font(.title3)
+                                .font(.subheadline)
                                 .fontWeight(.bold)
+
                         }
                     }
-                }
+                    .padding(.leading)
+                //}
             }
             .listStyle(PlainListStyle())
-            .navigationBarTitle("Tagged Articles", displayMode: .automatic)
+            .navigationBarTitle("Starred", displayMode: .automatic) //☆
             .navigationBarItems(trailing: EditButton())
 
             .sheet(item: $selectedItem, content: { item in
@@ -89,7 +67,7 @@ struct ArchiveListView: View {
                     SafariView(url: URL(string: item.url)!)
                 } else {
                     WebView(
-                        rssItem: item,
+                        rssViewModel: rssFeedViewModel, wrapper: item, rss: RSS.simple(), rssItem: item,
                         onArchiveAction: {
                             self.archiveListViewModel.archiveOrCancel(item)
                     })
@@ -108,18 +86,19 @@ extension ArchiveListView {
     
 }
 
-struct ArchiveListView_Previews: PreviewProvider {
-    
-    static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
-    
-static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-
-static let settingViewModel = SettingViewModel()
-
-static var previews: some View {
-
-    ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
-    }
-}
-//archiveListViewModel: self.archiveListViewModel,
+//struct ArchiveListView_Previews: PreviewProvider {
+//
+//    static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
+//
+//    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+//
+//    static let rssFeedViewModel = RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem)
+//
+//    static let settingViewModel = SettingViewModel()
+//
+//    static var previews: some View {
+//
+//    ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: self.rssFeedViewModel)
+//    }
+//}
 

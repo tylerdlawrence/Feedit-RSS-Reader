@@ -3,7 +3,7 @@
 //  Feedit
 //
 //  Created by Tyler D Lawrence on 8/10/20.
-//
+
 
 import UIKit
 import SwiftUI
@@ -11,17 +11,23 @@ import SwiftUI
 @main
 struct FeeditApp: App {
     @Environment(\.scenePhase) private var scenePhase
+//    let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext
+
+//    func window.rootViewController = UIHostingController(rootView: ContentView().environment(\.managedObjectContext, context))
     
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-    
-    static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
-    
-    static let settingViewModel = SettingViewModel()
 
+    static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
+
+    static let settingViewModel = SettingViewModel()
+    
+    static let rssFeedViewModel = RSSFeedViewModel(rss: RSS.simple(), dataSource: DataSourceService.current.rssItem)
+    
     var body: some Scene {
-        WindowGroup {
-            HomeView(viewModel: FeeditApp.viewModel, archiveListViewModel: FeeditApp.archiveListViewModel)
+        WindowGroup{
+            HomeView(viewModel: FeeditApp.viewModel, archiveListViewModel: FeeditApp.archiveListViewModel, rssFeedViewModel: FeeditApp.rssFeedViewModel)
         }
+        //(viewModel: FeeditApp.viewModel, archiveListViewModel: FeeditApp.archiveListViewModel)
         .onChange(of: scenePhase) { (newScenePhase) in
             switch newScenePhase {
             case .active:

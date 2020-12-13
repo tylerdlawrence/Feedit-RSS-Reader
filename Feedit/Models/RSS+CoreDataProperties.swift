@@ -13,11 +13,13 @@ import FeedKit
 extension RSS {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<RSS> {
+          
         return NSFetchRequest<RSS>(entityName: "RSS")
     }
 
-    @NSManaged public var author: String
-    @NSManaged public var urlToImage: String
+    @NSManaged public var author: String?
+    @NSManaged public var urlString: String?
+    @NSManaged public var imageURL: String
     @NSManaged public var url: String
     @NSManaged public var title: String
     @NSManaged public var desc: String
@@ -28,6 +30,11 @@ extension RSS {
     @NSManaged public var image: String
     @NSManaged public var isFetched: Bool
     
+    @NSManaged public var name: String
+    @NSManaged public var order: Int32
+    @NSManaged public var selected: Bool
+    //@NSManaged public var attribute: Attribute
+    
     public var rssURL: URL? {
         return URL(string: url)
     }
@@ -36,12 +43,12 @@ extension RSS {
         return "\(self.createTime?.string() ?? "")"
     }
     
-    static func create(url: String = "", title: String = "", desc: String = "", image: String = "", in context: NSManagedObjectContext) -> RSS {
+    static func create(url: String = "", title: String = "", desc: String = "", imageURL: String = "", in context: NSManagedObjectContext) -> RSS {
         let rss = RSS(context: context)
         rss.title = title
         rss.desc = desc
         rss.url = url
-        rss.image = image
+        rss.imageURL = imageURL
         rss.uuid = UUID()
         rss.createTime = Date()
         rss.updateTime = Date()
@@ -49,12 +56,12 @@ extension RSS {
         return rss
     }
     
-    static func simple(image: String = "") -> RSS {
+    static func simple(rss: String = "") -> RSS {
         let rss = RSS(context: Persistence.current.context)
-        rss.image = "AppIconBot"
-        rss.title = "Daring Fireball"
-        rss.desc = "description of RSS feed"
-        rss.url = "https://daringfireball.net/feeds/main"
+        rss.image = ""
+        rss.title = ""
+        rss.desc = ""
+        rss.url = ""
         return rss
     }
     
@@ -82,14 +89,11 @@ extension RSS {
         let rss = self
         switch feed {
         case .atom(let atomFeed):
-            //rss.image = atomFeed.image ?? ""
             rss.title = atomFeed.title ?? ""
         case .json(let jsonFeed):
-            //rss.image = jsonFeed.image ?? ""
             rss.title = jsonFeed.title ?? ""
             rss.desc = jsonFeed.description?.trimWhiteAndSpace ?? ""
         case .rss(let rssFeed):
-            //rss.image = rssFeed.image ?? ""
             rss.title = rssFeed.title ?? ""
             rss.desc = rssFeed.description?.trimWhiteAndSpace ?? ""
         }

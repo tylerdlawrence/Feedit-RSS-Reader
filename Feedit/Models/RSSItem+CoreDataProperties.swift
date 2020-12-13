@@ -24,7 +24,7 @@ extension RSSItem {
         return NSFetchRequest<RSSItem>(entityName: "RSSItem")
     }
 
-    @NSManaged public var urlToImage: String
+    //@NSManaged public var imageURL: String
     @NSManaged public var updateTime: Date?
     @NSManaged public var createTime: Date?
     @NSManaged public var desc: String
@@ -35,7 +35,8 @@ extension RSSItem {
     @NSManaged public var uuid: UUID?
     @NSManaged public var author: String
     @NSManaged public var isArchive: Bool
-    @NSManaged public var image: String
+    @NSManaged public var imageURL: String
+    
 
     
     public override func awakeFromInsert() {
@@ -43,12 +44,12 @@ extension RSSItem {
         uuid = UUID()
     }
     
-    static func create(uuid: UUID, image: String, title: String = "", desc: String = "", author: String = "", url: String = "",
+    static func create(uuid: UUID, imageURL: String, title: String = "", desc: String = "", author: String = "", url: String = "",
                        createTime: Date = Date(), progress: Double = 0, in context: NSManagedObjectContext) -> RSSItem {
         let item = RSSItem(context: context)
         item.rssUUID = uuid
         item.uuid = UUID()
-        item.image = image
+        item.imageURL = imageURL
         item.title = title
         item.desc = desc
         item.author = author
@@ -56,8 +57,12 @@ extension RSSItem {
         item.createTime = createTime
         item.progress = 0
         item.isArchive = false
+//        item.configurations = configurations
+        //item.imageURL = image
         return item
     }
+    
+    //static var placeholder = RSSItem.self
     
     static func requestObjects(rssUUID: UUID, start: Int = 0, limit: Int = 20) -> NSFetchRequest<RSSItem> {
         let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>

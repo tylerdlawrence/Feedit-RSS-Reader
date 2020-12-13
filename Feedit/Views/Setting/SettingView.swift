@@ -60,7 +60,7 @@ struct SettingView: View {
                     TextField("On My iPhone", text: $accounts)
                     Toggle(isOn: $isPrivate) {
                         Image(systemName: "icloud")
-                        Text("Private Account")
+                        Text("iCloud Sync")
                     }.toggleStyle(SwitchToggleStyle(tint: .blue))
                 }
 
@@ -78,7 +78,7 @@ struct SettingView: View {
 
                     Group {
                         HStack {
-                            Image(systemName: "circlebadge.2")
+                            Image(systemName: "app.badge")
                                 fixedSize()
                             Toggle(isOn: $notificationsEnabled) {
                                 Text("Notifications")
@@ -126,7 +126,7 @@ struct SettingView: View {
                             .frame(width: 35, height: 35)
                         Text("Feedit")
                         Text("version 1.01")
-                        Text("build 0.0020")
+                        Text("build 0.0024")
                 }
 //                HStack(alignment: .center) {
 //                    Text("  created by Tyler D Lawrence")
@@ -146,9 +146,9 @@ struct SettingView: View {
     }
 }
 
-//struct SettingView_Preview: PreviewProvider {
-//    static var previews: some View {
-//        SettingView
-//    }
-//
-//}
+struct SettingView_Preview: PreviewProvider {
+    static var previews: some View {
+        SettingView()
+    }
+
+}

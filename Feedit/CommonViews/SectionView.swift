@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SectionView<Content: View>: View {
     
-    var image: String?
+    var imageURL: String?
     var title: String?
     var description: String?
     let content: () -> Content
@@ -23,6 +23,12 @@ struct SectionView<Content: View>: View {
                         Text(title!)
                             .font(.headline)
                     }
+                    Section {
+                        if imageURL == nil {
+                            Image(imageURL!)
+                            
+                        }
+                    }
                     content()
                 }
             } else {
@@ -30,6 +36,11 @@ struct SectionView<Content: View>: View {
                     if title != nil {
                         Text(title!)
                             .font(.headline)
+                    }
+                    Section {
+                    if imageURL == nil {
+                        Image(systemName: "chart.bar.doc.horizontal").font(.system(size: 16, weight: .regular)).foregroundColor(.secondary)
+                        }
                     }
                     content()
                 }
@@ -49,7 +60,7 @@ struct SectionView<Content: View>: View {
 }
  struct SectionView_Previews: PreviewProvider {
      static var previews: some View {
-        SectionView(image: "Image", title: "Section", description: "Description", content: { Text("Content") })
+        SectionView(imageURL: "", title: "Section", description: "Description", content: { Text("Content") })
          .previewLayout(.sizeThatFits)
              .previewLayout(.sizeThatFits)
      }

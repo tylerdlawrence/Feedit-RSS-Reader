@@ -6,304 +6,405 @@
 //
 
 import SwiftUI
-import ModalView
 import FeedKit
-import Foundation
+import KingfisherSwiftUI
 import CoreData
-import MobileCoreServices
-
-struct Item: Identifiable {
-    let id = UUID()
-    let title: String
-}
-enum FeaureItem {
-    case add
-    case setting
-}
-enum FeatureItem {
-    case settings
-}
+import Combine
 
 struct HomeView: View {
     
-enum ContentViewGroup: Hashable {
-    case RSS
-    case tag
-}
-    
-    @State var sources: [RSS] = []
+    @Environment(\.presentationMode) var presentationMode
 
+    @EnvironmentObject var rssDataSource: RSSDataSource
+    
+    let defaultFeeds: [DefaultFeeds] = Bundle.main.decode("DefaultFeeds.json")
+
+    enum FeaureItem {
+        case add
+        case setting
+    }
+    @State var showSheetView = false
+
+    @State var sources: [RSS] = []
+    
     @ObservedObject var viewModel: RSSListViewModel
     @ObservedObject var archiveListViewModel: ArchiveListViewModel
-    
-    @State var showingContent: ContentViewGroup?
+    @State var rssFeedViewModel: RSSFeedViewModel
+
     @State private var selectedFeatureItem = FeaureItem.add
     @State private var isAddFormPresented = false
     @State private var isSettingPresented = false
     @State private var isSheetPresented = false
     @State private var addRSSProgressValue = 0.0
     @State private var previewIndex = 0
+    @State var isExpanded = false
     
-    private var addSourceButton: some View {
+
+    
+//    private var cardButton: some View {
+//        Menu {
+//            Button(action: {
+//                print("All")
+//            }, label: {
+//                HStack{
+//                    Text("All")
+//                    Image(systemName: "text.justifyleft")
+//                        //.font(.system(size: 16, weight: .heavy))
+//                }
+//            })
+//
+//            Button(action: {
+//                print("Unread")
+//            }, label: {
+//                HStack{
+//                    Text("Unread")
+//                    Image(systemName: "circle.fill").font(.system(size: 16, weight: .heavy))
+//                }
+//            })
+//            Button(action: {
+//                print("Filters")
+//            }, label: {
+//                HStack{
+//                    Text("Filters")
+//                    Image(systemName: "chevron.up").font(.system(size: 16, weight: .heavy))
+//                }
+//            })
+//        } label: {
+//            Label(
+//                title: { Text("")},
+//                icon: { Image(systemName: "chevron.up").font(.system(size: 16, weight: .heavy)) }
+//            )
+//        }
+//    }
+    private var leadingView: some View {
         Button(action: {
-            self.isSheetPresented = true
-            self.selectedFeatureItem = .add
+            print("On My iPhone")
         }) {
-            Image(systemName: "plus")
-                .imageScale(.large)
-            }
+            Image("accountLocalPhone")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 25, height: 35, alignment: .center)
+                .border(Color.clear, width: 2)
+                .cornerRadius(3.0)
+
         }
+    }
     
     private var settingButton: some View {
         Button(action: {
             self.selectedFeatureItem = .setting
             self.isSheetPresented = true
         }) {
-            Image(systemName: "gear")
+            Image(systemName: "gear").font(.system(size: 16, weight: .heavy))
                 .imageScale(.large)
+                .foregroundColor(Color("lightShadow"))
+        }
+    }
+    private var addSourceButton: some View {
+            Menu {
+                Button(action: {
+                    self.isSheetPresented = true
+                    self.selectedFeatureItem = .add
+                }, label: {
+                    HStack{
+                        Text("Add Feed")
+                        Image(systemName: "plus")
+                            .imageScale(.large)
+                            .font(.system(size: 16, weight: .heavy))
+                    }
+                })
+                
+                Button(action: {
+                    print("Add Folder")
+                }, label: {
+                    HStack{
+                        Text("Add Folder")
+                        Image(systemName: "folder").font(.system(size: 16, weight: .heavy))
+                    }
+                })
+            } label: {
+                Label(
+                    title: { Text("")},
+                    icon: { Image(systemName: "plus")
+                        .imageScale(.large)
+                    }
+                )
+            }
+        }
+
+    private var archiveListView: some View {
+        ArchiveListView(viewModel: archiveListViewModel, rssFeedViewModel: self.rssFeedViewModel)
+    }
+
+    private var trailingView: some View {
+        HStack(alignment: .top, spacing: 24) {
+            //EditButton()
+            addSourceButton
+        }
+        .foregroundColor(Color("bg"))
+    }
+    
+    private var feedView: some View {
+        HStack{
+//            Image("3icon")
+//                .resizable()
+//                .aspectRatio(contentMode: .fit)
+//                .frame(width: 25, height: 25, alignment: .center)
+//                .border(Color.clear, width: 3)
+//                .cornerRadius(5.0)
+////            (systemName: "archivebox").font(.system(size: 16, weight: .bold))
+//                .foregroundColor(Color("bg"))
+//                .imageScale(.large)
+            Text("All Items").font(.system(size: 18, weight: .semibold))
+//            Spacer()
+//            Text("\(viewModel.items.count)")
         }
     }
     
-    private var archiveListView: some View {
-        ArchiveListView(viewModel: archiveListViewModel)
+    private var unreadCount: some View {
+        UnreadCountView(count: viewModel.items.count)
     }
-
-//    private var trailingView: some View {
-//        HStack(alignment: .top, spacing: 24) {
-//            settingButton
-//            addSourceButton
+    
+    private var feedSection: some View {
+        HStack{
+            Image("3icon") //faviconTemplateImage") //accountLocalPhone")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 20, height: 20, alignment: .center)
+                .cornerRadius(5.0)
+                .foregroundColor(Color("bg"))
+             Text("Feeds") //.font(.system(size: 18, weight: .semibold))
+                .font(.system(size: 16, weight: .semibold))
+                .fontWeight(.semibold)
+                .foregroundColor(Color("bg"))
+            Spacer()
+            unreadCount
+//            Text("\(viewModel.items.count)")
+//                .font(.footnote)
+         }
+     }
+    
+    private var feedsAll: some View {
+        HStack{
+//            Image("accountLocalPhone")
+//                .resizable()
+//                .aspectRatio(contentMode: .fit)
+//                .frame(width: 30, height: 30, alignment: .center)
+//                .foregroundColor(Color("bg"))
+            Text("On My iPhone").font(.system(size: 18, weight: .semibold))
+            Spacer()
+            unreadCount
+        }
+    }
+    
+//    private var folderSection: some View {
+//        VStack{
+//            HStack{
+//                //Image("disclosure")
+//                Text("Folders").font(.system(size: 18, weight: .semibold))
+//            }
+//        }
+//    }
+    
+//    private var defaultFeedSection: some View {
+//        HStack{
+//            Image(systemName: "chevron.right").font(.system(size: 10, weight: .heavy))
+//                .foregroundColor(Color("bg"))
+//                .imageScale(.large)
+//            Text("Default Feeds")
+//            Spacer()
+//            Text("\(defaultFeeds.count)")
+//                .font(.footnote)
 //        }
 //    }
     
     private let addRSSPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("addNewRSSPublisher"))
     private let rssRefreshPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("rssListNeedRefresh"))
     
-    @State private var rss: [Item] = []
-    @State private var editMode = EditMode.inactive
-    private static var count = 0
-    
-    private var addButton: some View {
-        switch editMode {
-        case .inactive:
-            return AnyView(Button(action: onAdd) { Image(systemName: "plus.circle.fill") })
-        default:
-            return AnyView(EmptyView())
-        }
-    }
-
-    private func onDelete(offsets: IndexSet) {
-        rss.remove(atOffsets: offsets)
-    }
-
-    private func onMove(source: IndexSet, destination: Int) {
-        rss.move(fromOffsets: source, toOffset: destination)
-    }
-
-    private func onInsert(at offset: Int, itemProvider: [NSItemProvider]) {
-        for provider in itemProvider {
-            if provider.canLoadObject(ofClass: URL.self) {
-                _ = provider.loadObject(ofClass: URL.self) { url, error in
-                    DispatchQueue.main.async {
-                        url.map { self.rss.insert(Item(title: $0.absoluteString), at: offset) }
-                    }
-                }
-            }
-        }
-    }
-
-    private func onAdd() {
-        rss.append(Item(title: "Folder\(Self.count)"))
-        Self.count += 1
-    }
-    
   var body: some View {
-        NavigationView{
-            List {
-                HStack{
-                    Image("launch")
+    NavigationView {
+        List {
+            HStack(alignment: .top){
+                VStack(alignment: .center){
+                    Image(systemName: "icloud")
                         .resizable()
-                        .frame(width: 35.0, height: 35.0)
-                    Text("Local: On My iPhone")
-                        .font(.custom("Gotham", size: 18))
+                        .aspectRatio(contentMode: .fit)
+                        .foregroundColor(Color("bg"))
+                        .frame(width: 75, height: 75)
+                    Text("On My iPhone")
+                        .font(.title3)
+                        .fontWeight(.bold)
+                    Text("Today at ").font(.system(.headline)) +
+                        Text(Date(), style: .time)
+                        .fontWeight(.bold)
+                }.frame(width: 320.0).listRowBackground(Color("accent"))
+            }.listRowBackground(Color("accent"))
+            
+            Section(header: feedView) {
+//                Section(header: feedSection) {
+//                    ForEach(viewModel.items, id: \.self) { rss in
+//                        NavigationLink(destination: self.destinationView(rss: rss)) {
+//                            RSSRow(rss: rss)
+//                            }
+//                            .tag("RSS")
+//                    }
+//                    .padding(.leading)
+//                }
+                NavigationLink(destination: archiveListView) {
+                    BookmarkView()
                 }
-                
-                Spacer()
-
-                DisclosureGroup(
-               "○  All Sources", //○
-                tag: .RSS,
-                selection: $showingContent) {
-                    ForEach(viewModel.items, id: \.self) { rss in
-                        NavigationLink(destination: self.destinationView(rss)) {
-                            RSSRow(rss: rss)
-                        }
-                        .tag("RSS")
+                NavigationLink(destination: Tag.demoTags.randomElement()!) {
+                    TagView()
+                }
+            }
+            .textCase(nil)
+            .accentColor(Color("darkShadow"))
+            .foregroundColor(Color("darkerAccent"))
+            .listRowBackground(Color("accent"))
+            .edgesIgnoringSafeArea(.all)
+//                    DisclosureGroup(
+//                    "❯  Feeds",
+//                    tag: .RSS,
+//                    selection: $showingContent) {
+            Section(header: feedsAll) {
+                ForEach(viewModel.items, id: \.self) { rss in
+                    NavigationLink(destination: self.destinationView(rss: rss)) {
+                        RSSRow(rss: rss)
                     }
-                    .onMove(perform: onMove)
-                    .onDelete { indexSet in
-                        if let index = indexSet.first {
-                            self.viewModel.delete(at: index)
+                    .padding(.leading)
+                    .tag("RSS")
+                }
+                .onDelete { indexSet in
+                    if let index = indexSet.first {
+                        self.viewModel.delete(at: index)
+                        }
+                    }
+                }
+                .textCase(nil)
+                .listRowBackground(Color("accent"))
+                .accentColor(Color("darkShadow"))
+                .foregroundColor(Color("darkerAccent"))
+                .edgesIgnoringSafeArea(.all)
+//            Section(header: folderSection) {
+//                Section(header: defaultFeedSection) {
+//                    ForEach(viewModel.items, id: \.self) { rss in
+//                        NavigationLink(destination: self.destinationView(rss)) {
+//                            RSSRow(rss: rss) //TODO: make DefaultFeedRow
+//                        }
+//                        .padding(.leading)
+//                        .tag("diplayName")
+//                    }
+//                }
+//                 //;
+////                NavigationLink(destination: Text("News Folder")) {
+////                    HStack{
+////                        Image(systemName: "chevron.right").font(.system(size: 10, weight: .heavy))
+////                            .foregroundColor(Color("bg"))
+////                            .imageScale(.large)
+////                        Text("News")
+////                    }
+////                };
+////                NavigationLink(destination: Text("Blogs Folder")) {
+////                    HStack{
+////                        Image(systemName: "chevron.right").font(.system(size: 10, weight: .heavy))
+////                            .foregroundColor(Color("bg"))
+////                            .imageScale(.large)
+////                        Text("Blogs")
+////                    }
+////                };
+////                NavigationLink(destination: Text("Entertainment Folder")) {
+////                    HStack{
+////                        Image(systemName: "chevron.right").font(.system(size: 10, weight: .heavy))
+////                            .foregroundColor(Color("bg"))
+////                            .imageScale(.large)
+////                        Text("Entertainment")
+////                    }
+////                };
+////                NavigationLink(destination: Text("Technology Folder")) {
+////                    HStack{
+////                        Image(systemName: "chevron.right").font(.system(size: 10, weight: .heavy))
+////                            .foregroundColor(Color("bg"))
+////                            .imageScale(.large)
+////                        Text("Technology")
+////                    }
+////                }
+//            }
+//            .textCase(nil)
+//            .accentColor(Color("darkShadow"))
+//            .foregroundColor(Color("darkerAccent"))
+//            .listRowBackground(Color("accent"))
+//            .edgesIgnoringSafeArea(.all)
+//            if addRSSProgressValue > 0 && addRSSProgressValue < 1.0 {
+//                LinerProgressBar(lineWidth: 3, color: .blue, progress: $addRSSProgressValue)
+//                    .padding(.top, 2)
+//            }
+            }
+            .onReceive(rssRefreshPublisher, perform: { output in
+                self.viewModel.fecthResults()
+            })
+            .sheet(isPresented: $isSheetPresented, content: {
+                if FeaureItem.add == self.selectedFeatureItem {
+                    AddRSSView(
+                        viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss),
+                        onDoneAction: self.onDoneAction)
+                } else if FeaureItem.setting == self.selectedFeatureItem {
+                    SettingView()
+                }
+            })
+    //.listStyle(SidebarListStyle())
+//    .listStyle(GroupedListStyle())
+        .navigationTitle("")
+        .navigationBarItems(leading: leadingView, trailing: trailingView)
+        .toolbar {
+//            ToolbarItem(placement: .bottomBar) {
+//                cardButton
+//            }
+            ToolbarItem(placement: .bottomBar) {
+                Spacer()
+                    }
+            ToolbarItem(placement: .bottomBar) {
+                settingButton
                     }
                 }
             }
-            VStack {
-                NavigationLink(destination: archiveListView) {
-                    ButtonView()
-                    }
-                 }
-                Spacer()
-                    }
-                .onAppear {
-                    UITableView.appearance().separatorStyle = .none
-                }
-                .onReceive(rssRefreshPublisher, perform: { output in
-                    self.viewModel.fecthResults()
-                })
-                .sheet(isPresented: $isSheetPresented, content: {
-                    if FeaureItem.add == self.selectedFeatureItem {
-                        AddRSSView(
-                            viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss),
-                            onDoneAction: self.onDoneAction)
-                    } else if FeaureItem.setting == self.selectedFeatureItem {
-                        SettingView()
-                    }
-                })
-                .onAppear {
-                    UITableView.appearance().separatorStyle = .none
-                    self.viewModel.fecthResults()
-                }
-                .font(.custom("Gotham", size: 17))
-                .listStyle(PlainListStyle())
-                .navigationBarItems(leading: EditButton(), trailing: addSourceButton)
-                .navigationTitle("Account")
-                    .toolbar {
-                        ToolbarItem(placement: .bottomBar) {
-                                    Spacer()
-                                }
-                        ToolbarItem(placement: .bottomBar) {
-                            settingButton
-                
-                }
+            .onAppear {
+                self.viewModel.fecthResults()
+        }
+    
+    }
+}
+
+struct BookmarkView: View {
+    var body: some View {
+        VStack(alignment: .leading){
+            HStack{
+                Image("star")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 20, height: 20, alignment: .center)
+                Text("Starred")
+                    .font(.system(size: 16, weight: .semibold))
+                    .fontWeight(.semibold)
+                    .foregroundColor(Color("bg"))
             }
         }
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
-//    Text("Folders")
-//        .font(.headline)
-//        .fontWeight(.heavy)
-//        .foregroundColor(.gray)
-//        .multilineTextAlignment(.leading)
-//
-//                DisclosureGroup(
-//                " ❯  News",
-//                tag: .folder1,
-//                selection: $showingContent) {
-//                    ForEach(viewModel.items, id: \.self) { rss in
-//                        NavigationLink(destination: self.destinationFolderView(rss)) {
-//                            RSSRow(rss: rss)
-//                        }
-//                        .tag("folder1")
-//                    }
-//                }
-////                    NavigationLink(destination: Text("❯  News")) {
-////                        VStack{
-////                            Text("❯  News")
-////                        }
-////                    }
-//                DisclosureGroup(
-//                " ❯  Blogs",
-//                tag: .folder2,
-//                selection: $showingContent) {
-//                    ForEach(viewModel.items, id: \.self) { rss in
-//                        NavigationLink(destination: self.destinationFolderView(rss)) {
-//                            RSSRow(rss: rss)
-//                        }
-//                        .tag("folder2")
-//                    }
-//                }
-////                    NavigationLink(destination: Text("❯  Blogs")) {
-////                        VStack{
-////                            Text("❯  Blogs")
-////                        }
-////                    }
-//                DisclosureGroup(
-//                " ❯  Technology",
-//                tag: .folder3,
-//                selection: $showingContent) {
-//                    ForEach(viewModel.items, id: \.self) { rss in
-//                        NavigationLink(destination: self.destinationFolderView(rss)) {
-//                            RSSRow(rss: rss)
-//                        }
-//                        .tag("folder3")
-//                    }
-//                }
-////                    NavigationLink(destination: Text("❯  Technology")) {
-////                        VStack{
-////                            Text("❯  Technology")
-////                        }
-////                    }
-//                DisclosureGroup(
-//                " ❯  Entertainment",
-//                tag: .folder4,
-//                selection: $showingContent) {
-//                    ForEach(viewModel.items, id: \.self) { rss in
-//                        NavigationLink(destination: self.destinationFolderView(rss)) {
-//                            RSSRow(rss: rss)
-//                        }
-//                        .tag("folder4")
-//                    }
-//                }
-////                    NavigationLink(destination: Text("❯  Entertainment")) {
-////                        VStack{
-////                            Text("❯  Entertainment")
-////                        }
-////                    }
-           // }
-//            .onAppear {
-//                UITableView.appearance().separatorStyle = .none
-//            }
-//            .onReceive(rssRefreshPublisher, perform: { output in
-//        self.viewModel.fecthResults()
-//    })
-//    .sheet(isPresented: $isSheetPresented, content: {
-//        if FeaureItem.add == self.selectedFeatureItem {
-//            AddRSSView(
-//                viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss),
-//                onDoneAction: self.onDoneAction)
-//        } else if FeaureItem.setting == self.selectedFeatureItem {
-//            SettingView()
-//        }
-//    })
-//    .onAppear {
-//        UITableView.appearance().separatorStyle = .none
-//        self.viewModel.fecthResults()
-//
-//    }
-//        .font(.headline)
-//        .listStyle(PlainListStyle())
-//            //leading: EditButton(),
-//            .navigationBarItems(trailing: addSourceButton)
-//        .navigationTitle("Account")
-//            .toolbar {
-//                ToolbarItem(placement: .bottomBar) {
-//                            Spacer()
-//                        }
-//                ToolbarItem(placement: .bottomBar) {
-//                    settingButton
-//                }
-//            }
-        //}
-
-
-struct ButtonView: View {
+struct TagView: View {
     var body: some View {
-        Image(systemName: "tag")
-            .imageScale(.small)
-        Text("Tagged Articles")
-        
+        VStack(alignment: .leading){
+            HStack{
+                Image("smartFeedUnread")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 20, height: 20, alignment: .center)
+                Text("Tags")
+                    .font(.system(size: 16, weight: .semibold))
+                    .fontWeight(.semibold)
+                    .foregroundColor(Color("bg"))
+            }
+        }
     }
 }
 
@@ -332,36 +433,49 @@ extension DisclosureGroup where Label == Text {
   }
 }
 
-
 extension HomeView {
-    
     func onDoneAction() {
         self.viewModel.fecthResults()
     }
-    
-    private func destinationView(_ rss: RSS) -> some View {
-        RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
+    private func destinationView(rss: RSS) -> some View {
+        RSSFeedListView(rssViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem)) //, showSheetView: self.showSheetView)
             .environmentObject(DataSourceService.current.rss)
     }
-    private func destinationFolderView(_ rss: RSS) -> some View {
-        RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
-            .environmentObject(DataSourceService.current.rss)
-    }
-
+//    private func destinationFolderView(_ rss: RSS) -> some View {
+//        RSSFeedListView(rssViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), showSheetView: Bool)
+//            .environmentObject(DataSourceService.current.rss)
+//    }
     func deleteItems(at offsets: IndexSet) {
         viewModel.items.remove(atOffsets: offsets)
     }
 }
 
 struct HomeView_Previews: PreviewProvider {
-    
-    static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
-    
-    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
 
+
+    static let current = DataSourceService()
+    static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
+    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+    static let rssFeedViewModel = RSSFeedViewModel(rss: RSS.simple(), dataSource: DataSourceService.current.rssItem)
     static var previews: some View {
-        
-        HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel)
+        ZStack {
+            Color(.systemBackground)
+            HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel, rssFeedViewModel: self.rssFeedViewModel)
             .preferredColorScheme(.dark)
+        }
+    }
+}
+
+struct UnreadCountView: View {
+    var count: Int
+    var body: some View {
+        Text(verbatim: String(count))
+            .font(.caption)
+            .fontWeight(.bold)
+            .padding(.horizontal, 7)
+            .padding(.vertical, 1)
+            .background(Color("darkShadow")) //accent")) //darkShadow"))
+            .foregroundColor(Color("lightShadow"))
+            .cornerRadius(8)
     }
 }

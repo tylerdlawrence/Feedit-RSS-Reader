@@ -10,14 +10,19 @@ import SwiftUI
 struct ActionContextMenu: View {
     
     private var label: String
-    //private var mark: String
     private var systemName: String
     
     var onAction: (() -> Void)?
     
+    var onRead: (() -> UnreadCountProvider)?
+    
+    var onTag: (() -> Tag)?
+    
     init(label: String, systemName: String, onAction: (() -> Void)? = nil) {
+        //onRead: (() -> UnreadCountProvider)?, onTag: (() -> Tag)?
         self.label = "Tag Article"
-//        self.mark = "Mark as Read"
+        self.label = "Toggle Starred"
+        self.label = "Mark as Read"
         self.systemName = systemName
         self.onAction = onAction
     }
@@ -25,30 +30,41 @@ struct ActionContextMenu: View {
     var body: some View {
         VStack {
             Button(action: {
-                self.onAction?()
-            }) {
-                HStack() {
-                    Text(self.label)
-                    Image(systemName: "tag")
+                self.onRead?()
+            }, label: {
+                HStack{
+                    Text("Toggle Read")
+                    Image(systemName: "circle")
                         .imageScale(.small)
-//                        .foregroundColor(Color("darkerAccent"))
-                        .foregroundColor(.blue)
-//                    Text(self.mark)
-//                    Image("mark")
-//                        .resizable()
-//                        .aspectRatio(contentMode: .fit)
-//                        .frame(width: 20, height: 20)
                 }
-            }
+            })
+            Button(action: {
+                self.onAction?()
+            }, label: {
+                HStack{
+                    Text("Toggle Starred")
+                    Image(systemName: "star.fill") //"star") //
+                        .imageScale(.small)
+                }
+            })
+            Button(action: {
+                self.onTag?()
+            }, label: {
+                HStack{
+                    Text("Tag Article")
+                    Image(systemName: "circlebadge.2")
+                        .imageScale(.small)
+                    //Image("smartFeedUnread")
+                }
+            })
         }
+
     }
 }
 
-struct ActionContextMenu_Previews: PreviewProvider {
-    static var previews: some View {
-        ActionContextMenu(label: "Tag Article", systemName: "tag")
-                          //, mark: "mark")
-            //.preferredColorScheme(.dark)
-            //.previewDevice("iPhone 11 Pro Max")
-    }
-}
+//struct ActionContextMenu_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ActionContextMenu(label: "Toggle Starred", systemName: "star.fill")
+////        ActionContextMenu(read: "Mark As Read", systemName: "circle.fill")
+//    }
+//}

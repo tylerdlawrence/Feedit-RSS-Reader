@@ -26,7 +26,7 @@ struct AddRSSView: View {
             self.onDoneAction?()
             self.presentationMode.wrappedValue.dismiss()
         }) {
-            Image(systemName: "checkmark")
+            Image(systemName: "checkmark.circle")
             //Text("Done")
         }.disabled(!isVaildSource)
     }
@@ -37,7 +37,8 @@ struct AddRSSView: View {
             self.onCancelAction?()
             self.presentationMode.wrappedValue.dismiss()
         }) {
-            Image(systemName: "xmark")
+            Image(systemName: "chevron.left")
+            //Text("All Items") //xmark
             //Text("Cancel")
         }
     }
@@ -49,31 +50,52 @@ struct AddRSSView: View {
     }
     
     private var sectionHeader: some View {
-        VStack(alignment: .center) {
-            HStack {
-                Text("")//input//search
-                Spacer()
+        VStack {
+            HStack(alignment: .center) {
+//                Text("")//input//search
+               // Spacer()
                 Button(action: self.fetchDetail) {
                     Text("Search")
                         .font(.headline)
                         .fontWeight(.bold)
-                        .multilineTextAlignment(.center)
                     
                 }
             }
-            .padding(.trailing, 125.0)
+            .multilineTextAlignment(.center)
+
+            .padding(.leading, 120)
+        }
+    }
+    
+    
+    private var helpButton: some View {
+        Button(action: {
+                self.showingAlert = true
+            }) {
+            Image(systemName: "questionmark.circle")
+            }
+            .alert(isPresented: $showingAlert) {
+                Alert(title: Text("Where do I find an RSS feed?"), message: Text("RSS feed URLs can be found on most websites. Typically, RSS feeds will have /feed .rss, .xml, .json or .atom at the end of the site address."), dismissButton: .default(Text("Got it!")))
+        }
+    }
+    
+    private var trailingButtons: some View {
+        HStack(alignment: .top, spacing: 24) {
+            helpButton
+            doneButton
         }
     }
     
     private var isVaildSource: Bool {
         return !feedUrl.isEmpty
+        
     }
     
     @State private var hasFetchResult: Bool = false
     
     @State private var feedUrl: String = ""
     @State private var feedTitle: String = ""
-    
+
 //    @Binding var isPresented: Bool
 
     init(viewModel: AddRSSViewModel,
@@ -82,82 +104,74 @@ struct AddRSSView: View {
         self.viewModel = viewModel
         self.onDoneAction = onDoneAction
         self.onCancelAction = onCancelAction
+        
     }
     var body: some View {
         NavigationView {
             Form {
                 Section() { //header: sectionHeader
-                    HStack{
+                    HStack(alignment: .center){
                         Image(systemName: "magnifyingglass")
                             .opacity(0.4)
                             TextField("Feed URL", text: $feedUrl)
                                 .padding(.trailing)
+                                .multilineTextAlignment(.leading)
                             .opacity(0.4)
                             .disableAutocorrection(true)
                     }
-                    HStack{
+                    HStack(alignment: .center){
                         sectionHeader
+                    
                     }
                 }
-            
-                    Picker("  ❯   Folders", selection: $previewIndex) {
-                        ForEach(0 ..< categories.count) {
-                            Text(categories[$0].name)
-                        }
-                    }
-                //}
-//                        VStack {
-//                            List(categories, id: \.self) { category in
-//                                VStack(alignment: .leading) {
-//                                    Text(category.name)
-//                                        .font(.system(size: 12))
-//                                        .padding(EdgeInsets(top: 4, leading: 7, bottom: 4, trailing: 7))
-//                                        .background(Color(category.color))
-//                                        .cornerRadius(3)
-//                                    Text("Number of articles: \(category.articlesCount)")
-//                                        .font(.footnote)
+//                    Picker("Manage Folders", selection: $previewIndex) {
+//                        ForEach(0 ..< categories.count) {
+//                            Text(categories[$0].name)
+//                            NavigationView {
+//                                VStack {
+//                                    List(categories, id: \.self) { category in
+//                                        VStack(alignment: .center) {
+//                                            Text(category.name)
+//                                                .cornerRadius(3)
+//                                            Text("Number of articles: \(category.articlesCount)")
+//                                                .font(.footnote)
+//                                        }
+//                                    }
 //                                }
 //                            }
 //                        }
-//                        .navigationBarTitle("Folders")
-//                        .navigationBarItems(leading:
-//                            HStack {
-//                                Button("Add") {
-//                                    Category.insertSample(into: managedObjectContext)
-//                                }
-//                                Button("Rename") {
-//                                    self.renameCategory()
-//                                }
-//                            }, trailing:
-//                                Button("Save") {
-//                                    try! self.managedObjectContext.save()
-//                                }
-//                            )
 //                    }
+//                    .frame(width: 300, height: 35)
 //                    .font(.body)
-//                }
+//                    .padding(.leading, 90.0)
                 
-
-                Section(header: Text("") //result
-                            ) {
                     if !hasFetchResult {
-                        Text("Search results will show here")
-                            .opacity(0.4)
-                            .multilineTextAlignment(.center)
+                        EmptyView()
+
                     } else {
                         if viewModel.rss != nil {
-                            RSSDisplayView(rss: viewModel.rss!)
+                            //Spacer()
+                            Section(header: Text("Search Results")
+                                        .font(.subheadline)
+                                        .fontWeight(.heavy)
+                                        .multilineTextAlignment(.center)
+                                        .padding(.leading, 100.0)
+                                        ){
+                                RSSDisplayView(rss: viewModel.rss!)
+                                    .font(.subheadline)
+                            }
                     }
                 }
             }
             .navigationBarTitle("Add Feed")
-            .navigationBarItems(leading: cancelButton, trailing: doneButton)
+            .navigationBarItems(leading: cancelButton, trailing: trailingButtons)
         }
         .onDisappear {
             self.viewModel.cancelCreateNewRSS()
-        }
     }
 }
+    @State private var showingAlert = false
+    
 func fetchDetail() {
     guard let url = URL(string: self.feedUrl),
         let rss = viewModel.rss else {
@@ -174,23 +188,12 @@ func fetchDetail() {
         }
     }
 }
-//}
-//    private func renameCategory() {
-//        guard let category = categories.first else { return }
-//        if category.name == "News" {
-//            category.name = "Blogs"
-//        } else {
-//            category.name = "Technology"
-//        }
+
+//struct AddRSSView_Previews: PreviewProvider {
+//    static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
+//    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+//    static var previews: some View {
+//        HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel, rssFeedViewModel: self.rssFeedViewModel)
+//            .preferredColorScheme(.dark)
 //    }
 //}
-
-
-struct AddRSSView_Previews: PreviewProvider {
-    static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
-    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-    static var previews: some View {
-        HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel)
-            .preferredColorScheme(.dark)
-    }
-}
