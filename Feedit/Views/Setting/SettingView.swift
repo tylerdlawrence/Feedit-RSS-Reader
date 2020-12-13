@@ -126,7 +126,7 @@ struct SettingView: View {
                             .frame(width: 35, height: 35)
                         Text("Feedit")
                         Text("version 1.01")
-                        Text("build 0.0023")
+                        Text("build 0.0024")
                 }
 //                HStack(alignment: .center) {
 //                    Text("  created by Tyler D Lawrence")
