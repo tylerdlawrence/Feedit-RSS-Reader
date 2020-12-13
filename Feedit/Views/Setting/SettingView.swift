@@ -133,7 +133,7 @@ struct SettingView: View {
 //                }
             }
             .listStyle(GroupedListStyle())
-            .navigationBarTitle("Settings", displayMode: .inline)
+            .navigationBarTitle("Settings", displayMode: .automatic)
             .environment(\.horizontalSizeClass, .regular)
         }
         .onAppear {
