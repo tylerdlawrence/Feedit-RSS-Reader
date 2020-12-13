@@ -76,6 +76,15 @@ struct RSSItemRow: View {
 //            KFImage(URL(string: self.itemWrapper.imageURL)) //"3icon"
             KFImage(URL(string: self.rssSource.imageURL))
                             .placeholder({
+//                                ZStack{
+//                                KFImage(URL(string: self.itemWrapper.imageURL))
+//                                    .resizable()
+//                                    .aspectRatio(contentMode: .fit)
+//                                    .font(.body)
+//                                    .frame(width: 90, height: 90,alignment: .center)
+//                                    .opacity(0.5)
+//                                    .cornerRadius(5)
+//                                    .border(Color.clear, width: 2)
                                 ZStack{
                                     Image("launch")
                                         .resizable()
@@ -85,7 +94,7 @@ struct RSSItemRow: View {
                                         .opacity(0.5)
                                         .cornerRadius(5)
                                         .border(Color.clear, width: 2)
-//                                      ProgressView()
+////                                      ProgressView()
                                 }
                             })
                             .cancelOnDisappear(true)

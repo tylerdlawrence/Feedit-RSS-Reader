@@ -11,6 +11,12 @@ import Combine
 import KingfisherSwiftUI
 
 struct RSSFeedListView: View {
+    
+//    @Environment(\.managedObjectContext) var managedObjectContext
+//
+//    @Environment(\.presentationMode) var presentationMode
+    
+    @State private var isPresented = false
 
     var rssSource: RSS {
         return self.rssFeedViewModel.rss
@@ -19,7 +25,7 @@ struct RSSFeedListView: View {
     @EnvironmentObject var rssDataSource: RSSDataSource
     @ObservedObject var rssFeedViewModel: RSSFeedViewModel
     @Environment(\.colorScheme) var colorScheme
-
+    var onDoneAction: (() -> Void)?
     @State private var selectedItem: RSSItem?
     @State private var isSafariViewPresented = false
     @State private var start: Int = 0
@@ -29,14 +35,9 @@ struct RSSFeedListView: View {
     init(rssViewModel: RSSFeedViewModel) {
         self.rssFeedViewModel = rssViewModel
     }
-//    private var archiveListView: some View {
-//        Button(action: {
-//            print ("Tags")
-//        }) {
-//            Image(systemName: "arrow.counterclockwise")
-//                .imageScale(.medium)
-//        }
-//    }
+    
+
+    
     private var infoListView: some View {
         Button(action: {
             print ("Tags")
@@ -53,49 +54,57 @@ struct RSSFeedListView: View {
                 //.imageScale(.medium)
         }
     }
+    
     private var trailingFeedView: some View {
         HStack(alignment: .top, spacing: 24) {
             //infoListView
             markAllRead
         }
     }
+    
     var body: some View {
-        HStack{
-            KFImage(URL(string: self.rssSource.imageURL))
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 50, height: 50)
-                .cornerRadius(5.0)
         
-        VStack(alignment: .leading){
-                Text(rssSource.title)
-                    .font(.title2)
-                    .fontWeight(.heavy)
-            Text("Today at ").font(.system(.headline)) +
-                Text(Date(), style: .time)
-                .fontWeight(.bold)
-        }
-//            HStack{
-//                Text("Added")
-//                    .font(.footnote)
-//                    .fontWeight(.heavy)
-//                Text(rssSource.createTimeStr)
-//                    .font(.footnote)
-//                    .fontWeight(.heavy)
-//            }
-//            Text(rssSource.desc)
-//                    .font(.footnote)
-        }
-        .frame(width: 325.0, height: 80)
+        ZStack { //(alignment: .leading){
+            //ScrollView{
+            //HStack(alignment: .center){
+//            KFImage(URL(string: self.rssSource.imageURL))
+//                .resizable()
+//                .aspectRatio(contentMode: .fit)
+//                .frame(width: 50, height: 50)
+//                .cornerRadius(5.0)
+               // VStack(alignment: .leading){
+//                    Text(rssSource.title)
+//                        .font(.title2)
+//                        .fontWeight(.heavy)
+//                    Text("Today at ").font(.system(.headline)) +
+//                        Text(Date(), style: .time)
+//                        .fontWeight(.bold)
+                //Divider()
+
+                //}
+            //}
+        //}
+        //.frame(width: 325.0, height: 80)
 
         VStack{
             List {
-                ForEach(self.rssFeedViewModel.items, id: \.self) { item in
-                    RSSItemRow(rssViewModel: rssFeedViewModel, wrapper: item,
-                               menu: self.contextmenuAction(_:))
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            self.selectedItem = item
+                VStack(alignment: .leading){
+                    Text(rssSource.title)
+                        .font(.title2)
+                        .fontWeight(.heavy)
+                    Text("Today at ").font(.system(.headline)) +
+                        Text(Date(), style: .time)
+                        .fontWeight(.bold)
+                }
+                .padding(.leading)
+                    ForEach(self.rssFeedViewModel.items, id: \.self) { item in
+                        RSSItemRow(rssViewModel: rssFeedViewModel, wrapper: item,
+                                   menu: self.contextmenuAction(_:))
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                self.selectedItem = item
+                                self.isPresented.toggle()
+                        //}
                     }
                 }
                 VStack(alignment: .center) {
@@ -108,11 +117,15 @@ struct RSSFeedListView: View {
                             }
                         }
                     }
-                }
+            }
             .listStyle(PlainListStyle())
             }
+//        .navigationBarTitle(Text(rssSource.title) + Text(" Today at ") + Text(Date(), style: .time))
+//        .navigationBarTitleDisplayMode(.inline)
+//        .navigationBarTitle("dummy header").navigationBarHidden(true)
         .navigationBarTitle("", displayMode: .inline)
-        .navigationBarItems(trailing: trailingFeedView)
+        //.navigationBarItems(trailing: trailingFeedView)
+        //.fullScreenCover
         .sheet(item: $selectedItem, content: { item in
             if AppEnvironment.current.useSafari {
                 SafariView(url: URL(string: item.url)!)
@@ -121,12 +134,14 @@ struct RSSFeedListView: View {
                     rssViewModel: rssFeedViewModel, wrapper: item, rss: RSS.simple(), rssItem: item,
                     onArchiveAction: {
                         self.rssFeedViewModel.archiveOrCancel(item)
-                })
-            }
-        })
+                    })
+                }
+            })
+        
         .onAppear {
             self.rssFeedViewModel.fecthResults()
             self.rssFeedViewModel.fetchRemoteRSSItems()
+            }
         }
     }
     func contextmenuAction(_ item: RSSItem) {

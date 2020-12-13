@@ -13,6 +13,8 @@ import Combine
 
 struct HomeView: View {
     
+    @Environment(\.presentationMode) var presentationMode
+
     @EnvironmentObject var rssDataSource: RSSDataSource
     
     let defaultFeeds: [DefaultFeeds] = Bundle.main.decode("DefaultFeeds.json")
@@ -21,7 +23,8 @@ struct HomeView: View {
         case add
         case setting
     }
-    
+    @State var showSheetView = false
+
     @State var sources: [RSS] = []
     
     @ObservedObject var viewModel: RSSListViewModel
@@ -238,15 +241,15 @@ struct HomeView: View {
             }.listRowBackground(Color("accent"))
             
             Section(header: feedView) {
-                Section(header: feedSection) {
-                    ForEach(viewModel.items, id: \.self) { rss in
-                        NavigationLink(destination: self.destinationView(rss)) {
-                            RSSRow(rss: rss)
-                            }
-                            .tag("RSS")
-                    }
-                    .padding(.leading)
-                }
+//                Section(header: feedSection) {
+//                    ForEach(viewModel.items, id: \.self) { rss in
+//                        NavigationLink(destination: self.destinationView(rss: rss)) {
+//                            RSSRow(rss: rss)
+//                            }
+//                            .tag("RSS")
+//                    }
+//                    .padding(.leading)
+//                }
                 NavigationLink(destination: archiveListView) {
                     BookmarkView()
                 }
@@ -265,7 +268,7 @@ struct HomeView: View {
 //                    selection: $showingContent) {
             Section(header: feedsAll) {
                 ForEach(viewModel.items, id: \.self) { rss in
-                    NavigationLink(destination: self.destinationView(rss)) {
+                    NavigationLink(destination: self.destinationView(rss: rss)) {
                         RSSRow(rss: rss)
                     }
                     .padding(.leading)
@@ -331,6 +334,10 @@ struct HomeView: View {
 //            .foregroundColor(Color("darkerAccent"))
 //            .listRowBackground(Color("accent"))
 //            .edgesIgnoringSafeArea(.all)
+//            if addRSSProgressValue > 0 && addRSSProgressValue < 1.0 {
+//                LinerProgressBar(lineWidth: 3, color: .blue, progress: $addRSSProgressValue)
+//                    .padding(.top, 2)
+//            }
             }
             .onReceive(rssRefreshPublisher, perform: { output in
                 self.viewModel.fecthResults()
@@ -430,14 +437,14 @@ extension HomeView {
     func onDoneAction() {
         self.viewModel.fecthResults()
     }
-    private func destinationView(_ rss: RSS) -> some View {
-        RSSFeedListView(rssViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
+    private func destinationView(rss: RSS) -> some View {
+        RSSFeedListView(rssViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem)) //, showSheetView: self.showSheetView)
             .environmentObject(DataSourceService.current.rss)
     }
-    private func destinationFolderView(_ rss: RSS) -> some View {
-        RSSFeedListView(rssViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
-            .environmentObject(DataSourceService.current.rss)
-    }
+//    private func destinationFolderView(_ rss: RSS) -> some View {
+//        RSSFeedListView(rssViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), showSheetView: Bool)
+//            .environmentObject(DataSourceService.current.rss)
+//    }
     func deleteItems(at offsets: IndexSet) {
         viewModel.items.remove(atOffsets: offsets)
     }
@@ -467,8 +474,8 @@ struct UnreadCountView: View {
             .fontWeight(.bold)
             .padding(.horizontal, 7)
             .padding(.vertical, 1)
-            .background(Color("background"))
-            .foregroundColor(.blue)
+            .background(Color("darkShadow")) //accent")) //darkShadow"))
+            .foregroundColor(Color("lightShadow"))
             .cornerRadius(8)
     }
 }

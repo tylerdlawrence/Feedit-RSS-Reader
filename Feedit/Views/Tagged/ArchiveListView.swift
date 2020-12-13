@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import KingfisherSwiftUI
 import Intents
 
 struct ArchiveListView: View {
@@ -33,7 +34,6 @@ struct ArchiveListView: View {
                     RSSItemRow(rssViewModel: rssFeedViewModel, wrapper: item)
                         .onTapGesture {
                             self.selectedItem = item
-
                     }
                     
                 }
