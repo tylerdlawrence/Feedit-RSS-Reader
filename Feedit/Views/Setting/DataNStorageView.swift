@@ -32,7 +32,7 @@ struct DataNStorageView: View {
         .padding(.top, 40)
         .onAppear {
             self.viewModel.getRSSCount()
-            self.viewModel.getRSSItemCount()
+           // self.viewModel.getRSSItemCount
         }
     }
 }

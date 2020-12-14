@@ -29,15 +29,15 @@ struct ActionContextMenu: View {
     
     var body: some View {
         VStack {
-            Button(action: {
-                self.onRead?()
-            }, label: {
-                HStack{
-                    Text("Toggle Read")
-                    Image(systemName: "circle")
-                        .imageScale(.small)
-                }
-            })
+//            Button(action: {
+//                self.onRead?()
+//            }, label: {
+//                HStack{
+//                    Text("Toggle Read")
+//                    Image(systemName: "circle")
+//                        .imageScale(.small)
+//                }
+//            })
             Button(action: {
                 self.onAction?()
             }, label: {
@@ -47,16 +47,16 @@ struct ActionContextMenu: View {
                         .imageScale(.small)
                 }
             })
-            Button(action: {
-                self.onTag?()
-            }, label: {
-                HStack{
-                    Text("Tag Article")
-                    Image(systemName: "circlebadge.2")
-                        .imageScale(.small)
-                    //Image("smartFeedUnread")
-                }
-            })
+//            Button(action: {
+//                self.onTag?()
+//            }, label: {
+//                HStack{
+//                    Text("Tag Article")
+//                    Image(systemName: "circlebadge.2")
+//                        .imageScale(.small)
+//                    //Image("smartFeedUnread")
+//                }
+//            })
         }
 
     }

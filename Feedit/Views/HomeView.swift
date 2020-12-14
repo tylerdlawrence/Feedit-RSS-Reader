@@ -155,7 +155,8 @@ struct HomeView: View {
 ////            (systemName: "archivebox").font(.system(size: 16, weight: .bold))
 //                .foregroundColor(Color("bg"))
 //                .imageScale(.large)
-            Text("All Items").font(.system(size: 18, weight: .semibold))
+            Text("All Items") //.font(.system(size: 18, weight: .semibold))
+                .font(.headline)
 //            Spacer()
 //            Text("\(viewModel.items.count)")
         }
@@ -191,7 +192,8 @@ struct HomeView: View {
 //                .aspectRatio(contentMode: .fit)
 //                .frame(width: 30, height: 30, alignment: .center)
 //                .foregroundColor(Color("bg"))
-            Text("On My iPhone").font(.system(size: 18, weight: .semibold))
+            Text("On My iPhone") //.font(.system(size: 18, weight: .semibold))
+                .font(.headline)
             Spacer()
             unreadCount
         }
@@ -252,9 +254,13 @@ struct HomeView: View {
 //                }
                 NavigationLink(destination: archiveListView) {
                     BookmarkView()
+                    Spacer()
+                    UnreadCountView(count: self.archiveListViewModel.items.count)
                 }
                 NavigationLink(destination: Tag.demoTags.randomElement()!) {
                     TagView()
+                    Spacer()
+                    UnreadCountView(count: Tag.demoTags.count)
                 }
             }
             .textCase(nil)
@@ -262,14 +268,15 @@ struct HomeView: View {
             .foregroundColor(Color("darkerAccent"))
             .listRowBackground(Color("accent"))
             .edgesIgnoringSafeArea(.all)
-//                    DisclosureGroup(
-//                    "❯  Feeds",
-//                    tag: .RSS,
-//                    selection: $showingContent) {
+
             Section(header: feedsAll) {
                 ForEach(viewModel.items, id: \.self) { rss in
                     NavigationLink(destination: self.destinationView(rss: rss)) {
+                        HStack{
                         RSSRow(rss: rss)
+                        Spacer()
+                        UnreadCountView(count: RSSRow.viewModel.items.count)
+                        }
                     }
                     .padding(.leading)
                     .tag("RSS")
@@ -351,10 +358,10 @@ struct HomeView: View {
                     SettingView()
                 }
             })
-    //.listStyle(SidebarListStyle())
-//    .listStyle(GroupedListStyle())
+//    .listStyle(PlainListStyle())
+//    .listStyle(InsetGroupedListStyle())
         .navigationTitle("")
-        .navigationBarItems(leading: leadingView, trailing: trailingView)
+        .navigationBarItems(trailing: trailingView) //leading: leadingView, 
         .toolbar {
 //            ToolbarItem(placement: .bottomBar) {
 //                cardButton
@@ -381,9 +388,9 @@ struct BookmarkView: View {
                 Image("star")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: 20, height: 20, alignment: .center)
+                    .frame(width: 15, height: 15, alignment: .center)
                 Text("Starred")
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.headline) //.system(size: 16, weight: .semibold))
                     .fontWeight(.semibold)
                     .foregroundColor(Color("bg"))
             }
@@ -398,9 +405,9 @@ struct TagView: View {
                 Image("smartFeedUnread")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: 20, height: 20, alignment: .center)
+                    .frame(width: 15, height: 15, alignment: .center)
                 Text("Tags")
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.headline) //.system(size: 16, weight: .semibold))
                     .fontWeight(.semibold)
                     .foregroundColor(Color("bg"))
             }
@@ -474,7 +481,7 @@ struct UnreadCountView: View {
             .fontWeight(.bold)
             .padding(.horizontal, 7)
             .padding(.vertical, 1)
-            .background(Color("darkShadow")) //accent")) //darkShadow"))
+//            .background(Color("darkShadow")) //accent")) //darkShadow"))
             .foregroundColor(Color("lightShadow"))
             .cornerRadius(8)
     }

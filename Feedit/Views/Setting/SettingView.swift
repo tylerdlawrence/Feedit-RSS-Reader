@@ -35,7 +35,7 @@ struct SettingView: View {
     }
     
     @State private var isSelected: Bool = false
-    
+        
     var batchImportView: BatchImportView {
         let dataSource = DataSourceService.current.rss
         return BatchImportView(viewModel: BatchImportViewModel(dataSource: dataSource))

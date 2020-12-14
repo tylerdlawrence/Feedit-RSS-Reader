@@ -105,7 +105,7 @@ struct WebView: View {
             self.onDoneAction?()
             self.presentationMode.wrappedValue.dismiss()
         }) {
-            Image("MarkAllAsRead")
+            Image("MarkAllAsRead") //systemName: "chevron.left")
         }
     }
 
@@ -173,20 +173,33 @@ struct WebView: View {
 //                Spacer()
 //            }
 //        }
-        
-
-//        GeometryReader { geometry in
-//        ScrollView{
         NavigationView {
-//            ZStack(alignment: .topLeading) {
-            GeometryReader { geometry in
+//            GeometryReader { geometry in
                 ScrollView{
                     HStack(alignment: .center){
                         KFImage(URL(string: self.rssSource.imageURL))
+                            .placeholder({
+                                ZStack{
+                                    Image("launch")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 50, height: 50)
+                                        .cornerRadius(2)
+                                        .border(Color.gray, width: 2)
+                                }
+                                .padding(.trailing)
+                            })
                             .resizable()
-                            .aspectRatio(contentMode: .fit)
+                            .scaledToFit()
                             .frame(width: 50, height: 50)
-                            .cornerRadius(5.0)
+                            .clipped()
+                            .cornerRadius(12)
+                            .multilineTextAlignment(.trailing)
+//                        KFImage(URL(string: self.rssSource.imageURL))
+//                            .resizable()
+//                            .aspectRatio(contentMode: .fit)
+//                            .frame(width: 50, height: 50)
+//                            .cornerRadius(5.0)
                     VStack(alignment: .leading){
                         Text(rssSource.title)
                             .font(.title2)
@@ -199,16 +212,17 @@ struct WebView: View {
                     }
                     .padding([.top, .leading, .trailing])
                     
-                    VStack(alignment: .leading){                        Text(rssItem.title)
+                    VStack(alignment: .leading){
+                        Text(rssItem.title)
                             .font(.title2)
                             .multilineTextAlignment(.leading)
                             .padding([.top, .leading, .trailing])
                     
                     VStack(alignment: .leading){
-                            Text("\(itemWrapper.createTime?.string() ?? "")")
-                                .font(.headline)
-                                .foregroundColor(Color.gray)
-                                .padding(.leading)
+                        Text("\(itemWrapper.createTime?.string() ?? "")")
+                            .font(.headline)
+                            .foregroundColor(Color.gray)
+                            .padding(.leading)
                         }
                     }
                     
@@ -220,37 +234,41 @@ struct WebView: View {
                             .multilineTextAlignment(.leading)
                         }
                     }
-                }
-                .navigationBarTitle("", displayMode: .inline)
+//                .navigationBarTitle("", displayMode: .inline)
+                .navigationBarHidden(true)
                 .navigationBarItems(trailing: doneButton)
-                .toolbar {
-                    ToolbarItem(placement: .bottomBar) {
-                        makeFeatureItemView(
-                            imageName: FeatureItem.goBack.icon,
-                            disable: !self.viewModel.canGoBack,
-                            action: self.onGoBackAction)
-                    }
-                    ToolbarItem(placement: .bottomBar) {
-                        makeFeatureItemView(
-                            imageName: FeatureItem.goForward.icon,
-                            disable: !self.viewModel.canGoForward,
-                            action: self.onGoForwardAction)
-                    }
-                    ToolbarItem(placement: .bottomBar) {
-                        Spacer()
-                    }
-                    ToolbarItem(placement: .bottomBar) {
-                        makeFeatureItemView(imageName: FeatureItem.archive(self.rssItem.isArchive).icon, action: self.onArchiveAction)
-                    }
-                    ToolbarItem(placement: .bottomBar) {
-                        Spacer()
-                    }
-                    ToolbarItem(placement: .bottomBar) {
-                        Link(destination: URL(string: itemWrapper.url)!) {
-                            Image(systemName: "safari").font(.system(size: 16, weight: .bold)).foregroundColor(.blue)
+                    .toolbar {
+                        ToolbarItem(placement: .bottomBar) {
+                            makeFeatureItemView(
+                                imageName: FeatureItem.goBack.icon,
+                                disable: !self.viewModel.canGoBack,
+                                action: self.onGoBackAction)
+                        }
+                        ToolbarItem(placement: .bottomBar) {
+                            makeFeatureItemView(
+                                imageName: FeatureItem.goForward.icon,
+                                disable: !self.viewModel.canGoForward,
+                                action: self.onGoForwardAction)
+                        }
+                        ToolbarItem(placement: .bottomBar) {
+                            Spacer()
+                        }
+                        ToolbarItem(placement: .bottomBar) {
+                            makeFeatureItemView(imageName: FeatureItem.archive(self.rssItem.isArchive).icon, action: self.onArchiveAction)
+                        }
+                        ToolbarItem(placement: .bottomBar) {
+                            Spacer()
+                        }
+                        ToolbarItem(placement: .bottomBar) {
+                            Link(destination: URL(string: itemWrapper.url)!) {
+                                Image(systemName: "safari").font(.system(size: 16, weight: .bold)).foregroundColor(.blue)
+                            }
                         }
                     }
                 }
+                
+            }
+
 //                Text(itemWrapper.title)
 //                    .font(.title3)
 //                    .fontWeight(.bold)
@@ -308,8 +326,8 @@ struct WebView: View {
 //                            .imageScale(.medium)
 //
 ////                    }
-                }
-            }
+//                }
+            //}
 //            .frame(width: 400.0, height: 90.0)
 //            .background(Color("background"))
 //            .ignoresSafeArea(.keyboard, edges: .bottom)

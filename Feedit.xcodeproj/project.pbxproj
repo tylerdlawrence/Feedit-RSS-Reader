@@ -1179,7 +1179,7 @@
 				CODE_SIGN_ENTITLEMENTS = Feedit/Feedit.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 24;
+				CURRENT_PROJECT_VERSION = 25;
 				DEVELOPMENT_ASSET_PATHS = "\"Feedit/Preview Content\"";
 				DEVELOPMENT_TEAM = 7Z3Z6D3TH7;
 				ENABLE_PREVIEWS = YES;
@@ -1192,7 +1192,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.01;
+				MARKETING_VERSION = 1.02;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tylerdlawrence.feeditrssreader;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1210,7 +1210,7 @@
 				CODE_SIGN_ENTITLEMENTS = Feedit/Feedit.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 24;
+				CURRENT_PROJECT_VERSION = 25;
 				DEVELOPMENT_ASSET_PATHS = "\"Feedit/Preview Content\"";
 				DEVELOPMENT_TEAM = 7Z3Z6D3TH7;
 				ENABLE_PREVIEWS = YES;
@@ -1223,7 +1223,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.01;
+				MARKETING_VERSION = 1.02;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tylerdlawrence.feeditrssreader;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

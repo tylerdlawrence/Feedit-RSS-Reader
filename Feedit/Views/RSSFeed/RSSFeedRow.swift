@@ -5,11 +5,9 @@
 //  Created by Tyler D Lawrence on 8/10/20.
 //  View once you choose Feed on Main Screen
 
-import UIKit
 import SwiftUI
-import Combine
-import KingfisherSwiftUI
 import FeedKit
+import KingfisherSwiftUI
 
 struct RSSItemRow: View {
     var rssSource: RSS {
@@ -72,19 +70,19 @@ struct RSSItemRow: View {
                                 .frame(width: 15, height: 15)
                         }
                     }
-                }.padding(.horizontal, 12)
+                }
+            .padding(.horizontal, 12)
+            .contextMenu {
+                ActionContextMenu(
+                    label: itemWrapper.isArchive ? "Untag" : "Tag",
+                    systemName: "star\(itemWrapper.isArchive ? "" : "star")",
+                    onAction: {
+                        self.contextMenuAction?(self.itemWrapper)
+                    })
+                }
 //            KFImage(URL(string: self.itemWrapper.imageURL)) //"3icon"
             KFImage(URL(string: self.rssSource.imageURL))
                             .placeholder({
-//                                ZStack{
-//                                KFImage(URL(string: self.itemWrapper.imageURL))
-//                                    .resizable()
-//                                    .aspectRatio(contentMode: .fit)
-//                                    .font(.body)
-//                                    .frame(width: 90, height: 90,alignment: .center)
-//                                    .opacity(0.5)
-//                                    .cornerRadius(5)
-//                                    .border(Color.clear, width: 2)
                                 ZStack{
                                     Image("launch")
                                         .resizable()
@@ -94,33 +92,18 @@ struct RSSItemRow: View {
                                         .opacity(0.5)
                                         .cornerRadius(5)
                                         .border(Color.clear, width: 2)
-////                                      ProgressView()
+//                                     ProgressView()
                                 }
+                                .padding(.trailing)
                             })
-                            .cancelOnDisappear(true)
+//                            .cancelOnDisappear(true)
                             .resizable()
                             .scaledToFit()
                             .frame(width: 90, height: 90)
+                            .opacity(0.7)
                             .clipped()
                             .cornerRadius(12)
                             .multilineTextAlignment(.trailing)
-                            }
-
-
-        .contextMenu {
-            ActionContextMenu(
-                label: itemWrapper.isArchive ? "Untag" : "Tag",
-                systemName: "star\(itemWrapper.isArchive ? "" : "star")",
-                onAction: { //self.
-                    self.contextMenuAction?(self.itemWrapper)
-                })
-            }
+                        }
         }
     }
-//struct RSSFeedRow_Previews: PreviewProvider {
-//    static var previews: some View {
-//        let simple = DataSourceService.current.rssItem.simple()
-////        return RSSItemRow(wrapper: simple!)
-//        RSSItemRow(rssViewModel: rssFeedViewModel, wrapper: simple!)
-//    }
-//}

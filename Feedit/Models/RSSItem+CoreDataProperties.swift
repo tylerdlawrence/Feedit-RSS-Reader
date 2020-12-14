@@ -24,7 +24,6 @@ extension RSSItem {
         return NSFetchRequest<RSSItem>(entityName: "RSSItem")
     }
 
-    //@NSManaged public var imageURL: String
     @NSManaged public var updateTime: Date?
     @NSManaged public var createTime: Date?
     @NSManaged public var desc: String
@@ -57,13 +56,10 @@ extension RSSItem {
         item.createTime = createTime
         item.progress = 0
         item.isArchive = false
-//        item.configurations = configurations
-        //item.imageURL = image
+
         return item
     }
-    
-    //static var placeholder = RSSItem.self
-    
+        
     static func requestObjects(rssUUID: UUID, start: Int = 0, limit: Int = 20) -> NSFetchRequest<RSSItem> {
         let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
         let predicate = NSPredicate(format: "rssUUID = %@", argumentArray: [rssUUID])
@@ -83,22 +79,25 @@ extension RSSItem {
         request.fetchLimit = limit
         return request
     }
+}
+
+    extension RSSItem: ObjectValidatable {
+        func hasChangedValues() -> Bool {
+            return hasPersistentChangedValues
+        }
+    }
     
-    static func requestCountArchiveObjects() -> NSFetchRequest<RSSItem> {
+func requestCountArchiveObjects() -> NSFetchRequest<RSSItem> {
         let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
         let predicate = NSPredicate(format: "isArchive = true")
         request.predicate = predicate
         return request
     }
-    
-    static func requestDefaultObjects() -> NSFetchRequest<RSSItem> {
+
+func requestDefaultObjects() -> NSFetchRequest<RSSItem> {
         let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
         return request
     }
-}
+//}
 
-extension RSSItem: ObjectValidatable {
-    func hasChangedValues() -> Bool {
-        return hasPersistentChangedValues
-    }
-}
+
