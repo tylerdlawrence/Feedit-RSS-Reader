@@ -8,11 +8,15 @@
 import SwiftUI
 import FeedKit
 import KingfisherSwiftUI
+import SDWebImageSwiftUI
 
 struct RSSItemRow: View {
+    
+    
     var rssSource: RSS {
         return self.rssFeedViewModel.rss
     }
+    
     @ObservedObject var rssFeedViewModel: RSSFeedViewModel
     @ObservedObject var itemWrapper: RSSItem
     var contextMenuAction: ((RSSItem) -> Void)?
@@ -22,7 +26,6 @@ struct RSSItemRow: View {
         self.rssFeedViewModel = rssViewModel
         itemWrapper = wrapper
         contextMenuAction = action
-        self.imageLoader = ImageLoader(path: wrapper.imageURL)
     }
     private var pureTextView: some View {
             Text(itemWrapper.title)
@@ -35,6 +38,7 @@ struct RSSItemRow: View {
                 .lineLimit(1)
     }
     var body: some View{
+
         HStack{
             VStack(alignment: .leading, spacing: 8) {
                 Text(itemWrapper.title)
@@ -80,8 +84,7 @@ struct RSSItemRow: View {
                         self.contextMenuAction?(self.itemWrapper)
                     })
                 }
-//            KFImage(URL(string: self.itemWrapper.imageURL)) //"3icon"
-            KFImage(URL(string: self.rssSource.imageURL))
+            KFImage(URL(string: rssSource.imageURL))
                             .placeholder({
                                 ZStack{
                                     Image("launch")
@@ -92,7 +95,7 @@ struct RSSItemRow: View {
                                         .opacity(0.5)
                                         .cornerRadius(5)
                                         .border(Color.clear, width: 2)
-//                                     ProgressView()
+                                     //ProgressView()
                                 }
                                 .padding(.trailing)
                             })
@@ -104,6 +107,8 @@ struct RSSItemRow: View {
                             .clipped()
                             .cornerRadius(12)
                             .multilineTextAlignment(.trailing)
-                        }
+
+            
+            }
         }
     }

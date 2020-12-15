@@ -27,6 +27,11 @@ struct ArchiveListView: View {
         self.rssFeedViewModel = rssFeedViewModel
     }
     
+    private var loadMore: some View {
+        Button(action: self.archiveListViewModel.loadMore) {
+                Image("MarkAllAsRead")
+        }
+    }
     
     var body: some View {
             List {
@@ -43,36 +48,21 @@ struct ArchiveListView: View {
                         self.archiveListViewModel.unarchive(item)
                     }
                 }
-                //VStack(alignment: .center) {
-                    Button(action: self.archiveListViewModel.loadMore) {
-                        HStack(alignment: .center){
-                            //Spacer()
-                            Image(systemName: "arrow.counterclockwise")
-                                .imageScale(.small)
-                            Text(self.footer)
-                                .font(.subheadline)
-                                .fontWeight(.bold)
-
-                        }
-                    }
-                    .padding(.leading)
-                //}
             }
             .listStyle(PlainListStyle())
-            .navigationBarTitle("Starred", displayMode: .automatic) //☆
-            .navigationBarItems(trailing: EditButton())
+            .navigationBarTitle("Starred", displayMode: .inline)
+            .navigationBarItems(leading: EditButton(), trailing: loadMore)
 
             .sheet(item: $selectedItem, content: { item in
-                if AppEnvironment.current.useSafari {
-                    SafariView(url: URL(string: item.url)!)
-                } else {
-                    WebView(
-                        rssViewModel: rssFeedViewModel, wrapper: item, rss: RSS.simple(), rssItem: item,
-                        onArchiveAction: {
-                            self.archiveListViewModel.archiveOrCancel(item)
+//                if AppEnvironment.current.useSafari {
+//                    SafariView(url: URL(string: item.url)!)
+//                } else {
+                WebView(url: URL(string: item.url)!)
+//                        onArchiveAction: {
+//                            self.archiveListViewModel.archiveOrCancel(item)
                     })
-                }
-            })
+                //}
+//            })
             
             .onAppear {
                  UITableView.appearance().separatorStyle = .none
@@ -85,20 +75,3 @@ struct ArchiveListView: View {
 extension ArchiveListView {
     
 }
-
-//struct ArchiveListView_Previews: PreviewProvider {
-//
-//    static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
-//
-//    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-//
-//    static let rssFeedViewModel = RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem)
-//
-//    static let settingViewModel = SettingViewModel()
-//
-//    static var previews: some View {
-//
-//    ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: self.rssFeedViewModel)
-//    }
-//}
-

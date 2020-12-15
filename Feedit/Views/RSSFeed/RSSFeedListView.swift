@@ -8,15 +8,10 @@
 import SwiftUI
 import FeedKit
 import Combine
+import KingfisherSwiftUI
 
 struct RSSFeedListView: View {
     
-//    @Environment(\.managedObjectContext) var managedObjectContext
-//
-//    @Environment(\.presentationMode) var presentationMode
-    
-    @State private var isPresented = false
-
     var rssSource: RSS {
         return self.rssFeedViewModel.rss
     }
@@ -25,106 +20,69 @@ struct RSSFeedListView: View {
     
     @ObservedObject var rssFeedViewModel: RSSFeedViewModel
     
-    //@Environment(\.colorScheme) var colorScheme
     @State private var selectedItem: RSSItem?
     @State private var isSafariViewPresented = false
     @State private var start: Int = 0
-    @State private var footer: String = "Refresh more articles"
     @State var cancellables = Set<AnyCancellable>()
-    var onDoneAction: (() -> Void)?
 
     init(rssViewModel: RSSFeedViewModel) {
         self.rssFeedViewModel = rssViewModel
     }
     
-
-    
     private var infoListView: some View {
         Button(action: {
-            print ("Tags")
+            print ("feed info")
         }) {
             Image(systemName: "info.circle")
-                .imageScale(.medium)
         }
     }
+    
     private var markAllRead: some View {
         Button(action: {
             print ("Mark all as Read")
         }) {
             Image("MarkAllAsRead")
-                //.imageScale(.medium)
         }
     }
     
-    private var trailingFeedView: some View {
+    private var trailingButtons: some View {
         HStack(alignment: .top, spacing: 24) {
-            //infoListView
+            infoListView
             markAllRead
         }
     }
     
     var body: some View {
-        ZStack {
-            VStack {
-                List {
-                    VStack(alignment: .leading){
-                        Text(rssSource.title)
-                            .font(.title2)
-                            .fontWeight(.heavy)
-                        Text("Today at ").font(.system(.headline)) +
-                            Text(Date(), style: .time)
-                            .fontWeight(.bold)
-                    }
-                    .padding(.leading)
-                
-//                ForEach(rssFeedViewModel.items, id: \.self) { item in
-//                    NavigationLink(destination: WebView(rssViewModel: rssFeedViewModel, wrapper: item,
-//                            rss: RSS.simple(), rssItem: item)) {
-//                        RSSItemRow(rssViewModel: rssFeedViewModel, wrapper: item)
-//                            .contentShape(Rectangle())
-//                            .onTapGesture {
-//                                self.selectedItem = item
-//                                self.isPresented.toggle()
-//                        }
-//                    }
-//                }
-                ForEach(self.rssFeedViewModel.items, id: \.self) { item in
-                  RSSItemRow(rssViewModel: rssFeedViewModel, wrapper: item,
-                      menu: self.contextmenuAction(_:))
-                          .contentShape(Rectangle())
-                          .onTapGesture {
-                            self.selectedItem = item
-                            self.isPresented.toggle()
-                        }
-                    }
-                VStack(alignment: .center) {
-                    Button(action: self.rssFeedViewModel.loadMore) {
-                        HStack{
-                            Text("↺")
-                            Text(self.footer)
-                                .font(.title3)
-                                .fontWeight(.bold)
-                            }
-                        }
-                    }
+        ZStack{
+            List(rssFeedViewModel.items, id: \.id) { item in
+                NavigationLink(destination: WebView(url: URL(string: item.url)!)){
+                    RSSItemRow(rssViewModel: rssFeedViewModel, wrapper: item, menu: self.contextmenuAction(_:))
                 }
-                .listStyle(PlainListStyle())
-                .navigationBarTitle("", displayMode: .inline)
-            }.onAppear {
+            }
+            .listStyle(PlainListStyle())
+            .navigationBarTitle(rssSource.title, displayMode: .inline)
+            .navigationBarItems(trailing:
+                Button(action: self.rssFeedViewModel.loadMore) {
+                    Image("MarkAllAsRead")
+                })
+            
+//            .sheet(item: $selectedItem, content: { item in
+//                if AppEnvironment.current.useSafari {
+//                    SafariView(url: URL(string: item.url)!)
+//                } else {
+//                    WebView(
+//                        rssItem: item,
+//                        onArchiveAction: {
+//                            self.rssFeedViewModel.archiveOrCancel(item)
+//                    })
+//                }
+//            })
+            
+            }
+        
+            .onAppear {
                 self.rssFeedViewModel.fecthResults()
                 self.rssFeedViewModel.fetchRemoteRSSItems()
-        }
-        .sheet(item: $selectedItem, content: { item in
-            if AppEnvironment.current.useSafari {
-                SafariView(url: URL(string: item.url)!)
-            } else {
-                WebView(
-                    rssViewModel: rssFeedViewModel, wrapper: item, rss: RSS.simple(), rssItem: item,
-                    onArchiveAction: {
-                        self.rssFeedViewModel.archiveOrCancel(item)
-                    })
-                }
-            })
         }
     }
     
