@@ -54,8 +54,11 @@ struct RSSFeedListView: View {
     
     var body: some View {
         ZStack{
+
             List(rssFeedViewModel.items, id: \.id) { item in
-                NavigationLink(destination: WebView(url: URL(string: item.url)!)){
+                NavigationLink(destination: WebView(rssViewModel: rssFeedViewModel, wrapper: item, rss: rssSource, rssItem: item, url: URL(string: item.url)!)) {
+                               
+                                
                     RSSItemRow(rssViewModel: rssFeedViewModel, wrapper: item, menu: self.contextmenuAction(_:))
                 }
             }
@@ -78,7 +81,7 @@ struct RSSFeedListView: View {
 //                }
 //            })
             
-            }
+           }
         
             .onAppear {
                 self.rssFeedViewModel.fecthResults()

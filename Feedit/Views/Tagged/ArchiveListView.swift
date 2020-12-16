@@ -55,13 +55,15 @@ struct ArchiveListView: View {
 
             .sheet(item: $selectedItem, content: { item in
 //                if AppEnvironment.current.useSafari {
-//                    SafariView(url: URL(string: item.url)!)
+                    SafariView(url: URL(string: item.url)!)
 //                } else {
-                WebView(url: URL(string: item.url)!)
+//                WebView(url: URL(string: item.url)!)
 //                        onArchiveAction: {
 //                            self.archiveListViewModel.archiveOrCancel(item)
+                
+//                WebView(rssViewModel: rssFeedViewModel, wrapper: item, rss: rssSource, rssItem: item);)
                     })
-                //}
+//                }
 //            })
             
             .onAppear {

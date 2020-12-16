@@ -147,7 +147,7 @@
 		61CDCF5924E845DE007654C5 /* DocumentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CDCF5824E845DE007654C5 /* DocumentPicker.swift */; };
 		61CDCF5B24E8461D007654C5 /* RoundRectangleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CDCF5A24E8461D007654C5 /* RoundRectangleButton.swift */; };
 		61CDCF5D24E84645007654C5 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CDCF5C24E84645007654C5 /* TextView.swift */; };
-		61CDCF5F24E8466C007654C5 /* WebViewHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CDCF5E24E8466C007654C5 /* WebViewHolder.swift */; };
+		61CDCF5F24E8466C007654C5 /* WKWebViewWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CDCF5E24E8466C007654C5 /* WKWebViewWrapper.swift */; };
 		61DEBE3D25152CB20025B1B3 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61DEBE3225152CB20025B1B3 /* WidgetKit.framework */; };
 		61DEBE3F25152CB90025B1B3 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61DEBE3E25152CB90025B1B3 /* SwiftUI.framework */; };
 /* End PBXBuildFile section */
@@ -301,7 +301,7 @@
 		61CDCF5824E845DE007654C5 /* DocumentPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPicker.swift; sourceTree = "<group>"; };
 		61CDCF5A24E8461D007654C5 /* RoundRectangleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundRectangleButton.swift; sourceTree = "<group>"; };
 		61CDCF5C24E84645007654C5 /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
-		61CDCF5E24E8466C007654C5 /* WebViewHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewHolder.swift; sourceTree = "<group>"; };
+		61CDCF5E24E8466C007654C5 /* WKWebViewWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKWebViewWrapper.swift; sourceTree = "<group>"; };
 		61CDCF6724E84D5E007654C5 /* rss.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = rss.entitlements; sourceTree = "<group>"; };
 		61DEBE3225152CB20025B1B3 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		61DEBE3E25152CB90025B1B3 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
@@ -629,7 +629,7 @@
 				618D823C2570327F0061292F /* FeedImageView.swift */,
 				61967EEE24E2061100AA647C /* RSSFeedViewModel.swift */,
 				615899242585CB3000D893CE /* NavigationTitleView.swift */,
-				61CDCF5E24E8466C007654C5 /* WebViewHolder.swift */,
+				61CDCF5E24E8466C007654C5 /* WKWebViewWrapper.swift */,
 				61967EF024E2061100AA647C /* WebView.swift */,
 				61967EE724E205DD00AA647C /* SafariView.swift */,
 			);
@@ -875,7 +875,7 @@
 				618610D1256EF7500083A96D /* NetworkReachabilty.swift in Sources */,
 				61967ECC24E204FB00AA647C /* Request.swift in Sources */,
 				61595D4B257C0993000D6B22 /* Tag.swift in Sources */,
-				61CDCF5F24E8466C007654C5 /* WebViewHolder.swift in Sources */,
+				61CDCF5F24E8466C007654C5 /* WKWebViewWrapper.swift in Sources */,
 				618F902E250DCD4F00D5A03E /* RSSItem+CoreDataClass.swift in Sources */,
 				616CAF6324F7154600690804 /* DateSpec.swift in Sources */,
 				618F902C250DCD4F00D5A03E /* RSS+CoreDataClass.swift in Sources */,
