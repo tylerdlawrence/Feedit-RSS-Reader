@@ -13,6 +13,8 @@ import Combine
 
 struct HomeView: View {
     
+    @Environment(\.managedObjectContext) var managedObjectContext
+    
     @Environment(\.presentationMode) var presentationMode
 
     @EnvironmentObject var rssDataSource: RSSDataSource
@@ -275,7 +277,7 @@ struct HomeView: View {
                         HStack{
                         RSSRow(rss: rss)
                         Spacer()
-                        UnreadCountView(count: RSSRow.viewModel.items.count)
+                        UnreadCountView(count: self.rssFeedViewModel.items.count)
                         }
                     }
                     .padding(.leading)

@@ -12,7 +12,7 @@ struct AddRSSView: View {
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.managedObjectContext) var managedObjectContext
     
-    @FetchRequest(entity: Category.entity(), sortDescriptors: []) var categories: FetchedResults<Category>
+//    @FetchRequest(entity: Category.entity(), sortDescriptors: []) var categories: FetchedResults<Category>
     
     @ObservedObject var viewModel: AddRSSViewModel
     @State private var previewIndex = 0

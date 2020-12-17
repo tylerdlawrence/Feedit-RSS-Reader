@@ -33,14 +33,21 @@ struct ArchiveListView: View {
         }
     }
     
+    private var trailingView: some View {
+        HStack(alignment: .top, spacing: 24) {
+            EditButton()
+            loadMore
+        }
+    }
+        
     var body: some View {
+        ZStack{
             List {
                 ForEach(self.archiveListViewModel.items, id: \.self) { item in
                     RSSItemRow(rssViewModel: rssFeedViewModel, wrapper: item)
                         .onTapGesture {
                             self.selectedItem = item
                     }
-                    
                 }
                 .onDelete { indexSet in
                     if let index = indexSet.first {
@@ -49,9 +56,11 @@ struct ArchiveListView: View {
                     }
                 }
             }
+            .padding(.bottom)
+        }
             .listStyle(PlainListStyle())
-            .navigationBarTitle("Starred", displayMode: .inline)
-            .navigationBarItems(leading: EditButton(), trailing: loadMore)
+            .navigationBarTitle("Starred", displayMode: .automatic)
+            .navigationBarItems(trailing: trailingView)
 
             .sheet(item: $selectedItem, content: { item in
 //                if AppEnvironment.current.useSafari {
@@ -66,10 +75,8 @@ struct ArchiveListView: View {
 //                }
 //            })
             
-            .onAppear {
-                 UITableView.appearance().separatorStyle = .none
-                
-                self.archiveListViewModel.fecthResults()
+        .onAppear {
+            self.archiveListViewModel.fecthResults()
         }
     }
 }

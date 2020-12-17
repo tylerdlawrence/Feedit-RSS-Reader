@@ -22,6 +22,7 @@ struct WebView: View {
     
     @EnvironmentObject var rssDataSource: RSSDataSource
     @ObservedObject var rssFeedViewModel: RSSFeedViewModel
+    
     var rssSource: RSS {
         return self.rssFeedViewModel.rss
     }
@@ -185,6 +186,8 @@ struct WebView: View {
 //            }
 //        }
         //NavigationView {
+//        webViewWrapper
+        
             SafariView(url: url)
 //                ScrollView{
 //                    HStack(alignment: .center){
@@ -246,7 +249,6 @@ struct WebView: View {
 //                        }
                     //}
                 .navigationBarTitle("", displayMode: .inline)
-//                .navigationBarHidden(true)
                 .navigationBarItems(leading: doneButton)
                     .toolbar {
                         ToolbarItem(placement: .bottomBar) {
@@ -276,9 +278,6 @@ struct WebView: View {
                             }
                         }
                     }
-//                }
-                
-            //}
 
 
             .onAppear {
@@ -310,46 +309,46 @@ extension WebView {
     }
 }
 
-struct ImageView: View {
-    var body: some View {
-        GeometryReader { geometry in
-            ZStack(alignment: .topLeading) {
-                ScrollView {
-                    Spacer()    // TODO: replace with the actual content
-                }
-                
-                // TODO: Unsupported element class: UIVisualEffectView
-                
-                Text("")
-                    .font(.body)
-                    .multilineTextAlignment(.center)
-                    .offset(x: 0, y: 854)
-                    .frame(width: 414, height: 0)
-                
-                Button(action: {
-                    //share()
-                }) {
-                    Image(systemName: "square.and.arrow.up.fill")
-                        .frame(width: 44, height: 44, alignment: .center)
-                }
-                .aspectRatio(contentMode: .fill)
-                .accentColor(Color.blue)
-                .offset(x: 362, y: 44)
-                
-                Button(action: {
-                    //done()
-                }) {
-                    Image(systemName: "multiply.circle.fill")
-                        .frame(width: 44, height: 44, alignment: .center)
-                }
-                .clipped()
-                .accentColor(Color.blue)
-                .offset(x: 8, y: 44)
-            }
-            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
-        }
-    }
-}
+//struct ImageView: View {
+//    var body: some View {
+//        GeometryReader { geometry in
+//            ZStack(alignment: .topLeading) {
+//                ScrollView {
+//                    Spacer()    // TODO: replace with the actual content
+//                }
+//
+//                // TODO: Unsupported element class: UIVisualEffectView
+//
+//                Text("")
+//                    .font(.body)
+//                    .multilineTextAlignment(.center)
+//                    .offset(x: 0, y: 854)
+//                    .frame(width: 414, height: 0)
+//
+//                Button(action: {
+//                    //share()
+//                }) {
+//                    Image(systemName: "square.and.arrow.up.fill")
+//                        .frame(width: 44, height: 44, alignment: .center)
+//                }
+//                .aspectRatio(contentMode: .fill)
+//                .accentColor(Color.blue)
+//                .offset(x: 362, y: 44)
+//
+//                Button(action: {
+//                    //done()
+//                }) {
+//                    Image(systemName: "multiply.circle.fill")
+//                        .frame(width: 44, height: 44, alignment: .center)
+//                }
+//                .clipped()
+//                .accentColor(Color.blue)
+//                .offset(x: 8, y: 44)
+//            }
+//            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
+//        }
+//    }
+//}
 struct WebView_Previews: PreviewProvider {
     static var previews: some View {
         SafariView(url:URL(string: "https://google.com")!)

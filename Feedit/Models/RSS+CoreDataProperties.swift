@@ -79,6 +79,14 @@ extension RSS {
 }
 
 extension RSS {
+    static func getNodes() -> NSFetchRequest<RSS> {
+        let request = RSS.fetchRequest() as NSFetchRequest<RSS>
+        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+        return request
+    }
+}
+
+extension RSS {
     static func == (lhs: RSS, rhs: RSS) -> Bool {
         return lhs.uuid == rhs.uuid
     }
