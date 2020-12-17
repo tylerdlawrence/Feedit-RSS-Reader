@@ -69,42 +69,42 @@ struct WebView: View {
 
     }
     
-    private var bottomView: some View {
-        HStack(alignment: .bottom) {
-            makeFeatureItemView(
-                imageName: FeatureItem.goBack.icon,
-                disable: !self.viewModel.canGoBack,
-                action: self.onGoBackAction)
-            makeFeatureItemView(
-                imageName: FeatureItem.goForward.icon,
-                disable: !self.viewModel.canGoForward,
-                action: self.onGoForwardAction
-                )
-            makeFeatureItemView(
-                imageName: FeatureItem.archive(self.rssItem.isArchive).icon,
-                action: self.onArchiveAction
-            )
-            if !self.viewModel.progressHide {
-                VStack(alignment: .center) {
-                    ProgressBar(
-                        boardWidth: 6,
-                        font: Font.system(size: 12),
-                        color: .blue, progress:
-                        self.$viewModel.progress
-                    )
-                    .padding(10)
-                }
-                .frame(width: 50, height: 50, alignment: .center)
-            }
-            Link(destination: URL(string: itemWrapper.url)!) {
-                Image(systemName: "safari")
-                    .foregroundColor(.blue)
-                    .frame(width: 50.0, height: 50.0)
-                    .imageScale(.medium)
-
-            }
-        }
-    }
+//    private var bottomView: some View {
+//        HStack(alignment: .bottom) {
+//            makeFeatureItemView(
+//                imageName: FeatureItem.goBack.icon,
+//                disable: !self.viewModel.canGoBack,
+//                action: self.onGoBackAction)
+//            makeFeatureItemView(
+//                imageName: FeatureItem.goForward.icon,
+//                disable: !self.viewModel.canGoForward,
+//                action: self.onGoForwardAction
+//                )
+//            makeFeatureItemView(
+//                imageName: FeatureItem.archive(self.rssItem.isArchive).icon,
+//                action: self.onArchiveAction
+//            )
+//            if !self.viewModel.progressHide {
+//                VStack(alignment: .center) {
+//                    ProgressBar(
+//                        boardWidth: 6,
+//                        font: Font.system(size: 12),
+//                        color: .blue, progress:
+//                        self.$viewModel.progress
+//                    )
+//                    .padding(10)
+//                }
+//                .frame(width: 50, height: 50, alignment: .center)
+//            }
+//            Link(destination: URL(string: itemWrapper.url)!) {
+//                Image(systemName: "safari")
+//                    .foregroundColor(.blue)
+//                    .frame(width: 50.0, height: 50.0)
+//                    .imageScale(.medium)
+//
+//            }
+//        }
+//    }
     
     private var doneButton: some View {
         Button(action: {
@@ -152,132 +152,86 @@ struct WebView: View {
 
     
     var body: some View {
-//        SafariView(url: url)
 
-//        VStack(alignment: .leading) {
-//            webViewWrapper
-//            HStack(alignment: .top, spacing: 30) {
-//                makeFeatureItemView(
-//                    imageName: FeatureItem.goBack.icon,
-//                    disable: !self.viewModel.canGoBack,
-//                    action: self.onGoBackAction
-//                )
-//                makeFeatureItemView(
-//                    imageName: FeatureItem.goForward.icon,
-//                    disable: !self.viewModel.canGoForward,
-//                    action: self.onGoForwardAction
-//                )
-//                makeFeatureItemView(imageName: FeatureItem.archive(self.rssItem.isArchive).icon, action: self.onArchiveAction)
-//
-//                if !self.viewModel.progressHide {
-//                    VStack(alignment: .center) {
-//                        ProgressBar(
-//                            boardWidth: 6,
-//                            font: Font.system(size: 12),
-//                            color: .blue, progress:
-//                            self.$viewModel.progress
-//                        )
-//                        .padding(10)
-//                    }
-//                    .frame(width: 50, height: 50, alignment: .center)
-//                }
-//
-//                Spacer()
-//            }
-//        }
-        //NavigationView {
-//        webViewWrapper
-        
-            SafariView(url: url)
-//                ScrollView{
-//                    HStack(alignment: .center){
-//                        KFImage(URL(string: self.rssSource.imageURL))
-//                            .placeholder({
-//                                ZStack{
-//                                    Image("launch")
-//                                        .resizable()
-//                                        .aspectRatio(contentMode: .fit)
-//                                        .frame(width: 50, height: 50)
-//                                        .cornerRadius(2)
-//                                        .border(Color.gray, width: 2)
-//                                }
-//                                .padding(.trailing)
-//                            })
-//                            .resizable()
-//                            .scaledToFit()
-//                            .frame(width: 50, height: 50)
-//                            .clipped()
-//                            .cornerRadius(12)
-//                            .multilineTextAlignment(.trailing)
-////                        KFImage(URL(string: self.rssSource.imageURL))
-////                            .resizable()
-////                            .aspectRatio(contentMode: .fit)
-////                            .frame(width: 50, height: 50)
-////                            .cornerRadius(5.0)
-//                    VStack(alignment: .leading){
-//                        Text(rssSource.title)
-//                            .font(.title2)
-//                            .fontWeight(.heavy)
-//                            .foregroundColor(Color.gray)
-//                        Text(rssSource.desc)
-//                            .font(.body)
-//                            .lineLimit(2)
-//                        }
-//                    }
-//                    .padding([.top, .leading, .trailing])
-//
-//                    VStack(alignment: .leading){
-//                        Text(rssItem.title)
-//                            .font(.title2)
-//                            .multilineTextAlignment(.leading)
-//                            .padding([.top, .leading, .trailing])
-//
-//                    VStack(alignment: .leading){
-//                        Text("\(itemWrapper.createTime?.string() ?? "")")
-//                            .font(.headline)
-//                            .foregroundColor(Color.gray)
-//                            .padding(.leading)
-//                        }
-//                    }
-//
-//                    VStack{
-//                        HStack{
-//                        Text(rssItem.desc)
-//                            .font(.headline)
-//                            .padding(.all)
-//                            .multilineTextAlignment(.leading)
-//                        }
-                    //}
-                .navigationBarTitle("", displayMode: .inline)
-                .navigationBarItems(leading: doneButton)
-                    .toolbar {
-                        ToolbarItem(placement: .bottomBar) {
-                            makeFeatureItemView(
-                                imageName: FeatureItem.goBack.icon,
-                                disable: !self.viewModel.canGoBack,
-                                action: self.onGoBackAction)
-                        }
-                        ToolbarItem(placement: .bottomBar) {
-                            makeFeatureItemView(
-                                imageName: FeatureItem.goForward.icon,
-                                disable: !self.viewModel.canGoForward,
-                                action: self.onGoForwardAction)
-                        }
-                        ToolbarItem(placement: .bottomBar) {
-                            Spacer()
-                        }
-                        ToolbarItem(placement: .bottomBar) {
-                            makeFeatureItemView(imageName: FeatureItem.archive(self.rssItem.isArchive).icon, action: self.onArchiveAction)
-                        }
-                        ToolbarItem(placement: .bottomBar) {
-                            Spacer()
-                        }
-                        ToolbarItem(placement: .bottomBar) {
-                            Link(destination: URL(string: itemWrapper.url)!) {
-                                Image(systemName: "safari").font(.system(size: 14, weight: .bold)).foregroundColor(.blue)
-                            }
-                        }
+        VStack(alignment: .leading) {
+            webViewWrapper
+//            SafariView(url: url)
+
+            HStack(alignment: .top, spacing: 30) {
+                makeFeatureItemView(
+                    imageName: FeatureItem.goBack.icon,
+                    disable: !self.viewModel.canGoBack,
+                    action: self.onGoBackAction
+                )
+                makeFeatureItemView(
+                    imageName: FeatureItem.goForward.icon,
+                    disable: !self.viewModel.canGoForward,
+                    action: self.onGoForwardAction
+                )
+                
+                if !self.viewModel.progressHide {
+                    VStack(alignment: .center) {
+                        ProgressBar(
+                            boardWidth: 6,
+                            font: Font.system(size: 12),
+                            color: .blue, progress:
+                            self.$viewModel.progress
+                        )
+                        .padding(10)
                     }
+                    .frame(width: 50, height: 50, alignment: .center)
+                }
+                
+                makeFeatureItemView(imageName: FeatureItem.archive(self.rssItem.isArchive).icon, action: self.onArchiveAction)
+
+                Link(destination: URL(string: itemWrapper.url)!) {
+                    Image(systemName: "safari")
+                        .imageScale(.large)
+                }
+                .frame(width: 50, height: 50, alignment: .center)
+            }
+        }
+        .navigationBarTitle("", displayMode: .inline)
+        .navigationBarItems(leading: doneButton)
+//                    .toolbar {
+//                        ToolbarItem(placement: .bottomBar) {
+//                            makeFeatureItemView(
+//                                imageName: FeatureItem.goBack.icon,
+//                                disable: !self.viewModel.canGoBack,
+//                                action: self.onGoBackAction)
+//                        }
+//                        ToolbarItem(placement: .bottomBar) {
+//                            makeFeatureItemView(
+//                                imageName: FeatureItem.goForward.icon,
+//                                disable: !self.viewModel.canGoForward,
+//                                action: self.onGoForwardAction)
+//                        }
+////                        ToolbarItem(placement: .bottomBar) {
+////                            Spacer()
+////                        }
+//                        ToolbarItem(placement: .bottomBar) {
+//                            makeFeatureItemView(imageName: FeatureItem.archive(self.rssItem.isArchive).icon, action: self.onArchiveAction)
+//                        }
+//                        ToolbarItem(placement: .bottomBar) {
+//                            if !self.viewModel.progressHide {
+//                                VStack(alignment: .center) {
+//                                    ProgressBar(
+//                                        boardWidth: 6,
+//                                        font: Font.system(size: 12),
+//                                        color: .blue, progress:
+//                                        self.$viewModel.progress
+//                                    )
+//                                    .padding(10)
+//                                }
+//                                .frame(width: 50, height: 50, alignment: .center)
+//                            }
+//                        }
+//                        ToolbarItem(placement: .bottomBar) {
+//                            Link(destination: URL(string: itemWrapper.url)!) {
+//                                Image(systemName: "safari").font(.system(size: 14, weight: .bold)).foregroundColor(.blue)
+//                            }
+//                        }
+//                    }
 
 
             .onAppear {
@@ -309,46 +263,6 @@ extension WebView {
     }
 }
 
-//struct ImageView: View {
-//    var body: some View {
-//        GeometryReader { geometry in
-//            ZStack(alignment: .topLeading) {
-//                ScrollView {
-//                    Spacer()    // TODO: replace with the actual content
-//                }
-//
-//                // TODO: Unsupported element class: UIVisualEffectView
-//
-//                Text("")
-//                    .font(.body)
-//                    .multilineTextAlignment(.center)
-//                    .offset(x: 0, y: 854)
-//                    .frame(width: 414, height: 0)
-//
-//                Button(action: {
-//                    //share()
-//                }) {
-//                    Image(systemName: "square.and.arrow.up.fill")
-//                        .frame(width: 44, height: 44, alignment: .center)
-//                }
-//                .aspectRatio(contentMode: .fill)
-//                .accentColor(Color.blue)
-//                .offset(x: 362, y: 44)
-//
-//                Button(action: {
-//                    //done()
-//                }) {
-//                    Image(systemName: "multiply.circle.fill")
-//                        .frame(width: 44, height: 44, alignment: .center)
-//                }
-//                .clipped()
-//                .accentColor(Color.blue)
-//                .offset(x: 8, y: 44)
-//            }
-//            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
-//        }
-//    }
-//}
 struct WebView_Previews: PreviewProvider {
     static var previews: some View {
         SafariView(url:URL(string: "https://google.com")!)
