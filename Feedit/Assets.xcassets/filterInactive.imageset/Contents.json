@@ -1,12 +1,11 @@
 {
   "images" : [
     {
-      "filename" : "filter-unselected_Normal.png",
+      "filename" : "filter-unselected_Normal@2x.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "filter-unselected_Normal@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },

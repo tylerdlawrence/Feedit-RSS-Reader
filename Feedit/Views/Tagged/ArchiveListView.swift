@@ -18,7 +18,9 @@ struct ArchiveListView: View {
     @EnvironmentObject var rssDataSource: RSSDataSource
     @ObservedObject var rssFeedViewModel: RSSFeedViewModel
     @ObservedObject var archiveListViewModel: ArchiveListViewModel
-    
+    @ObservedObject var searchBar: SearchBar = SearchBar()
+    @State private var isShowing = false
+
     @State private var selectedItem: RSSItem?
     @State var footer = "Refresh more articles"
     
@@ -56,15 +58,20 @@ struct ArchiveListView: View {
                     }
                 }
             }
+            .pullToRefresh(isShowing: $isShowing) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self.isShowing = false
+                }
+            }
             .padding(.bottom)
         }
-            .listStyle(PlainListStyle())
-            .navigationBarTitle("Starred", displayMode: .automatic)
-            .navigationBarItems(trailing: trailingView)
-
-            .sheet(item: $selectedItem, content: { item in
+        .listStyle(PlainListStyle())
+        .navigationBarTitle("Starred", displayMode: .automatic)
+        .navigationBarItems(trailing: trailingView)
+        .add(self.searchBar)
+        .sheet(item: $selectedItem, content: { item in
 //                if AppEnvironment.current.useSafari {
-                    SafariView(url: URL(string: item.url)!)
+                SafariView(url: URL(string: item.url)!)
 //                } else {
 //                WebView(url: URL(string: item.url)!)
 //                        onArchiveAction: {

@@ -28,8 +28,8 @@ class DataNStorageViewModel: NSObject, ObservableObject {
         print("getRSSCount = \(rssCount)")
     }
     
-//    func getRSSItemCount() {
-//        rssItemCount = rssItemDataSource.performFetchCount(RSSItem.requestDefaultObjects())
-//        print("getRSSItemCount = \(rssItemCount)")
-//    }
+    func getRSSItemCount() {
+        rssItemCount = rssItemDataSource.performFetchCount(RSSItem.requestDefaultObjects())
+        print("getRSSItemCount = \(rssItemCount)")
+    }
 }

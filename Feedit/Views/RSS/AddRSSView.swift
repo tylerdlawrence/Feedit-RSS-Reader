@@ -81,7 +81,7 @@ struct AddRSSView: View {
     
     private var trailingButtons: some View {
         HStack(alignment: .top, spacing: 24) {
-            helpButton
+            //helpButton
             doneButton
         }
     }

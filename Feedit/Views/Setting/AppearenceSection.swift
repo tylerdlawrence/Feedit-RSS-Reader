@@ -51,9 +51,9 @@ struct AppearenceSection: ToggleStyle {
 }
 
 //struct AppearenceSection_Previews: PreviewProvider {
-  //  typealias Previews = ToggleStyle
-    //
-      //  var previews: some ToggleStyle {
-        //    AppearenceSection(isToggled: .constant(true), isSelected: .constant(true))
-        //}
-    //}
+//    //typealias Previews = ToggleStyle
+//
+//        var previews: some ToggleStyle {
+//            AppearenceSection(isToggled: .constant(true), isSelected: .constant(true))
+//        }
+//    }

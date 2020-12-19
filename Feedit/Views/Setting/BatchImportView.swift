@@ -4,76 +4,13 @@
 //
 //  Created by Tyler D Lawrence on 8/15/20.
 //
-//
-//import SwiftUI
-//import UIKit
-//import UniformTypeIdentifiers
-//
-//struct BatchImportView: View {
-//
-//    let viewModel: BatchImportViewModel
-//
-//    @State private var isSheetPresented = false
-//    @State private var isJSONHintPresented = true
-//    @State private var buttonStatus: RoundRectangeButton.Status = .normal("Select File")
-//    @State private var JSONText = ""
-//
-//    @ObservedObject private var pickerViewModel: DocumentPickerViewModel
-//
-//    init(viewModel: BatchImportViewModel) {
-//        self.viewModel = viewModel
-//        self.pickerViewModel = DocumentPickerViewModel()
-//    }
-//
-//    var body: some View {
-        //OPEN AND SAVE
-//        VStack {
-//            Text(fileName)
-//                .fontWeight(.bold)
-//
-//            Button(action: {
-//                openFile.toggle()
-//            }, label: {
-//                Text("Open")
-//                    .foregroundColor(.white)
-//                    .padding(.vertical, 10)
-//                    .padding(.horizontal, 35)
-//                    .background(Color.blue)
-//                    .clipShape(Capsule())
-//            })
-//
-//            Button(action: {
-//                saveFile.toggle()
-//            }, label: {
-//                Text("Save")
-//                    .foregroundColor(.white)
-//                    .padding(.vertical, 10)
-//                    .padding(.horizontal, 35)
-//                    .background(Color.blue)
-//                    .clipShape(Capsule())
-//            })
-//        }
-//        .fileImporter(isPresented: self.$openFile, allowedContentTypes: [.json]) { (result) in
-//            do {
-//                let fileURL = try result.get()
-//                self.fileName = fileURL.lastPathComponent
-//            } catch {
-//                print(error.localizedDescription)
-//            }
-//        }
-//        .fileExporter(isPresented: self.$saveFile, document: DocumentPicker(viewModel: Bundle.main.path(forResource: "default", ofType: "json")!), contentType: .json) { (result) in
-//            do {
-//                let fileURL = try result.get()
-//                print(fileURL)
-//            } catch {
-//                print(error.localizedDescription)
-//            }
-//        }
-//
+
 import SwiftUI
+import UIKit
+import UniformTypeIdentifiers
 
 struct BatchImportView: View {
-    
+        
     let viewModel: BatchImportViewModel
     
     @State private var isSheetPresented = false
@@ -83,67 +20,121 @@ struct BatchImportView: View {
     
     @ObservedObject private var pickerViewModel: DocumentPickerViewModel
     
+    @State private var document: MessageDocument = MessageDocument(message: "")
+
+    @State private var isImporting: Bool = false
+    @State private var isExporting: Bool = false
+    
     init(viewModel: BatchImportViewModel) {
         self.viewModel = viewModel
         self.pickerViewModel = DocumentPickerViewModel()
     }
     
     var body: some View {
+        
         VStack {
-            Text("Import")
-                .font(.largeTitle)
-                .fontWeight(.black)
-                .padding(.top)
+            GroupBox(label: Text("")) {
+                TextEditor(text: $document.message)
+            }
+        
+        GroupBox {
             HStack {
-                if #available(iOS 14.0, *) {
-                    Text("Supports Json Format")
-
-                        .font(.system(size: 18, weight: .bold))
-                        .fixedSize()
-                        .padding(.leading, 20)
-                } else {
-                    // Fallback on earlier versions
-                }
-               //Spacer()
-                Image(systemName: "chevron.down.circle")
-                    .fixedSize()
-                    .font(.system(size: 16, weight: .bold))
-                    //.foregroundColor(.white)
-                    .padding(.trailing, 20)
-            }
-            .padding(.top, 8)
-            .padding(.bottom, 8)
-            .onTapGesture {
-                self.isJSONHintPresented.toggle()
-            }
-            if isJSONHintPresented {
-                Image("BatchImportImage")
-                    .resizable()
-                    .frame(width: UIScreen.main.bounds.width - 40, height: (UIScreen.main.bounds.width - 40)/1.6)
-                    .cornerRadius(8)
-            }
-            TextEditor(text: $JSONText) //, textStyle: .constant(.body))
-                .frame(height: 300)
-                .border(Color.gray, width: 1.0)
-                .padding(.leading, 20)
-                .padding(.trailing, 20)
-            Spacer()
-            RoundRectangeButton(status: $buttonStatus) { status in
-                switch status {
-                case .error:
-                    print("import error !!!")
-                case .normal:
-                    print("normal")
-                    self.isSheetPresented = true
-                case .ok:
-                    self.viewModel.batchInsert(JSONText: self.JSONText)
-                    self.buttonStatus = .normal("Import Successful")
-                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.0) {
-                        self.buttonStatus = .normal("Select File")
+                Spacer()
+                
+                Button(action: {
+                    isImporting = false
+                    
+                    //fix broken picker sheet
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        isImporting = true
                     }
-                }
+                }, label: {
+                    Text("Import File")
+                })
+                
+                Spacer()
+                
+                Button(action: {
+                    isExporting = false
+                    
+                    //fix broken picker sheet
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        isExporting = true
+                    }
+                    
+                }, label: {
+                    Text("Export File")
+                })
+                
+                Spacer()
             }
         }
+    }
+    .padding()
+    .fileImporter(
+        isPresented: $isImporting,
+        allowedContentTypes: [UTType.plainText],
+        allowsMultipleSelection: false
+    ) { result in
+        do {
+            guard let selectedFile: URL = try result.get().first else { return }
+            
+            //trying to get access to url contents
+            if (CFURLStartAccessingSecurityScopedResource(selectedFile as CFURL)) {
+                
+                guard let message = String(data: try Data(contentsOf: selectedFile), encoding: .utf8) else { return }
+                
+                document.message = message
+                    
+                //done accessing the url
+                CFURLStopAccessingSecurityScopedResource(selectedFile as CFURL)
+            }
+            else {
+                print("Permission error!")
+            }
+        } catch {
+            // Handle failure.
+            print(error.localizedDescription)
+        }
+    }
+    .fileExporter(
+        isPresented: $isExporting,
+        document: document,
+        contentType: UTType.plainText,
+        defaultFilename: "feedit-file"
+    ) { result in
+        if case .success = result {
+            // Handle success.
+        } else {
+            // Handle failure.
+        }
+    }
+        
+//        VStack {
+//            TextEditor(text: $JSONText) //, textStyle: .constant(.body))
+//                .frame(height: 250)
+//                .border(Color.gray, width: 1.0)
+//                .padding(.leading, 20)
+//                .padding(.trailing, 20)
+//            //Spacer()
+//            RoundRectangeButton(status: $buttonStatus) { status in
+//                switch status {
+//                case .error:
+//                    print("import error !!!")
+//                case .normal:
+//                    print("normal")
+//                    self.isSheetPresented = true
+//                case .ok:
+//                    self.viewModel.batchInsert(JSONText: self.JSONText)
+//                    self.buttonStatus = .normal("Import Successful")
+//                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.0) {
+//                        self.buttonStatus = .normal("Select File")
+//                    }
+//                }
+//            }
+//        }
+        
+
         .sheet(isPresented: $isSheetPresented, content: {
             DocumentPicker(viewModel: self.pickerViewModel)
         })
@@ -160,6 +151,7 @@ struct BatchImportView: View {
         .onDisappear {
             self.viewModel.discardCreateContext()
         }
+
     }
 }
 
@@ -170,102 +162,27 @@ struct BatchImportView_Previews: PreviewProvider {
     }
 }
 
-//        VStack {
-//            Text("Import")
-//                .font(.largeTitle)
-//                .fontWeight(.black)
-//                .padding(.top)
-//            HStack {
-//                if #available(iOS 14.0, *) {
-//                    Text("Supports Json Format")
-//                        .font(.system(size: 18, weight: .bold))
-//                        .fixedSize()
-//                        .padding(.leading, 20)
-//                } else {
-//                    // Fallback on earlier versions
-//                }
-//               //Spacer()
-//                Image(systemName: "chevron.down.circle")
-//                    .fixedSize()
-//                    .font(.system(size: 16, weight: .bold))
-//                    //.foregroundColor(.white)
-//                    .padding(.trailing, 20)
-//            }
-//            .padding(.top, 8)
-//            .padding(.bottom, 8)
-//            .onTapGesture {
-//                self.isJSONHintPresented.toggle()
-//            }
-//            if isJSONHintPresented {
-//                Image("BatchImportImage")
-//                    .resizable()
-//                    .frame(width: UIScreen.main.bounds.width - 40, height: (UIScreen.main.bounds.width - 40)/1.6)
-//                    .foregroundColor(.clear)
-//                    .cornerRadius(12)
-//            }
-//            TextView(text: $JSONText, textStyle: .constant(.body))
-//                .frame(height: 300)
-//                .border(Color.gray, width: 1.0)
-//                .padding(.leading, 20)
-//                .padding(.trailing, 20)
-//
-//            Spacer()
-//            RoundRectangeButton(status: $buttonStatus) { status in
-//                switch status {
-//                case .error:
-//                    print("import error")
-//                case .normal:
-//                    print("normal")
-//                    self.isSheetPresented = true
-//                case .ok:
-//                    self.viewModel.batchInsert(JSONText: self.JSONText)
-//                    self.buttonStatus = .normal("Import Successful")
-//                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.0) {
-//                        self.buttonStatus = .normal("Select File")
-//                    }
-//                }
-//            }
-//        }
-//        .sheet(isPresented: $isSheetPresented, content: {
-//            DocumentPicker(viewModel: self.pickerViewModel)
-//        })
-//        .onReceive(self.pickerViewModel.$jsonURL, perform: { output in
-//            guard let jsonURL = output else { return }
-//            guard let jsonStr = try? String(contentsOf: jsonURL, encoding: .utf8) else {
-//                return
-//            }
-//            self.JSONText = jsonStr
-//            self.buttonStatus = .ok("Import")
-//        })
-//        .padding(.top, 20)
-//        .padding(.bottom, 20)
-//        .onDisappear {
-//            self.viewModel.discardCreateContext()
-//        }
-//    }
-//}
-//
-//struct DocumentManager: FileDocument {
-//    var url: String
-//    static var readableContentTypes: [UTType] { [.audio] }
-//
-//    init(url: String)  {
-//        self.url = url
-//    }
-//
-//    init(configuration: ReadConfiguration) throws {
-//        url = ""
-//    }
-//
-//    func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
-//        let file = try! FileWrapper(url: URL(fileURLWithPath: url), options: .immediate)
-//        return file
-//    }
-//}
+struct MessageDocument: FileDocument {
+    
+    static var readableContentTypes: [UTType] { [.plainText] }
 
-//struct BatchImportView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        let dataSource = DataSourceService.current.rss
-//        return BatchImportView(viewModel: BatchImportViewModel(dataSource: dataSource))
-//    }
-//}
+    var message: String
+
+    init(message: String) {
+        self.message = message
+    }
+
+    init(configuration: ReadConfiguration) throws {
+        guard let data = configuration.file.regularFileContents,
+              let string = String(data: data, encoding: .utf8)
+        else {
+            throw CocoaError(.fileReadCorruptFile)
+        }
+        message = string
+    }
+
+    func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
+        return FileWrapper(regularFileWithContents: message.data(using: .utf8)!)
+    }
+    
+}
