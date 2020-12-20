@@ -425,7 +425,7 @@ struct HomeView: View {
                     }
             ToolbarItem(placement: .bottomBar) {
                 //Spacer()
-                cardButton
+                //cardButton
 
 //                settingButton
             }
@@ -471,7 +471,7 @@ struct TagView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 15, height: 15, alignment: .center)
-                Text("Tags")
+                Text("Unread")
                     .font(.headline) //.system(size: 16, weight: .semibold))
                     .fontWeight(.semibold)
                     .foregroundColor(Color("bg"))

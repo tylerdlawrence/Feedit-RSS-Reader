@@ -16,15 +16,15 @@ struct ActionContextMenu: View {
     
     var isDone: (() -> Void)?
     
-    var onTag: (() -> Tag)?
+    //var onTag: (() -> Tag)?
     
-    init(label: String, systemName: String, onAction: (() -> Void)? = nil, onRead: (() -> Void)? = nil) {
+    init(label: String, systemName: String, isRead: (() -> Void)? = nil, onAction: (() -> Void)? = nil) {
         self.label = "Tag Article"
         self.label = "Toggle Starred"
         self.label = "Mark as Read"
         self.systemName = systemName
         self.onAction = onAction
-        self.isDone = onRead
+        self.isDone = isRead
     }
     
     var body: some View {
@@ -34,10 +34,12 @@ struct ActionContextMenu: View {
             }, label: {
                 HStack {
                     Text("Mark As Read")
-                    Image("Symbol")
+                    Image("smartFeedUnread")
+                        .foregroundColor(.gray)
+                    //Image("Symbol")
 
                 }
-//                .opacity((isDone != nil) ? 0.2 : 1.0)
+                //.opacity((isDone != nil) ? 0.2 : 1.0)
 
             })
             
@@ -46,7 +48,7 @@ struct ActionContextMenu: View {
             }, label: {
                 HStack{
                     Text("Toggle Starred")
-                    Image(systemName: "star.fill") //"star") //
+                    Image("star") //"star") //
                         .imageScale(.small)
                 }
             })
