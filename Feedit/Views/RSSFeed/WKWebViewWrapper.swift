@@ -1,10 +1,9 @@
 //
-//  WKWebViewWrapper.swift
+//  WebViewHolder.swift
 //  Feedit
 //
 //  Created by Tyler D Lawrence on 8/15/20.
 //
-
 import SwiftUI
 import Combine
 import WebKit
@@ -126,4 +125,3 @@ struct WebViewWrapper_Previews: PreviewProvider {
             .preferredColorScheme(.dark)
     }
 }
-

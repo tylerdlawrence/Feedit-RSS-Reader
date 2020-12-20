@@ -35,7 +35,7 @@ struct SettingView: View {
     }
     
     @State private var isSelected: Bool = false
-    
+        
     var batchImportView: BatchImportView {
         let dataSource = DataSourceService.current.rss
         return BatchImportView(viewModel: BatchImportViewModel(dataSource: dataSource))
@@ -64,29 +64,29 @@ struct SettingView: View {
                     }.toggleStyle(SwitchToggleStyle(tint: .blue))
                 }
 
-                Section(header: Text("DATA & Notifications")) {
-                    Group {
-                        HStack {
-                            NavigationLink(destination: self.dataNStorage) {
-                                HStack {
-                                    Image(systemName: "internaldrive")
-                                        .fixedSize()
-                                    Text("Data & Storage")
-                                }
-                            }
-                        }
+//                Section(header: Text("DATA")) {
+//                    Group {
+//                        HStack {
+//                            NavigationLink(destination: self.dataNStorage) {
+//                                HStack {
+//                                    Image(systemName: "internaldrive")
+//                                        .fixedSize()
+//                                    Text("Data & Storage")
+//                                }
+//                            }
+//                        }
 
-                    Group {
-                        HStack {
-                            Image(systemName: "app.badge")
-                                fixedSize()
-                            Toggle(isOn: $notificationsEnabled) {
-                                Text("Notifications")
-                            }.toggleStyle(SwitchToggleStyle(tint: .blue))
-                        }
-                    }
-                }
-            }
+//                    Group {
+//                        HStack {
+//                            Image(systemName: "app.badge")
+//                                fixedSize()
+//                            Toggle(isOn: $notificationsEnabled) {
+//                                Text("Notifications")
+//                            }.toggleStyle(SwitchToggleStyle(tint: .blue))
+//                        }
+//                    }
+                //}
+            //}
                 Section(header: Text("FEEDS")) {
                         Group {
                             HStack {
@@ -98,28 +98,45 @@ struct SettingView: View {
                                         }
                                     }
                                 }
-                            }
-                        }
-
-                Section(header: Text("READING & APPEARENCE")) {
-                            Group {
-                            //padding()
-                                HStack {
-                                    Image(systemName: "safari")
-                                        .fixedSize()
-                                    ForEach([SettingItem.webView], id: \.self) { _ in
-                                            Toggle("Reader View", isOn: self.$isSelected)
-                                        }.toggleStyle(SwitchToggleStyle(tint: .blue))
-                                    }
-
-                                HStack {
+                            HStack {
+                                NavigationLink(destination: self.dataNStorage) {
                                     HStack {
-                                Image(systemName: "circle.lefthalf.fill")
-                                    Toggle("Dark Mode", isOn: $isDarkModeOn)
+                                        Image(systemName: "internaldrive")
+                                            .fixedSize()
+                                        Text("Data & Storage")
+                                    }
+                                }
+                            }
+                            HStack {
+                                Image(systemName: "safari")
+                                    .fixedSize()
+                                ForEach([SettingItem.webView], id: \.self) { _ in
+                                        Toggle("Reader View", isOn: self.$isSelected)
                                     }.toggleStyle(SwitchToggleStyle(tint: .blue))
                                 }
                             }
                         }
+
+//                Section(header: Text("READING & APPEARENCE")) {
+//                            Group {
+//                            //padding()
+//                                HStack {
+//                                    Image(systemName: "safari")
+//                                        .fixedSize()
+//                                    ForEach([SettingItem.webView], id: \.self) { _ in
+//                                            Toggle("Reader View", isOn: self.$isSelected)
+//                                        }.toggleStyle(SwitchToggleStyle(tint: .blue))
+//                                    }
+//
+//                                HStack {
+//                                    HStack {
+//                                Image(systemName: "circle.lefthalf.fill")
+//                                    Toggle("Dark Mode", isOn: $isDarkModeOn)
+//                                    }.toggleStyle(SwitchToggleStyle(tint: .blue))
+//                                }
+//                            }
+//                        }
+                //VStack{
                 HStack(alignment: .center) {
                         Image("launch")
                             .resizable()
@@ -128,9 +145,12 @@ struct SettingView: View {
                         Text("version 1.01")
                         Text("build 0.0024")
                 }
-//                HStack(alignment: .center) {
-//                    Text("  created by Tyler D Lawrence")
-//                }
+                
+                VStack(alignment: .center) {
+                    //Spacer()
+                    Text("Created by Tyler D Lawrence")
+                }
+                .padding(.leading, 45.0)
             }
             .listStyle(GroupedListStyle())
             .navigationBarTitle("Settings", displayMode: .automatic)

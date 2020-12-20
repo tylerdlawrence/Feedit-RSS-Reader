@@ -12,7 +12,7 @@ import Combine
 
 class RSSFeedViewModel: NSObject, ObservableObject {
     
-    let defaultFeeds: [DefaultFeeds] = Bundle.main.decode("DefaultFeeds.json")
+    //let defaultFeeds: [DefaultFeeds] = Bundle.main.decode("DefaultFeeds.json")
     
     @Published var sources: [DefaultFeeds] = []
     

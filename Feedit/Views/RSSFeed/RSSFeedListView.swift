@@ -9,149 +9,135 @@ import SwiftUI
 import FeedKit
 import Combine
 import KingfisherSwiftUI
+import SwiftUIRefresh
 
 struct RSSFeedListView: View {
     
-//    @Environment(\.managedObjectContext) var managedObjectContext
-//
-//    @Environment(\.presentationMode) var presentationMode
+    var feed = ""
+    @State var searchText: String = ""
     
-    @State private var isPresented = false
-
     var rssSource: RSS {
         return self.rssFeedViewModel.rss
     }
+    @ObservedObject var searchBar: SearchBar = SearchBar()
     
+    let refreshControl: RefreshControl = RefreshControl()
+    @State var scrollView: UIScrollView?
+
     @EnvironmentObject var rssDataSource: RSSDataSource
+    
     @ObservedObject var rssFeedViewModel: RSSFeedViewModel
-    @Environment(\.colorScheme) var colorScheme
-    var onDoneAction: (() -> Void)?
+    
+    @State var isRefreshing: Bool = false
+    @State private var isShowing = false
+
     @State private var selectedItem: RSSItem?
     @State private var isSafariViewPresented = false
     @State private var start: Int = 0
-    @State private var footer: String = "Refresh more articles"
     @State var cancellables = Set<AnyCancellable>()
-    
+
     init(rssViewModel: RSSFeedViewModel) {
         self.rssFeedViewModel = rssViewModel
     }
     
-
-    
     private var infoListView: some View {
         Button(action: {
-            print ("Tags")
+            print ("feed info")
         }) {
             Image(systemName: "info.circle")
-                .imageScale(.medium)
         }
     }
+    
     private var markAllRead: some View {
         Button(action: {
             print ("Mark all as Read")
         }) {
             Image("MarkAllAsRead")
-                //.imageScale(.medium)
         }
     }
     
-    private var trailingFeedView: some View {
+    private var trailingButtons: some View {
         HStack(alignment: .top, spacing: 24) {
-            //infoListView
+            infoListView
             markAllRead
         }
     }
     
-    var body: some View {
-        
-        ZStack { //(alignment: .leading){
-            //ScrollView{
-            //HStack(alignment: .center){
-//            KFImage(URL(string: self.rssSource.imageURL))
-//                .resizable()
-//                .aspectRatio(contentMode: .fit)
-//                .frame(width: 50, height: 50)
-//                .cornerRadius(5.0)
-               // VStack(alignment: .leading){
-//                    Text(rssSource.title)
-//                        .font(.title2)
-//                        .fontWeight(.heavy)
-//                    Text("Today at ").font(.system(.headline)) +
-//                        Text(Date(), style: .time)
-//                        .fontWeight(.bold)
-                //Divider()
-
-                //}
-            //}
-        //}
-        //.frame(width: 325.0, height: 80)
-
-        VStack{
-            List {
-                VStack(alignment: .leading){
-                    Text(rssSource.title)
-                        .font(.title2)
-                        .fontWeight(.heavy)
-                    Text("Today at ").font(.system(.headline)) +
-                        Text(Date(), style: .time)
-                        .fontWeight(.bold)
-                }
-                .padding(.leading)
-                    ForEach(self.rssFeedViewModel.items, id: \.self) { item in
-                        RSSItemRow(rssViewModel: rssFeedViewModel, wrapper: item,
-                                   menu: self.contextmenuAction(_:))
-                            .contentShape(Rectangle())
-                            .onTapGesture {
-                                self.selectedItem = item
-                                self.isPresented.toggle()
-                        //}
-                    }
-                }
-                VStack(alignment: .center) {
-                    Button(action: self.rssFeedViewModel.loadMore) {
-                        HStack{
-                            Text("↺")
-                            Text(self.footer)
-                                .font(.title2)
-                                .fontWeight(.bold)
-                            }
-                        }
-                    }
-            }
-            .listStyle(PlainListStyle())
-            }
-//        .navigationBarTitle(Text(rssSource.title) + Text(" Today at ") + Text(Date(), style: .time))
-//        .navigationBarTitleDisplayMode(.inline)
-//        .navigationBarTitle("dummy header").navigationBarHidden(true)
-        .navigationBarTitle("", displayMode: .inline)
-        //.navigationBarItems(trailing: trailingFeedView)
-        //.fullScreenCover
-        .sheet(item: $selectedItem, content: { item in
-            if AppEnvironment.current.useSafari {
-                SafariView(url: URL(string: item.url)!)
-            } else {
-                WebView(
-                    rssViewModel: rssFeedViewModel, wrapper: item, rss: RSS.simple(), rssItem: item,
-                    onArchiveAction: {
-                        self.rssFeedViewModel.archiveOrCancel(item)
-                    })
-                }
-            })
-        
-        .onAppear {
-            self.rssFeedViewModel.fecthResults()
-            self.rssFeedViewModel.fetchRemoteRSSItems()
-            }
+    func refresh() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+            self.isRefreshing = false
         }
     }
+    
+    var body: some View {
+        ZStack{
+//            List(rssFeedViewModel.items, id: \.id) { item in  //{
+//                ScrollViewResolver(for: refreshControl)
+//                ForEach(1...100, id: \.self) { eachRowIndex in
+//                    //Text("Row \(eachRowIndex)")
+//                    NavigationLink(destination: WebView(rssViewModel: rssFeedViewModel, wrapper: item, rss: rssSource, rssItem: item, url: URL(string: item.url)!)) {
+//                    RSSItemRow(rssViewModel: rssFeedViewModel, wrapper: item, menu: self.contextmenuAction(_:))
+//                    }
+//                }
+//            }
+//                .onAppear {
+//                    self.refreshControl.onValueChanged = {
+//                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+//                            self.refreshControl.refreshControl?.endRefreshing()
+//                        }
+//                    }
+//                }
+
+            List(rssFeedViewModel.items, id: \.id) { item in
+
+                NavigationLink(destination: WebView(rssViewModel: rssFeedViewModel, wrapper: item, rss: rssSource, rssItem: item, url: URL(string: item.url)!)) {
+                                
+                    RSSItemRow(rssViewModel: rssFeedViewModel, wrapper: item, menu: self.contextmenuAction(_:))
+
+                }
+//                .opacity(isRefreshing ? 0.2 : 1.0)
+            }
+            .listStyle(PlainListStyle())
+            .navigationBarTitle(rssSource.title, displayMode: .automatic)
+            .add(self.searchBar)
+            .pullToRefresh(isShowing: $isShowing) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self.isShowing = false
+                }
+            }
+            .navigationBarItems(trailing:
+                Button(action: self.rssFeedViewModel.loadMore) {
+                    //Image("MarkAllAsRead")
+                    Image(systemName: "arrow.counterclockwise")
+                })
+            
+//            .sheet(item: $selectedItem, content: { item in
+//                if AppEnvironment.current.useSafari {
+//                    SafariView(url: URL(string: item.url)!)
+//                } else {
+//                    WebView(
+//                        rssItem: item,
+//                        onArchiveAction: {
+//                            self.rssFeedViewModel.archiveOrCancel(item)
+//                    })
+//                }
+//            })
+            
+           }
+            .onAppear {
+                self.rssFeedViewModel.fecthResults()
+                self.rssFeedViewModel.fetchRemoteRSSItems()
+                self.isRefreshing = true
+                self.refresh()
+//                self.refreshControl.onValueChanged = {
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+//                        self.refreshControl.refreshControl?.endRefreshing()
+//                    }
+//                }
+        }
+    }
+    
     func contextmenuAction(_ item: RSSItem) {
         rssFeedViewModel.archiveOrCancel(item)
-    }
-}
-
-extension RSSFeedListView {
-    private func destinationView(_ rss: RSS) -> some View {
-        RSSFeedListView(rssViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
-            .environmentObject(DataSourceService.current.rss)
     }
 }

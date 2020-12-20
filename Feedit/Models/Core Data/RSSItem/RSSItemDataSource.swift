@@ -9,6 +9,8 @@ import CoreData
 import Foundation
 
 class RSSItemDataSource: NSObject, DataSource, NSFetchedResultsControllerDelegate {
+
+    //NSFetchedResultsControllerDelegate {
     
     var parentContext: NSManagedObjectContext
     
@@ -21,6 +23,13 @@ class RSSItemDataSource: NSObject, DataSource, NSFetchedResultsControllerDelegat
     var newObject: RSSItem?
     
     var updateObject: RSSItem?
+    
+    private var _isRead: Bool?
+
+    var isRead: Bool {
+        get { _isRead ?? false }
+        set { _isRead = newValue }
+    }
     
     required init(parentContext: NSManagedObjectContext) {
         self.parentContext = parentContext
@@ -47,6 +56,7 @@ extension RSSItemDataSource {
         let item = RSSItem.init(context: createContext)
         item.url = "https://github.blog/feed"
         item.imageURL = ""
+        self._isRead = isRead
         return item
     }
 }

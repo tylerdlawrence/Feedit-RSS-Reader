@@ -8,6 +8,7 @@
 import XCTest
 import CoreData
 import Combine
+import FeedKit
 
 class BatchImportViewModelTests: XCTestCase {
 

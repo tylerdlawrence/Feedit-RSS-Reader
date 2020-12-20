@@ -11,18 +11,18 @@ import FeedKit
 import Combine
 
 struct RSSRow: View {
-
+//    @ private var viewModel: RSSListViewModel
     @ObservedObject var imageLoader: ImageLoader
     @ObservedObject var rss: RSS
 
     var contextMenuAction: ((RSS) -> Void)?
 
     init(rss: RSS, menu action: ((RSS) -> Void)? = nil) {
-
         self.rss = rss
         self.imageLoader = ImageLoader(path: rss.imageURL)
 //works^
         contextMenuAction = action
+//        self.viewModel = viewModel
 
     }
 
@@ -38,34 +38,32 @@ struct RSSRow: View {
     }
 
     private var pureTextView: some View {
-        VStack(spacing: 0.0) {
+        VStack(alignment: .leading, spacing: 4) {
             Text(rss.title)
-                .font(.custom("Gotham", size: 16))
-                .multilineTextAlignment(.leading)
+                .font(.headline)
                 .lineLimit(1)
-            //Spacer()
-//            Text("\(content)")
-//                .font(.footnote)
-//            Text(rss.desc)
-//                .font(.subheadline)
-//                .lineLimit(1)
-//            Text(rss.createTimeStr)
-//                .font(.custom("Gotham", size: 12))
-//                .multilineTextAlignment(.leading)
-//                .lineLimit(1)
-                }
+            Text(rss.desc)
+                .font(.subheadline)
+                .foregroundColor(Color.gray)
+                .lineLimit(3)
+        }
     }
+    
+    static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
+    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+    
     var body: some View {
-        HStack() {
-            VStack(alignment: .center) {
-                HStack {
-                    if
-                        self.imageLoader.image != nil {
-                        iconImageView(self.imageLoader.image!)
-                            .frame(width: 25, height: 25,alignment: .center)
-                            .layoutPriority(10)
-                        pureTextView
-                        
+        VStack(alignment: .leading) {
+            HStack(alignment: .top) {
+//                HStack {
+                if
+                    self.imageLoader.image != nil {
+                    iconImageView(self.imageLoader.image!)
+                        .frame(width: 25, height: 25,alignment: .center)
+                        .layoutPriority(10)
+                    pureTextView
+//                    Spacer()
+//                    UnreadCountView(count: RSSRow.viewModel.items.count)
                     } else {
                         
                         Image("Thumbnail") //3icon
@@ -80,8 +78,10 @@ struct RSSRow: View {
                             .animation(.easeInOut)
                             
                         pureTextView
+//                        Spacer()
+//                        UnreadCountView(count: RSSRow.viewModel.items.count)
                     }
-                }
+//                }
             }
         }
     }

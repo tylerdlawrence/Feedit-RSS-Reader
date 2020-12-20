@@ -11,6 +11,7 @@ import KingfisherSwiftUI
 import Intents
 
 struct ArchiveListView: View {
+    
     var rssSource: RSS {
         return self.rssFeedViewModel.rss
     }
@@ -18,7 +19,9 @@ struct ArchiveListView: View {
     @EnvironmentObject var rssDataSource: RSSDataSource
     @ObservedObject var rssFeedViewModel: RSSFeedViewModel
     @ObservedObject var archiveListViewModel: ArchiveListViewModel
-    
+    @ObservedObject var searchBar: SearchBar = SearchBar()
+    @State private var isShowing = false
+
     @State private var selectedItem: RSSItem?
     @State var footer = "Refresh more articles"
     
@@ -27,15 +30,29 @@ struct ArchiveListView: View {
         self.rssFeedViewModel = rssFeedViewModel
     }
     
+    private var loadMore: some View {
+        Button(action: self.archiveListViewModel.loadMore) {
+//                Image("MarkAllAsRead")
+            Image(systemName: "arrow.counterclockwise")
+            
+        }
+    }
     
+    private var trailingView: some View {
+        HStack(alignment: .top, spacing: 24) {
+            EditButton()
+            loadMore
+        }
+    }
+        
     var body: some View {
+        ZStack{
             List {
                 ForEach(self.archiveListViewModel.items, id: \.self) { item in
                     RSSItemRow(rssViewModel: rssFeedViewModel, wrapper: item)
                         .onTapGesture {
                             self.selectedItem = item
                     }
-                    
                 }
                 .onDelete { indexSet in
                     if let index = indexSet.first {
@@ -43,41 +60,33 @@ struct ArchiveListView: View {
                         self.archiveListViewModel.unarchive(item)
                     }
                 }
-                //VStack(alignment: .center) {
-                    Button(action: self.archiveListViewModel.loadMore) {
-                        HStack(alignment: .center){
-                            //Spacer()
-                            Image(systemName: "arrow.counterclockwise")
-                                .imageScale(.small)
-                            Text(self.footer)
-                                .font(.subheadline)
-                                .fontWeight(.bold)
-
-                        }
-                    }
-                    .padding(.leading)
-                //}
             }
-            .listStyle(PlainListStyle())
-            .navigationBarTitle("Starred", displayMode: .automatic) //☆
-            .navigationBarItems(trailing: EditButton())
-
-            .sheet(item: $selectedItem, content: { item in
-                if AppEnvironment.current.useSafari {
-                    SafariView(url: URL(string: item.url)!)
-                } else {
-                    WebView(
-                        rssViewModel: rssFeedViewModel, wrapper: item, rss: RSS.simple(), rssItem: item,
-                        onArchiveAction: {
-                            self.archiveListViewModel.archiveOrCancel(item)
-                    })
+            .pullToRefresh(isShowing: $isShowing) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self.isShowing = false
                 }
-            })
-            
-            .onAppear {
-                 UITableView.appearance().separatorStyle = .none
+            }
+            .padding(.bottom)
+        }
+        .listStyle(PlainListStyle())
+        .navigationBarTitle("Starred", displayMode: .automatic)
+        .navigationBarItems(trailing: trailingView)
+        .add(self.searchBar)
+        .sheet(item: $selectedItem, content: { item in
+//                if AppEnvironment.current.useSafari {
+                SafariView(url: URL(string: item.url)!)
+//                } else {
+//                WebView(url: URL(string: item.url)!)
+//                        onArchiveAction: {
+//                            self.archiveListViewModel.archiveOrCancel(item)
                 
-                self.archiveListViewModel.fecthResults()
+//                WebView(rssViewModel: rssFeedViewModel, wrapper: item, rss: rssSource, rssItem: item);)
+                    })
+//                }
+//            })
+            
+        .onAppear {
+            self.archiveListViewModel.fecthResults()
         }
     }
 }
@@ -85,20 +94,3 @@ struct ArchiveListView: View {
 extension ArchiveListView {
     
 }
-
-//struct ArchiveListView_Previews: PreviewProvider {
-//
-//    static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
-//
-//    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-//
-//    static let rssFeedViewModel = RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem)
-//
-//    static let settingViewModel = SettingViewModel()
-//
-//    static var previews: some View {
-//
-//    ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: self.rssFeedViewModel)
-//    }
-//}
-

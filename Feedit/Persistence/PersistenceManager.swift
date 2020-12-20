@@ -24,7 +24,7 @@ class Persistence {
     
     init(directory: FileManager.SearchPathDirectory = .documentDirectory,
          domainMask: FileManager.SearchPathDomainMask = .userDomainMask,
-         version vNumber: UInt) { //Uint
+         version vNumber: UInt) {
         let version = Version(vNumber)
         container = NSPersistentContainer(name: version.modelName)
         if let url = version.dbFileURL(directory, domainMask) {

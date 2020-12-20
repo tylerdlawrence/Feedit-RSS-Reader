@@ -24,7 +24,6 @@ extension RSSItem {
         return NSFetchRequest<RSSItem>(entityName: "RSSItem")
     }
 
-    //@NSManaged public var imageURL: String
     @NSManaged public var updateTime: Date?
     @NSManaged public var createTime: Date?
     @NSManaged public var desc: String
@@ -36,7 +35,7 @@ extension RSSItem {
     @NSManaged public var author: String
     @NSManaged public var isArchive: Bool
     @NSManaged public var imageURL: String
-    
+    @NSManaged public var isDone: Bool
 
     
     public override func awakeFromInsert() {
@@ -57,13 +56,20 @@ extension RSSItem {
         item.createTime = createTime
         item.progress = 0
         item.isArchive = false
-//        item.configurations = configurations
-        //item.imageURL = image
+        item.isDone = false
+
+
         return item
     }
     
-    //static var placeholder = RSSItem.self
-    
+    var wrappedTitle: String {
+        title 
+    }
+
+    var wrappedDTitle: String {
+        title 
+    }
+        
     static func requestObjects(rssUUID: UUID, start: Int = 0, limit: Int = 20) -> NSFetchRequest<RSSItem> {
         let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
         let predicate = NSPredicate(format: "rssUUID = %@", argumentArray: [rssUUID])
@@ -84,21 +90,25 @@ extension RSSItem {
         return request
     }
     
-    static func requestCountArchiveObjects() -> NSFetchRequest<RSSItem> {
-        let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
-        let predicate = NSPredicate(format: "isArchive = true")
-        request.predicate = predicate
-        return request
-    }
-    
+    func requestCountArchiveObjects() -> NSFetchRequest<RSSItem> {
+            let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
+            let predicate = NSPredicate(format: "isArchive = true")
+            request.predicate = predicate
+            return request
+        }
+
     static func requestDefaultObjects() -> NSFetchRequest<RSSItem> {
         let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
         return request
+        }
     }
-}
+
+
 
 extension RSSItem: ObjectValidatable {
     func hasChangedValues() -> Bool {
         return hasPersistentChangedValues
     }
 }
+
+

@@ -8,7 +8,7 @@
 import CoreData
 import Foundation
 
-class RSSDataSource: NSObject, DataSource, NSFetchedResultsControllerDelegate {
+class RSSDataSource: NSObject, NSFetchedResultsControllerDelegate, DataSource { //NSFetchedResultsControllerDelegate {
     
     var parentContext: NSManagedObjectContext
     

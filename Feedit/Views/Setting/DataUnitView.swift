@@ -35,6 +35,7 @@ struct DataUnitView: View {
             HStack {
                 VStack {
                     Text(label)
+                        .foregroundColor(.white)
                 }
                 Spacer()
             }
@@ -45,6 +46,7 @@ struct DataUnitView: View {
                 VStack {
                     Text("items: \(content)")
                         .font(.footnote)
+                        .foregroundColor(.white)
                 }
             }
             .padding(.bottom, 12)
