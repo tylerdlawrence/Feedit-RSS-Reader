@@ -56,6 +56,14 @@ extension RSS {
         return rss
     }
     
+    var wrappedTitle: String {
+        title
+    }
+
+    var wrappedDTitle: String {
+        title
+    }
+    
     static func simple(rss: String = "") -> RSS {
         let rss = RSS(context: Persistence.current.context)
         rss.image = ""

@@ -14,6 +14,10 @@ import SwiftUIRefresh
 
 struct HomeView: View {
     
+    @Environment(\.managedObjectContext) var moc
+    
+    @State private var titleFilter = "A"
+    
     @Environment(\.managedObjectContext) var managedObjectContext
     
     @Environment(\.presentationMode) var presentationMode
@@ -51,41 +55,41 @@ struct HomeView: View {
 
 
     
-//    private var cardButton: some View {
-//        Menu {
-//            Button(action: {
-//                print("All")
-//            }, label: {
-//                HStack{
-//                    Text("All")
-//                    Image(systemName: "text.justifyleft")
-//                        //.font(.system(size: 16, weight: .heavy))
-//                }
-//            })
-//
-//            Button(action: {
-//                print("Unread")
-//            }, label: {
-//                HStack{
-//                    Text("Unread")
-//                    Image(systemName: "circle.fill").font(.system(size: 16, weight: .heavy))
-//                }
-//            })
-//            Button(action: {
-//                print("Filters")
-//            }, label: {
-//                HStack{
-//                    Text("Filters")
-//                    Image(systemName: "chevron.up").font(.system(size: 16, weight: .heavy))
-//                }
-//            })
-//        } label: {
-//            Label(
-//                title: { Text("")},
-//                icon: { Image(systemName: "chevron.up").font(.system(size: 16, weight: .heavy)) }
-//            )
-//        }
-//    }
+    private var cardButton: some View {
+        Menu {
+            Button(action: {
+                print("All")
+            }, label: {
+                HStack{
+                    Text("All")
+                    Image(systemName: "text.justifyleft")
+                        //.font(.system(size: 16, weight: .heavy))
+                }
+            })
+
+            Button(action: {
+                print("Unread")
+            }, label: {
+                HStack{
+                    Text("Unread")
+                    Image(systemName: "circle.fill").font(.system(size: 16, weight: .heavy))
+                }
+            })
+            Button(action: {
+                print("Filters")
+            }, label: {
+                HStack{
+                    Text("Filters")
+                    Image(systemName: "chevron.up").font(.system(size: 16, weight: .heavy))
+                }
+            })
+        } label: {
+            Label(
+                title: { Text("")},
+                icon: { Image(systemName: "chevron.up").font(.system(size: 16, weight: .heavy)) }
+            )
+        }
+    }
     private var leadingView: some View {
         HStack(alignment: .top, spacing: 24) {
             //EditButton()
@@ -112,16 +116,18 @@ struct HomeView: View {
             self.selectedFeatureItem = .setting
             self.isSheetPresented = true
         }) {
-            Image(systemName: "slider.horizontal.3")
-                .foregroundColor(Color("bg"))
-                .imageScale(.medium)
-                .font(.system(size: 18, weight: .semibold))
-//            Image("nav_settings")
-//                .resizable()
-//                .aspectRatio(contentMode: .fit)
-//                .frame(width: 20, height: 20)
+//            Image(systemName: "slider.horizontal.3")
+//                .foregroundColor(Color("bg"))
 //                .imageScale(.medium)
-//                .font(.system(size: 20, weight: .heavy))
+//                .font(.system(size: 18, weight: .semibold))
+            Image("toggle")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 20, height: 20)
+                .imageScale(.medium)
+//                .foregroundColor(Color("bg"))
+//                .font(.system(size: 18, weight: .semibold))
+
 //                .foregroundColor(Color("lightShadow"))
         }
     }
@@ -137,7 +143,7 @@ struct HomeView: View {
                             .foregroundColor(Color("bg"))
 
                             .imageScale(.medium)
-                            .font(.system(size: 18, weight: .heavy))
+                            .font(.system(size: 18, weight: .bold))
                         
                 })
                 
@@ -253,166 +259,145 @@ struct HomeView: View {
     private let addRSSPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("addNewRSSPublisher"))
     private let rssRefreshPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("rssListNeedRefresh"))
     
-    
-//    func refresh() {
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-//            self.isRefreshing = false
-//        }
-//    }
+    var rssSource: RSS {
+        return self.rssFeedViewModel.rss
+    }
     
   var body: some View {
     NavigationView {
+        
         List {
-//            KRefreshScrollView(progressTint: .purple, arrowTint: .purple) {
-//
-//                VStack{
-//
-//                    ForEach(viewModel.items, id: \.self) { rss in
-//
-//                        HStack{
-//
-//                            NavigationLink(destination: self.destinationView(rss: rss)) {
-//                                RSSRow(rss: rss)
-//                                }
-//                        }
-//                        .padding()
-//                    }
-//                }
-//                .background(Color.white)
-//                .padding()
-//
-//            } onUpdate: {
-//
-//                viewModel.items.append("New Data")
-//            }
-                        HStack(alignment: .top){
-                            VStack(alignment: .center){
-                                Image(systemName: "icloud")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .foregroundColor(Color("bg"))
-                                    .frame(width: 75, height: 75)
-                                Text("On My iPhone")
-                                    .font(.title3)
-                                    .fontWeight(.bold)
-                                Text("Today at ").font(.system(.headline)) +
-                                    Text(Date(), style: .time)
-                                    .fontWeight(.bold)
-                            }.frame(width: 320.0).listRowBackground(Color("accent"))
-                        }.listRowBackground(Color("accent"))
+
+            HStack(alignment: .top){
+                VStack(alignment: .center){
+                    Image(systemName: "icloud")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .foregroundColor(Color("bg"))
+                        .frame(width: 75, height: 75)
+                    Text("On My iPhone")
+                        .font(.title3)
+                        .fontWeight(.bold)
+                    Text("Today at ").font(.system(.headline)) +
+                        Text(Date(), style: .time)
+                        .fontWeight(.bold)
+                }.frame(width: 320.0).listRowBackground(Color("accent"))
+            }.listRowBackground(Color("accent"))
 
                         
-                        Section(header: feedView) {
-            //                Section(header: feedSection) {
-            //                    ForEach(viewModel.items, id: \.self) { rss in
-            //                        NavigationLink(destination: self.destinationView(rss: rss)) {
-            //                            RSSRow(rss: rss)
-            //                            }
-            //                            .tag("RSS")
-            //                    }
-            //                    .padding(.leading)
-            //                }
-                            NavigationLink(destination: archiveListView) {
-                                BookmarkView()
-                                Spacer()
-                                UnreadCountView(count: self.archiveListViewModel.items.count)
-                            }
-                            NavigationLink(destination: Tag.demoTags.randomElement()!) {
-                                TagView()
-                                Spacer()
-                                UnreadCountView(count: Tag.demoTags.count)
-                            }
-                        }
-                        .textCase(nil)
-                        .accentColor(Color("darkShadow"))
-                        .foregroundColor(Color("darkerAccent"))
-                        .listRowBackground(Color("accent"))
-                        .edgesIgnoringSafeArea(.all)
+            Section(header: feedView) {
+//                NavigationLink(destination: feedSection) {
+//                    RSSFeedListView
+//                }
+//            DisclosureGroup("On My iPhone", isExpanded: $revealDetails) {
+                //ForEach(viewModel.items, id: \.self) { rss in
+//                    NavigationLink(destination: self.destinationView(rss: rss)) {
+//                                        RSSRow(rss: rss)
+//                                        }
+//                                        .tag("RSS")
+                                //}
+//                                .padding(.leading)
+                            //}
+                NavigationLink(destination: archiveListView) {
+                    BookmarkView()
+                    Spacer()
+                    UnreadCountView(count: self.archiveListViewModel.items.count)
+                }
+                NavigationLink(destination: Tag.demoTags.randomElement()!) {
+                    TagView()
+                    Spacer()
+                    UnreadCountView(count: Tag.demoTags.count)
+                }
+            }
+            .textCase(nil)
+            .accentColor(Color("darkShadow"))
+            .foregroundColor(Color("darkerAccent"))
+            .listRowBackground(Color("accent"))
+            .edgesIgnoringSafeArea(.all)
 
-                        Section(header: feedsAll) {
-            //            DisclosureGroup("On My iPhone", isExpanded: $revealDetails) {
-                            //KRefreshScrollView(progressTint: .purple, arrowTint: .purple) {
-                            ForEach(viewModel.items, id: \.self) { rss in
-                                NavigationLink(destination: self.destinationView(rss: rss)) {
-                                    HStack{
-                                    RSSRow(rss: rss)
-                                    //Spacer()
-                                    //UnreadCountView(count: self.rssFeedViewModel.items.count)
-                                    }
-                                }
-                                .padding(.leading)
-                                .tag("RSS")
-                            }
-                            
-                            .onDelete { indexSet in
-                                if let index = indexSet.first {
-                                    self.viewModel.delete(at: index)
-                                    }
-                                }
-                            }
-                            .textCase(nil)
-                            .listRowBackground(Color("accent"))
-                            .accentColor(Color("darkShadow"))
-                            .foregroundColor(Color("darkerAccent"))
-                            .edgesIgnoringSafeArea(.all)
-                        .pullToRefresh(isShowing: $isShowing) {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                self.isShowing = false
-                            }
+            Section(header: feedsAll) {
+//            DisclosureGroup("On My iPhone", isExpanded: $revealDetails) {
+                ForEach(viewModel.items, id: \.self) { rss in
+                    NavigationLink(destination: self.destinationView(rss: rss)) {
+                        HStack{
+                        RSSRow(rss: rss)
+                        //Spacer()
+                        //UnreadCountView(count: self.rssFeedViewModel.items.count)
                         }
-            //            Section(header: folderSection) {
-            //                Section(header: defaultFeedSection) {
-            //                    ForEach(viewModel.items, id: \.self) { rss in
-            //                        NavigationLink(destination: self.destinationView(rss)) {
-            //                            RSSRow(rss: rss) //TODO: make DefaultFeedRow
-            //                        }
-            //                        .padding(.leading)
-            //                        .tag("diplayName")
-            //                    }
-            //                }
-            //                 //;
-            ////                NavigationLink(destination: Text("News Folder")) {
-            ////                    HStack{
-            ////                        Image(systemName: "chevron.right").font(.system(size: 10, weight: .heavy))
-            ////                            .foregroundColor(Color("bg"))
-            ////                            .imageScale(.large)
-            ////                        Text("News")
-            ////                    }
-            ////                };
-            ////                NavigationLink(destination: Text("Blogs Folder")) {
-            ////                    HStack{
-            ////                        Image(systemName: "chevron.right").font(.system(size: 10, weight: .heavy))
-            ////                            .foregroundColor(Color("bg"))
-            ////                            .imageScale(.large)
-            ////                        Text("Blogs")
-            ////                    }
-            ////                };
-            ////                NavigationLink(destination: Text("Entertainment Folder")) {
-            ////                    HStack{
-            ////                        Image(systemName: "chevron.right").font(.system(size: 10, weight: .heavy))
-            ////                            .foregroundColor(Color("bg"))
-            ////                            .imageScale(.large)
-            ////                        Text("Entertainment")
-            ////                    }
-            ////                };
-            ////                NavigationLink(destination: Text("Technology Folder")) {
-            ////                    HStack{
-            ////                        Image(systemName: "chevron.right").font(.system(size: 10, weight: .heavy))
-            ////                            .foregroundColor(Color("bg"))
-            ////                            .imageScale(.large)
-            ////                        Text("Technology")
-            ////                    }
-            ////                }
-            //            }
-            //            .textCase(nil)
-            //            .accentColor(Color("darkShadow"))
-            //            .foregroundColor(Color("darkerAccent"))
-            //            .listRowBackground(Color("accent"))
-            //            .edgesIgnoringSafeArea(.all)
-            //            if addRSSProgressValue > 0 && addRSSProgressValue < 1.0 {
-            //                LinerProgressBar(lineWidth: 3, color: .blue, progress: $addRSSProgressValue)
-            //                    .padding(.top, 2)
-            //            }
+                    }
+                    .padding(.leading)
+                    .tag("RSS")
+                }
+                
+                .onDelete { indexSet in
+                    if let index = indexSet.first {
+                        self.viewModel.delete(at: index)
+                        }
+                    }
+                }
+                .textCase(nil)
+                .listRowBackground(Color("accent"))
+                .accentColor(Color("darkShadow"))
+                .foregroundColor(Color("darkerAccent"))
+                .edgesIgnoringSafeArea(.all)
+            .pullToRefresh(isShowing: $isShowing) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self.isShowing = false
+                }
+            }
+//            Section(header: folderSection) {
+//                Section(header: defaultFeedSection) {
+//                    ForEach(viewModel.items, id: \.self) { rss in
+//                        NavigationLink(destination: self.destinationView(rss)) {
+//                            RSSRow(rss: rss) //TODO: make DefaultFeedRow
+//                        }
+//                        .padding(.leading)
+//                        .tag("diplayName")
+//                    }
+//                }
+//                 //;
+////                NavigationLink(destination: Text("News Folder")) {
+////                    HStack{
+////                        Image(systemName: "chevron.right").font(.system(size: 10, weight: .heavy))
+////                            .foregroundColor(Color("bg"))
+////                            .imageScale(.large)
+////                        Text("News")
+////                    }
+////                };
+////                NavigationLink(destination: Text("Blogs Folder")) {
+////                    HStack{
+////                        Image(systemName: "chevron.right").font(.system(size: 10, weight: .heavy))
+////                            .foregroundColor(Color("bg"))
+////                            .imageScale(.large)
+////                        Text("Blogs")
+////                    }
+////                };
+////                NavigationLink(destination: Text("Entertainment Folder")) {
+////                    HStack{
+////                        Image(systemName: "chevron.right").font(.system(size: 10, weight: .heavy))
+////                            .foregroundColor(Color("bg"))
+////                            .imageScale(.large)
+////                        Text("Entertainment")
+////                    }
+////                };
+////                NavigationLink(destination: Text("Technology Folder")) {
+////                    HStack{
+////                        Image(systemName: "chevron.right").font(.system(size: 10, weight: .heavy))
+////                            .foregroundColor(Color("bg"))
+////                            .imageScale(.large)
+////                        Text("Technology")
+////                    }
+////                }
+//            }
+//            .textCase(nil)
+//            .accentColor(Color("darkShadow"))
+//            .foregroundColor(Color("darkerAccent"))
+//            .listRowBackground(Color("accent"))
+//            .edgesIgnoringSafeArea(.all)
+//            if addRSSProgressValue > 0 && addRSSProgressValue < 1.0 {
+//                LinerProgressBar(lineWidth: 3, color: .blue, progress: $addRSSProgressValue)
+//                    .padding(.top, 2)
+//            }
         }
         .onReceive(rssRefreshPublisher, perform: { output in
                 self.viewModel.fecthResults()
@@ -439,7 +424,8 @@ struct HomeView: View {
                 Spacer()
                     }
             ToolbarItem(placement: .bottomBar) {
-                Spacer()
+                //Spacer()
+                cardButton
 
 //                settingButton
             }
@@ -544,11 +530,12 @@ struct HomeView_Previews: PreviewProvider {
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     static let rssFeedViewModel = RSSFeedViewModel(rss: RSS.simple(), dataSource: DataSourceService.current.rssItem)
     static var previews: some View {
-        ZStack {
+        //ZStack {
             Color(.systemBackground)
             HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel, rssFeedViewModel: self.rssFeedViewModel)
             .preferredColorScheme(.dark)
-        }
+//            HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel, rssFeedViewModel: self.rssFeedViewModel)
+        //}
     }
 }
 
@@ -561,7 +548,7 @@ struct UnreadCountView: View {
             .padding(.horizontal, 7)
             .padding(.vertical, 1)
 //            .background(Color("darkShadow")) //accent")) //darkShadow"))
-            .foregroundColor(Color("lightShadow"))
+            .foregroundColor(Color("darkShadow"))
             .cornerRadius(8)
     }
 }

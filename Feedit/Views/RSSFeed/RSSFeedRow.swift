@@ -12,6 +12,18 @@ import SDWebImageSwiftUI
 
 struct RSSItemRow: View {
     
+    enum FavoriteFilter: Int {
+        case want
+        case done
+        
+        var label: String {
+            switch self {
+            case .want: return "Want to do"
+            case .done: return "Done"
+            }
+        }
+    }
+    
     @Environment(\.managedObjectContext) var managedObjectContext
 
     var rssSource: RSS {
@@ -22,6 +34,7 @@ struct RSSItemRow: View {
     @ObservedObject var itemWrapper: RSSItem
     var contextMenuAction: ((RSSItem) -> Void)?
     var imageLoader: ImageLoader!
+    var isDone: (() -> Void)?
 
     init(rssViewModel: RSSFeedViewModel, wrapper: RSSItem, menu action: ((RSSItem) -> Void)? = nil) {
         self.rssFeedViewModel = rssViewModel
@@ -49,9 +62,18 @@ struct RSSItemRow: View {
                     .frame(width: 12, height: 12)
                     .opacity(0.7)
             }
-        }
+//            if itemWrapper.isDone {
+////                Text(itemWrapper.title)
+////                    .opacity((isDone != nil) ? 0.2 : 1.0)
+//                Image("circle")
+//                    .resizable()
+//                    .aspectRatio(contentMode: .fit)
+//                    .frame(width: 12, height: 12)
+//                    .opacity(0.7)
+//            }
         }
     }
+}
     
     var body: some View{
         VStack(alignment: .leading) {
@@ -82,11 +104,21 @@ struct RSSItemRow: View {
 
                 .contextMenu {
                     ActionContextMenu(
-                        label: itemWrapper.isArchive ? "Untag" : "Tag",
+                        label: itemWrapper.isArchive ? "Unstar" : "Star",
                         systemName: "star\(itemWrapper.isArchive ? "" : "star")",
                         onAction: {
                             self.contextMenuAction?(self.itemWrapper)
                         })
+                }
+                    
+                .contextMenu {
+                    ActionContextMenu(
+                        label: itemWrapper.isDone ? "Unread" : "Read",
+                        systemName: "circle\(itemWrapper.isDone ? "" : "circle")",
+                        onAction: {
+                            self.contextMenuAction?(self.itemWrapper)
+                        })
+                        .opacity((isDone != nil) ? 0.2 : 1.0)
                     }
 
             }

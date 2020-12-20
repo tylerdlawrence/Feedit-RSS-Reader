@@ -14,30 +14,33 @@ struct ActionContextMenu: View {
     
     var onAction: (() -> Void)?
     
-    var onRead: (() -> UnreadCountProvider)?
+    var isDone: (() -> Void)?
     
     var onTag: (() -> Tag)?
     
-    init(label: String, systemName: String, onAction: (() -> Void)? = nil) {
-        //onRead: (() -> UnreadCountProvider)?, onTag: (() -> Tag)?
+    init(label: String, systemName: String, onAction: (() -> Void)? = nil, onRead: (() -> Void)? = nil) {
         self.label = "Tag Article"
         self.label = "Toggle Starred"
         self.label = "Mark as Read"
         self.systemName = systemName
         self.onAction = onAction
+        self.isDone = onRead
     }
     
     var body: some View {
         VStack {
-//            Button(action: {
-//                self.onRead?()
-//            }, label: {
-//                HStack{
-//                    Text("Toggle Read")
-//                    Image(systemName: "circle")
-//                        .imageScale(.small)
-//                }
-//            })
+            Button(action: {
+                self.isDone?()
+            }, label: {
+                HStack {
+                    Text("Mark As Read")
+                    Image("Symbol")
+
+                }
+//                .opacity((isDone != nil) ? 0.2 : 1.0)
+
+            })
+            
             Button(action: {
                 self.onAction?()
             }, label: {
@@ -47,24 +50,7 @@ struct ActionContextMenu: View {
                         .imageScale(.small)
                 }
             })
-//            Button(action: {
-//                self.onTag?()
-//            }, label: {
-//                HStack{
-//                    Text("Tag Article")
-//                    Image(systemName: "circlebadge.2")
-//                        .imageScale(.small)
-//                    //Image("smartFeedUnread")
-//                }
-//            })
         }
 
     }
 }
-
-//struct ActionContextMenu_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ActionContextMenu(label: "Toggle Starred", systemName: "star.fill")
-////        ActionContextMenu(read: "Mark As Read", systemName: "circle.fill")
-//    }
-//}

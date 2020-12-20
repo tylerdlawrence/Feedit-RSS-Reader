@@ -11,6 +11,7 @@ import KingfisherSwiftUI
 import Intents
 
 struct ArchiveListView: View {
+    
     var rssSource: RSS {
         return self.rssFeedViewModel.rss
     }
@@ -31,7 +32,9 @@ struct ArchiveListView: View {
     
     private var loadMore: some View {
         Button(action: self.archiveListViewModel.loadMore) {
-                Image("MarkAllAsRead")
+//                Image("MarkAllAsRead")
+            Image(systemName: "arrow.counterclockwise")
+            
         }
     }
     

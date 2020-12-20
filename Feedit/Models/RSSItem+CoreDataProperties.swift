@@ -35,7 +35,7 @@ extension RSSItem {
     @NSManaged public var author: String
     @NSManaged public var isArchive: Bool
     @NSManaged public var imageURL: String
-    
+    @NSManaged public var isDone: Bool
 
     
     public override func awakeFromInsert() {
@@ -56,8 +56,18 @@ extension RSSItem {
         item.createTime = createTime
         item.progress = 0
         item.isArchive = false
+        item.isDone = false
+
 
         return item
+    }
+    
+    var wrappedTitle: String {
+        title 
+    }
+
+    var wrappedDTitle: String {
+        title 
     }
         
     static func requestObjects(rssUUID: UUID, start: Int = 0, limit: Int = 20) -> NSFetchRequest<RSSItem> {
@@ -92,6 +102,8 @@ extension RSSItem {
         return request
         }
     }
+
+
 
 extension RSSItem: ObjectValidatable {
     func hasChangedValues() -> Bool {

@@ -107,7 +107,8 @@ struct RSSFeedListView: View {
             }
             .navigationBarItems(trailing:
                 Button(action: self.rssFeedViewModel.loadMore) {
-                    Image("MarkAllAsRead")
+                    //Image("MarkAllAsRead")
+                    Image(systemName: "arrow.counterclockwise")
                 })
             
 //            .sheet(item: $selectedItem, content: { item in
@@ -123,7 +124,6 @@ struct RSSFeedListView: View {
 //            })
             
            }
-        
             .onAppear {
                 self.rssFeedViewModel.fecthResults()
                 self.rssFeedViewModel.fetchRemoteRSSItems()

@@ -65,6 +65,8 @@ class RSSItemStore: NSObject {
             let rs = try fetchedResultsController.managedObjectContext.fetch(fetchRequest)
             rs.forEach { item in
                 print("item created time = \(String(describing: item.createTime))")
+                //isDone = item.isDone
+
             }
             return rs
         } catch let error {
