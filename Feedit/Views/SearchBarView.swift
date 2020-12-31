@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SearchBarView: View {
         
-    var feed = ["Blog", "Feed", "hello", "RSS", "News", "Covid", "Better", "Days"]
+    var feed = [""]
         //["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"] + ["Ceres", "Pluto", "Haumea", "Makemake", "Eris"]
     
     @ObservedObject var searchBar: SearchBar = SearchBar()

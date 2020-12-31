@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 import CoreData
 import Combine
+import SwiftUIGestures
 
 class RSSFeedViewModel: NSObject, ObservableObject {
     
@@ -34,6 +35,16 @@ class RSSFeedViewModel: NSObject, ObservableObject {
         updatedItem.isArchive = !item.isArchive
         updatedItem.updateTime = Date()
         dataSource.setUpdateObject(updatedItem)
+        
+        _ = dataSource.saveUpdateObject()
+    }
+    
+    func isDone(_ item: RSSItem) {
+        let readItem = dataSource.readObject(item)
+        readItem.isDone = !item.isDone
+        readItem.updateTime = Date()
+        readItem.objectWillChange.send()
+        dataSource.setUpdateObject(readItem)
         
         _ = dataSource.saveUpdateObject()
     }

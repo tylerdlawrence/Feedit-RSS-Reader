@@ -34,12 +34,9 @@ struct ActionContextMenu: View {
             }, label: {
                 HStack {
                     Text("Mark As Read")
-                    Image("smartFeedUnread")
-                        .foregroundColor(.gray)
-                    //Image("Symbol")
+                    Image("unread-action")
 
                 }
-                //.opacity((isDone != nil) ? 0.2 : 1.0)
 
             })
             
@@ -48,7 +45,7 @@ struct ActionContextMenu: View {
             }, label: {
                 HStack{
                     Text("Toggle Starred")
-                    Image("star") //"star") //
+                    Image(systemName: "star.fill") //"star") //
                         .imageScale(.small)
                 }
             })

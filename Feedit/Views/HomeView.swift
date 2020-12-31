@@ -11,6 +11,7 @@ import KingfisherSwiftUI
 import CoreData
 import Combine
 import SwiftUIRefresh
+import SwipeCell
 
 struct HomeView: View {
     
@@ -39,7 +40,7 @@ struct HomeView: View {
     @State private var isShowing = false
     @State var sources: [RSS] = []
     @ObservedObject var searchBar: SearchBar = SearchBar()
-
+//    @ObservedObject var basicListViewController: BasicListViewController
     @ObservedObject var viewModel: RSSListViewModel
     @ObservedObject var archiveListViewModel: ArchiveListViewModel
     @State var rssFeedViewModel: RSSFeedViewModel
@@ -53,6 +54,7 @@ struct HomeView: View {
     @State var isExpanded = false
     @State private var revealDetails = false
 
+    //let index : Int
 
     
     private var cardButton: some View {
@@ -140,10 +142,9 @@ struct HomeView: View {
                     //HStack{
                         //Text("Add Feed")
                         Image(systemName: "plus")
-                            .foregroundColor(Color("bg"))
-
+                            //.foregroundColor(Color("bg"))
                             .imageScale(.medium)
-                            .font(.system(size: 18, weight: .bold))
+                            .font(.system(size: 18, weight: .semibold))
                         
                 })
                 
@@ -262,6 +263,7 @@ struct HomeView: View {
     var rssSource: RSS {
         return self.rssFeedViewModel.rss
     }
+    //@Binding var content: Int
     
   var body: some View {
     NavigationView {
@@ -298,16 +300,18 @@ struct HomeView: View {
                                 //}
 //                                .padding(.leading)
                             //}
+                NavigationLink(destination: DataNStorageView()) { //Tag.demoTags.randomElement()!) {
+                    TagView()
+                    Spacer()
+                    //UnreadCountView(Text("items: \(content)"))
+                    //UnreadCountView(count: DataNStorageView.count) //Tag.demoTags.count)
+                }
                 NavigationLink(destination: archiveListView) {
                     BookmarkView()
                     Spacer()
                     UnreadCountView(count: self.archiveListViewModel.items.count)
                 }
-                NavigationLink(destination: Tag.demoTags.randomElement()!) {
-                    TagView()
-                    Spacer()
-                    UnreadCountView(count: Tag.demoTags.count)
-                }
+
             }
             .textCase(nil)
             .accentColor(Color("darkShadow"))
@@ -448,12 +452,16 @@ struct HomeView: View {
 
 struct BookmarkView: View {
     var body: some View {
-        VStack(alignment: .leading){
+        VStack(alignment: .trailing) { //(alignment: .leading){
             HStack{
-                Image("star")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 15, height: 15, alignment: .center)
+//                Image(systemName: "star.fill")
+//                    .imageScale(.medium)
+                Image(systemName: "star.fill").font(.system(size: 16, weight: .black)).foregroundColor(.yellow)
+//                    .foregroundColor(.yellow)
+//                Image("star")
+//                    .resizable()
+//                    .aspectRatio(contentMode: .fit)
+//                    .frame(width: 15, height: 15, alignment: .center)
                 Text("Starred")
                     .font(.headline) //.system(size: 16, weight: .semibold))
                     .fontWeight(.semibold)
@@ -467,11 +475,13 @@ struct TagView: View {
     var body: some View {
         VStack(alignment: .leading){
             HStack{
-                Image("smartFeedUnread")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 15, height: 15, alignment: .center)
-                Text("Unread")
+
+                Image(systemName: "archivebox.fill").font(.system(size: 16, weight: .black)).foregroundColor(Color("text"))
+                    //.imageScale(.medium)
+//                    .resizable()
+//                    .aspectRatio(contentMode: .fit)
+//                    .frame(width: 15, height: 15, alignment: .center)
+                Text("Archive")
                     .font(.headline) //.system(size: 16, weight: .semibold))
                     .fontWeight(.semibold)
                     .foregroundColor(Color("bg"))
@@ -510,7 +520,7 @@ extension HomeView {
         self.viewModel.fecthResults()
     }
     private func destinationView(rss: RSS) -> some View {
-        RSSFeedListView(rssViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem)) //, showSheetView: self.showSheetView)
+        RSSFeedListView(rssViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem)) //, basicListViewController: basicListViewController) //, showSheetView: self.showSheetView)
             .environmentObject(DataSourceService.current.rss)
     }
 //    private func destinationFolderView(_ rss: RSS) -> some View {
@@ -529,13 +539,15 @@ struct HomeView_Previews: PreviewProvider {
     static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     static let rssFeedViewModel = RSSFeedViewModel(rss: RSS.simple(), dataSource: DataSourceService.current.rssItem)
+    //static let basicListViewController = BasicListViewController()
     static var previews: some View {
         //ZStack {
-            Color(.systemBackground)
-            HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel, rssFeedViewModel: self.rssFeedViewModel)
+            //Color(.systemBackground)
+        HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel, rssFeedViewModel: self.rssFeedViewModel)
             .preferredColorScheme(.dark)
 //            HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel, rssFeedViewModel: self.rssFeedViewModel)
         //}
+        //basicListViewController: self.basicListViewController,
     }
 }
 

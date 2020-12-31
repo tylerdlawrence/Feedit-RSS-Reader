@@ -18,6 +18,8 @@
 		61453B17255CC5920060EBB6 /* URLImage in Frameworks */ = {isa = PBXBuildFile; productRef = 61453B16255CC5920060EBB6 /* URLImage */; };
 		615096E3256377E00001C0D9 /* SwiftUIX in Frameworks */ = {isa = PBXBuildFile; productRef = 615096E2256377E00001C0D9 /* SwiftUIX */; };
 		615096EB2564BF420001C0D9 /* NavigationBarModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615096EA2564BF420001C0D9 /* NavigationBarModifier.swift */; };
+		615834DD259146FF009CBEF3 /* SwiperizeItemModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615834DC259146FF009CBEF3 /* SwiperizeItemModifier.swift */; };
+		6158358D259301E7009CBEF3 /* ScrollManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6158358C259301E6009CBEF3 /* ScrollManager.swift */; };
 		615899252585CB3100D893CE /* NavigationTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615899242585CB3000D893CE /* NavigationTitleView.swift */; };
 		61595CF6257B18EE000D6B22 /* DefaultFeeds.opml in Resources */ = {isa = PBXBuildFile; fileRef = 61595CF5257B18EE000D6B22 /* DefaultFeeds.opml */; };
 		61595D06257B1C6E000D6B22 /* RSCore in Frameworks */ = {isa = PBXBuildFile; productRef = 61595D05257B1C6E000D6B22 /* RSCore */; };
@@ -78,10 +80,10 @@
 		618610B3256ED5BE0083A96D /* KingfisherSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 618610B2256ED5BE0083A96D /* KingfisherSwiftUI */; };
 		618610C5256EE3AB0083A96D /* Article.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618610C4256EE3AB0083A96D /* Article.swift */; };
 		618610CF256EF7500083A96D /* Common Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618610CC256EF74F0083A96D /* Common Utils.swift */; };
-		618610D0256EF7500083A96D /* HTMLScarperUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618610CD256EF7500083A96D /* HTMLScarperUtility.swift */; };
 		618610D1256EF7500083A96D /* NetworkReachabilty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618610CE256EF7500083A96D /* NetworkReachabilty.swift */; };
 		618610D5256EF7A00083A96D /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 618610D4256EF7A00083A96D /* SwiftSoup */; };
 		618610DC256EF8420083A96D /* Reachability in Frameworks */ = {isa = PBXBuildFile; productRef = 618610DB256EF8420083A96D /* Reachability */; };
+		618AC9DF25994C3900E8286E /* NavigationStack in Frameworks */ = {isa = PBXBuildFile; productRef = 618AC9DE25994C3900E8286E /* NavigationStack */; };
 		618D823D2570327F0061292F /* FeedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618D823C2570327F0061292F /* FeedImageView.swift */; };
 		618F73DC2584291500CA36B4 /* Image-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618F73DB2584291500CA36B4 /* Image-Extensions.swift */; };
 		618F73DF2584293E00CA36B4 /* HiddenModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618F73DE2584293E00CA36B4 /* HiddenModifier.swift */; };
@@ -133,7 +135,6 @@
 		61BA4084258A7CB600346A50 /* Article.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618610C4256EE3AB0083A96D /* Article.swift */; };
 		61BA408B258AA25F00346A50 /* NewsFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61BA408A258AA25F00346A50 /* NewsFeedView.swift */; };
 		61BA408E258AA4C400346A50 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61BA408D258AA4C400346A50 /* Constants.swift */; };
-		61BA4091258AA61D00346A50 /* ArticleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61BA4090258AA61D00346A50 /* ArticleViewModel.swift */; };
 		61C8189624E1F3FB00593939 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C8189524E1F3FB00593939 /* AppDelegate.swift */; };
 		61C8189824E1F3FB00593939 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C8189724E1F3FB00593939 /* SceneDelegate.swift */; };
 		61C8189F24E1F3FD00593939 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 61C8189E24E1F3FD00593939 /* Assets.xcassets */; };
@@ -150,6 +151,11 @@
 		61C8D577258D8EF600EA8C2B /* SwiftUIRefresh in Frameworks */ = {isa = PBXBuildFile; productRef = 61C8D576258D8EF600EA8C2B /* SwiftUIRefresh */; };
 		61C8D583258DAB0700EA8C2B /* ExportFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C8D582258DAB0700EA8C2B /* ExportFile.swift */; };
 		61C8D58F258E53DB00EA8C2B /* FilteredList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C8D58E258E53DA00EA8C2B /* FilteredList.swift */; };
+		61C8D670258FC66A00EA8C2B /* SwiftUIGestures in Frameworks */ = {isa = PBXBuildFile; productRef = 61C8D66F258FC66A00EA8C2B /* SwiftUIGestures */; };
+		61C8D676258FC94000EA8C2B /* SwipeGesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C8D675258FC94000EA8C2B /* SwipeGesture.swift */; };
+		61C8D67B258FEC3700EA8C2B /* RSSActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C8D67A258FEC3700EA8C2B /* RSSActions.swift */; };
+		61C8D6812590034C00EA8C2B /* SwipeCell in Frameworks */ = {isa = PBXBuildFile; productRef = 61C8D6802590034C00EA8C2B /* SwipeCell */; };
+		61C8D6992590785C00EA8C2B /* SwipeCellDemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C8D6982590785B00EA8C2B /* SwipeCellDemoView.swift */; };
 		61CDCF4B24E843C4007654C5 /* Color+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CDCF4A24E843C4007654C5 /* Color+Ext.swift */; };
 		61CDCF5724E8459B007654C5 /* LinerProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CDCF5624E8459B007654C5 /* LinerProgressBar.swift */; };
 		61CDCF5924E845DE007654C5 /* DocumentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CDCF5824E845DE007654C5 /* DocumentPicker.swift */; };
@@ -175,6 +181,27 @@
 			proxyType = 1;
 			remoteGlobalIDString = 61C8189124E1F3FB00593939;
 			remoteInfo = Feedit;
+		};
+		618AC9BE2597933A00E8286E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 618AC9B92597933900E8286E /* MailExample.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3F234AE31E44AA5E00E22A38;
+			remoteInfo = MailExample;
+		};
+		618AC9C52597936E00E8286E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 618AC9C22597936D00E8286E /* SwipeCellKit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 3F234AC21E44A7A400E22A38;
+			remoteInfo = SwipeCellKit;
+		};
+		618AC9C82597936F00E8286E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 618AC9C22597936D00E8286E /* SwipeCellKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3F234AC31E44A7A400E22A38;
+			remoteInfo = SwipeCellKit;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -215,6 +242,8 @@
 		6117365A24E83CC500A2DEA5 /* BatchImportViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchImportViewModel.swift; sourceTree = "<group>"; };
 		612FB83D2540F04000D9822B /* RSSListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RSSListView.swift; path = Feedit/Views/RSSListView.swift; sourceTree = SOURCE_ROOT; };
 		615096EA2564BF420001C0D9 /* NavigationBarModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarModifier.swift; sourceTree = "<group>"; };
+		615834DC259146FF009CBEF3 /* SwiperizeItemModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiperizeItemModifier.swift; sourceTree = "<group>"; };
+		6158358C259301E6009CBEF3 /* ScrollManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollManager.swift; sourceTree = "<group>"; };
 		615899242585CB3000D893CE /* NavigationTitleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationTitleView.swift; sourceTree = "<group>"; };
 		61595CF5257B18EE000D6B22 /* DefaultFeeds.opml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = DefaultFeeds.opml; sourceTree = "<group>"; };
 		61595D19257B32AE000D6B22 /* Articles */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Articles; sourceTree = "<group>"; };
@@ -256,8 +285,9 @@
 		6182213C250542E9005636B2 /* Subscriptions-test.opml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "Subscriptions-test.opml"; sourceTree = "<group>"; };
 		618610C4256EE3AB0083A96D /* Article.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Article.swift; sourceTree = "<group>"; };
 		618610CC256EF74F0083A96D /* Common Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Common Utils.swift"; sourceTree = "<group>"; };
-		618610CD256EF7500083A96D /* HTMLScarperUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTMLScarperUtility.swift; sourceTree = "<group>"; };
 		618610CE256EF7500083A96D /* NetworkReachabilty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkReachabilty.swift; sourceTree = "<group>"; };
+		618AC9B92597933900E8286E /* MailExample.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MailExample.xcodeproj; path = "../../SwipeCellKit-develop/Example/MailExample.xcodeproj"; sourceTree = "<group>"; };
+		618AC9C22597936D00E8286E /* SwipeCellKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SwipeCellKit.xcodeproj; path = "/Users/tylerdlawrence/Documents/Personal Files/SwipeCellKit-develop/SwipeCellKit.xcodeproj"; sourceTree = "<absolute>"; };
 		618D823C2570327F0061292F /* FeedImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageView.swift; sourceTree = "<group>"; };
 		618F73DB2584291500CA36B4 /* Image-Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Image-Extensions.swift"; sourceTree = "<group>"; };
 		618F73DE2584293E00CA36B4 /* HiddenModifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HiddenModifier.swift; sourceTree = "<group>"; };
@@ -299,7 +329,6 @@
 		61BA407A258A7A6C00346A50 /* CDArticle+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CDArticle+CoreDataClass.swift"; sourceTree = "<group>"; };
 		61BA408A258AA25F00346A50 /* NewsFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsFeedView.swift; sourceTree = "<group>"; };
 		61BA408D258AA4C400346A50 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		61BA4090258AA61D00346A50 /* ArticleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleViewModel.swift; sourceTree = "<group>"; };
 		61C8189224E1F3FB00593939 /* Feedit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Feedit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		61C8189524E1F3FB00593939 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		61C8189724E1F3FB00593939 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -316,6 +345,9 @@
 		61C8D569258D5D3E00EA8C2B /* KRefreshScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KRefreshScrollView.swift; sourceTree = "<group>"; };
 		61C8D582258DAB0700EA8C2B /* ExportFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportFile.swift; sourceTree = "<group>"; };
 		61C8D58E258E53DA00EA8C2B /* FilteredList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilteredList.swift; sourceTree = "<group>"; };
+		61C8D675258FC94000EA8C2B /* SwipeGesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeGesture.swift; sourceTree = "<group>"; };
+		61C8D67A258FEC3700EA8C2B /* RSSActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSSActions.swift; sourceTree = "<group>"; };
+		61C8D6982590785B00EA8C2B /* SwipeCellDemoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeCellDemoView.swift; sourceTree = "<group>"; };
 		61CDCF4A24E843C4007654C5 /* Color+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Ext.swift"; sourceTree = "<group>"; };
 		61CDCF5624E8459B007654C5 /* LinerProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinerProgressBar.swift; sourceTree = "<group>"; };
 		61CDCF5824E845DE007654C5 /* DocumentPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPicker.swift; sourceTree = "<group>"; };
@@ -359,9 +391,12 @@
 				61595D15257B1EB6000D6B22 /* RSWeb in Frameworks */,
 				618610B3256ED5BE0083A96D /* KingfisherSwiftUI in Frameworks */,
 				616121F0255367B60074F061 /* SDWebImageSwiftUI in Frameworks */,
+				61C8D670258FC66A00EA8C2B /* SwiftUIGestures in Frameworks */,
 				616121D7255366A00074F061 /* ModalView in Frameworks */,
+				61C8D6812590034C00EA8C2B /* SwipeCell in Frameworks */,
 				618610D5256EF7A00083A96D /* SwiftSoup in Frameworks */,
 				61DEBE3F25152CB90025B1B3 /* SwiftUI.framework in Frameworks */,
+				618AC9DF25994C3900E8286E /* NavigationStack in Frameworks */,
 				61453B17255CC5920060EBB6 /* URLImage in Frameworks */,
 				61DEBE3D25152CB20025B1B3 /* WidgetKit.framework in Frameworks */,
 			);
@@ -413,10 +448,25 @@
 			isa = PBXGroup;
 			children = (
 				618610CC256EF74F0083A96D /* Common Utils.swift */,
-				618610CD256EF7500083A96D /* HTMLScarperUtility.swift */,
 				618610CE256EF7500083A96D /* NetworkReachabilty.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		618AC9BA2597933900E8286E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				618AC9BF2597933A00E8286E /* MailExample.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		618AC9C32597936D00E8286E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				618AC9C92597936F00E8286E /* SwipeCellKit.framework */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		618F9025250DCD4F00D5A03E /* Models */ = {
@@ -432,7 +482,6 @@
 				61BA4076258A79E400346A50 /* CDArticle+CoreDataProperties.swift */,
 				61BA407A258A7A6C00346A50 /* CDArticle+CoreDataClass.swift */,
 				618610C4256EE3AB0083A96D /* Article.swift */,
-				61BA4090258AA61D00346A50 /* ArticleViewModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -455,6 +504,7 @@
 			isa = PBXGroup;
 			children = (
 				61C8189424E1F3FB00593939 /* Feedit */,
+				618AC9B92597933900E8286E /* MailExample.xcodeproj */,
 				6182212B25053FEE005636B2 /* rssTests */,
 				61C8189324E1F3FB00593939 /* Products */,
 				61C818CD24E1F4A900593939 /* Frameworks */,
@@ -463,6 +513,7 @@
 				61595D1A257B32AF000D6B22 /* ArticlesDatabase */,
 				61595D1B257B32AF000D6B22 /* Secrets */,
 				61595D1D257B32AF000D6B22 /* SyncDatabase */,
+				618AC9C22597936D00E8286E /* SwipeCellKit.xcodeproj */,
 			);
 			sourceTree = "<group>";
 		};
@@ -649,7 +700,11 @@
 			isa = PBXGroup;
 			children = (
 				61967EF124E2061100AA647C /* RSSFeedListView.swift */,
+				61C8D6982590785B00EA8C2B /* SwipeCellDemoView.swift */,
+				61C8D67A258FEC3700EA8C2B /* RSSActions.swift */,
 				61967EEF24E2061100AA647C /* RSSFeedRow.swift */,
+				6158358C259301E6009CBEF3 /* ScrollManager.swift */,
+				615834DC259146FF009CBEF3 /* SwiperizeItemModifier.swift */,
 				619852272587EEC7009988B8 /* Img.swift */,
 				618D823C2570327F0061292F /* FeedImageView.swift */,
 				61967EEE24E2061100AA647C /* RSSFeedViewModel.swift */,
@@ -657,6 +712,7 @@
 				61CDCF5E24E8466C007654C5 /* WKWebViewWrapper.swift */,
 				61967EF024E2061100AA647C /* WebView.swift */,
 				61967EE724E205DD00AA647C /* SafariView.swift */,
+				61C8D675258FC94000EA8C2B /* SwipeGesture.swift */,
 			);
 			path = RSSFeed;
 			sourceTree = "<group>";
@@ -713,6 +769,11 @@
 			buildRules = (
 			);
 			dependencies = (
+				618AC9EA259A575600E8286E /* PBXTargetDependency */,
+				618AC9E225994C5800E8286E /* PBXTargetDependency */,
+				618AC9C62597936E00E8286E /* PBXTargetDependency */,
+				61C8D6842590036F00EA8C2B /* PBXTargetDependency */,
+				61C8D673258FC68900EA8C2B /* PBXTargetDependency */,
 				61C8D57A258D8F0A00EA8C2B /* PBXTargetDependency */,
 				61595D30257B3B38000D6B22 /* PBXTargetDependency */,
 				61595D2E257B3B32000D6B22 /* PBXTargetDependency */,
@@ -747,6 +808,9 @@
 				61595D0F257B1DBE000D6B22 /* RSParser */,
 				61595D14257B1EB6000D6B22 /* RSWeb */,
 				61C8D576258D8EF600EA8C2B /* SwiftUIRefresh */,
+				61C8D66F258FC66A00EA8C2B /* SwiftUIGestures */,
+				61C8D6802590034C00EA8C2B /* SwipeCell */,
+				618AC9DE25994C3900E8286E /* NavigationStack */,
 			);
 			productName = Feedit;
 			productReference = 61C8189224E1F3FB00593939 /* Feedit.app */;
@@ -795,9 +859,23 @@
 				61595D0E257B1DBE000D6B22 /* XCRemoteSwiftPackageReference "RSParser" */,
 				61595D13257B1EB6000D6B22 /* XCRemoteSwiftPackageReference "RSWeb" */,
 				61C8D575258D8EF600EA8C2B /* XCRemoteSwiftPackageReference "SwiftUIRefresh" */,
+				61C8D66E258FC66A00EA8C2B /* XCRemoteSwiftPackageReference "SwiftUIGestures" */,
+				61C8D67F2590034B00EA8C2B /* XCRemoteSwiftPackageReference "SwipeCell" */,
+				615835352591B76B009CBEF3 /* XCRemoteSwiftPackageReference "periphery" */,
+				618AC9DD25994C3900E8286E /* XCRemoteSwiftPackageReference "swiftui-navigation-stack" */,
 			);
 			productRefGroup = 61C8189324E1F3FB00593939 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 618AC9BA2597933900E8286E /* Products */;
+					ProjectRef = 618AC9B92597933900E8286E /* MailExample.xcodeproj */;
+				},
+				{
+					ProductGroup = 618AC9C32597936D00E8286E /* Products */;
+					ProjectRef = 618AC9C22597936D00E8286E /* SwipeCellKit.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				61C8189124E1F3FB00593939 /* Feedit */,
@@ -805,6 +883,23 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		618AC9BF2597933A00E8286E /* MailExample.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = MailExample.app;
+			remoteRef = 618AC9BE2597933A00E8286E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		618AC9C92597936F00E8286E /* SwipeCellKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = SwipeCellKit.framework;
+			remoteRef = 618AC9C82597936F00E8286E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		6182212825053FEE005636B2 /* Resources */ = {
@@ -892,7 +987,7 @@
 				61967EE924E205DD00AA647C /* ActionContextMenu.swift in Sources */,
 				618F73DF2584293E00CA36B4 /* HiddenModifier.swift in Sources */,
 				618D823D2570327F0061292F /* FeedImageView.swift in Sources */,
-				618610D0256EF7500083A96D /* HTMLScarperUtility.swift in Sources */,
+				61C8D67B258FEC3700EA8C2B /* RSSActions.swift in Sources */,
 				615E961D2530116600891083 /* AppearenceView.swift in Sources */,
 				61C818E724E1F9BA00593939 /* PersistenceManager.swift in Sources */,
 				61595D50257C0A03000D6B22 /* UIColor+.swift in Sources */,
@@ -906,6 +1001,7 @@
 				61CDCF5B24E8461D007654C5 /* RoundRectangleButton.swift in Sources */,
 				61595D7F257C6DAF000D6B22 /* AccountMetadata.swift in Sources */,
 				61967F0024E2068400AA647C /* AddRSSView.swift in Sources */,
+				61C8D676258FC94000EA8C2B /* SwipeGesture.swift in Sources */,
 				618610D1256EF7500083A96D /* NetworkReachabilty.swift in Sources */,
 				61967ECC24E204FB00AA647C /* Request.swift in Sources */,
 				61595D4B257C0993000D6B22 /* Tag.swift in Sources */,
@@ -916,6 +1012,7 @@
 				618F902C250DCD4F00D5A03E /* RSS+CoreDataClass.swift in Sources */,
 				6117364924E83C0600A2DEA5 /* DataUnitView.swift in Sources */,
 				61595D25257B3A4D000D6B22 /* DefaultFeedsImporter.swift in Sources */,
+				615834DD259146FF009CBEF3 /* SwiperizeItemModifier.swift in Sources */,
 				61F1ED6C258B170F0000D166 /* MainView.swift in Sources */,
 				61967F0324E2068400AA647C /* RSSDisplayView.swift in Sources */,
 				61F1ED8E258CF9D10000D166 /* __ContentView.swift in Sources */,
@@ -934,6 +1031,7 @@
 				61BA407B258A7A6C00346A50 /* CDArticle+CoreDataClass.swift in Sources */,
 				61595DB2257C9AE2000D6B22 /* DefaultFeeds.swift in Sources */,
 				6117365524E83C3E00A2DEA5 /* DataNStorageView.swift in Sources */,
+				6158358D259301E7009CBEF3 /* ScrollManager.swift in Sources */,
 				61967ED224E2053D00AA647C /* Date+Ext.swift in Sources */,
 				61967EEB24E205DD00AA647C /* TextFieldView.swift in Sources */,
 				61967ECD24E204FB00AA647C /* ImageServices.swift in Sources */,
@@ -969,9 +1067,9 @@
 				61F1ED7F258C0D260000D166 /* SearchBar.swift in Sources */,
 				61595DB6257CA132000D6B22 /* Bundle-Decodable.swift in Sources */,
 				6117365724E83C7B00A2DEA5 /* DataNStorageViewModel.swift in Sources */,
+				61C8D6992590785C00EA8C2B /* SwipeCellDemoView.swift in Sources */,
 				618F902F250DCD4F00D5A03E /* RSSItem+CoreDataProperties.swift in Sources */,
 				61B46F69257F038100BF6C87 /* DefaultFeedRow.swift in Sources */,
-				61BA4091258AA61D00346A50 /* ArticleViewModel.swift in Sources */,
 				61595D90257C6E51000D6B22 /* UnreadCountProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1040,6 +1138,19 @@
 			isa = PBXTargetDependency;
 			productRef = 618610D7256EF7AB0083A96D /* SwiftSoup */;
 		};
+		618AC9C62597936E00E8286E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = SwipeCellKit;
+			targetProxy = 618AC9C52597936E00E8286E /* PBXContainerItemProxy */;
+		};
+		618AC9E225994C5800E8286E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 618AC9E125994C5800E8286E /* NavigationStack */;
+		};
+		618AC9EA259A575600E8286E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 618AC9E9259A575600E8286E /* SwiftUIKitView */;
+		};
 		6193AEF82536481A00EF8460 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = 6193AEF72536481A00EF8460 /* SDWebImageSwiftUI */;
@@ -1047,6 +1158,14 @@
 		61C8D57A258D8F0A00EA8C2B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = 61C8D579258D8F0A00EA8C2B /* SwiftUIRefresh */;
+		};
+		61C8D673258FC68900EA8C2B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 61C8D672258FC68900EA8C2B /* SwiftUIGestures */;
+		};
+		61C8D6842590036F00EA8C2B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 61C8D6832590036F00EA8C2B /* SwipeCell */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1230,7 +1349,7 @@
 				CODE_SIGN_ENTITLEMENTS = Feedit/Feedit.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 26;
 				DEVELOPMENT_ASSET_PATHS = "\"Feedit/Preview Content\"";
 				DEVELOPMENT_TEAM = 7Z3Z6D3TH7;
 				ENABLE_PREVIEWS = YES;
@@ -1243,7 +1362,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.02;
+				MARKETING_VERSION = 1.03;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tylerdlawrence.feeditrssreader;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1261,7 +1380,7 @@
 				CODE_SIGN_ENTITLEMENTS = Feedit/Feedit.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 26;
 				DEVELOPMENT_ASSET_PATHS = "\"Feedit/Preview Content\"";
 				DEVELOPMENT_TEAM = 7Z3Z6D3TH7;
 				ENABLE_PREVIEWS = YES;
@@ -1274,7 +1393,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.02;
+				MARKETING_VERSION = 1.03;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tylerdlawrence.feeditrssreader;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1331,6 +1450,14 @@
 			requirement = {
 				branch = master;
 				kind = branch;
+			};
+		};
+		615835352591B76B009CBEF3 /* XCRemoteSwiftPackageReference "periphery" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/peripheryapp/periphery";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.4.1;
 			};
 		};
 		61595D04257B1C6E000D6B22 /* XCRemoteSwiftPackageReference "RSCore" */ = {
@@ -1445,6 +1572,22 @@
 				minimumVersion = 5.1.0;
 			};
 		};
+		618AC9DD25994C3900E8286E /* XCRemoteSwiftPackageReference "swiftui-navigation-stack" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/matteopuc/swiftui-navigation-stack.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.0;
+			};
+		};
+		618AC9E5259A573F00E8286E /* XCRemoteSwiftPackageReference "SwiftUIKitView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AvdLee/SwiftUIKitView.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		6193AEF32536480400EF8460 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI.git";
@@ -1459,6 +1602,22 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 0.0.3;
+			};
+		};
+		61C8D66E258FC66A00EA8C2B /* XCRemoteSwiftPackageReference "SwiftUIGestures" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "git@github.com:waynedahlberg/SwiftUIGestures.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		61C8D67F2590034B00EA8C2B /* XCRemoteSwiftPackageReference "SwipeCell" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/EnesKaraosman/SwipeCell.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.2;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -1599,6 +1758,21 @@
 			package = 618610DA256EF8420083A96D /* XCRemoteSwiftPackageReference "Reachability.swift" */;
 			productName = Reachability;
 		};
+		618AC9DE25994C3900E8286E /* NavigationStack */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 618AC9DD25994C3900E8286E /* XCRemoteSwiftPackageReference "swiftui-navigation-stack" */;
+			productName = NavigationStack;
+		};
+		618AC9E125994C5800E8286E /* NavigationStack */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 618AC9DD25994C3900E8286E /* XCRemoteSwiftPackageReference "swiftui-navigation-stack" */;
+			productName = NavigationStack;
+		};
+		618AC9E9259A575600E8286E /* SwiftUIKitView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 618AC9E5259A573F00E8286E /* XCRemoteSwiftPackageReference "SwiftUIKitView" */;
+			productName = SwiftUIKitView;
+		};
 		6193AEF72536481A00EF8460 /* SDWebImageSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6193AEF32536480400EF8460 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
@@ -1613,6 +1787,26 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 61C8D575258D8EF600EA8C2B /* XCRemoteSwiftPackageReference "SwiftUIRefresh" */;
 			productName = SwiftUIRefresh;
+		};
+		61C8D66F258FC66A00EA8C2B /* SwiftUIGestures */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 61C8D66E258FC66A00EA8C2B /* XCRemoteSwiftPackageReference "SwiftUIGestures" */;
+			productName = SwiftUIGestures;
+		};
+		61C8D672258FC68900EA8C2B /* SwiftUIGestures */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 61C8D66E258FC66A00EA8C2B /* XCRemoteSwiftPackageReference "SwiftUIGestures" */;
+			productName = SwiftUIGestures;
+		};
+		61C8D6802590034C00EA8C2B /* SwipeCell */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 61C8D67F2590034B00EA8C2B /* XCRemoteSwiftPackageReference "SwipeCell" */;
+			productName = SwipeCell;
+		};
+		61C8D6832590036F00EA8C2B /* SwipeCell */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 61C8D67F2590034B00EA8C2B /* XCRemoteSwiftPackageReference "SwipeCell" */;
+			productName = SwipeCell;
 		};
 /* End XCSwiftPackageProductDependency section */
 

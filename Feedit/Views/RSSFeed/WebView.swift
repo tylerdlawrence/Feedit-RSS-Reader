@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import NavigationStack
 import KingfisherSwiftUI
 import Combine
 import CoreData
@@ -110,6 +111,7 @@ struct WebView: View {
         Button(action: {
             self.onDoneAction?()
             self.presentationMode.wrappedValue.dismiss()
+                
         }) {
             //Image(systemName: "chevron.left") //systemName: "chevron.left")
             Text("")

@@ -22,11 +22,12 @@ struct FeeditApp: App {
     static let settingViewModel = SettingViewModel()
     
     static let rssFeedViewModel = RSSFeedViewModel(rss: RSS.simple(), dataSource: DataSourceService.current.rssItem)
-    
+    //static let basicListViewController = BasicListViewController()
     var body: some Scene {
         WindowGroup{
             HomeView(viewModel: FeeditApp.viewModel, archiveListViewModel: FeeditApp.archiveListViewModel, rssFeedViewModel: FeeditApp.rssFeedViewModel)
         }
+        //basicListViewController: FeeditApp.basicListViewController, 
         //(viewModel: FeeditApp.viewModel, archiveListViewModel: FeeditApp.archiveListViewModel)
         .onChange(of: scenePhase) { (newScenePhase) in
             switch newScenePhase {
