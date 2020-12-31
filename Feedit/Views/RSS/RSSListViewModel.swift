@@ -10,8 +10,6 @@ import UIKit
 
 class RSSListViewModel: NSObject, ObservableObject{
     
-    let defaultFeeds: [DefaultFeeds] = Bundle.main.decode("DefaultFeeds.json")
-
     @Published var items: [RSS] = []
     let dataSource: RSSDataSource
     var start = 0

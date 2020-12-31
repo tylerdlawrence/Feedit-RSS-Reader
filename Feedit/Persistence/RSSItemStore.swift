@@ -5,12 +5,14 @@
 //  Created by Tyler D Lawrence on 8/10/20.
 //
 
+import SwiftUI
+import UIKit
 import Foundation
 import Combine
 import CoreData
 import FeedKit
 
-class RSSItemStore: NSObject {
+class RSSItemStore: NSObject, ObservableObject {
     
     private let persistence = Persistence.current
 
@@ -89,6 +91,16 @@ class RSSItemStore: NSObject {
             try context.save()
         } catch { fatalError() }
     }
+    
+    @Published var items = [RSSItem]()
+    
+    @Published var selectedItem: RSSItem? //= nil
+    var changingMailIndex = -1
+    var isChanging = false
+    // when user tap on item then will be read
+    
+    var offsetX: CGFloat = 0.0
+    var isRead = false
 }
 
 extension RSSItemStore: NSFetchedResultsControllerDelegate {

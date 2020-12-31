@@ -98,15 +98,15 @@ struct SettingView: View {
                                         }
                                     }
                                 }
-                            HStack {
-                                NavigationLink(destination: self.dataNStorage) {
-                                    HStack {
-                                        Image(systemName: "internaldrive")
-                                            .fixedSize()
-                                        Text("Data & Storage")
-                                    }
-                                }
-                            }
+//                            HStack {
+//                                NavigationLink(destination: self.dataNStorage) {
+//                                    HStack {
+//                                        Image(systemName: "internaldrive")
+//                                            .fixedSize()
+//                                        Text("Data & Storage")
+//                                    }
+//                                }
+//                            }
                             HStack {
                                 Image(systemName: "safari")
                                     .fixedSize()

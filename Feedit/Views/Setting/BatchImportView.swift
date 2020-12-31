@@ -32,8 +32,8 @@ struct BatchImportView: View {
     
     var body: some View {
         
-        VStack {
-            GroupBox(label: Text("")) {
+        //VStack {
+            GroupBox(label: Text("Import & Export Feeds")) {
                 TextEditor(text: $document.message)
             }
         
@@ -69,7 +69,7 @@ struct BatchImportView: View {
                 Spacer()
             }
         }
-    }
+   // }
     .padding()
     .fileImporter(
         isPresented: $isImporting,
@@ -110,29 +110,29 @@ struct BatchImportView: View {
         }
     }
         
-//        VStack {
+        VStack {
 //            TextEditor(text: $JSONText) //, textStyle: .constant(.body))
 //                .frame(height: 250)
 //                .border(Color.gray, width: 1.0)
 //                .padding(.leading, 20)
 //                .padding(.trailing, 20)
-//            //Spacer()
-//            RoundRectangeButton(status: $buttonStatus) { status in
-//                switch status {
-//                case .error:
-//                    print("import error !!!")
-//                case .normal:
-//                    print("normal")
-//                    self.isSheetPresented = true
-//                case .ok:
-//                    self.viewModel.batchInsert(JSONText: self.JSONText)
-//                    self.buttonStatus = .normal("Import Successful")
-//                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.0) {
-//                        self.buttonStatus = .normal("Select File")
-//                    }
-//                }
-//            }
-//        }
+            //Spacer()
+            RoundRectangeButton(status: $buttonStatus) { status in
+                switch status {
+                case .error:
+                    print("import error !!!")
+                case .normal:
+                    print("normal")
+                    self.isSheetPresented = true
+                case .ok:
+                    self.viewModel.batchInsert(JSONText: self.JSONText)
+                    self.buttonStatus = .normal("Import Successful")
+                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.0) {
+                        self.buttonStatus = .normal("Select File")
+                    }
+                }
+            }
+        }
         
 
         .sheet(isPresented: $isSheetPresented, content: {

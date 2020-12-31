@@ -7,8 +7,11 @@
 //
 
 import SwiftUI
+import UIKit
 import KingfisherSwiftUI
 import Intents
+import SwipeCell
+import SwipeCellKit
 
 struct ArchiveListView: View {
     
@@ -40,11 +43,11 @@ struct ArchiveListView: View {
     
     private var trailingView: some View {
         HStack(alignment: .top, spacing: 24) {
-            EditButton()
+            //EditButton()
             loadMore
         }
     }
-        
+    
     var body: some View {
         ZStack{
             List {
@@ -54,12 +57,14 @@ struct ArchiveListView: View {
                             self.selectedItem = item
                     }
                 }
+                
                 .onDelete { indexSet in
                     if let index = indexSet.first {
                         let item = self.archiveListViewModel.items[index]
                         self.archiveListViewModel.unarchive(item)
                     }
                 }
+
             }
             .pullToRefresh(isShowing: $isShowing) {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
@@ -94,3 +99,5 @@ struct ArchiveListView: View {
 extension ArchiveListView {
     
 }
+
+
