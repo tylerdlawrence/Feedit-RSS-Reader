@@ -14,6 +14,8 @@ import ModalView
 struct SettingView: View {
     
 //    @ObservedObject var settingViewModel: SettingViewModel
+    @Environment(\.presentationMode) var presentationMode
+
 
     enum ReadMode {
         case safari
@@ -46,6 +48,18 @@ struct SettingView: View {
         return storage
     }
     
+    private var doneButton: some View {
+        Button(action: {
+            self.onDoneAction?()
+            self.presentationMode.wrappedValue.dismiss()
+                
+        }) {
+            //Image(systemName: "chevron.left") //systemName: "chevron.left")
+            Text("Done")
+        }
+    }
+    var onDoneAction: (() -> Void)?
+
     @State private var isDarkModeOn = true
     @State private var isSettingsExpanded: Bool = true
     @State var accounts: String = ""
@@ -154,6 +168,7 @@ struct SettingView: View {
             }
             .listStyle(GroupedListStyle())
             .navigationBarTitle("Settings", displayMode: .automatic)
+            .navigationBarItems(trailing: doneButton)
             .environment(\.horizontalSizeClass, .regular)
         }
         .onAppear {

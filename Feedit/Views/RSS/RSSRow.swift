@@ -40,15 +40,23 @@ struct RSSRow: View {
     private var pureTextView: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(rss.title)
-                .font(.headline)
+                .font(.system(size: 17, weight: .medium, design: .rounded))
+                //.font(.headline)
                 .lineLimit(1)
             Text(rss.desc)
-                .font(.subheadline)
+                .font(.system(size: 13, weight: .medium, design: .rounded))
+                //.font(.subheadline)
                 .foregroundColor(Color.gray)
                 .lineLimit(3)
         }
     }
-    
+    //    let text : String
+    //    let index : Int
+        let width : CGFloat = 60
+    //    @Binding var indices : [Int]
+        @State var offset = CGSize.zero
+        @State var offsetY : CGFloat = 0
+        @State var scale : CGFloat = 0.5
     static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     
@@ -62,6 +70,7 @@ struct RSSRow: View {
                         .frame(width: 25, height: 25,alignment: .center)
                         .layoutPriority(10)
                     pureTextView
+
 //                    Spacer()
 //                    UnreadCountView(count: RSSRow.viewModel.items.count)
                     } else {
@@ -78,6 +87,7 @@ struct RSSRow: View {
                             .animation(.easeInOut)
                             
                         pureTextView
+
 //                        Spacer()
 //                        UnreadCountView(count: RSSRow.viewModel.items.count)
                     }

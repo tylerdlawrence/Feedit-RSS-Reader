@@ -82,6 +82,21 @@ struct RSSFeedListView: View {
         self.rssFeedViewModel = rssViewModel
     }
     
+    enum FeatureItem {
+        case goBack
+        case goForward
+        case archive(Bool)
+        
+        var icon: String {
+            switch self {
+            case .goBack: return "chevron.backward"
+            case .goForward: return "chevron.forward"
+            case .archive(let isArchived):
+                return "star\(isArchived ? ".fill" : "")"
+            }
+        }
+    }
+    
     private var infoListView: some View {
         Button(action: {
             print ("feed info")
@@ -131,28 +146,55 @@ struct RSSFeedListView: View {
         NavigationStackView(transitionType: .custom(.scale), easing: .spring(response: 0.5, dampingFraction: 0.25, blendDuration: 0.5)) {
             List(rssFeedViewModel.items, id: \.id) { item in
                 NavigationLink(destination: WebView(rssViewModel: rssFeedViewModel, wrapper: item, rss: rssSource, rssItem: item, url: URL(string: item.url)!)) {
+
                         RSSItemRow(rssViewModel: rssFeedViewModel, wrapper: item, menu: self.contextmenuAction(_:))
-                            //.frame(width : geo.size.width, alignment: .leading)
+//                    KFImage(URL(string: rssSource.image))
+//                        .placeholder({
+//                            ProgressView()
+//                        })
+//                        .resizable()
+//                        .scaledToFill()
+//                        .frame(width: 90, height: 90)
+//                        .clipped()
+//                        .cornerRadius(12)
+                    
+
                 }
             }
-                        
+//            .listStyle(SidebarListStyle())
             .listStyle(PlainListStyle())
             .navigationBarTitle(rssSource.title, displayMode: .inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    VStack{
+                    VStack(alignment: .center){
                         Text(rssSource.title)
-                            .font(.system(.footnote))
+                            .font(.system(.body))
                             .fontWeight(.bold)
 
                         Text("Today at ")
                             .fontWeight(.bold)
+                            .foregroundColor(.gray)
                             .font(.system(.footnote)) +
                             Text(Date(), style: .time)
                             .font(.system(.footnote))
                             .fontWeight(.bold)
+                            .foregroundColor(.gray)
+
                     }
                     .padding(.vertical)
+                }
+            }
+            .toolbar {
+                ToolbarItem(placement: .bottomBar) {
+                    markAllRead
+                }
+                ToolbarItem(placement: .bottomBar) {
+                    Spacer()
+                }
+                ToolbarItem(placement: .bottomBar) {
+                    Button(action: self.rssFeedViewModel.loadMore) {
+                        Image(systemName: "arrow.counterclockwise")
+                    }
                 }
             }
             .add(self.searchBar)
@@ -161,10 +203,10 @@ struct RSSFeedListView: View {
                     self.isShowing = false
                 }
             }
-            .navigationBarItems(trailing:
-                Button(action: self.rssFeedViewModel.loadMore) {
-                    Image(systemName: "arrow.counterclockwise")
-                })
+//            .navigationBarItems(trailing:
+//                Button(action: self.rssFeedViewModel.loadMore) {
+//                    Image(systemName: "arrow.counterclockwise")
+//                })
             }
 //            .sheet(item: $selectedItem, content: { item in
 //                if AppEnvironment.current.useSafari {

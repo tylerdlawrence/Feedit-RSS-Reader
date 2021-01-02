@@ -18,6 +18,12 @@ struct HomeView: View {
     @Environment(\.managedObjectContext) var moc
     
     @State private var titleFilter = "A"
+        
+//    @State private var downloadAmount = 0.0
+//    let timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
+    var lineWidth: CGFloat = 2
+    var color: Color = .blue
+//    @Binding var progress: Double
     
     @Environment(\.managedObjectContext) var managedObjectContext
     
@@ -60,12 +66,11 @@ struct HomeView: View {
     private var cardButton: some View {
         Menu {
             Button(action: {
-                print("All")
+                print("Starred")
             }, label: {
                 HStack{
-                    Text("All")
-                    Image(systemName: "text.justifyleft")
-                        //.font(.system(size: 16, weight: .heavy))
+                    Text("Starred")
+                    Image(systemName: "star.fill").font(.system(size: 10, weight: .heavy))
                 }
             })
 
@@ -74,21 +79,23 @@ struct HomeView: View {
             }, label: {
                 HStack{
                     Text("Unread")
-                    Image(systemName: "circle.fill").font(.system(size: 16, weight: .heavy))
+                    Image("unread-action").font(.system(size: 10, weight: .heavy))
                 }
             })
+            
             Button(action: {
-                print("Filters")
+                print("All")
             }, label: {
                 HStack{
-                    Text("Filters")
-                    Image(systemName: "chevron.up").font(.system(size: 16, weight: .heavy))
+                    Text("All")
+                    Image(systemName: "text.justifyleft")
+                        //.font(.system(size: 16, weight: .heavy))
                 }
             })
         } label: {
             Label(
                 title: { Text("")},
-                icon: { Image(systemName: "chevron.up").font(.system(size: 16, weight: .heavy)) }
+                icon: { Image(systemName: "text.justifyleft").font(.system(size: 18, weight: .heavy)) }//Image("filterActive").font(.system(size: 18, weight: .heavy)) }
             )
         }
     }
@@ -118,19 +125,16 @@ struct HomeView: View {
             self.selectedFeatureItem = .setting
             self.isSheetPresented = true
         }) {
-//            Image(systemName: "slider.horizontal.3")
-//                .foregroundColor(Color("bg"))
+            Image(systemName: "gear").font(.system(size: 18, weight: .heavy)) //"slider.horizontal.3")
+                //.foregroundColor(Color("bg"))
 //                .imageScale(.medium)
 //                .font(.system(size: 18, weight: .semibold))
-            Image("toggle")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 20, height: 20)
-                .imageScale(.medium)
-//                .foregroundColor(Color("bg"))
-//                .font(.system(size: 18, weight: .semibold))
+//            Image("toggle")
+//                .resizable()
+//                .aspectRatio(contentMode: .fit)
+//                .frame(width: 25, height: 25)
+//                .imageScale(.medium)
 
-//                .foregroundColor(Color("lightShadow"))
         }
     }
     private var addSourceButton: some View {
@@ -144,7 +148,7 @@ struct HomeView: View {
                         Image(systemName: "plus")
                             //.foregroundColor(Color("bg"))
                             .imageScale(.medium)
-                            .font(.system(size: 18, weight: .semibold))
+                            .font(.system(size: 20, weight: .semibold))
                         
                 })
                 
@@ -191,8 +195,8 @@ struct HomeView: View {
 ////            (systemName: "archivebox").font(.system(size: 16, weight: .bold))
 //                .foregroundColor(Color("bg"))
 //                .imageScale(.large)
-            Text("All Items") //.font(.system(size: 18, weight: .semibold))
-                .font(.headline)
+            Text("All Items")
+                .font(.system(size: 17, weight: .medium, design: .rounded))                //.font(.headline)
 //            Spacer()
 //            Text("\(viewModel.items.count)")
         }
@@ -229,8 +233,8 @@ struct HomeView: View {
 //                .aspectRatio(contentMode: .fit)
 //                .frame(width: 30, height: 30, alignment: .center)
 //                .foregroundColor(Color("bg"))
-            Text("On My iPhone") //.font(.system(size: 18, weight: .semibold))
-                .font(.headline)
+            Text("Feeds")
+                .font(.system(size: 17, weight: .medium, design: .rounded))                //.font(.headline)
             Spacer()
             unreadCount
         }
@@ -270,20 +274,34 @@ struct HomeView: View {
         
         List {
 
-            HStack(alignment: .top){
-                VStack(alignment: .center){
-                    Image(systemName: "icloud")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .foregroundColor(Color("bg"))
-                        .frame(width: 75, height: 75)
-                    Text("On My iPhone")
-                        .font(.title3)
-                        .fontWeight(.bold)
-                    Text("Today at ").font(.system(.headline)) +
-                        Text(Date(), style: .time)
-                        .fontWeight(.bold)
-                }.frame(width: 320.0).listRowBackground(Color("accent"))
+//            HStack(alignment: .top){
+            VStack(alignment: .leading){
+                VStack{
+                    Image(systemName: "icloud").foregroundColor(Color("bg"))
+                }.listRowBackground(Color("accent"))
+                Text("On My iPhone").font(.system(size: 18, weight: .medium, design: .rounded))
+                    .foregroundColor(Color("bg"))
+                    .multilineTextAlignment(.leading)
+
+                Text("Today at ").font(.system(size: 16, weight: .medium, design: .rounded)) + Text(Date(), style: .time)
+                    .font(.system(size: 15, weight: .medium, design: .rounded))
+                    .fontWeight(.bold)
+//                VStack(alignment: .center){
+//                    Image(systemName: "icloud")
+//                        .resizable()
+//                        .aspectRatio(contentMode: .fit)
+//                        .foregroundColor(Color("bg"))
+//                        .frame(width: 75, height: 75)
+////                    Text("On My iPhone")
+////                        .font(.title3)
+////                        .fontWeight(.bold)
+//                    Text("Today at ").font(.system(size: 16, weight: .medium, design: .rounded)) +
+//                        Text(Date(), style: .time)
+//                        .font(.system(size: 15, weight: .medium, design: .rounded))
+//                        .fontWeight(.bold)
+//
+//                }.frame(width: 320.0).listRowBackground(Color("accent"))
+                
             }.listRowBackground(Color("accent"))
 
                         
@@ -419,22 +437,40 @@ struct HomeView: View {
 //    .listStyle(InsetGroupedListStyle())
         .navigationTitle("")
         //.add(self.searchBar)
-        .navigationBarItems(leading: leadingView, trailing: trailingView) //leading: leadingView,
+        .navigationBarItems(trailing: trailingView) //leading: leadingView,
         .toolbar {
-//            ToolbarItem(placement: .bottomBar) {
-//                Spacer()
-//            }
-            ToolbarItem(placement: .bottomBar) {
-                Spacer()
-                    }
             ToolbarItem(placement: .bottomBar) {
                 //Spacer()
-                //cardButton
-
-//                settingButton
+                cardButton
+                
             }
             
-                }
+            ToolbarItem(placement: .bottomBar) {
+                Spacer()
+
+            }
+            ToolbarItem(placement: .bottomBar) {
+                leadingView
+//                Button(action: self.rssFeedViewModel.loadMore) {
+//                    Image(systemName: "arrow.counterclockwise")
+//                }
+            }
+        }
+//        .toolbar {
+////            ToolbarItem(placement: .bottomBar) {
+////                Spacer()
+////            }
+//            ToolbarItem(placement: .bottomBar) {
+//                Spacer()
+//                    }
+//            ToolbarItem(placement: .bottomBar) {
+//                //Spacer()
+//                //cardButton
+//
+////                settingButton
+//            }
+//
+//                }
             }
             .onAppear {
                 self.viewModel.fecthResults()
@@ -463,8 +499,9 @@ struct BookmarkView: View {
 //                    .aspectRatio(contentMode: .fit)
 //                    .frame(width: 15, height: 15, alignment: .center)
                 Text("Starred")
-                    .font(.headline) //.system(size: 16, weight: .semibold))
-                    .fontWeight(.semibold)
+                    .font(.system(size: 17, weight: .medium, design: .rounded))
+//                    .font(.headline) //.system(size: 16, weight: .semibold))
+//                    .fontWeight(.semibold)
                     .foregroundColor(Color("bg"))
             }
         }
@@ -482,8 +519,9 @@ struct TagView: View {
 //                    .aspectRatio(contentMode: .fit)
 //                    .frame(width: 15, height: 15, alignment: .center)
                 Text("Archive")
-                    .font(.headline) //.system(size: 16, weight: .semibold))
-                    .fontWeight(.semibold)
+                    .font(.system(size: 17, weight: .medium, design: .rounded))
+//                    .font(.headline) //.system(size: 16, weight: .semibold))
+//                    .fontWeight(.semibold)
                     .foregroundColor(Color("bg"))
             }
         }
