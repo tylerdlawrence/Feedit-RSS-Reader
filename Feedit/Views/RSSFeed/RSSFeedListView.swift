@@ -7,6 +7,7 @@
 
 import SwiftUI
 import UIKit
+import SwiftUIX
 import NavigationStack
 import SwipeCell
 import SwiftUIGestures
@@ -18,40 +19,6 @@ import SwipeCellKit
 
 struct RSSFeedListView: View {
     
-    enum DragState {
-        case inactive
-        case pressing
-        case dragging(translation: CGSize)
-        
-        var translation: CGSize {
-            switch self {
-            case .inactive, .pressing:
-                return .zero
-            case .dragging(let translation):
-                return translation
-            }
-        }
-        
-        var isActive: Bool {
-            switch self {
-            case .inactive:
-                return false
-            case .pressing, .dragging:
-                return true
-            }
-        }
-        
-        var isDragging: Bool {
-            switch self {
-            case .inactive, .pressing:
-                return false
-            case .dragging:
-                return true
-            }
-        }
-    }
-    
-    @GestureState var dragState = DragState.inactive
     @State var viewState = CGSize.zero
     
     var feed = [""]
@@ -97,12 +64,16 @@ struct RSSFeedListView: View {
         }
     }
     
+    @State private var showingInfo = false
+
     private var infoListView: some View {
         Button(action: {
-            print ("feed info")
-        }) {
+            self.showingInfo = true
+            }) {
             Image(systemName: "info.circle")
-        }
+            }.sheet(isPresented: $showingInfo) {
+                InfoView(rssViewModel: rssFeedViewModel)
+                }
     }
     
     private var markAllRead: some View {
@@ -143,11 +114,12 @@ struct RSSFeedListView: View {
     
     var body: some View {
 //        ZStack{
+        
         NavigationStackView(transitionType: .custom(.scale), easing: .spring(response: 0.5, dampingFraction: 0.25, blendDuration: 0.5)) {
             List(rssFeedViewModel.items, id: \.id) { item in
                 NavigationLink(destination: WebView(rssViewModel: rssFeedViewModel, wrapper: item, rss: rssSource, rssItem: item, url: URL(string: item.url)!)) {
-
                         RSSItemRow(rssViewModel: rssFeedViewModel, wrapper: item, menu: self.contextmenuAction(_:))
+
 //                    KFImage(URL(string: rssSource.image))
 //                        .placeholder({
 //                            ProgressView()
@@ -157,13 +129,13 @@ struct RSSFeedListView: View {
 //                        .frame(width: 90, height: 90)
 //                        .clipped()
 //                        .cornerRadius(12)
-                    
-
                 }
+                //isScrollEnabled(_: true)
             }
 //            .listStyle(SidebarListStyle())
             .listStyle(PlainListStyle())
             .navigationBarTitle(rssSource.title, displayMode: .inline)
+            .navigationBarItems(trailing: infoListView)
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     VStack(alignment: .center){
@@ -187,6 +159,7 @@ struct RSSFeedListView: View {
             .toolbar {
                 ToolbarItem(placement: .bottomBar) {
                     markAllRead
+                        .frame(width: 44, height: 44)
                 }
                 ToolbarItem(placement: .bottomBar) {
                     Spacer()
@@ -194,6 +167,7 @@ struct RSSFeedListView: View {
                 ToolbarItem(placement: .bottomBar) {
                     Button(action: self.rssFeedViewModel.loadMore) {
                         Image(systemName: "arrow.counterclockwise")
+                            .frame(width: 44, height: 44)
                     }
                 }
             }
@@ -229,7 +203,8 @@ struct RSSFeedListView: View {
             }
             func contextmenuAction(_ item: RSSItem) {
                 rssFeedViewModel.archiveOrCancel(item)
-                //rssFeedViewModel.isDone(item)
+                rssFeedViewModel.isDone(item)
         
     }
 }
+

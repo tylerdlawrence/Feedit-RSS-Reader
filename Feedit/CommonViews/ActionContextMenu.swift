@@ -19,7 +19,7 @@ struct ActionContextMenu: View {
     //var onTag: (() -> Tag)?
     
     init(label: String, systemName: String, isRead: (() -> Void)? = nil, onAction: (() -> Void)? = nil) {
-        self.label = "Tag Article"
+        self.label = "Archive"
         self.label = "Toggle Starred"
         self.label = "Mark as Read"
         self.systemName = systemName
@@ -28,13 +28,26 @@ struct ActionContextMenu: View {
     }
     
     var body: some View {
+//        VStack {
+//            Button(action: {
+//                self.onAction?()
+//            }) {
+//                HStack {
+//                    Text(self.label)
+//                    Image(systemName: self.systemName)
+//                        .imageScale(.small)
+//                        .foregroundColor(.primary)
+//                }
+//            }
+//        }
         VStack {
             Button(action: {
                 self.isDone?()
             }, label: {
                 HStack {
                     Text("Mark As Read")
-                    Image("unread-action")
+                    Image("unread-action") //systemName: self.systemName) //"unread-action")
+                        .imageScale(.small)
 
                 }
 
@@ -44,11 +57,12 @@ struct ActionContextMenu: View {
                 self.onAction?()
             }, label: {
                 HStack{
-                    Text("Toggle Starred")
-                    Image(systemName: "star.fill") //"star") //
+                    Text("Toggle Starred") //self.label) //"Toggle Starred")
+                    Image(systemName: "star.fill") //self.systemName) //systemName: "star.fill")
                         .imageScale(.small)
                 }
             })
+            
         }
 
     }

@@ -103,6 +103,25 @@ extension RSSItem {
         }
     }
 
+class Model: ObservableObject {
+    @Published var feed: RSSItem?
+    @Published var error: IdentifiableError?
+    @Published var isReadStatuses: [URL: Bool]
+    
+    var task: URLSessionDataTask?
+    init() {
+        self.isReadStatuses = UserDefaults.standard.data(forKey: "isReadStatuses")
+            .flatMap { try? JSONDecoder().decode([URL: Bool].self, from: $0) } ?? [:]
+        //reload()
+    }
+    
+    func setIsRead(_ value: Bool, url: URL) {
+        var statuses = isReadStatuses
+        statuses[url] = value
+        isReadStatuses = statuses
+        UserDefaults.standard.set(try? JSONEncoder().encode(isReadStatuses), forKey: "isReadStatuses")
+    }
+}
 
 
 extension RSSItem: ObjectValidatable {
@@ -111,4 +130,17 @@ extension RSSItem: ObjectValidatable {
     }
 }
 
-
+public struct IdentifiableError: Error, Identifiable {
+    public let underlying: Error
+    public init(underlying: Error) {
+        self.underlying = underlying
+    }
+    
+    public var id: String {
+        localizedDescription
+    }
+    
+    public var localizedDescription: String {
+        underlying.localizedDescription
+    }
+}

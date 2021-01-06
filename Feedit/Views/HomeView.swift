@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftUIX
 import FeedKit
 import KingfisherSwiftUI
 import CoreData
@@ -17,6 +18,8 @@ struct HomeView: View {
     
     @Environment(\.managedObjectContext) var moc
     
+    @State private var archiveScale: Image.Scale = .medium
+
     @State private var titleFilter = "A"
         
 //    @State private var downloadAmount = 0.0
@@ -59,6 +62,7 @@ struct HomeView: View {
     @State private var previewIndex = 0
     @State var isExpanded = false
     @State private var revealDetails = false
+    @State private var action: Int?
 
     //let index : Int
 
@@ -95,7 +99,10 @@ struct HomeView: View {
         } label: {
             Label(
                 title: { Text("")},
-                icon: { Image(systemName: "text.justifyleft").font(.system(size: 18, weight: .heavy)) }//Image("filterActive").font(.system(size: 18, weight: .heavy)) }
+                icon: { Image(systemName: "line.horizontal.3.decrease.circle").font(.system(size: 20)) } //.frame(width: 44, height: 44) }
+                    
+                //Image("filterInactive").font(.system(size: 18, weight: .heavy))
+                //Image(systemName: "text.justifyleft").font(.system(size: 18, weight: .heavy))
             )
         }
     }
@@ -125,7 +132,10 @@ struct HomeView: View {
             self.selectedFeatureItem = .setting
             self.isSheetPresented = true
         }) {
-            Image(systemName: "gear").font(.system(size: 18, weight: .heavy)) //"slider.horizontal.3")
+            Image(systemName: "gear")
+                .imageScale(.medium)
+            //"slider.horizontal.3")
+                .frame(width: 44, height: 44, alignment: .trailing)
                 //.foregroundColor(Color("bg"))
 //                .imageScale(.medium)
 //                .font(.system(size: 18, weight: .semibold))
@@ -146,9 +156,11 @@ struct HomeView: View {
                     //HStack{
                         //Text("Add Feed")
                         Image(systemName: "plus")
+                            
                             //.foregroundColor(Color("bg"))
                             .imageScale(.medium)
-                            .font(.system(size: 20, weight: .semibold))
+//                            .font(.system(size: 20, weight: .semibold))
+                            .frame(width: 44, height: 44, alignment: .trailing)
                         
                 })
                 
@@ -171,17 +183,28 @@ struct HomeView: View {
 //        }
     }
 
+
     private var archiveListView: some View {
         ArchiveListView(viewModel: archiveListViewModel, rssFeedViewModel: self.rssFeedViewModel)
     }
 
+//    private var archiveButton: some View {
+//        Button(action: {
+//            self.action = 1
+//        }) {
+//            Image(systemName: "archivebox.fill")
+//                .imageScale(.medium)
+//        }
+//    }
+    
     private var trailingView: some View {
         HStack(alignment: .top, spacing: 24) {
             //EditButton()
-            //settingButton
+            settingButton
+            Spacer()
             addSourceButton
-        }
-        .foregroundColor(Color("bg"))
+                .accentColor(Color("darkShadow"))
+        }.padding(24)
     }
     
     private var feedView: some View {
@@ -267,7 +290,8 @@ struct HomeView: View {
     var rssSource: RSS {
         return self.rssFeedViewModel.rss
     }
-    //@Binding var content: Int
+    
+    @State private var showingInfo = false
     
   var body: some View {
     NavigationView {
@@ -310,14 +334,14 @@ struct HomeView: View {
 //                    RSSFeedListView
 //                }
 //            DisclosureGroup("On My iPhone", isExpanded: $revealDetails) {
-                //ForEach(viewModel.items, id: \.self) { rss in
+//                ForEach(viewModel.items, id: \.self) { rss in
 //                    NavigationLink(destination: self.destinationView(rss: rss)) {
 //                                        RSSRow(rss: rss)
 //                                        }
 //                                        .tag("RSS")
-                                //}
+//                                }
 //                                .padding(.leading)
-                            //}
+//                            }
                 NavigationLink(destination: DataNStorageView()) { //Tag.demoTags.randomElement()!) {
                     TagView()
                     Spacer()
@@ -338,25 +362,48 @@ struct HomeView: View {
             .edgesIgnoringSafeArea(.all)
 
             Section(header: feedsAll) {
-//            DisclosureGroup("On My iPhone", isExpanded: $revealDetails) {
+//            DisclosureGroup("", isExpanded: $revealDetails) {
+//                ScrollView {
                 ForEach(viewModel.items, id: \.self) { rss in
                     NavigationLink(destination: self.destinationView(rss: rss)) {
                         HStack{
                         RSSRow(rss: rss)
-                        //Spacer()
-                        //UnreadCountView(count: self.rssFeedViewModel.items.count)
+//                            .contextMenu {
+//                                Button(action: {
+//                                    self.showingInfo = true
+//                                    }) {
+//                                    Text("Get Info")
+//                                    Image(systemName: "info.circle")
+//                                    }.sheet(isPresented: $showingInfo) {
+//                                        InfoView()
+//                                        }
+//                                
+//                                Button(action: {
+//                                    // change country setting
+//                                }) {
+//                                    Text("Copy Feed URL")
+//                                    Image(systemName: "doc.on.doc")
+//                                }
+//
+//                                Button(action: {
+//                                    // enable geolocation
+//                                }) {
+//                                    Text("Mark All As Read")
+//                                    Image("unread-action")
+//                                }
+//                            }
                         }
                     }
-                    .padding(.leading)
                     .tag("RSS")
                 }
-                
                 .onDelete { indexSet in
                     if let index = indexSet.first {
                         self.viewModel.delete(at: index)
                         }
                     }
+                .onMove(perform: moveRow)
                 }
+//            }
                 .textCase(nil)
                 .listRowBackground(Color("accent"))
                 .accentColor(Color("darkShadow"))
@@ -421,6 +468,12 @@ struct HomeView: View {
 //                    .padding(.top, 2)
 //            }
         }
+        .onReceive(addRSSPublisher, perform: { output in
+            guard
+                let userInfo = output.userInfo,
+                let total = userInfo["total"] as? Double else { return }
+            self.addRSSProgressValue += 1.0/total
+        })
         .onReceive(rssRefreshPublisher, perform: { output in
                 self.viewModel.fecthResults()
             })
@@ -435,27 +488,37 @@ struct HomeView: View {
             })
 //    .listStyle(PlainListStyle())
 //    .listStyle(InsetGroupedListStyle())
-        .navigationTitle("")
+        //.navigationViewStyle(DoubleColumnNavigationViewStyle())
+        .navigationTitle("") 
         //.add(self.searchBar)
-        .navigationBarItems(trailing: trailingView) //leading: leadingView,
+        .navigationBarItems(trailing: EditButton()) //leading: cardButton, 
+         //Color("bg"))
+//leading: leadingView,
         .toolbar {
             ToolbarItem(placement: .bottomBar) {
-                //Spacer()
-                cardButton
-                
-            }
-            
-            ToolbarItem(placement: .bottomBar) {
-                Spacer()
+                settingButton
+//                trailingView
+//                    .frame(width: UIScreen.main.bounds.width, height: 49, alignment: .leading)
 
             }
+//
             ToolbarItem(placement: .bottomBar) {
-                leadingView
-//                Button(action: self.rssFeedViewModel.loadMore) {
-//                    Image(systemName: "arrow.counterclockwise")
-//                }
+                Spacer()
+//
             }
-        }
+            ToolbarItem(placement: .bottomBar) {
+                addSourceButton
+////                Button(action: self.rssFeedViewModel.loadMore) {
+////                    Image(systemName: "arrow.counterclockwise")
+////                }
+            }
+        }.listRowBackground(Color("accent"))
+        //Spacer()
+//        if addRSSProgressValue > 0 && addRSSProgressValue < 1.0 {
+//            LinerProgressBar(lineWidth: 3, color: .blue, progress: $addRSSProgressValue)
+//                .frame(width: UIScreen.main.bounds.width, height: 3, alignment: .leading)
+//        }
+        
 //        .toolbar {
 ////            ToolbarItem(placement: .bottomBar) {
 ////                Spacer()
@@ -472,6 +535,7 @@ struct HomeView: View {
 //
 //                }
             }
+    .accentColor(Color("darkShadow")) //Color("bg"))
             .onAppear {
                 self.viewModel.fecthResults()
 //                self.isRefreshing = true
@@ -557,6 +621,13 @@ extension HomeView {
     func onDoneAction() {
         self.viewModel.fecthResults()
     }
+
+    func moveRow(from indexes: IndexSet, to destination: Int) {
+        if let first = indexes.first {
+            viewModel.items.insert(viewModel.items.remove(at: first), at: destination)
+        }
+    }
+    
     private func destinationView(rss: RSS) -> some View {
         RSSFeedListView(rssViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem)) //, basicListViewController: basicListViewController) //, showSheetView: self.showSheetView)
             .environmentObject(DataSourceService.current.rss)
@@ -602,3 +673,4 @@ struct UnreadCountView: View {
             .cornerRadius(8)
     }
 }
+

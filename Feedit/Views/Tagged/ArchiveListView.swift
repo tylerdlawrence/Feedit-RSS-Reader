@@ -48,6 +48,14 @@ struct ArchiveListView: View {
         }
     }
     
+    private var markAllRead: some View {
+        Button(action: {
+            print ("Mark all as Read")
+        }) {
+            Image("MarkAllAsRead")
+        }
+    }
+    
     var body: some View {
         ZStack{
             List {
@@ -75,7 +83,22 @@ struct ArchiveListView: View {
         }
         .listStyle(PlainListStyle())
         .navigationBarTitle("Starred", displayMode: .automatic)
-        .navigationBarItems(trailing: trailingView)
+        //.navigationBarItems(trailing: trailingView)
+        .toolbar {
+            ToolbarItem(placement: .bottomBar) {
+                markAllRead
+                    .frame(width: 44, height: 44)
+            }
+            ToolbarItem(placement: .bottomBar) {
+                Spacer()
+            }
+            ToolbarItem(placement: .bottomBar) {
+                Button(action: self.archiveListViewModel.loadMore) {
+                    Image(systemName: "arrow.counterclockwise")
+                        .frame(width: 44, height: 44)
+                }
+            }
+        }
         .add(self.searchBar)
         .sheet(item: $selectedItem, content: { item in
 //                if AppEnvironment.current.useSafari {

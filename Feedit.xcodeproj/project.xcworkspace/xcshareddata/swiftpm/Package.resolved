@@ -20,12 +20,30 @@
         }
       },
       {
+        "package": "ASCollectionView",
+        "repositoryURL": "https://github.com/apptekstudios/ASCollectionView.git",
+        "state": {
+          "branch": "master",
+          "revision": "d920a109e5b6e3a3c4f11108fbb0134c02f277ea",
+          "version": null
+        }
+      },
+      {
         "package": "BrightFutures",
         "repositoryURL": "https://github.com/Thomvis/BrightFutures.git",
         "state": {
           "branch": null,
           "revision": "9279defa6bdc21501ce740266e5a14d0119ddc63",
           "version": "8.0.1"
+        }
+      },
+      {
+        "package": "DifferenceKit",
+        "repositoryURL": "https://github.com/ra1028/DifferenceKit",
+        "state": {
+          "branch": null,
+          "revision": "14c66681e12a38b81045f44c6c29724a0d4b0e72",
+          "version": "1.1.5"
         }
       },
       {
@@ -277,6 +295,15 @@
         "state": {
           "branch": "master",
           "revision": "2b461698d3eaf51cdad1a85f1e920e1a705ce2d3",
+          "version": null
+        }
+      },
+      {
+        "package": "SwipeableView",
+        "repositoryURL": "https://github.com/mroffmix/Swipeable-View.git",
+        "state": {
+          "branch": "main",
+          "revision": "2d613bc85326d1f36b846d18a1d8fb801ca0b37e",
           "version": null
         }
       },
