@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "AdvancedList",
+        "repositoryURL": "https://github.com/crelies/advancedlist.git",
+        "state": {
+          "branch": null,
+          "revision": "9ffa471bd365b20841c5fd2a8d73c37415a7254c",
+          "version": "6.0.0"
+        }
+      },
+      {
         "package": "AEXML",
         "repositoryURL": "https://github.com/tadija/AEXML",
         "state": {
@@ -89,6 +98,15 @@
           "branch": null,
           "revision": "0e548b700c7c123dd3b2ac776e90d63a540f084d",
           "version": "5.15.7"
+        }
+      },
+      {
+        "package": "ListPagination",
+        "repositoryURL": "https://github.com/crelies/ListPagination",
+        "state": {
+          "branch": null,
+          "revision": "af667b368a10512da79605b61698d53c11d24cbf",
+          "version": "0.1.1"
         }
       },
       {

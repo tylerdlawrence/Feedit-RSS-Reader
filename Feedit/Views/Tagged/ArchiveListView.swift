@@ -8,6 +8,7 @@
 
 import SwiftUI
 import UIKit
+import SwiftUIX
 import KingfisherSwiftUI
 import Intents
 import SwipeCell
@@ -35,15 +36,14 @@ struct ArchiveListView: View {
     
     private var loadMore: some View {
         Button(action: self.archiveListViewModel.loadMore) {
-//                Image("MarkAllAsRead")
             Image(systemName: "arrow.counterclockwise")
-            
+                .imageScale(.small)
+                .frame(width: 44, height: 44)
         }
     }
     
     private var trailingView: some View {
         HStack(alignment: .top, spacing: 24) {
-            //EditButton()
             loadMore
         }
     }
@@ -57,7 +57,7 @@ struct ArchiveListView: View {
     }
     
     var body: some View {
-        ZStack{
+        //ZStack{
             List {
                 ForEach(self.archiveListViewModel.items, id: \.self) { item in
                     RSSItemRow(rssViewModel: rssFeedViewModel, wrapper: item)
@@ -65,6 +65,7 @@ struct ArchiveListView: View {
                             self.selectedItem = item
                     }
                 }
+                
                 
                 .onDelete { indexSet in
                     if let index = indexSet.first {
@@ -74,31 +75,58 @@ struct ArchiveListView: View {
                 }
 
             }
-            .pullToRefresh(isShowing: $isShowing) {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    self.isShowing = false
-                }
-            }
+//            .pullToRefresh(isShowing: $isShowing) {
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+//                    self.isShowing = false
+//                }
+//            }
             .padding(.bottom)
-        }
+        //}
         .listStyle(PlainListStyle())
-        .navigationBarTitle("Starred", displayMode: .automatic)
-        //.navigationBarItems(trailing: trailingView)
+            .navigationBarItems(trailing: loadMore)
         .toolbar {
-            ToolbarItem(placement: .bottomBar) {
-                markAllRead
-                    .frame(width: 44, height: 44)
-            }
-            ToolbarItem(placement: .bottomBar) {
-                Spacer()
-            }
-            ToolbarItem(placement: .bottomBar) {
-                Button(action: self.archiveListViewModel.loadMore) {
-                    Image(systemName: "arrow.counterclockwise")
-                        .frame(width: 44, height: 44)
+            ToolbarItem(placement: .principal) {
+                VStack{
+                    HStack{
+                        Image(systemName: "star.fill")
+                            .imageScale(.small)
+                            .foregroundColor(Color("bg"))
+                        Text("Starred")
+                            .font(.system(.body))
+                            .fontWeight(.bold)
+                        Text("\(archiveListViewModel.items.count)")
+                            .font(.caption)
+                            .fontWeight(.bold)
+                            .padding(.horizontal, 7)
+                            .padding(.vertical, 1)
+                            //.foregroundColor(Color("bg"))
+                            .background(Color("darkShadow"))
+                            .foregroundColor(Color("text"))
+                            .cornerRadius(8)
+                    }
+                    Text("Today at ")
+                        .fontWeight(.bold)
+                        .foregroundColor(.gray)
+                        .font(.system(.footnote)) +
+                        Text(Date(), style: .time)
+                        .font(.system(.footnote))
+                        .fontWeight(.bold)
+                        .foregroundColor(.gray)
                 }
             }
         }
+//        .toolbar {
+//            ToolbarItem(placement: .bottomBar) {
+//                Spacer()
+//            }
+//            ToolbarItem(placement: .bottomBar) {
+//                Spacer()
+//            }
+//            ToolbarItem(placement: .bottomBar) {
+//                markAllRead
+//                    .frame(width: 44, height: 44)
+//            }
+//        }
         .add(self.searchBar)
         .sheet(item: $selectedItem, content: { item in
 //                if AppEnvironment.current.useSafari {
@@ -107,7 +135,6 @@ struct ArchiveListView: View {
 //                WebView(url: URL(string: item.url)!)
 //                        onArchiveAction: {
 //                            self.archiveListViewModel.archiveOrCancel(item)
-                
 //                WebView(rssViewModel: rssFeedViewModel, wrapper: item, rss: rssSource, rssItem: item);)
                     })
 //                }

@@ -20,6 +20,7 @@
 		615096EB2564BF420001C0D9 /* NavigationBarModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615096EA2564BF420001C0D9 /* NavigationBarModifier.swift */; };
 		6154917A25A5776D00020FD2 /* FeedUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6154917925A5776D00020FD2 /* FeedUtils.swift */; };
 		615491D725A66E0600020FD2 /* ASCollectionView in Frameworks */ = {isa = PBXBuildFile; productRef = 615491D625A66E0600020FD2 /* ASCollectionView */; };
+		615491E525A6A81100020FD2 /* AdvancedList in Frameworks */ = {isa = PBXBuildFile; productRef = 615491E425A6A81100020FD2 /* AdvancedList */; };
 		615834DD259146FF009CBEF3 /* SwiperizeItemModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615834DC259146FF009CBEF3 /* SwiperizeItemModifier.swift */; };
 		6158358D259301E7009CBEF3 /* ScrollManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6158358C259301E6009CBEF3 /* ScrollManager.swift */; };
 		615899252585CB3100D893CE /* NavigationTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615899242585CB3000D893CE /* NavigationTitleView.swift */; };
@@ -185,13 +186,6 @@
 			remoteGlobalIDString = 61C8189124E1F3FB00593939;
 			remoteInfo = Feedit;
 		};
-		618AC9BE2597933A00E8286E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 618AC9B92597933900E8286E /* MailExample.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 3F234AE31E44AA5E00E22A38;
-			remoteInfo = MailExample;
-		};
 		618AC9C52597936E00E8286E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 618AC9C22597936D00E8286E /* SwipeCellKit.xcodeproj */;
@@ -290,7 +284,6 @@
 		618610C4256EE3AB0083A96D /* Article.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Article.swift; sourceTree = "<group>"; };
 		618610CC256EF74F0083A96D /* Common Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Common Utils.swift"; sourceTree = "<group>"; };
 		618610CE256EF7500083A96D /* NetworkReachabilty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkReachabilty.swift; sourceTree = "<group>"; };
-		618AC9B92597933900E8286E /* MailExample.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MailExample.xcodeproj; path = "../../SwipeCellKit-develop/Example/MailExample.xcodeproj"; sourceTree = "<group>"; };
 		618AC9C22597936D00E8286E /* SwipeCellKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SwipeCellKit.xcodeproj; path = "/Users/tylerdlawrence/Documents/Personal Files/SwipeCellKit-develop/SwipeCellKit.xcodeproj"; sourceTree = "<absolute>"; };
 		618D823C2570327F0061292F /* FeedImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageView.swift; sourceTree = "<group>"; };
 		618F73DB2584291500CA36B4 /* Image-Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Image-Extensions.swift"; sourceTree = "<group>"; };
@@ -392,6 +385,7 @@
 				61595D0B257B1D4F000D6B22 /* RSDatabase in Frameworks */,
 				616121EC2553678B0074F061 /* AFNetworking in Frameworks */,
 				616121E42553670B0074F061 /* FeedKit in Frameworks */,
+				615491E525A6A81100020FD2 /* AdvancedList in Frameworks */,
 				61E9D18025A37DF400880550 /* SwipeableView in Frameworks */,
 				61595D15257B1EB6000D6B22 /* RSWeb in Frameworks */,
 				618610B3256ED5BE0083A96D /* KingfisherSwiftUI in Frameworks */,
@@ -459,14 +453,6 @@
 			path = Utilities;
 			sourceTree = "<group>";
 		};
-		618AC9BA2597933900E8286E /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				618AC9BF2597933A00E8286E /* MailExample.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		618AC9C32597936D00E8286E /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -510,7 +496,6 @@
 			isa = PBXGroup;
 			children = (
 				61C8189424E1F3FB00593939 /* Feedit */,
-				618AC9B92597933900E8286E /* MailExample.xcodeproj */,
 				6182212B25053FEE005636B2 /* rssTests */,
 				61C8189324E1F3FB00593939 /* Products */,
 				61C818CD24E1F4A900593939 /* Frameworks */,
@@ -776,6 +761,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				615491E825A6A89900020FD2 /* PBXTargetDependency */,
 				615491DA25A66E1500020FD2 /* PBXTargetDependency */,
 				61E9D18325A37E0500880550 /* PBXTargetDependency */,
 				618AC9EA259A575600E8286E /* PBXTargetDependency */,
@@ -822,6 +808,7 @@
 				618AC9DE25994C3900E8286E /* NavigationStack */,
 				61E9D17F25A37DF400880550 /* SwipeableView */,
 				615491D625A66E0600020FD2 /* ASCollectionView */,
+				615491E425A6A81100020FD2 /* AdvancedList */,
 			);
 			productName = Feedit;
 			productReference = 61C8189224E1F3FB00593939 /* Feedit.app */;
@@ -876,14 +863,11 @@
 				618AC9DD25994C3900E8286E /* XCRemoteSwiftPackageReference "swiftui-navigation-stack" */,
 				61E9D17E25A37DF300880550 /* XCRemoteSwiftPackageReference "Swipeable-View" */,
 				615491D525A66E0500020FD2 /* XCRemoteSwiftPackageReference "ASCollectionView" */,
+				615491E325A6A81100020FD2 /* XCRemoteSwiftPackageReference "advancedlist" */,
 			);
 			productRefGroup = 61C8189324E1F3FB00593939 /* Products */;
 			projectDirPath = "";
 			projectReferences = (
-				{
-					ProductGroup = 618AC9BA2597933900E8286E /* Products */;
-					ProjectRef = 618AC9B92597933900E8286E /* MailExample.xcodeproj */;
-				},
 				{
 					ProductGroup = 618AC9C32597936D00E8286E /* Products */;
 					ProjectRef = 618AC9C22597936D00E8286E /* SwipeCellKit.xcodeproj */;
@@ -898,13 +882,6 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		618AC9BF2597933A00E8286E /* MailExample.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = MailExample.app;
-			remoteRef = 618AC9BE2597933A00E8286E /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		618AC9C92597936F00E8286E /* SwipeCellKit.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -1102,6 +1079,10 @@
 		615491DA25A66E1500020FD2 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = 615491D925A66E1500020FD2 /* ASCollectionView */;
+		};
+		615491E825A6A89900020FD2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 615491E725A6A89900020FD2 /* AdvancedList */;
 		};
 		61595D28257B3B20000D6B22 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1371,7 +1352,7 @@
 				CODE_SIGN_ENTITLEMENTS = Feedit/Feedit.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 26;
+				CURRENT_PROJECT_VERSION = 27;
 				DEVELOPMENT_ASSET_PATHS = "\"Feedit/Preview Content\"";
 				DEVELOPMENT_TEAM = 7Z3Z6D3TH7;
 				ENABLE_PREVIEWS = YES;
@@ -1384,7 +1365,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.03;
+				MARKETING_VERSION = 1.04;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tylerdlawrence.feeditrssreader;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1402,7 +1383,7 @@
 				CODE_SIGN_ENTITLEMENTS = Feedit/Feedit.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 26;
+				CURRENT_PROJECT_VERSION = 27;
 				DEVELOPMENT_ASSET_PATHS = "\"Feedit/Preview Content\"";
 				DEVELOPMENT_TEAM = 7Z3Z6D3TH7;
 				ENABLE_PREVIEWS = YES;
@@ -1415,7 +1396,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.03;
+				MARKETING_VERSION = 1.04;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tylerdlawrence.feeditrssreader;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1480,6 +1461,14 @@
 			requirement = {
 				branch = master;
 				kind = branch;
+			};
+		};
+		615491E325A6A81100020FD2 /* XCRemoteSwiftPackageReference "advancedlist" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/crelies/advancedlist.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.0.0;
 			};
 		};
 		615835352591B76B009CBEF3 /* XCRemoteSwiftPackageReference "periphery" */ = {
@@ -1690,6 +1679,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 615491D525A66E0500020FD2 /* XCRemoteSwiftPackageReference "ASCollectionView" */;
 			productName = ASCollectionView;
+		};
+		615491E425A6A81100020FD2 /* AdvancedList */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 615491E325A6A81100020FD2 /* XCRemoteSwiftPackageReference "advancedlist" */;
+			productName = AdvancedList;
+		};
+		615491E725A6A89900020FD2 /* AdvancedList */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 615491E325A6A81100020FD2 /* XCRemoteSwiftPackageReference "advancedlist" */;
+			productName = AdvancedList;
 		};
 		61595D05257B1C6E000D6B22 /* RSCore */ = {
 			isa = XCSwiftPackageProductDependency;

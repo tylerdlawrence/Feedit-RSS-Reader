@@ -37,6 +37,7 @@ class RSSStore: NSObject {
         return fetchedResultsController.fetchedObjects ?? []
     }
     
+    
     public var rssSrouces: [RSS] = []
     
     override init() {

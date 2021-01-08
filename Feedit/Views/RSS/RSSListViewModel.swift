@@ -43,7 +43,9 @@ class RSSListViewModel: NSObject, ObservableObject{
     func move(at index: Int) {
         let object = items[index]
         dataSource.move(object, saveContext: true)
+        items.move(fromOffsets: [index], toOffset: index)
     }
+
     
     class FeedsAPIResponse: Codable {
         var status: String

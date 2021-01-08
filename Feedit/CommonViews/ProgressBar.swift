@@ -49,3 +49,4 @@ struct ProgressBar_Previews: PreviewProvider {
         }
     }
 }
+
