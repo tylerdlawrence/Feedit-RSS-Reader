@@ -57,15 +57,17 @@ struct ArchiveListView: View {
     }
     
     var body: some View {
-        //ZStack{
+        ZStack{
             List {
                 ForEach(self.archiveListViewModel.items, id: \.self) { item in
-                    RSSItemRow(rssViewModel: rssFeedViewModel, wrapper: item)
-                        .onTapGesture {
-                            self.selectedItem = item
+//                    NavigationLink(destination: WebView(rssViewModel: rssFeedViewModel, wrapper: item, rss: rssSource, rssItem: item, url: URL(string: item.url)!)) {
+                        
+                        RSSItemRow(rssViewModel: rssFeedViewModel, wrapper: item)
+                            .onTapGesture {
+                                self.selectedItem = item
                     }
-                }
-                
+                //}
+            }
                 
                 .onDelete { indexSet in
                     if let index = indexSet.first {
@@ -75,6 +77,9 @@ struct ArchiveListView: View {
                 }
 
             }
+            .onAppear {
+                self.archiveListViewModel.fecthResults()
+            }
 //            .pullToRefresh(isShowing: $isShowing) {
 //                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
 //                    self.isShowing = false
@@ -82,8 +87,9 @@ struct ArchiveListView: View {
 //            }
             .padding(.bottom)
         //}
-        .listStyle(PlainListStyle())
+            .listStyle(PlainListStyle())
             .navigationBarItems(trailing: loadMore)
+
         .toolbar {
             ToolbarItem(placement: .principal) {
                 VStack{
@@ -99,7 +105,6 @@ struct ArchiveListView: View {
                             .fontWeight(.bold)
                             .padding(.horizontal, 7)
                             .padding(.vertical, 1)
-                            //.foregroundColor(Color("bg"))
                             .background(Color("darkShadow"))
                             .foregroundColor(Color("text"))
                             .cornerRadius(8)
@@ -129,8 +134,10 @@ struct ArchiveListView: View {
 //        }
         .add(self.searchBar)
         .sheet(item: $selectedItem, content: { item in
+            SafariView(url: URL(string: item.url)!)
+
 //                if AppEnvironment.current.useSafari {
-                SafariView(url: URL(string: item.url)!)
+//                SafariView(url: URL(string: item.url)!)
 //                } else {
 //                WebView(url: URL(string: item.url)!)
 //                        onArchiveAction: {
@@ -140,8 +147,8 @@ struct ArchiveListView: View {
 //                }
 //            })
             
-        .onAppear {
-            self.archiveListViewModel.fecthResults()
+//        .onAppear {
+//            self.archiveListViewModel.fecthResults()
         }
     }
 }

@@ -12,11 +12,7 @@ import Combine
 import SwiftUIGestures
 
 class RSSFeedViewModel: NSObject, ObservableObject {
-    
-    //let defaultFeeds: [DefaultFeeds] = Bundle.main.decode("DefaultFeeds.json")
-    
-    @Published var sources: [DefaultFeeds] = []
-    
+            
     @Published var items: [RSSItem] = []
     
     let dataSource: RSSItemDataSource
@@ -26,7 +22,6 @@ class RSSFeedViewModel: NSObject, ObservableObject {
     init(rss: RSS, dataSource: RSSItemDataSource) {
         self.dataSource = dataSource
         self.rss = rss
-//        self.sources = defaultFeeds
         super.init()
     }
     
@@ -39,12 +34,22 @@ class RSSFeedViewModel: NSObject, ObservableObject {
         _ = dataSource.saveUpdateObject()
     }
     
-    func isDone(_ item: RSSItem) {
-        let readItem = dataSource.readObject(item)
-        readItem.isDone = !item.isDone
-        readItem.updateTime = Date()
-        readItem.objectWillChange.send()
-        dataSource.setUpdateObject(readItem)
+//    func isDone(isDone: RSSItem) { //(_ item: RSSItem) {
+//        let updatedItem = dataSource.readObject(isDone) //item
+//        updatedItem.isDone = !isDone.isDone //item
+//        updatedItem.updateTime = Date()
+//        updatedItem.objectWillChange.send()
+//        dataSource.setUpdateObject(updatedItem)
+//
+//        _ = dataSource.saveUpdateObject()
+//    }
+    
+    func isRead(_ item: RSSItem) {
+        let updatedItem = dataSource.readObject(item)
+        updatedItem.isRead = !item.isRead
+        updatedItem.updateTime = Date()
+        updatedItem.objectWillChange.send()
+        dataSource.setUpdateObject(updatedItem)
         
         _ = dataSource.saveUpdateObject()
     }

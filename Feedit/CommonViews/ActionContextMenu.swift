@@ -13,57 +13,98 @@ struct ActionContextMenu: View {
     private var systemName: String
     
     var onAction: (() -> Void)?
-    
-    var isDone: (() -> Void)?
-    
-    //var onTag: (() -> Tag)?
-    
-    init(label: String, systemName: String, isRead: (() -> Void)? = nil, onAction: (() -> Void)? = nil) {
-        self.label = "Archive"
-        self.label = "Toggle Starred"
-        self.label = "Mark as Read"
+    //var onStarAction: (() -> Void)?
+    var isReadAction: (() -> Void)?
+
+    init(label: String, systemName: String, onAction: (() -> Void)? = nil, isReadAction: (() -> Void)? = nil) {
+        self.label = label
         self.systemName = systemName
         self.onAction = onAction
-        self.isDone = isRead
+        self.isReadAction = isReadAction
     }
     
     var body: some View {
-//        VStack {
-//            Button(action: {
-//                self.onAction?()
-//            }) {
-//                HStack {
-//                    Text(self.label)
-//                    Image(systemName: self.systemName)
-//                        .imageScale(.small)
-//                        .foregroundColor(.primary)
-//                }
-//            }
-//        }
         VStack {
             Button(action: {
-                self.isDone?()
-            }, label: {
+                self.isReadAction?()
+            }) {
                 HStack {
                     Text("Mark As Read")
-                    Image("unread-action") //systemName: self.systemName) //"unread-action")
-                        .imageScale(.small)
-
+                    Image("unread-action")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 20, height: 20)
+                        .opacity(0.7)
                 }
-
-            })
-            
-            Button(action: {
-                self.onAction?()
-            }, label: {
-                HStack{
-                    Text("Toggle Starred") //self.label) //"Toggle Starred")
-                    Image(systemName: "star.fill") //self.systemName) //systemName: "star.fill")
-                        .imageScale(.small)
+            }
+                Button(action: {
+                    self.onAction?()
+                }) {
+                    HStack {
+                        Text("Star Article")
+                        Image(systemName: "star.fill")
+                            .imageScale(.small)
+                    }
                 }
-            })
             
         }
-
     }
 }
+struct ActionContextMenu_Previews: PreviewProvider {
+    static var previews: some View {
+        ActionContextMenu(label: "Archive", systemName: "tray.and.arrow.down")
+    }
+}
+//struct RedMenu: MenuStyle {
+//    func makeBody(configuration: Configuration) -> some View {
+//        Menu(configuration)
+//            .foregroundColor(.red)
+//    }
+//}
+//struct MenuView: View{
+//    var body: some View{
+//        NavigationView{
+//        Text("Hello")
+//            .toolbar {
+//                ToolbarItem(placement: .primaryAction) {
+//                    Menu {
+//                        Section {
+//                            Button(action: {}) {
+//                                Label("Add Feed", systemImage: "plus")
+//                            }
+//
+//                            Button(action: {}) {
+//                                Label("Add Folder", systemImage: "folder")
+//                            }
+//                        }
+//
+//                        Section(header: Text("Secondary actions")) {
+//                            Button(action: {}) {
+//                                Label("Remove old files", systemImage: "trash")
+//                                    .foregroundColor(.red)
+//                            }
+//                        }
+//                    }
+//                    label: {
+//                        Label("Add", systemImage: "plus")
+//                    }
+//                }
+//            }
+////            .toolbar {
+////                ToolbarItem(placement: .primaryAction) {
+////                    Menu("Add") {
+////                        Button("File") {}
+////                        Button("Folder") {}
+////                    }.menuStyle(RedMenu())
+////                }
+////            }
+//        }
+//    }
+//}
+//
+//struct ActionContextMenu_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ActionContextMenu(label: "Archive", systemName: "tray.and.arrow.down")
+//        MenuView()
+//    }
+//}

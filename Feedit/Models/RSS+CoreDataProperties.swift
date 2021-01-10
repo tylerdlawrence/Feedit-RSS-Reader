@@ -5,6 +5,7 @@
 //  Created by Tyler D Lawrence on 8/10/20.
 //
 
+import SwiftUI
 import Foundation
 import CoreData
 import FeedKit
@@ -29,11 +30,13 @@ extension RSS {
     @NSManaged public var uuid: UUID?
     @NSManaged public var image: String
     @NSManaged public var isFetched: Bool
-    
     @NSManaged public var name: String
     @NSManaged public var order: Int32
     @NSManaged public var selected: Bool
-    //@NSManaged public var attribute: Attribute
+    @NSManaged public var isSwiped: Bool
+    @NSManaged public var offset: CGFloat
+    @NSManaged public var removeAll: Int
+
     
     public var rssURL: URL? {
         return URL(string: url)

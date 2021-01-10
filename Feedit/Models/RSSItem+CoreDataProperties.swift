@@ -5,6 +5,7 @@
 //  Created by Tyler D Lawrence on 8/10/20.
 //
 
+import SwiftUI
 import Foundation
 import CoreData
 
@@ -35,15 +36,18 @@ extension RSSItem {
     @NSManaged public var author: String
     @NSManaged public var isArchive: Bool
     @NSManaged public var imageURL: String
-    @NSManaged public var isDone: Bool
-
+    //@NSManaged public var isDone: Bool
+    @NSManaged public var isRead: Bool
+    @NSManaged public var isStarred: Bool
+    @NSManaged public var isSwiped: Bool
+    @NSManaged public var offset: CGFloat
     
     public override func awakeFromInsert() {
         super.awakeFromInsert()
         uuid = UUID()
     }
     
-    static func create(uuid: UUID, imageURL: String, title: String = "", desc: String = "", author: String = "", url: String = "",
+    static func create(uuid: UUID, isDone: Bool, isRead: Bool, imageURL: String, title: String = "", desc: String = "", author: String = "", url: String = "",
                        createTime: Date = Date(), progress: Double = 0, in context: NSManagedObjectContext) -> RSSItem {
         let item = RSSItem(context: context)
         item.rssUUID = uuid
@@ -56,8 +60,10 @@ extension RSSItem {
         item.createTime = createTime
         item.progress = 0
         item.isArchive = false
-        item.isDone = false
-
+        //item.isDone = false
+        item.isRead = false
+        item.isStarred = false
+        
 
         return item
     }

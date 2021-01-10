@@ -40,8 +40,8 @@ class RSSItemStore: NSObject, ObservableObject {
         fetchRSS()
     }
     
-    public func createAndSave(rss uuid: UUID, imageURL: String, title: String, desc: String, author: String, url: String, createTime: Date) -> RSSItem {
-        let item = RSSItem.create(uuid: uuid, imageURL: imageURL, title: title, desc: desc, author: author, url: url, createTime: createTime,
+    public func createAndSave(rss uuid: UUID, isDone: Bool, isRead: Bool, imageURL: String, title: String, desc: String, author: String, url: String, createTime: Date) -> RSSItem {
+        let item = RSSItem.create(uuid: uuid, isDone: isRead, isRead: isRead, imageURL: imageURL, title: title, desc: desc, author: author, url: url, createTime: createTime,
                                   in: persistence.context)
         saveChanges()
         return item

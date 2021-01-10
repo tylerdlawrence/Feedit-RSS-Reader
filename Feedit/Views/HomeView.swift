@@ -405,10 +405,10 @@ struct BookmarkView: View {
     var body: some View {
         VStack(alignment: .trailing) {
             HStack{
-                Image(systemName: "star.fill").font(.system(size: 16, weight: .black)).foregroundColor(Color("text"))
+                Image(systemName: "star.fill").font(.system(size: 16, weight: .black)).foregroundColor(Color("bg"))
                 Text("Starred")
                     .font(.system(size: 17, weight: .medium, design: .rounded))
-                    .foregroundColor(Color("bg"))
+                    .foregroundColor(Color("text"))
             }
         }
     }
@@ -418,10 +418,10 @@ struct TagView: View {
     var body: some View {
         VStack(alignment: .leading){
             HStack{
-                Image(systemName: "archivebox.fill").font(.system(size: 16, weight: .black)).foregroundColor(Color("text"))
+                Image(systemName: "archivebox.fill").font(.system(size: 16, weight: .black)).foregroundColor(Color("bg"))
                 Text("Archive")
                     .font(.system(size: 17, weight: .medium, design: .rounded))
-                    .foregroundColor(Color("bg"))
+                    .foregroundColor(Color("text"))
             }
         }
     }
@@ -483,7 +483,7 @@ struct HomeView_Previews: PreviewProvider {
     
     static var previews: some View {
         HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel, rssFeedViewModel: self.rssFeedViewModel)
-            //.preferredColorScheme(.dark)
+            .preferredColorScheme(.dark)
     }
 }
 
