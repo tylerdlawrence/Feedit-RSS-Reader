@@ -21,8 +21,12 @@ import SwipeCellKit
 import Intents
 
 struct RSSItemRow: View {
-
+    
+    @EnvironmentObject var rssDataSource: RSSDataSource
     @Environment(\.managedObjectContext) var managedObjectContext
+    @Environment(\.managedObjectContext) private var viewContext
+    @Environment (\.presentationMode) var presentationMode
+
 
     var rssSource: RSS {
         return self.rssFeedViewModel.rss
@@ -41,10 +45,9 @@ struct RSSItemRow: View {
     var isRead: ((RSSItem) -> Void)?
     var model: GroupModel
     
-    init(rssViewModel: RSSFeedViewModel, wrapper: RSSItem, isDone: ((RSSItem) -> Void)? = nil, menu action: ((RSSItem) -> Void)? = nil) {
+    init(rssViewModel: RSSFeedViewModel, wrapper: RSSItem, isRead: ((RSSItem) -> Void)? = nil, menu action: ((RSSItem) -> Void)? = nil) {
         self.rssFeedViewModel = rssViewModel
         itemWrapper = wrapper
-        isRead = isDone
         contextMenuAction = action
         self.model = GroupModel(icon: "text.justifyleft", title: "")
     }
@@ -97,7 +100,8 @@ struct RSSItemRow: View {
                 
                Text(itemWrapper.title)
                 .font(.system(size: 17, weight: .medium, design: .rounded))
-                .foregroundColor(fontColor)
+                .foregroundColor(useReadText ? Color.gray : Color("text"))
+                //.foregroundColor(fontColor)
                 .lineLimit(3)
                Text(itemWrapper.desc.trimHTMLTag.trimWhiteAndSpace)
                    .font(.system(size: 15, weight: .medium, design: .rounded))
@@ -109,39 +113,46 @@ struct RSSItemRow: View {
        }
     }
     
+    @State private var showingInfo = false
+    private var infoListView: some View {
+        Button(action: {
+            self.showingInfo = true
+            }) {
+            Image(systemName: "info.circle")
+            }.sheet(isPresented: $showingInfo) {
+                InfoView(rssViewModel: rssFeedViewModel)
+        }
+    }
+    @State private var useReadText = false
+    
     var body: some View{
         ZStack{
             pureTextView
                 .contextMenu {
                     Section{
-                        Button(action:{
-                          self.fontColor = Color.gray
-                            .opacity(0.8)
-                        }){
-                          HStack {
-                            Image(systemName: ("circle"))
-                            Text("Mark As Read")
-                          }
-                        }
-                        Button(action:{
-                          self.fontColor = Color("text")
-                        }){
-                          HStack {
-                            Image(systemName: ("largecircle.fill.circle"))
-                            Text("Mark As Unread")
-                          }
-                        }
+                        ActionContextMenu(
+                            label: self.useReadText ? "Mark As Unread" : "Mark As Read",
+                            systemName: "circle\(self.useReadText ? ".fill" : "")",
+                            onAction: {
+                                self.useReadText.toggle()
+                        })
+                    
+                        ActionContextMenu(
+                            label: itemWrapper.isArchive ? "Unstar" : "Star",
+                            systemName: "star\(itemWrapper.isArchive ? "" : ".fill")",
+                            onAction: {
+                                self.contextMenuAction?(self.itemWrapper)
+                        })
                     }
-                    Button(action: {
-                        self.contextMenuAction?(self.itemWrapper)
-                    }) {
-                        HStack {
-                            Text("Star Article")
-                            Image(systemName: "star.fill")
-                                .imageScale(.small)
-                            }
-                        }
+                    Section{
+                        ActionContextMenu(
+                            label: "Feed Info",
+                            systemName: "info.circle",
+                            onAction: {
+                                
+                        })
                     }
+                }
 
         }
     }

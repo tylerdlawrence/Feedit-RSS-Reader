@@ -34,16 +34,6 @@ class RSSFeedViewModel: NSObject, ObservableObject {
         _ = dataSource.saveUpdateObject()
     }
     
-//    func isDone(isDone: RSSItem) { //(_ item: RSSItem) {
-//        let updatedItem = dataSource.readObject(isDone) //item
-//        updatedItem.isDone = !isDone.isDone //item
-//        updatedItem.updateTime = Date()
-//        updatedItem.objectWillChange.send()
-//        dataSource.setUpdateObject(updatedItem)
-//
-//        _ = dataSource.saveUpdateObject()
-//    }
-    
     func isRead(_ item: RSSItem) {
         let updatedItem = dataSource.readObject(item)
         updatedItem.isRead = !item.isRead

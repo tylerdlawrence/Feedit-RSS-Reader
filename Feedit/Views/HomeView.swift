@@ -17,7 +17,7 @@ import SwipeCell
 struct HomeView: View {
     
     @Environment(\.managedObjectContext) var moc
-    
+
     @State private var archiveScale: Image.Scale = .medium
 
     @State private var titleFilter = "A"
@@ -307,7 +307,18 @@ struct HomeView: View {
                 NavigationLink(destination: archiveListView) {
                     BookmarkView()
                     Spacer()
-                    UnreadCountView(count: self.archiveListViewModel.items.count)
+                    Text("\(self.archiveListViewModel.items.count)")
+                        .font(.caption)
+                        .fontWeight(.bold)
+                        .padding(.horizontal, 7)
+                        .padding(.vertical, 1)
+                        .foregroundColor(Color("darkShadow"))
+                        .cornerRadius(8)
+                    //UnreadCountView(count: self.archiveListViewModel.items.count)
+                    
+                }
+                .onAppear {
+                    self.archiveListViewModel.fecthResults()
                 }
             }
             .textCase(nil)
@@ -322,13 +333,13 @@ struct HomeView: View {
                         HStack{
                             RSSRow(rss: rss)
                                 Spacer()
-                                Text("\(rssFeedViewModel.items.count)")
-                                    .font(.caption)
-                                    .fontWeight(.bold)
-                                    .padding(.horizontal, 7)
-                                    .padding(.vertical, 1)
-                                    .foregroundColor(Color("darkShadow"))
-                                    .cornerRadius(8)
+//                                Text("\(rssFeedViewModel.items.count)")
+//                                    .font(.caption)
+//                                    .fontWeight(.bold)
+//                                    .padding(.horizontal, 7)
+//                                    .padding(.vertical, 1)
+//                                    .foregroundColor(Color("darkShadow"))
+//                                    .cornerRadius(8)
                         }
                     }
                     .tag("RSS")

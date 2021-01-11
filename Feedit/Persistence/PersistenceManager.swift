@@ -43,9 +43,9 @@ class Persistence {
 
 extension Persistence {
     struct Version {
-        private let number: UInt //Uint
+        private let number: UInt
 
-        init(_ number: UInt) { //Uint
+        init(_ number: UInt) {
             self.number = number
         }
 

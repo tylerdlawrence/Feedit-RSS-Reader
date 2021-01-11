@@ -41,6 +41,9 @@ extension RSSItem {
     @NSManaged public var isStarred: Bool
     @NSManaged public var isSwiped: Bool
     @NSManaged public var offset: CGFloat
+    @NSManaged public var status: String
+    @NSManaged public var useReadText: Bool
+
     
     public override func awakeFromInsert() {
         super.awakeFromInsert()
@@ -63,9 +66,25 @@ extension RSSItem {
         //item.isDone = false
         item.isRead = false
         item.isStarred = false
+        item.useReadText = false
         
 
         return item
+    }
+    
+    enum Status: String {
+        case read = "Read"
+        case unread = "Unread"
+        case remove = "Remove"
+    }
+    
+    var readStatus: Status {
+        set {
+            status = newValue.rawValue
+        }
+        get {
+            Status(rawValue: status) ?? .read
+        }
     }
     
     var wrappedTitle: String {
@@ -99,6 +118,23 @@ extension RSSItem {
     func requestCountArchiveObjects() -> NSFetchRequest<RSSItem> {
             let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
             let predicate = NSPredicate(format: "isArchive = true")
+            request.predicate = predicate
+            return request
+        }
+    
+    static func requestRSSReadObjects(start: Int = 0, limit: Int = 20) -> NSFetchRequest<RSSItem> {
+        let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
+        let predicate = NSPredicate(format: "isRead = false")
+        request.predicate = predicate
+        request.sortDescriptors = [.init(key: #keyPath(RSSItem.updateTime), ascending: false)]
+        request.fetchOffset = start
+        request.fetchLimit = limit
+        return request
+    }
+    
+    func requestCountRSSObjects() -> NSFetchRequest<RSSItem> {
+            let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
+            let predicate = NSPredicate(format: "isRead = false")
             request.predicate = predicate
             return request
         }

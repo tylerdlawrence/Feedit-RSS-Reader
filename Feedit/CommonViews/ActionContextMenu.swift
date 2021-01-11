@@ -13,48 +13,36 @@ struct ActionContextMenu: View {
     private var systemName: String
     
     var onAction: (() -> Void)?
-    //var onStarAction: (() -> Void)?
-    var isReadAction: (() -> Void)?
-
-    init(label: String, systemName: String, onAction: (() -> Void)? = nil, isReadAction: (() -> Void)? = nil) {
+    
+    
+    init(label: String, systemName: String, onAction: (() -> Void)? = nil) {
         self.label = label
         self.systemName = systemName
         self.onAction = onAction
-        self.isReadAction = isReadAction
     }
     
     var body: some View {
         VStack {
             Button(action: {
-                self.isReadAction?()
+                self.onAction?()
             }) {
                 HStack {
-                    Text("Mark As Read")
-                    Image("unread-action")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 20, height: 20)
-                        .opacity(0.7)
+                    Text(self.label)
+                    Image(systemName: self.systemName)
+                        .imageScale(.small)
+                        .foregroundColor(.primary)
                 }
             }
-                Button(action: {
-                    self.onAction?()
-                }) {
-                    HStack {
-                        Text("Star Article")
-                        Image(systemName: "star.fill")
-                            .imageScale(.small)
-                    }
-                }
-            
         }
     }
 }
-struct ActionContextMenu_Previews: PreviewProvider {
-    static var previews: some View {
-        ActionContextMenu(label: "Archive", systemName: "tray.and.arrow.down")
-    }
-}
+
+//struct ActionContextMenu_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ActionContextMenu(label: "Archive", systemName: "tray.and.arrow.down")
+//    }
+//}
+
 //struct RedMenu: MenuStyle {
 //    func makeBody(configuration: Configuration) -> some View {
 //        Menu(configuration)

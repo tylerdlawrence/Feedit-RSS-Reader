@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import Foundation
+import Combine
 import UIKit
 import SwiftUIX
 import ASCollectionView
@@ -13,7 +15,6 @@ import NavigationStack
 import SwipeCell
 import SwiftUIGestures
 import FeedKit
-import Combine
 import KingfisherSwiftUI
 import SwiftUIRefresh
 import SwipeCellKit
@@ -21,6 +22,8 @@ import SwipeCellKit
 struct RSSFeedListView: View {
     
     @EnvironmentObject var rssDataSource: RSSDataSource
+    @Environment(\.managedObjectContext) private var viewContext
+
     @ObservedObject var rssFeedViewModel: RSSFeedViewModel
     @State private var selectedItem: RSSItem?
     @State private var isSafariViewPresented = false
@@ -45,6 +48,8 @@ struct RSSFeedListView: View {
     }
 
     init(rssViewModel: RSSFeedViewModel) {
+//        self.dataSource = dataSource
+//        self.rss = rss
         self.rssFeedViewModel = rssViewModel
         self.model = GroupModel(icon: "text.justifyleft", title: "")
     }
@@ -111,6 +116,8 @@ struct RSSFeedListView: View {
     }
     
     var model: GroupModel
+//    let dataSource: RSSItemDataSource
+//    let rss: RSS
 
 //    let width : CGFloat = 60
 //    @State var offset = CGSize.zero
@@ -137,9 +144,12 @@ struct RSSFeedListView: View {
     var body: some View {
         ZStack{
 //        NavigationStackView(transitionType: .custom(.scale), easing: .spring(response: 0.5, dampingFraction: 0.25, blendDuration: 0.5)) {
-            List(rssFeedViewModel.items, id: \.id) { item in
-                NavigationLink(destination: WebView(rssViewModel: rssFeedViewModel, wrapper: item, rss: rssSource, rssItem: item, url: URL(string: item.url)!)) {
-                    RSSItemRow(rssViewModel: rssFeedViewModel, wrapper: item, menu: self.contextmenuAction(_:))
+        ScrollView {
+            //List(rssFeedViewModel.items, id: \.id) { item in
+            LazyVStack(alignment: .leading) {
+                ForEach(rssFeedViewModel.items, id: \.self) { item in
+                    NavigationLink(destination: WebView(rssViewModel: rssFeedViewModel, wrapper: item, rss: rssSource, rssItem: item, url: URL(string: item.url)!)) {
+                        RSSItemRow(rssViewModel: rssFeedViewModel, wrapper: item, menu: self.contextmenuAction(_:))
 //                        .contentShape(Rectangle())
 //                        .onTapGesture {
 //                            self.selectedItem = item
@@ -154,8 +164,16 @@ struct RSSFeedListView: View {
 //                        .frame(width: 90, height: 90)
 //                        .clipped()
 //                        .cornerRadius(12)
+                        }
+                    }
+                    .padding([.top, .bottom, .trailing])
                 }
+                .frame(width: 350)
+                .border(Color.clear, width: 1)
+        //        .cornerRadius(10)
+        //        .padding(10)
             }
+            .id(UUID())
             .listStyle(PlainListStyle())
             .navigationBarTitle(rssSource.title, displayMode: .inline)
             //.navigationBarItems(trailing: reloadButton)
@@ -193,9 +211,18 @@ struct RSSFeedListView: View {
                 ToolbarItem(placement: .bottomBar) {
                     Menu {
                         Picker(selection: $sort, label: Text("Smart Filters")) {
-                            Text("All").tag(0)
-                            Text("Starred").tag(1)
-                            Text("Unread").tag(2)
+                            HStack{
+                                Text("All").tag(0)
+                                Image(systemName: "text.justifyleft")
+                            }
+                            HStack{
+                                Text("Starred").tag(1)
+                                Image(systemName: "star.fill")
+                            }
+                            HStack{
+                                Text("Unread").tag(2)
+                                Image(systemName: "circle")
+                            }
                         }
                         Button(action: self.rssFeedViewModel.loadMore) {
                             Text("Refresh Articles")
@@ -220,7 +247,7 @@ struct RSSFeedListView: View {
                 }
             }
         }
-        .add(self.searchBar)
+        //.add(self.searchBar)
 
 //            .sheet(item: $selectedItem, content: { item in
 //                if AppEnvironment.current.useSafari {
