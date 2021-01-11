@@ -125,36 +125,63 @@ struct RSSFeedListView: View {
 //    @State var scale : CGFloat = 0.5
     
     func footerView() -> some View {
-        VStack(alignment: .leading) {
-            Spacer()
-            Text("\(rssFeedViewModel.items.count)")
-                .font(.caption)
-                .fontWeight(.bold)
-                .padding(.horizontal, 7)
-                .padding(.vertical, 1)
-                .background(Color("darkShadow"))
-                .opacity(0.4)
-                .foregroundColor(Color("text"))
-                .cornerRadius(8)
-            Spacer()
+        //VStack(alignment: .leading) {
+        VStack(alignment: .center){
+            HStack(alignment: .center){
+                KFImage(URL(string: rssSource.imageURL))
+                    .placeholder({
+                Image(systemName: model.icon)
+                    .imageScale(.medium)
+                    .font(.system(size: 16, weight: .heavy))
+                    .layoutPriority(10)
+                    .foregroundColor(.white)
+                    .background(
+                        Rectangle().fill(model.color)
+                            .opacity(0.6)
+                            .frame(width: 25, height: 25,alignment: .center)
+                            .cornerRadius(5)
+                    )})
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 25, height: 25,alignment: .center)
+                    .cornerRadius(2)
+                    .border(Color.clear, width: 1)
+                Text(rssSource.title)
+                    .font(.system(.body))
+                    .fontWeight(.bold)
+                Spacer()
+                Text("\(rssFeedViewModel.items.count)")
+                    .font(.caption)
+                    .fontWeight(.bold)
+                    .padding(.horizontal, 7)
+                    .padding(.vertical, 1)
+                    .background(Color("darkShadow"))
+                    .opacity(0.4)
+                    .foregroundColor(Color("text"))
+                    .cornerRadius(8)
+                Spacer()
+            }
         }
     }
     
     
     var body: some View {
-        ZStack{
+//        ZStack{
 //        NavigationStackView(transitionType: .custom(.scale), easing: .spring(response: 0.5, dampingFraction: 0.25, blendDuration: 0.5)) {
-        ScrollView {
-            //List(rssFeedViewModel.items, id: \.id) { item in
-            LazyVStack(alignment: .leading) {
-                ForEach(rssFeedViewModel.items, id: \.self) { item in
-                    NavigationLink(destination: WebView(rssViewModel: rssFeedViewModel, wrapper: item, rss: rssSource, rssItem: item, url: URL(string: item.url)!)) {
-                        RSSItemRow(rssViewModel: rssFeedViewModel, wrapper: item, menu: self.contextmenuAction(_:))
+        ScrollViewReader { scrollProxy in
+            ScrollView {
+//            List(rssFeedViewModel.items, id: \.id) { item in
+                LazyVStack(alignment: .leading, spacing: 0) {
+                    Divider().padding(0).padding([.leading])
+//                    if rssFeedViewModel.items.count <= 0 {
+                        ForEach(rssFeedViewModel.items, id: \.self) { item in
+                            NavigationLink(destination: WebView(rssViewModel: rssFeedViewModel, wrapper: item, rss: rssSource, rssItem: item, url: URL(string: item.url)!)) {
+                                RSSItemRow(rssViewModel: rssFeedViewModel, wrapper: item, menu: self.contextmenuAction(_:))
 //                        .contentShape(Rectangle())
 //                        .onTapGesture {
 //                            self.selectedItem = item
 //                        }
-                        .multilineTextAlignment(.leading)
+                                    .multilineTextAlignment(.leading)
 //                    KFImage(URL(string: rssSource.image))
 //                        .placeholder({
 //                            ProgressView()
@@ -164,47 +191,20 @@ struct RSSFeedListView: View {
 //                        .frame(width: 90, height: 90)
 //                        .clipped()
 //                        .cornerRadius(12)
-                        }
+                                }
+                            }
+                        .padding([.top, .bottom, .trailing])
                     }
-                    .padding([.top, .bottom, .trailing])
-                }
-                .frame(width: 350)
-                .border(Color.clear, width: 1)
-        //        .cornerRadius(10)
-        //        .padding(10)
+                    .frame(width: 360)
+                    .border(Color.clear, width: 1)
             }
             .id(UUID())
-            .listStyle(PlainListStyle())
-            .navigationBarTitle(rssSource.title, displayMode: .inline)
-            //.navigationBarItems(trailing: reloadButton)
+//            .listStyle(PlainListStyle())
+            .navigationBarTitle("", displayMode: .inline)
+            .navigationBarItems(trailing: reloadButton)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    VStack(alignment: .center){
-                        HStack(alignment: .center){
-                            KFImage(URL(string: rssSource.imageURL))
-                                .placeholder({
-                            Image(systemName: model.icon)
-                                .imageScale(.medium)
-                                .font(.system(size: 16, weight: .heavy))
-                                .layoutPriority(10)
-                                .foregroundColor(.white)
-                                .background(
-                                    Rectangle().fill(model.color)
-                                        .opacity(0.6)
-                                        .frame(width: 25, height: 25,alignment: .center)
-                                        .cornerRadius(5)
-                                )})
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 25, height: 25,alignment: .center)
-                                .cornerRadius(2)
-                                .border(Color.clear, width: 1)
-                            Text(rssSource.title)
-                                .font(.system(.body))
-                                .fontWeight(.bold)
-                            footerView()
-                        }
-                    }
+                footerView()
                 }
             }
             .toolbar {
@@ -232,7 +232,7 @@ struct RSSFeedListView: View {
                         }
                     }
                     label: {
-                        Label("Sort", systemImage: "line.horizontal.3.decrease.circle").font(.system(size: 20, weight: .light))
+                        Label("Sort", systemImage: "line.horizontal.3.decrease.circle").font(.system(size: 22, weight: .light))
                         }
                     }
                 ToolbarItem(placement: .bottomBar) {
@@ -240,14 +240,14 @@ struct RSSFeedListView: View {
                 }
                 ToolbarItem(placement: .bottomBar) {
                     markAllRead
-                        .frame(width: 44, height: 44)
+                        .frame(width: 40, height: 40)
                 }
                 ToolbarItem(placement: .bottomBar) {
                     //infoListView
                 }
             }
         }
-        //.add(self.searchBar)
+        .add(self.searchBar)
 
 //            .sheet(item: $selectedItem, content: { item in
 //                if AppEnvironment.current.useSafari {
