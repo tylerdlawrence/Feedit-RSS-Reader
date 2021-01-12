@@ -95,12 +95,12 @@ class RSSItemStore: NSObject, ObservableObject {
     @Published var items = [RSSItem]()
     
     @Published var selectedItem: RSSItem? //= nil
-    var changingMailIndex = -1
-    var isChanging = false
-    // when user tap on item then will be read
-    
-    var offsetX: CGFloat = 0.0
-    var isRead = false
+//    var changingMailIndex = -1
+//    var isChanging = false
+//    // when user tap on item then will be read
+//
+//    var offsetX: CGFloat = 0.0
+//    var isRead = false
 }
 
 extension RSSItemStore: NSFetchedResultsControllerDelegate {

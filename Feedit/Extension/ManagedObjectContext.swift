@@ -23,7 +23,7 @@ extension NSManagedObjectContext {
         do {
             try save()
         } catch {
-            fatalError("failed to save context with error: \(error)")
+            fatalError("failed to save context")
         }
     }
 }

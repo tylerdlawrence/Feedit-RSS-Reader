@@ -21,24 +21,52 @@ struct ArchiveListView: View {
     }
     
     @EnvironmentObject var rssDataSource: RSSDataSource
+//    @ObservedObject var viewModel: RSSListViewModel
     @ObservedObject var rssFeedViewModel: RSSFeedViewModel
     @ObservedObject var archiveListViewModel: ArchiveListViewModel
     @ObservedObject var searchBar: SearchBar = SearchBar()
     @State private var isShowing = false
 
+
     @State private var selectedItem: RSSItem?
-    @State var footer = "Refresh more articles"
+    @State var footer = "Load More Articles"
     
     init(viewModel: ArchiveListViewModel, rssFeedViewModel: RSSFeedViewModel) {
         self.archiveListViewModel = viewModel
         self.rssFeedViewModel = rssFeedViewModel
+//        self.viewModel = listViewModel
     }
     
+    @State private var isLoading = false
+    var animation: Animation {
+        Animation.linear
+    }
     private var loadMore: some View {
-        Button(action: self.archiveListViewModel.loadMore) {
-            Image(systemName: "arrow.counterclockwise")
-                .imageScale(.small)
+        VStack(alignment: .center) {
+            HStack {
+                Button(action: self.archiveListViewModel.loadMore) {
+                    //self.isLoading.toggle()
+//                    self.archiveListViewModel.loadMore()
+//                }) {
+                    Image(systemName: "arrow.counterclockwise")
+                        .rotationEffect(.degrees(isLoading ? 360 : 0))
+                        .animation(animation)
+                        .onAppear() {
+                            self.isLoading.toggle()
+                        }
+                        
+                }//.buttonStyle(LoadingButtonStyle())
+            }
+        }
+    }
+    struct LoadingButtonStyle: ButtonStyle {
+        func makeBody(configuration: Self.Configuration) -> some View {
+            configuration.label
+                .font(.system(size: 16, weight: .bold, design: .rounded))
+                .foregroundColor(Color("bg"))
+                .multilineTextAlignment(.center)
                 .frame(width: 44, height: 44)
+                .scaleEffect(configuration.isPressed ? 0.9 : 1.0)
         }
     }
     
@@ -53,109 +81,119 @@ struct ArchiveListView: View {
             print ("Mark all as Read")
         }) {
             Image("MarkAllAsRead")
+                .font(.system(size: 16, weight: .bold, design: .rounded))
+                .foregroundColor(Color("bg"))
+                .frame(width: 44, height: 44)
+
+
         }
     }
     
     var body: some View {
-        ZStack{
+        ZStack {
             List {
                 ForEach(self.archiveListViewModel.items, id: \.self) { item in
-//                    NavigationLink(destination: WebView(rssViewModel: rssFeedViewModel, wrapper: item, rss: rssSource, rssItem: item, url: URL(string: item.url)!)) {
-                        
+                    NavigationLink(destination: WebView(rssViewModel: rssFeedViewModel, wrapper: item, rss: rssSource, rssItem: item, url: URL(string: item.url)!)) {
                         RSSItemRow(rssViewModel: rssFeedViewModel, wrapper: item)
-                            .onTapGesture {
-                                self.selectedItem = item
+                        
                     }
-                //}
-            }
-                
+                }
                 .onDelete { indexSet in
                     if let index = indexSet.first {
                         let item = self.archiveListViewModel.items[index]
                         self.archiveListViewModel.unarchive(item)
                     }
                 }
-
-            }
-            .onAppear {
-                self.archiveListViewModel.fecthResults()
-            }
-//            .pullToRefresh(isShowing: $isShowing) {
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-//                    self.isShowing = false
-//                }
-//            }
-            .padding(.bottom)
-        //}
-            .listStyle(PlainListStyle())
-            .navigationBarItems(trailing: loadMore)
-
-        .toolbar {
-            ToolbarItem(placement: .principal) {
-                VStack{
-                    HStack{
-                        Image(systemName: "star.fill")
-                            .imageScale(.small)
-                            .foregroundColor(Color("bg"))
-                        Text("Starred")
-                            .font(.system(.body))
-                            .fontWeight(.bold)
-                        Text("\(archiveListViewModel.items.count)")
-                            .font(.caption)
-                            .fontWeight(.bold)
-                            .padding(.horizontal, 7)
-                            .padding(.vertical, 1)
-                            .background(Color("darkShadow"))
-                            .foregroundColor(Color("text"))
-                            .cornerRadius(8)
-                    }
-                    Text("Today at ")
-                        .fontWeight(.bold)
-                        .foregroundColor(.gray)
-                        .font(.system(.footnote)) +
-                        Text(Date(), style: .time)
-                        .font(.system(.footnote))
-                        .fontWeight(.bold)
-                        .foregroundColor(.gray)
+                VStack(alignment: .center, spacing: 0.0) {
+                    EmptyView()
+                        .padding(.bottom)
+//                        Button(action: self.archiveListViewModel.loadMore) {
+//                            loadMore
+//                        }
                 }
             }
-        }
-//        .toolbar {
-//            ToolbarItem(placement: .bottomBar) {
-//                Spacer()
-//            }
-//            ToolbarItem(placement: .bottomBar) {
-//                Spacer()
-//            }
-//            ToolbarItem(placement: .bottomBar) {
-//                markAllRead
-//                    .frame(width: 44, height: 44)
-//            }
-//        }
-        .add(self.searchBar)
-        .sheet(item: $selectedItem, content: { item in
-            SafariView(url: URL(string: item.url)!)
-
-//                if AppEnvironment.current.useSafari {
-//                SafariView(url: URL(string: item.url)!)
-//                } else {
-//                WebView(url: URL(string: item.url)!)
-//                        onArchiveAction: {
-//                            self.archiveListViewModel.archiveOrCancel(item)
-//                WebView(rssViewModel: rssFeedViewModel, wrapper: item, rss: rssSource, rssItem: item);)
-                    })
-//                }
-//            })
-            
-//        .onAppear {
-//            self.archiveListViewModel.fecthResults()
-//            }
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    HStack(alignment: .center) {
+                        //loadMore
+                        markAllRead
+                    }
+                }
+            }
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    VStack{
+                        HStack{
+                            Image(systemName: "star.fill")
+                                .imageScale(.small)
+                                .foregroundColor(Color("bg"))
+                            Text("Starred")
+                                .font(.system(.body))
+                                .fontWeight(.bold)
+                            Text("\(archiveListViewModel.items.count)")
+                                .font(.caption)
+                                .fontWeight(.bold)
+                                .padding(.horizontal, 7)
+                                .padding(.vertical, 1)
+                                .background(Color("darkShadow"))
+                                .foregroundColor(Color("text"))
+                                .cornerRadius(8)
+                        }
+                        HStack {
+                            Text("Last Sync ")
+                                .fontWeight(.bold)
+                                .foregroundColor(.gray)
+                                .font(.system(.footnote)) +
+                                Text(Date(), style: .time)
+                                .font(.system(.footnote))
+                                .fontWeight(.bold)
+                                .foregroundColor(.gray)
+                        }
+                    }
+                }
+            }
+//                .sheet(item: $selectedItem, content: { item in
+//                    SafariView(url: URL(string: item.url)!)
+//                })
+            .onAppear {
+                self.archiveListViewModel.fecthResults()
         }
     }
+    .navigationBarTitle("", displayMode: .inline)
+    }
 }
-
+//            ScrollViewReader { scrollProxy in
+//                ScrollView {
+//                    LazyVStack(alignment: .leading, spacing: 0) {
+//                      ForEach(self.archiveListViewModel.items, id: \.self) { item in
+//                          RSSItemRow(rssViewModel: rssFeedViewModel, wrapper: item)
+//                              .onTapGesture {
+//                                  self.selectedItem = item
+//                              }
+//                          }
+//                          .padding([.top, .bottom, .trailing])
+//                          .frame(width: 360)
+//                          .border(Color.clear, width: 1)
+//                 }
+//                .add(self.searchBar)
+//                .pullToRefresh(isShowing: $isShowing) {
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+//                        self.isShowing = false
+//                        }
+//                    }
 extension ArchiveListView {
-    
+
 }
 
+struct ArchiveListView_Previews: PreviewProvider {
+    
+    static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
+    static let rssFeedViewModel = RSSFeedViewModel(rss: RSS.simple(), dataSource: DataSourceService.current.rssItem)
+    static let rssListViewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+
+    static var previews: some View {
+        ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: self.rssFeedViewModel)
+        //, listViewModel: self.rssListViewModel)
+    }
+}
 

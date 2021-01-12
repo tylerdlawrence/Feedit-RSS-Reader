@@ -14,9 +14,68 @@ import Combine
 import SwiftUIRefresh
 import SwipeCell
 
+struct DidReselectKey: EnvironmentKey {
+    static let defaultValue = PassthroughSubject<TabSelection, Never>().eraseToAnyPublisher()
+}
+
+extension EnvironmentValues {
+    var didReselect: AnyPublisher<TabSelection, Never> {
+        get {
+            return self[DidReselectKey.self]
+        }
+        set {
+            self[DidReselectKey.self] = newValue
+        }
+    }
+}
+
+enum TabSelection: String {
+    case Hottest, Newest, Settings, Tags
+}
+/** https://stackoverflow.com/a/64019877/193772 */
+struct NavigableTabViewItem<Content: View, TabItem: View>: View {
+    @Environment(\.didReselect) var didReselect
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    
+    let tabSelection: TabSelection
+    let content: Content
+    let tabItem: TabItem
+    
+    init(tabSelection: TabSelection, @ViewBuilder content: () -> Content, @ViewBuilder tabItem: () -> TabItem) {
+        self.tabSelection = tabSelection
+        self.content = content()
+        self.tabItem = tabItem()
+    }
+
+    var body: some View {
+        let didReselectThis = didReselect.filter( {
+            $0 == tabSelection
+        }).eraseToAnyPublisher()
+
+        NavigationView {
+
+//            self.content.environmentObject(settings).onReceive(didReselect) { _ in
+//                    DispatchQueue.main.async {
+//                        self.presentationMode.wrappedValue.dismiss()
+//                    }
+//                }
+
+            
+        }.tabItem {
+            self.tabItem
+        }
+        .tag(tabSelection)
+        .navigationViewStyle(StackNavigationViewStyle())
+        .environment(\.didReselect, didReselectThis)
+    }
+}
+
 struct HomeView: View {
     
     @Environment(\.managedObjectContext) var moc
+//    @State private var didReselect = PassthroughSubject<TabSelection, Never>()
+    @Environment(\.didReselect) var didReselect
+    @State var isVisible = false
 
     @State private var archiveScale: Image.Scale = .medium
 
@@ -263,6 +322,26 @@ struct HomeView: View {
         }
     }
     
+    private var lastSync: some View {
+        HStack {
+            Text("Last Sync ")
+                .fontWeight(.bold)
+                .foregroundColor(Color("lightShadow"))
+                .font(.system(.footnote)) +
+                Text(Date(), style: .time)
+                .font(.system(.footnote))
+                .fontWeight(.bold)
+                .foregroundColor(Color("lightShadow"))
+        }
+//        Text("Last Sync: ")
+//            .foregroundColor(Color("bg"))
+//            .fontWeight(.bold)
+//            .font(.system(size: 16, weight: .medium, design: .rounded)) + Text(Date(), style: .time)
+//            .font(.system(size: 15, weight: .medium, design: .rounded))
+//            .fontWeight(.bold)
+//            .foregroundColor(Color("bg"))
+
+    }
 //    private var infoListView: some View {
 //        Button(action: {
 //            self.showingInfo = true
@@ -283,6 +362,22 @@ struct HomeView: View {
     
     @State private var showingInfo = false
     
+    @State private var isLoading = false
+    var animation: Animation {
+        Animation.linear
+    }
+
+    struct LoadingButtonStyle: ButtonStyle {
+        func makeBody(configuration: Self.Configuration) -> some View {
+            configuration.label
+                .font(.system(size: 16, weight: .bold, design: .rounded))
+                .foregroundColor(Color("bg"))
+                .multilineTextAlignment(.center)
+                .frame(width: 44, height: 44)
+                .scaleEffect(configuration.isPressed ? 0.9 : 1.0)
+        }
+    }
+    
   var body: some View {
     NavigationView {
         List {
@@ -293,12 +388,10 @@ struct HomeView: View {
                     Text("On My iPhone").font(.system(size: 18, weight: .medium, design: .rounded))
                         .foregroundColor(Color("bg"))
                         .multilineTextAlignment(.leading)
-
                     Text("Today at ").font(.system(size: 16, weight: .medium, design: .rounded)) + Text(Date(), style: .time)
                         .font(.system(size: 15, weight: .medium, design: .rounded))
                         .fontWeight(.bold)
                 }.listRowBackground(Color("accent"))
-            
             Section(header: feedView) {
                 NavigationLink(destination: DataNStorageView()) {
                     TagView()
@@ -314,8 +407,6 @@ struct HomeView: View {
                         .padding(.vertical, 1)
                         .foregroundColor(Color("darkShadow"))
                         .cornerRadius(8)
-                    //UnreadCountView(count: self.archiveListViewModel.items.count)
-                    
                 }
                 .onAppear {
                     self.archiveListViewModel.fecthResults()
@@ -326,21 +417,21 @@ struct HomeView: View {
             .foregroundColor(Color("darkerAccent"))
             .listRowBackground(Color("accent"))
             .edgesIgnoringSafeArea(.all)
-
             Section(header: feedsAll) {
                 ForEach(viewModel.items, id: \.self) { rss in
                     NavigationLink(destination: self.destinationView(rss: rss)) {
-                        HStack{
-                            RSSRow(rss: rss)
-                                Spacer()
-//                                Text("\(rssFeedViewModel.items.count)")
-//                                    .font(.caption)
-//                                    .fontWeight(.bold)
-//                                    .padding(.horizontal, 7)
-//                                    .padding(.vertical, 1)
-//                                    .foregroundColor(Color("darkShadow"))
-//                                    .cornerRadius(8)
-                        }
+                        RSSRow(rss: rss)
+//                            if RSSRow.viewModel.items.count <= 0 {
+//                            Text("\(RSSRow.viewModel.items.count)")
+//                                .font(.caption)
+//                                .fontWeight(.bold)
+//                                .padding(.horizontal, 7)
+//                                .padding(.vertical, 1)
+//                                .foregroundColor(Color("darkShadow"))
+//                                .cornerRadius(8)
+//                            } else {
+//                                EmptyView()
+//                            }
                     }
                     .tag("RSS")
                 }
@@ -351,17 +442,11 @@ struct HomeView: View {
                     }
                 .onMove(perform: moveRow)
                 }
-//            }
                 .textCase(nil)
                 .listRowBackground(Color("accent"))
                 .accentColor(Color("darkShadow"))
                 .foregroundColor(Color("darkerAccent"))
                 .edgesIgnoringSafeArea(.all)
-            .pullToRefresh(isShowing: $isShowing) {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    self.isShowing = false
-                }
-            }
         }
         .onReceive(addRSSPublisher, perform: { output in
             guard
@@ -371,28 +456,28 @@ struct HomeView: View {
         })
         .onReceive(rssRefreshPublisher, perform: { output in
                 self.viewModel.fecthResults()
-            })
-            .sheet(isPresented: $isSheetPresented, content: {
-                if FeaureItem.add == self.selectedFeatureItem {
-                    AddRSSView(
-                        viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss),
-                        onDoneAction: self.onDoneAction)
-                } else if FeaureItem.setting == self.selectedFeatureItem {
-                    SettingView()
-            }
         })
-        .navigationTitle("")
+        .sheet(isPresented: $isSheetPresented, content: {
+            if FeaureItem.add == self.selectedFeatureItem {
+                AddRSSView(
+                    viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss),
+                    onDoneAction: self.onDoneAction)
+        } else if FeaureItem.setting == self.selectedFeatureItem {
+                SettingView()
+        }
+        })
         .toolbar {
             #if os(iOS)
             ToolbarItem {
-                EditButton()
+                //loadMore
             }
             #endif
             ToolbarItem(placement: .bottomBar) {
                 settingButton
             }
-            ToolbarItem(placement: .bottomBar) {
-                Spacer()
+            ToolbarItem(placement: .status) {
+                //Spacer()
+                lastSync
             }
             ToolbarItem(placement: .bottomBar) {
                 addSourceButton
@@ -403,12 +488,21 @@ struct HomeView: View {
                     .frame(width: UIScreen.main.bounds.width, height: 3, alignment: .leading)
             }
         }
-        .accentColor(Color("darkShadow"))
-    
         .onAppear {
             self.viewModel.fecthResults()
         }
-    
+//        .navigationBarItems(.trailing: Button(action: self.archiveListViewModel.loadMore) {
+//                            //self.isLoading.toggle()
+//        //                    self.archiveListViewModel.loadMore()
+//        //                }) {
+//                            Image(systemName: "arrow.counterclockwise")
+//                                .rotationEffect(.degrees(isLoading ? 360 : 0))
+//                                .animation(animation)
+//                                .onAppear {
+//                                    self.isLoading.toggle()
+//                                }
+//                        }.buttonStyle(LoadingButtonStyle()))
+        .accentColor(Color("darkShadow"))
     }
 }
 
@@ -464,6 +558,7 @@ extension DisclosureGroup where Label == Text {
 }
 
 extension HomeView {
+    
     func onDoneAction() {
         self.viewModel.fecthResults()
     }
@@ -483,6 +578,7 @@ extension HomeView {
     func deleteItems(at offsets: IndexSet) {
         viewModel.items.remove(atOffsets: offsets)
     }
+    
 }
 
 struct HomeView_Previews: PreviewProvider {
@@ -499,6 +595,13 @@ struct HomeView_Previews: PreviewProvider {
 }
 
 struct UnreadCountView: View {
+//struct UnreadCountView<Content: View>: View {
+//    let unreadCount: () -> Content
+//    init(_ unreadCount: @autoclosure @escaping () -> Content) {
+//        self.unreadCount = unreadCount
+//    }
+//    var body: Content {
+//        unreadCount()
     var count: Int
     var body: some View {
         Text(verbatim: String(count))
@@ -510,4 +613,17 @@ struct UnreadCountView: View {
             .cornerRadius(8)
     }
 }
-
+//if viewModel.items.count <= 0 {
+//    ForEach(1..<10) { _ in
+//        HStack{
+//            RSSRow(rss: rss)
+//            Text("\(self.viewModel.items.count)")
+//                    .font(.caption)
+//                    .fontWeight(.bold)
+//                    .padding(.horizontal, 7)
+//                    .padding(.vertical, 1)
+//                    .foregroundColor(Color("darkShadow"))
+//                    .cornerRadius(8)
+//        }
+//    }
+//}

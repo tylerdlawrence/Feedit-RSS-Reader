@@ -65,34 +65,34 @@ class ArchiveListViewModel: NSObject, ObservableObject {
         _ = dataSource.saveUpdateObject()
     }
     
-    func markAsRead(_ item: RSSItem) {
-        let updatedItem = dataSource.readObject(item)
-        updatedItem.isRead = false
-        updatedItem.updateTime = Date()
-        dataSource.setUpdateObject(updatedItem)
-        
-        let rs = dataSource.saveUpdateObject()
-        switch rs {
-        case .failed:
-            print("----> \(#function) failed")
-        case .saved:
-            items.removeAll { item == $0 }
-        case .unchanged:
-            print("----> \(#function) unchanged")
-            
-        }
-        
-    }
+//    func markAsRead(_ item: RSSItem) {
+//        let updatedItem = dataSource.readObject(item)
+//        updatedItem.isRead = false
+//        updatedItem.updateTime = Date()
+//        dataSource.setUpdateObject(updatedItem)
+//
+//        let rs = dataSource.saveUpdateObject()
+//        switch rs {
+//        case .failed:
+//            print("----> \(#function) failed")
+//        case .saved:
+//            items.removeAll { item == $0 }
+//        case .unchanged:
+//            print("----> \(#function) unchanged")
+//
+//        }
+//
+//    }
     
-    func readOrCancel(_ item: RSSItem) {
-        let updatedItem = dataSource.readObject(item)
-        updatedItem.isRead = !item.isRead
-        updatedItem.updateTime = Date()
-        updatedItem.objectWillChange.send()
-        dataSource.setUpdateObject(updatedItem)
-        
-        _ = dataSource.saveUpdateObject()
-    }
+//    func readOrCancel(_ item: RSSItem) {
+//        let updatedItem = dataSource.readObject(item)
+//        updatedItem.isRead = !item.isRead
+//        updatedItem.updateTime = Date()
+//        updatedItem.objectWillChange.send()
+//        dataSource.setUpdateObject(updatedItem)
+//
+//        _ = dataSource.saveUpdateObject()
+//    }
     
 }
 

@@ -124,6 +124,19 @@ struct RSSFeedListView: View {
 //    @State var offsetY : CGFloat = 0
 //    @State var scale : CGFloat = 0.5
     
+    private var lastSync: some View {
+        HStack {
+            Text("Last Sync ")
+                .fontWeight(.bold)
+                .foregroundColor(Color("lightShadow"))
+                .font(.system(.footnote)) +
+                Text(Date(), style: .time)
+                .font(.system(.footnote))
+                .fontWeight(.bold)
+                .foregroundColor(Color("lightShadow"))
+        }
+    }
+    
     func footerView() -> some View {
         //VStack(alignment: .leading) {
         VStack(alignment: .center){
@@ -144,8 +157,8 @@ struct RSSFeedListView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 25, height: 25,alignment: .center)
-                    .cornerRadius(2)
-                    .border(Color.clear, width: 1)
+                    .cornerRadius(5)
+                    .border(Color.clear, width: 0)
                 Text(rssSource.title)
                     .font(.system(.body))
                     .fontWeight(.bold)
@@ -166,22 +179,23 @@ struct RSSFeedListView: View {
     
     
     var body: some View {
-//        ZStack{
+        ZStack{
 //        NavigationStackView(transitionType: .custom(.scale), easing: .spring(response: 0.5, dampingFraction: 0.25, blendDuration: 0.5)) {
         ScrollViewReader { scrollProxy in
-            ScrollView {
+            ScrollView(.vertical, showsIndicators: true) {
 //            List(rssFeedViewModel.items, id: \.id) { item in
                 LazyVStack(alignment: .leading, spacing: 0) {
+                    //, pinnedViews: [.sectionHeaders]
                     Divider().padding(0).padding([.leading])
 //                    if rssFeedViewModel.items.count <= 0 {
                         ForEach(rssFeedViewModel.items, id: \.self) { item in
                             NavigationLink(destination: WebView(rssViewModel: rssFeedViewModel, wrapper: item, rss: rssSource, rssItem: item, url: URL(string: item.url)!)) {
                                 RSSItemRow(rssViewModel: rssFeedViewModel, wrapper: item, menu: self.contextmenuAction(_:))
-//                        .contentShape(Rectangle())
-//                        .onTapGesture {
-//                            self.selectedItem = item
-//                        }
                                     .multilineTextAlignment(.leading)
+//                                    .contentShape(Rectangle())
+//                                    .onTapGesture {
+//                                        self.selectedItem = item
+//                                    }
 //                    KFImage(URL(string: rssSource.image))
 //                        .placeholder({
 //                            ProgressView()
@@ -193,15 +207,16 @@ struct RSSFeedListView: View {
 //                        .cornerRadius(12)
                                 }
                             }
-                        .padding([.top, .bottom, .trailing])
+                        .padding(.all)
+                        //.padding([.top, .bottom, .trailing])
                     }
                     .frame(width: 360)
-                    .border(Color.clear, width: 1)
+                    .border(Color.clear, width: 0)
             }
             .id(UUID())
-//            .listStyle(PlainListStyle())
             .navigationBarTitle("", displayMode: .inline)
-            .navigationBarItems(trailing: reloadButton)
+//            .listStyle(PlainListStyle())
+//            .navigationBarItems(trailing: reloadButton)
             .toolbar {
                 ToolbarItem(placement: .principal) {
                 footerView()
@@ -235,19 +250,20 @@ struct RSSFeedListView: View {
                         Label("Sort", systemImage: "line.horizontal.3.decrease.circle").font(.system(size: 22, weight: .light))
                         }
                     }
-                ToolbarItem(placement: .bottomBar) {
-                    Spacer()
+//                ToolbarItem(placement: .bottomBar) {
+//                    Spacer()
+//                }
+                ToolbarItem(placement: .status) {
+                    lastSync
                 }
                 ToolbarItem(placement: .bottomBar) {
                     markAllRead
                         .frame(width: 40, height: 40)
                 }
-                ToolbarItem(placement: .bottomBar) {
-                    //infoListView
-                }
             }
         }
-        .add(self.searchBar)
+        
+        //.add(self.searchBar)
 
 //            .sheet(item: $selectedItem, content: { item in
 //                if AppEnvironment.current.useSafari {
@@ -260,9 +276,11 @@ struct RSSFeedListView: View {
 //                    })
 //                }
 //            })
+        }
                 .onAppear {
                     self.rssFeedViewModel.fecthResults()
                     self.rssFeedViewModel.fetchRemoteRSSItems()
+                
             }
         }
         func contextmenuAction(_ item: RSSItem) {

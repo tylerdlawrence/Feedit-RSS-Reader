@@ -75,11 +75,22 @@ extension RSS {
         rss.url = ""
         return rss
     }
+    //RSSItem
+//    static func requestObjects(start: Int = 0, limit: Int = 20) -> NSFetchRequest<RSSItem> {
+//        let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
+//        let predicate = NSPredicate(format: "rssUUID = %@", argumentArray: [rssUUID])
+//        request.predicate = predicate
+//        request.sortDescriptors = [.init(key: #keyPath(RSSItem.createTime), ascending: false)]
+//        request.fetchOffset = start
+//        request.fetchLimit = limit
+//        return request
+//    }
     
     static func requestObjects() -> NSFetchRequest<RSS> {
         let request = RSS.fetchRequest() as NSFetchRequest<RSS>
         request.predicate = .init(value: true)
         request.sortDescriptors = [.init(key: #keyPath(RSS.createTime), ascending: false)]
+        
         return request
     }
     

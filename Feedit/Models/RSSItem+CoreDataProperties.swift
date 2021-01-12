@@ -38,7 +38,7 @@ extension RSSItem {
     @NSManaged public var imageURL: String
     //@NSManaged public var isDone: Bool
     @NSManaged public var isRead: Bool
-    @NSManaged public var isStarred: Bool
+    //@NSManaged public var isStarred: Bool
     @NSManaged public var isSwiped: Bool
     @NSManaged public var offset: CGFloat
     @NSManaged public var status: String
@@ -65,8 +65,8 @@ extension RSSItem {
         item.isArchive = false
         //item.isDone = false
         item.isRead = false
-        item.isStarred = false
-        item.useReadText = false
+        //item.isStarred = false
+        //item.useReadText = false
         
 
         return item
@@ -94,7 +94,7 @@ extension RSSItem {
     var wrappedDTitle: String {
         title 
     }
-        
+            
     static func requestObjects(rssUUID: UUID, start: Int = 0, limit: Int = 20) -> NSFetchRequest<RSSItem> {
         let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
         let predicate = NSPredicate(format: "rssUUID = %@", argumentArray: [rssUUID])
@@ -122,15 +122,15 @@ extension RSSItem {
             return request
         }
     
-    static func requestRSSReadObjects(start: Int = 0, limit: Int = 20) -> NSFetchRequest<RSSItem> {
-        let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
-        let predicate = NSPredicate(format: "isRead = false")
-        request.predicate = predicate
-        request.sortDescriptors = [.init(key: #keyPath(RSSItem.updateTime), ascending: false)]
-        request.fetchOffset = start
-        request.fetchLimit = limit
-        return request
-    }
+//    static func requestRSSReadObjects(start: Int = 0, limit: Int = 20) -> NSFetchRequest<RSSItem> {
+//        let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
+//        let predicate = NSPredicate(format: "isRead = false")
+//        request.predicate = predicate
+//        request.sortDescriptors = [.init(key: #keyPath(RSSItem.updateTime), ascending: false)]
+//        request.fetchOffset = start
+//        request.fetchLimit = limit
+//        return request
+//    }
     
     func requestCountRSSObjects() -> NSFetchRequest<RSSItem> {
             let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>

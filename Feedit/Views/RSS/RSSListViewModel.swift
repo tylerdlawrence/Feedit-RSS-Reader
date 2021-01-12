@@ -24,11 +24,20 @@ class RSSListViewModel: NSObject, ObservableObject{
         fecthResults(start: start)
     }
     
+//    func fecthResults(start: Int = 0) {
+//        if start == 0 {
+//            items.removeAll()
+//        }
+//        dataSource.performFetch(RSS.requestObjects())
+//        if let objects = dataSource.fetchedResult.fetchedObjects {
+//            items.append(contentsOf: objects)
+//        }
+//    }
     func fecthResults(start: Int = 0) {
         if start == 0 {
             items.removeAll()
         }
-        dataSource.performFetch(RSS.requestObjects())
+        dataSource.performFetch(RSS.requestObjects())//rssUUID: rss.uuid!, start: start
         if let objects = dataSource.fetchedResult.fetchedObjects {
             items.append(contentsOf: objects)
         }

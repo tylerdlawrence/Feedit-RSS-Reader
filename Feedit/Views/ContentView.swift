@@ -11,16 +11,16 @@ import Combine
 
 struct ContentView: View {
     
-    @Environment(\.managedObjectContext) private var viewContext
-    
-    @FetchRequest(entity: RSSItem.entity(), sortDescriptors: [], predicate: NSPredicate(format: "rssUUID = %@"))
-    
-    var unread: FetchedResults<RSSItem>
+//    @Environment(\.managedObjectContext) private var viewContext
+//
+//    @FetchRequest(entity: RSSItem.entity(), sortDescriptors: [], predicate: NSPredicate(format: "rssUUID = %@"))
+//
+//    var unread: FetchedResults<RSSItem>
     
     var body: some View {
         ContentView()
-            .environment(\.managedObjectContext, Persistence(version: 1).container.viewContext
-            )
+//            .environment(\.managedObjectContext, Persistence(version: 1).container.viewContext
+//            )
     }
 }
 
