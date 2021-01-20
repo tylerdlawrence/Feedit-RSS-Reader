@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import NavigationStack
 import KingfisherSwiftUI
 import Combine
 import CoreData
@@ -60,7 +59,7 @@ struct WebView: View {
         let viewModel = WKWebViewModel(rssItem: rssItem)
         itemWrapper = wrapper
         self.rss = rss
-        self.imageLoader = ImageLoader(path: rss.imageURL)
+        self.imageLoader = ImageLoader(urlString: rss.imageURL)
         self.rssItem = rssItem
         self.viewModel = viewModel
         self.onArchiveAction = onArchiveAction

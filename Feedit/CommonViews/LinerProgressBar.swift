@@ -51,6 +51,5 @@ struct LinerProgressBar_Previews: PreviewProvider {
                 Spacer()
             }
         }
-        .padding()
     }
 }

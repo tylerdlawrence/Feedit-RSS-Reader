@@ -5,16 +5,33 @@
 //  Created by Tyler D Lawrence on 8/10/20.
 //
 
-import SwiftUI
-import UIKit
 import Foundation
 import Combine
 import CoreData
 import FeedKit
+import SwiftUI
 
 class RSSItemStore: NSObject, ObservableObject {
-    
+//    var id = UUID()
+//    var title: String
+//    var desc: String
+//    var url: URL
+//    var date: Date
+//    var lastUpdateDate: Date
+   
     private let persistence = Persistence.current
+    
+    static let instance = RSSItemStore()
+    
+    var isRead: Bool {
+        return readDate != nil
+    }
+    
+    var readDate: Date? {
+        didSet {
+            objectWillChange.send()
+        }
+    }
 
     private lazy var fetchedResultsController: NSFetchedResultsController<RSSItem> = {
         let fetchRequest: NSFetchRequest<RSSItem> = RSSItem.fetchRequest()
@@ -41,7 +58,7 @@ class RSSItemStore: NSObject, ObservableObject {
     }
     
     public func createAndSave(rss uuid: UUID, isDone: Bool, isRead: Bool, imageURL: String, title: String, desc: String, author: String, url: String, createTime: Date) -> RSSItem {
-        let item = RSSItem.create(uuid: uuid, isDone: isRead, isRead: isRead, imageURL: imageURL, title: title, desc: desc, author: author, url: url, createTime: createTime,
+        let item = RSSItem.create(uuid: uuid, isDone: isDone, isRead: isRead, imageURL: imageURL, title: title, desc: desc, author: author, url: url, createTime: createTime,
                                   in: persistence.context)
         saveChanges()
         return item
@@ -63,12 +80,11 @@ class RSSItemStore: NSObject, ObservableObject {
         fetchRequest.predicate = predicate
         fetchRequest.fetchLimit = limit
         fetchRequest.fetchOffset = start
+        
         do {
             let rs = try fetchedResultsController.managedObjectContext.fetch(fetchRequest)
             rs.forEach { item in
                 print("item created time = \(String(describing: item.createTime))")
-                //isDone = item.isDone
-
             }
             return rs
         } catch let error {
@@ -91,20 +107,68 @@ class RSSItemStore: NSObject, ObservableObject {
             try context.save()
         } catch { fatalError() }
     }
-    
-    @Published var items = [RSSItem]()
-    
-    @Published var selectedItem: RSSItem? //= nil
-//    var changingMailIndex = -1
-//    var isChanging = false
-//    // when user tap on item then will be read
-//
-//    var offsetX: CGFloat = 0.0
-//    var isRead = false
 }
 
 extension RSSItemStore: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         didChange.send(self)
     }
+}
+
+class AllArticlesStorage: NSObject, ObservableObject {
+    
+  @Published var articles: [RSSItem] = []
+  private let articlesFetchedResultsController: NSFetchedResultsController<RSSItem>
+
+  init(managedObjectContext: NSManagedObjectContext) {
+    articlesFetchedResultsController = NSFetchedResultsController(fetchRequest: RSSItem.fetchRequest(),
+    managedObjectContext: managedObjectContext,
+    sectionNameKeyPath: nil, cacheName: nil)
+
+    super.init()
+
+    articlesFetchedResultsController.delegate = self
+    
+    
+    
+    func fetchAllArticles(RSS item: RSS, start: Int, limit: Int = 100) throws -> [RSSItem] {
+        guard let uuid = item.uuid else {
+            throw RSSError.invalidParameter
+        }
+        let fetchRequest: NSFetchRequest<RSSItem> = RSSItem.fetchRequest()
+        let predicate = NSPredicate(format: "rssUUID = %@", argumentArray: [uuid])
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        fetchRequest.predicate = predicate
+        fetchRequest.fetchLimit = limit
+        fetchRequest.fetchOffset = start
+        do {
+            let rs = try articlesFetchedResultsController.managedObjectContext.fetch(fetchRequest)
+            rs.forEach { item in
+                print("title = \(String(describing: item.title))")
+            }
+            return rs
+        } catch let error {
+            throw error
+        }
+    }
+    
+    
+
+
+    do {
+      try articlesFetchedResultsController.performFetch()
+      articles = articlesFetchedResultsController.fetchedObjects ?? []
+    } catch {
+      print("failed to fetch items!")
+    }
+  }
+}
+
+extension AllArticlesStorage: NSFetchedResultsControllerDelegate {
+  func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+    guard let rssItem = controller.fetchedObjects as? [RSSItem]
+      else { return }
+
+    articles = rssItem
+  }
 }

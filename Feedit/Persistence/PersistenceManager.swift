@@ -9,6 +9,27 @@ import Foundation
 import CoreData
 import Combine
 
+//class PersistenceManager {
+//  let persistentContainer: NSPersistentContainer = {
+//      let container = NSPersistentContainer(name: "MyApplication")
+//      container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+//          if let error = error as NSError? {
+//              fatalError("Unresolved error \(error), \(error.userInfo)")
+//          }
+//      })
+//      return container
+//  }()
+//
+//  init() {
+//    _ = NotificationCenter.default
+//
+//      if self.persistentContainer.viewContext.hasChanges {
+//        try? self.persistentContainer.viewContext.save()
+//      }
+//    }
+//  }
+
+
 class Persistence {
     
     static private(set) var current = Persistence(version: 1)

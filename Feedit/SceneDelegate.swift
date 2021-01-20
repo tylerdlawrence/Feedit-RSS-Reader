@@ -10,25 +10,20 @@ import SwiftUI
 
 @main
 struct FeeditApp: App {
+    
     @Environment(\.scenePhase) private var scenePhase
-//    let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext
-
-//    func window.rootViewController = UIHostingController(rootView: ContentView().environment(\.managedObjectContext, context))
-    
+//    static let articles = AllArticlesStorage(managedObjectContext: Persistence.current.context)
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-
     static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
-
     static let settingViewModel = SettingViewModel()
-    
-    static let rssFeedViewModel = RSSFeedViewModel(rss: RSS.simple(), dataSource: DataSourceService.current.rssItem)
-    //static let basicListViewController = BasicListViewController()
+    static let rssFeedViewModel = RSSFeedViewModel(rss: RSS(context: Persistence.current.context), dataSource: DataSourceService.current.rssItem)
+    static let rss = RSS()
+
     var body: some Scene {
         WindowGroup{
             HomeView(viewModel: FeeditApp.viewModel, archiveListViewModel: FeeditApp.archiveListViewModel, rssFeedViewModel: FeeditApp.rssFeedViewModel)
-        }
-        //basicListViewController: FeeditApp.basicListViewController, 
-        //(viewModel: FeeditApp.viewModel, archiveListViewModel: FeeditApp.archiveListViewModel)
+                //viewModel: FeeditApp.viewModel, archiveListViewModel: FeeditApp.archiveListViewModel, rssFeedViewModel: FeeditApp.rssFeedViewModel)
+        }//articles: FeeditApp.articles, 
         .onChange(of: scenePhase) { (newScenePhase) in
             switch newScenePhase {
             case .active:
@@ -44,6 +39,97 @@ struct FeeditApp: App {
     }
 }
 
+//extension List {
+//    @ViewBuilder func noSeparators() -> some View {
+//        #if swift(>=5.3) // Xcode 12
+//        if #available(iOS 14.0, *) { // iOS 14
+//            self
+//            .accentColor(Color.secondary)
+//            .listStyle(SidebarListStyle())
+//            .onAppear {
+//                UITableView.appearance().backgroundColor = UIColor.systemBackground
+//            }
+//        } else { // iOS 13
+//            self
+//                        .listStyle(PlainListStyle())
+//            .onAppear {
+//                UITableView.appearance().separatorStyle = .none
+//            }
+//        }
+//        #else // Xcode 11.5
+//        self
+//                .listStyle(PlainListStyle())
+//        .onAppear {
+//            UITableView.appearance().separatorStyle = .none
+//        }
+//        #endif
+//    }
+//}
+//struct ListSwipeActions: ViewModifier {
+//
+//    @ObservedObject var coordinator = Coordinator()
+//
+//    func body(content: Content) -> some View {
+//
+//        return content
+//            .introspectTableView { tableView in
+//                tableView.delegate = self.coordinator
+//            }
+//    }
+//
+////    class Coordinator: NSObject, ObservableObject, UITableViewDelegate {
+////
+////        func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+////            return .delete
+////        }
+////
+////        func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+////
+////            let archiveAction = UIContextualAction(style: .normal, title: "Title") { action, view, completionHandler in
+////                // update data source
+////                completionHandler(true)
+////            }
+////            archiveAction.image = UIImage(systemName: "archivebox")!
+////            archiveAction.backgroundColor = .systemYellow
+////
+////            let configuration = UISwipeActionsConfiguration(actions: [archiveAction])
+////
+////            return configuration
+////        }
+////    }
+//}
+
+//extension List {
+//    func swipeActions() -> some View {
+//        return self.modifier(ListSwipeActions())
+//    }
+//}
+extension UINavigationController {
+    override open func viewDidLoad() {
+        super.viewDidLoad()
+
+        UITabBar.appearance().shadowImage = UIImage()
+        UITabBar.appearance().backgroundImage = UIImage()
+        UITabBar.appearance().isTranslucent = false
+        UITabBar.appearance().backgroundColor = .black
+
+    let standard = UINavigationBarAppearance()
+        standard.backgroundColor = UIColor(Color("accent")) //UIColor(Color("accent"))//.black//UIColor(Color("tab")) //When you scroll or you have title (small one)
+
+    let compact = UINavigationBarAppearance()
+        compact.backgroundColor = UIColor(Color("accent")) //UIColor(Color("accent"))//.black//UIColor(Color("tab")) //compact-height
+
+    let scrollEdge = UINavigationBarAppearance()
+        scrollEdge.backgroundColor = UIColor(Color("accent")) //UIColor(Color("accent"))//.black//UIColor(Color("tab")) //.systemGray6 //When you have large title
+
+    navigationBar.standardAppearance = standard
+    navigationBar.compactAppearance = compact
+    navigationBar.scrollEdgeAppearance = scrollEdge
+
+
+
+ }
+}
 //
 //class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //

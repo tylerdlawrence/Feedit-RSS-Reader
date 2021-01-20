@@ -6,53 +6,35 @@
 //
 
 import SwiftUI
-import UIKit
-import NavigationStack
+import MobileCoreServices
 import SwipeCell
-import SwiftUIGestures
-import FeedKit
 import Combine
+import Foundation
+import CoreData
 import KingfisherSwiftUI
-import SwiftUIRefresh
-import SwipeCellKit
 
 struct InfoView: View {
+    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.managedObjectContext) var managedObjectContext
+
+    @ObservedObject var rss: RSS
+    @State private var isSelected: Bool = false
     
     enum InfoItem: CaseIterable {
         case webView
-        case darkMode
-        case batchImport
         
         var label: String {
             switch self {
             case .webView: return "Read Mode"
-            case .darkMode: return "Outlook"
-            case .batchImport: return "Import RSS Sources"
             }
         }
     }
     
-    @Environment(\.presentationMode) var presentationMode
-    
     var rssSource: RSS {
-        return self.rssFeedViewModel.rss
+        return self.rss
     }
-    
-    @EnvironmentObject var rssDataSource: RSSDataSource
-    @ObservedObject var rssFeedViewModel: RSSFeedViewModel
 
-    @State private var feedUrl: String = ""
-    @State private var feedTitle: String = ""
-    
-    @State private var hasFetchResult: Bool = false
-    @State private var isSelected: Bool = false
-
-    init(rssViewModel: RSSFeedViewModel) {
-        self.rssFeedViewModel = rssViewModel
-    }
-    
     var body: some View {
-        
         Form {
             Text(rssSource.title).font(.system(size: 18, weight: .medium, design: .rounded))
             HStack{
@@ -74,24 +56,36 @@ struct InfoView: View {
                     .border(Color.clear, width: 1)
                     .multilineTextAlignment(.center)
 
-            Text(rssSource.desc)
+                Text(rssSource.desc)
                     
             }
 
             Section(header: Text("date added")) {
                 Text(rssSource.createTimeStr)
+//                    .onTapGesture(count: 1) {
+//                        UIPasteboard.general.setValue(self.rssSource.createTimeStr,
+//                                                      forPasteboardType: kUTTypePlainText as String)
+//                        }
                 }
             Section(header: Text("Feed URL")) {
                 Text(rssSource.url)
+                    .onTapGesture(count: 1) {
+                        UIPasteboard.general.setValue(self.rssSource.url,
+                                                      forPasteboardType: kUTTypePlainText as String)
+                    }
                 }
             Section(header: Text("Image URL")) {
                 Text(rssSource.imageURL)
+                    .onTapGesture(count: 1) {
+                        UIPasteboard.general.setValue(self.rssSource.imageURL,
+                                                      forPasteboardType: kUTTypePlainText as String)
+                    }
                 }
             HStack {
                 Image(systemName: "safari")
                     .fixedSize()
                 ForEach([InfoItem.webView], id: \.self) { _ in
-                        Toggle("Reader View", isOn: self.$isSelected)
+                        Toggle("Safari Reader View", isOn: self.$isSelected)
                     }.toggleStyle(SwitchToggleStyle(tint: .blue))
                 }
             }
@@ -102,13 +96,6 @@ struct InfoView: View {
                 self.presentationMode.wrappedValue.dismiss()
             }) {
                 Text("Done")
-            })
+                }, trailing: EditButton())
         }
     }
-
-struct InfoView_Previews: PreviewProvider {
-    static let rssFeedViewModel = RSSFeedViewModel(rss: RSS.simple(), dataSource: DataSourceService.current.rssItem)
-    static var previews: some View {
-        InfoView(rssViewModel: self.rssFeedViewModel)
-    }
-}
