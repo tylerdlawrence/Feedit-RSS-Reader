@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import NavigationStack
 import KingfisherSwiftUI
 import Combine
 import CoreData
@@ -60,7 +59,7 @@ struct WebView: View {
         let viewModel = WKWebViewModel(rssItem: rssItem)
         itemWrapper = wrapper
         self.rss = rss
-        self.imageLoader = ImageLoader(path: rss.imageURL)
+        self.imageLoader = ImageLoader(urlString: rss.imageURL)
         self.rssItem = rssItem
         self.viewModel = viewModel
         self.onArchiveAction = onArchiveAction
@@ -171,7 +170,7 @@ struct WebView: View {
                     action: self.onGoForwardAction
                 )
                 
-                //if !self.viewModel.progressHide {
+                if !self.viewModel.progressHide {
                     VStack(alignment: .center) {
                         ProgressBar(
                             boardWidth: 6,
@@ -182,7 +181,7 @@ struct WebView: View {
                         .padding(10)
                     }
                     .frame(width: 50, height: 50, alignment: .center)
-                //}
+                }
                 
                 makeFeatureItemView(imageName: FeatureItem.archive(self.rssItem.isArchive).icon, action: self.onArchiveAction)
 

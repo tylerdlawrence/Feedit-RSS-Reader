@@ -9,11 +9,13 @@ import SwiftUI
 import FeedKit
 import CoreData
 import Foundation
-import ModalView
 
 struct SettingView: View {
     
-//    @ObservedObject var settingViewModel: SettingViewModel
+    @Environment(\.presentationMode) var presentationMode
+    
+    @State private var quantity = 1
+
 
     enum ReadMode {
         case safari
@@ -46,23 +48,39 @@ struct SettingView: View {
         return storage
     }
     
+    private var doneButton: some View {
+        Button(action: {
+            self.onDoneAction?()
+            self.presentationMode.wrappedValue.dismiss()
+                
+        }) {
+            Text("Done")
+        }
+    }
+    var onDoneAction: (() -> Void)?
+
     @State private var isDarkModeOn = true
     @State private var isSettingsExpanded: Bool = true
     @State var accounts: String = ""
-    @State var isPrivate: Bool = true
+    @State var isPrivate: Bool = false
     @State var notificationsEnabled: Bool = false
     @State private var previewIndex = 0
     
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("ACCOUNTS")) {
+                Section(header: Text("ACCOUNT")) {
                     TextField("On My iPhone", text: $accounts)
                     Toggle(isOn: $isPrivate) {
                         Image(systemName: "icloud")
                         Text("iCloud Sync")
                     }.toggleStyle(SwitchToggleStyle(tint: .blue))
                 }
+                
+                Stepper("Quantity: \(quantity)",
+                    value: $quantity,
+                    in: 1...99
+                )
 
 //                Section(header: Text("DATA")) {
 //                    Group {
@@ -87,14 +105,14 @@ struct SettingView: View {
 //                    }
                 //}
             //}
-                Section(header: Text("FEEDS")) {
+                Section(header: Text("Feeds")) {
                         Group {
                             HStack {
                                 NavigationLink(destination: self.batchImportView) {
                                         HStack {
-                                        Image(systemName: "square.and.arrow.down")
+                                        Image(systemName: "square.and.arrow.up")
                                         .fixedSize()
-                                        Text("Import")
+                                        Text("Import & Export")
                                         }
                                     }
                                 }
@@ -111,22 +129,41 @@ struct SettingView: View {
                                 Image(systemName: "safari")
                                     .fixedSize()
                                 ForEach([SettingItem.webView], id: \.self) { _ in
-                                        Toggle("Reader View", isOn: self.$isSelected)
+                                        Toggle("Safari View", isOn: self.$isSelected)
                                     }.toggleStyle(SwitchToggleStyle(tint: .blue))
                                 }
                             }
                         }
+                
+                Section(header: Text("About")) {
+                        Group {
+                            HStack {
+                                Link(destination: URL(string: "https://github.com/tylerdlawrence/Feedit-RSS-Reader")!) {
+                                        HStack {
+                                            Image("github")
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fit)
+                                                .frame(width: 25, height: 25)
+                                                .cornerRadius(3.0)
+                                        Text("GitHub")
+                                        }
+                                    }
+                                }
+                            HStack {
+                                Link(destination: URL(string: "https://twitter.com/FeeditRSSReader")!) {
+                                        HStack {
+                                            Image("twitter")
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fit)
+                                                .frame(width: 25, height: 25)
+                                                .cornerRadius(3.0)
+                                        Text("Twitter")
+                                        }
+                                    }
+                                }
 
-//                Section(header: Text("READING & APPEARENCE")) {
-//                            Group {
-//                            //padding()
-//                                HStack {
-//                                    Image(systemName: "safari")
-//                                        .fixedSize()
-//                                    ForEach([SettingItem.webView], id: \.self) { _ in
-//                                            Toggle("Reader View", isOn: self.$isSelected)
-//                                        }.toggleStyle(SwitchToggleStyle(tint: .blue))
-//                                    }
+                        }
+                }
 //
 //                                HStack {
 //                                    HStack {
@@ -136,24 +173,21 @@ struct SettingView: View {
 //                                }
 //                            }
 //                        }
-                //VStack{
-                HStack(alignment: .center) {
-                        Image("launch")
-                            .resizable()
-                            .frame(width: 35, height: 35)
-                        Text("Feedit")
-                        Text("version 1.01")
-                        Text("build 0.0024")
+                Section(header: Text("Copyright © 2021 Tyler D Lawrence"), footer: Text("Feedit version 1.04 build 0.0027")) {
+                    Link(destination: URL(string: "https://tylerdlawrence.net")!) {
+                        HStack {
+                            Image("launch")
+                                .resizable()
+                                .frame(width: 35, height: 35)
+                                .cornerRadius(3.0)
+                            Text("Website")
+                        }
+                    }
                 }
-                
-                VStack(alignment: .center) {
-                    //Spacer()
-                    Text("Created by Tyler D Lawrence")
-                }
-                .padding(.leading, 45.0)
             }
             .listStyle(GroupedListStyle())
             .navigationBarTitle("Settings", displayMode: .automatic)
+            .navigationBarItems(trailing: doneButton)
             .environment(\.horizontalSizeClass, .regular)
         }
         .onAppear {

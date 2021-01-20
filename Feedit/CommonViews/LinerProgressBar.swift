@@ -21,7 +21,7 @@ struct LineGraph: Shape {
 struct LinerProgressBar: View {
     
     var lineWidth: CGFloat = 2
-    var color: Color = .red
+    var color: Color = .blue
     
     @Binding var progress: Double
     
@@ -51,6 +51,5 @@ struct LinerProgressBar_Previews: PreviewProvider {
                 Spacer()
             }
         }
-        .padding()
     }
 }

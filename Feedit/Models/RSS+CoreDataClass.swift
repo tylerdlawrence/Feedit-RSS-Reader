@@ -7,9 +7,19 @@
 
 import Foundation
 import CoreData
+import SwiftUI
+import FeedKit
+import FaviconFinder
+import Combine
+import BackgroundTasks
 
 @objc(RSS)
-public class RSS: NSManagedObject {
-
+class RSS: NSManagedObject, Identifiable {
+    var context: [RSSItem] = [] {
+        didSet {
+            objectWillChange.send()
+        }
+    }
+    
 }
 

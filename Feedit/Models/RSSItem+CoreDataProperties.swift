@@ -5,6 +5,7 @@
 //  Created by Tyler D Lawrence on 8/10/20.
 //
 
+import SwiftUI
 import Foundation
 import CoreData
 
@@ -14,7 +15,7 @@ extension RSSItem: Identifiable {
 
 extension RSSItem {
     static func == (lhs: RSSItem, rhs: RSSItem) -> Bool {
-        return lhs.title == rhs.title && lhs.isArchive == rhs.isArchive
+        return lhs.title == rhs.title && lhs.isArchive == rhs.isArchive && lhs.wasRead == rhs.wasRead && lhs.markAsRead == rhs.markAsRead
     }
 }
 
@@ -35,7 +36,23 @@ extension RSSItem {
     @NSManaged public var author: String
     @NSManaged public var isArchive: Bool
     @NSManaged public var imageURL: String
-    @NSManaged public var isDone: Bool
+    @NSManaged public var isRead: Bool
+    @NSManaged public var isSwiped: Bool
+    @NSManaged public var offset: CGFloat
+    @NSManaged public var status: String
+    @NSManaged public var useReadText: Bool
+    @NSManaged public var wasRead: NSNumber
+    @NSManaged public var firstIndex: Bool
+    @NSManaged public var isFavorite: Bool
+    @NSManaged public var markAsRead: Bool
+    @NSManaged public var markPostRead: Bool
+
+
+
+
+//    @NSManaged public var image: UIImage
+//    
+//    @NSManaged var items: RSS
 
     
     public override func awakeFromInsert() {
@@ -43,9 +60,9 @@ extension RSSItem {
         uuid = UUID()
     }
     
-    static func create(uuid: UUID, imageURL: String, title: String = "", desc: String = "", author: String = "", url: String = "",
+    static func create(uuid: UUID, isDone: Bool, isRead: Bool, imageURL: String, title: String = "", desc: String = "", author: String = "", url: String = "",
                        createTime: Date = Date(), progress: Double = 0, in context: NSManagedObjectContext) -> RSSItem {
-        let item = RSSItem(context: context)
+        let item = RSSItem(context: context) //(context:context)
         item.rssUUID = uuid
         item.uuid = UUID()
         item.imageURL = imageURL
@@ -56,20 +73,17 @@ extension RSSItem {
         item.createTime = createTime
         item.progress = 0
         item.isArchive = false
-        item.isDone = false
+        item.isRead = isRead
 
+//        item.isRead = false
+        //item.useReadText = false
+        
 
         return item
     }
     
-    var wrappedTitle: String {
-        title 
-    }
 
-    var wrappedDTitle: String {
-        title 
-    }
-        
+            
     static func requestObjects(rssUUID: UUID, start: Int = 0, limit: Int = 20) -> NSFetchRequest<RSSItem> {
         let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
         let predicate = NSPredicate(format: "rssUUID = %@", argumentArray: [rssUUID])
@@ -90,9 +104,18 @@ extension RSSItem {
         return request
     }
     
+
+    
     func requestCountArchiveObjects() -> NSFetchRequest<RSSItem> {
             let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
             let predicate = NSPredicate(format: "isArchive = true")
+            request.predicate = predicate
+            return request
+        }
+    
+    func requestCountRSSObjects() -> NSFetchRequest<RSSItem> {
+            let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
+            let predicate = NSPredicate(format: "unreadOnly = true")
             request.predicate = predicate
             return request
         }
@@ -103,12 +126,8 @@ extension RSSItem {
         }
     }
 
-
-
 extension RSSItem: ObjectValidatable {
     func hasChangedValues() -> Bool {
         return hasPersistentChangedValues
     }
 }
-
-

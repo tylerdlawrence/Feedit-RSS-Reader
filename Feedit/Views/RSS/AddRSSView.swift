@@ -12,10 +12,8 @@ struct AddRSSView: View {
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.managedObjectContext) var managedObjectContext
     
-//    @FetchRequest(entity: Category.entity(), sortDescriptors: []) var categories: FetchedResults<Category>
-    
     @ObservedObject var viewModel: AddRSSViewModel
-    @State private var previewIndex = 0
+//    @State private var previewIndex = 0
 
     var onDoneAction: (() -> Void)?
     var onCancelAction: (() -> Void)?
@@ -27,7 +25,6 @@ struct AddRSSView: View {
             self.presentationMode.wrappedValue.dismiss()
         }) {
             Image(systemName: "checkmark.circle")
-            //Text("Done")
         }.disabled(!isVaildSource)
     }
     
@@ -37,9 +34,7 @@ struct AddRSSView: View {
             self.onCancelAction?()
             self.presentationMode.wrappedValue.dismiss()
         }) {
-            Image(systemName: "chevron.left")
-            //Text("All Items") //xmark
-            //Text("Cancel")
+            Image(systemName: "xmark")
         }
     }
     
@@ -50,39 +45,12 @@ struct AddRSSView: View {
     }
     
     private var sectionHeader: some View {
-        VStack {
-            HStack(alignment: .center) {
-//                Text("")//input//search
-               // Spacer()
+        VStack(alignment: .center) {
+            HStack{
                 Button(action: self.fetchDetail) {
-                    Text("Search")
-                        .font(.headline)
-                        .fontWeight(.bold)
-                    
+                    Text("Search").font(.system(size: 17, weight: .medium, design: .rounded))
                 }
-            }
-            .multilineTextAlignment(.center)
-
-            .padding(.leading, 120)
-        }
-    }
-    
-    
-    private var helpButton: some View {
-        Button(action: {
-                self.showingAlert = true
-            }) {
-            Image(systemName: "questionmark.circle")
-            }
-            .alert(isPresented: $showingAlert) {
-                Alert(title: Text("Where do I find an RSS feed?"), message: Text("RSS feed URLs can be found on most websites. Typically, RSS feeds will have /feed .rss, .xml, .json or .atom at the end of the site address."), dismissButton: .default(Text("Got it!")))
-        }
-    }
-    
-    private var trailingButtons: some View {
-        HStack(alignment: .top, spacing: 24) {
-            //helpButton
-            doneButton
+            }.padding(.horizontal, 120.0)
         }
     }
     
@@ -96,82 +64,54 @@ struct AddRSSView: View {
     @State private var feedUrl: String = ""
     @State private var feedTitle: String = ""
 
-//    @Binding var isPresented: Bool
-
     init(viewModel: AddRSSViewModel,
          onDoneAction: (() -> Void)? = nil,
          onCancelAction: (() -> Void)? = nil) {
         self.viewModel = viewModel
         self.onDoneAction = onDoneAction
         self.onCancelAction = onCancelAction
-        
     }
+    
     var body: some View {
         NavigationView {
             Form {
-                Section() { //header: sectionHeader
+                Section() {
                     HStack(alignment: .center){
                         Image(systemName: "magnifyingglass")
                             .opacity(0.4)
                             TextField("Feed URL", text: $feedUrl)
+//                                .textCase(.lowercase)
+                                .disableAutocorrection(true)
+                                .opacity(0.4)
                                 .padding(.trailing)
                                 .multilineTextAlignment(.leading)
-                            .opacity(0.4)
-                            .disableAutocorrection(true)
                     }
                     HStack(alignment: .center){
                         sectionHeader
                     
                     }
                 }
-//                    Picker("Manage Folders", selection: $previewIndex) {
-//                        ForEach(0 ..< categories.count) {
-//                            Text(categories[$0].name)
-//                            NavigationView {
-//                                VStack {
-//                                    List(categories, id: \.self) { category in
-//                                        VStack(alignment: .center) {
-//                                            Text(category.name)
-//                                                .cornerRadius(3)
-//                                            Text("Number of articles: \(category.articlesCount)")
-//                                                .font(.footnote)
-//                                        }
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//                    .frame(width: 300, height: 35)
-//                    .font(.body)
-//                    .padding(.leading, 90.0)
-                
                     if !hasFetchResult {
                         EmptyView()
-
                     } else {
                         if viewModel.rss != nil {
-                            //Spacer()
-                            Section(header: Text("Search Results")
-                                        .font(.subheadline)
-                                        .fontWeight(.heavy)
-                                        .multilineTextAlignment(.center)
-                                        .padding(.leading, 100.0)
-                                        ){
-                                RSSDisplayView(rss: viewModel.rss!)
-                                    .font(.subheadline)
-                            }
+                        Section(header: Text("Feed").font(.system(size: 15, weight: .medium, design: .rounded))
+                                    
+                                    ){
+                            RSSDisplayView(rss: viewModel.rss!)
+                                .font(.system(size: 15, weight: .medium, design: .rounded))
+                        }
                     }
                 }
             }
             .navigationBarTitle("Add Feed")
-            .navigationBarItems(leading: cancelButton, trailing: trailingButtons)
+            .navigationBarItems(leading: cancelButton, trailing: doneButton)
         }
         .onDisappear {
             self.viewModel.cancelCreateNewRSS()
     }
 }
-    @State private var showingAlert = false
-    
+
 func fetchDetail() {
     guard let url = URL(string: self.feedUrl),
         let rss = viewModel.rss else {
@@ -188,12 +128,3 @@ func fetchDetail() {
         }
     }
 }
-
-//struct AddRSSView_Previews: PreviewProvider {
-//    static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
-//    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-//    static var previews: some View {
-//        HomeView(viewModel: self.viewModel, archiveListViewModel: self.archiveListViewModel, rssFeedViewModel: self.rssFeedViewModel)
-//            .preferredColorScheme(.dark)
-//    }
-//}
