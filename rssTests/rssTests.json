@@ -1,0 +1,16 @@
+"""
+	[
+        {
+        	"url": "https://developer.apple.com/news/rss/news.rss",
+            "title": "Apple Developer News",
+            "description": "Apple Developer News",
+            "imageUrl": "https://developer.apple.com/assets/elements/icons/app-clips/app-clips-256x256.png"
+        },
+        {
+            "url": "https://www.apple.com/newsroom/rss-feed.rss",
+            "title": "Apple Newsroom",
+            "description": "Apple Newsroom",
+            "imageUrl": "https://developer.apple.com/assets/elements/icons/app-clips/app-clips-256x256.png"
+        },
+    ]
+"""
