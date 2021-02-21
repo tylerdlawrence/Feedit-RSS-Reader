@@ -61,3 +61,19 @@
 //        _ = dataSource.saveUpdateObject()
 //    }
 //}
+
+//@State private var badgeCount: Int = 1
+//var badgePosition: CGFloat = 2
+//var tabsCount: CGFloat = 3
+// Badge View
+//                            ZStack {
+//                              Circle()
+//                                .foregroundColor(Color.red)
+//                                    Text("\(self.viewModel.items.count)")
+//                                        .font(.caption)
+//
+//                            }
+//                            .frame(width: 10, height: 10)
+//                            .offset(x: ( ( 2 * self.badgePosition) - -0.33 ) * ( geometry.size.width / ( 2 * self.tabsCount ) ) + 2, y: -18)
+//                            .opacity(self.viewModel.items.count == 0 ? 0 : 1.0)
+//                }

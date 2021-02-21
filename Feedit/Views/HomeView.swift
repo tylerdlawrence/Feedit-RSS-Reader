@@ -6,11 +6,6 @@
 //
 
 import SwiftUI
-import BetterSafariView
-import Introspect
-import UIKit
-import MobileCoreServices
-import Combine
 
 struct HomeView: View {
     
@@ -115,6 +110,7 @@ struct HomeView: View {
                     .foregroundColor(Color("text"))
                     .cornerRadius(8)
             }
+            
             HStack {
                 ZStack{
                     NavigationLink(destination: DataNStorageView()) {
@@ -145,6 +141,7 @@ struct HomeView: View {
                     }
                     .opacity(0.0)
                     .buttonStyle(PlainButtonStyle())
+                    
                     HStack{
                         Image(systemName: "archivebox.fill").font(.system(size: 20, weight: .thin))
                             .foregroundColor(Color("tab"))
@@ -153,19 +150,7 @@ struct HomeView: View {
                         Text("Archive")
                             .font(.system(size: 17, weight: .regular, design: .rounded))
                         Spacer()
-//                    Text("\(self.archiveListViewModel.items.count)")
-//                        .font(.caption)
-//                        .fontWeight(.bold)
-//                        .padding(.horizontal, 7)
-//                        .padding(.vertical, 1)
-//                        .background(Color.gray.opacity(0.5))
-//                        .opacity(0.4)
-//                        .foregroundColor(Color("text"))
-//                        .cornerRadius(8)
                     }
-//                    .onAppear {
-//                        self.unreadListViewModel.fecthResults()
-//                    }
                 }
                 .accentColor(Color("tab"))
                 .foregroundColor(Color("darkerAccent"))
@@ -185,19 +170,7 @@ struct HomeView: View {
                         Text("Starred")
                             .font(.system(size: 17, weight: .regular, design: .rounded))
                             Spacer()
-//                        Text("\(self.archiveListViewModel.items.count)")
-//                            .font(.caption)
-//                            .fontWeight(.bold)
-//                            .padding(.horizontal, 7)
-//                            .padding(.vertical, 1)
-//                            .background(Color.gray.opacity(0.5))
-//                            .opacity(0.4)
-//                            .foregroundColor(Color("text"))
-//                            .cornerRadius(8)
                     }
-//                    .onAppear {
-//                        self.archiveListViewModel.fecthResults()
-//                    }
                 }
                 .accentColor(Color("tab"))
                 .foregroundColor(Color("darkerAccent"))
@@ -208,6 +181,7 @@ struct HomeView: View {
                     Text("All Items")
                         .font(.system(size: 18, weight: .medium, design: .rounded))
                 }
+                
             })
             .textCase(nil)
             .accentColor(Color("tab"))
@@ -235,7 +209,6 @@ struct HomeView: View {
                         self.viewModel.delete(at: index)
                     }
                 }
-
                 .accentColor(Color("tab"))
                 .foregroundColor(Color("darkerAccent"))
                 .listRowBackground(Color("accent"))
@@ -255,12 +228,21 @@ struct HomeView: View {
     private let addRSSPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("addNewRSSPublisher"))
     private let rssRefreshPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("rssListNeedRefresh"))
     
+    var dateFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        return formatter
+    }
+    
     var body: some View {
         NavigationView{
             VStack {
                 ZStack {
                     List{
                         Spacer()
+                            .accentColor(Color("tab"))
+                            .foregroundColor(Color("darkerAccent"))
+                            .listRowBackground(Color("accent"))
                         allItemsSection
                         Spacer()
                         feedsSection
@@ -270,7 +252,6 @@ struct HomeView: View {
                                                 Toggle("", isOn: $isRead)
                                                     .toggleStyle(CheckboxStyle())})
                     .listStyle(PlainListStyle())
-                    //.listStyle(SidebarListStyle())
                     .navigationBarTitle("Account")
                 }
             Spacer()
@@ -296,14 +277,6 @@ struct HomeView: View {
             .onReceive(rssRefreshPublisher, perform: { output in
                 self.viewModel.fecthResults()
             })
-//            .sheet(isPresented: $isSheetPresented, content: {
-//                if FeaureItem.add == self.selectedFeatureItem {
-//                    AddRSSView(viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss),
-//                        onDoneAction: self.onDoneAction)
-//                } else if FeaureItem.setting == self.selectedFeatureItem {
-//                    SettingView(fetchContentTime: .constant("minute1"))
-//                }
-//            })
             .sheet(isPresented: $isSheetPresented, content: {
                 if FeaureItem.add == self.selectedFeatureItem {
                     AddRSSView(
@@ -312,9 +285,6 @@ struct HomeView: View {
                 } else if FeaureItem.setting == self.selectedFeatureItem {
                     SettingView(fetchContentTime: .constant("minute1"))
                 }
-//                else if FeaureItem.star == self.selectedFeatureItem {
-//                    archiveListView
-//                }
             })
             .onAppear {
                 self.viewModel.fecthResults()
@@ -379,6 +349,21 @@ extension DisclosureGroup where Label == Text {
       content: content
     )
   }
+}
+
+struct HomeFooter: View {
+    
+    var dateFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        return formatter
+    }
+    var body: some View {
+        HStack {
+            Text("Today at \(dateFormatter.string(from: Date()))")
+                .font(.system(size: 12, weight: .regular, design: .rounded))
+        }//.padding(.leading)
+    }
 }
 
 

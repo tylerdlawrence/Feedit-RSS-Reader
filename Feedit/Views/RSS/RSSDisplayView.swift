@@ -83,16 +83,18 @@ struct RSSDisplayView: View {
         }
     }
 }
-//#if DEBUG
-//    struct SourceListRow_Previews: PreviewProvider {
-//        static let rss = DataSourceService.current
-//        static var previews: some View {
-//            let rss = RSS.create(url: "https://",
-//                                 title: "simple demo",
-//                                 desc: "show me your desc",
-//                                 imageURL: "", in: Persistence.current.context)
-//            return RSSDisplayView(rss: rss)
-////            RSSDisplayView(rss: RSS.simple()).frame(width: 100, height: 60, alignment: .leading)
-//    }
-//}
-//#endif
+
+#if DEBUG
+
+struct SourceDisplayView_Previews: PreviewProvider {
+    static let rss = DataSourceService.current
+    static var previews: some View {
+        let rss = RSS.create(url: "https://",
+                             title: "simple demo",
+                             desc: "show me your desc",
+                             image: "", in: Persistence.current.context)
+        return RSSDisplayView(rss: rss)
+    }
+}
+
+#endif

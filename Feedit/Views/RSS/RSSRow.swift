@@ -116,7 +116,7 @@ struct RSSRow: View {
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 20, height: 20,alignment: .center)
                         .cornerRadius(2)
-                        .border(Color.clear, width: 1)
+                        .border(Color("text"), width: 1)
                     Text(rss.title)
                         .font(.system(size: 18, weight: .regular, design: .rounded))
                         .lineLimit(1)

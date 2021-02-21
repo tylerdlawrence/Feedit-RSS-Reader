@@ -153,7 +153,6 @@ struct Footer: View {
     }
     var body: some View {
         HStack {
-//            Spacer()
             Text("Last Refresh: \(dateFormatter.string(from: rssSource.updateTime!))")
         }.padding(.leading)
     }
