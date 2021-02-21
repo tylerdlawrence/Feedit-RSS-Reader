@@ -81,7 +81,7 @@ struct RSSRow: View {
             title: "",
             systemImage: "ellipsis",
             view: nil,
-            backgroundColor: Color("accent"),
+            backgroundColor: Color("tab"),
             action: { showAlert.toggle()
             }
         )
@@ -98,7 +98,7 @@ struct RSSRow: View {
 //            },
 //            feedback: true
 //        )
-        let swipeSlots = SwipeCellSlot(slots: [infoButton], slotStyle: .destructive, buttonWidth: 70)
+        let swipeSlots = SwipeCellSlot(slots: [infoButton], slotStyle: .destructive, buttonWidth: 60)
                 HStack(alignment: .center){
                     KFImage(URL(string: rss.image))
                         .placeholder({
@@ -132,7 +132,7 @@ struct RSSRow: View {
 //                        .foregroundColor(Color("text"))
 //                        .cornerRadius(8)
                 }
-                .frame(height: 25)
+                .frame(height: 40)
                 .onTapGesture {
                 }
                 .swipeCell(cellPosition: .both, leftSlot: swipeSlots, rightSlot: nil)
@@ -318,3 +318,24 @@ struct RSSRow_Previews: PreviewProvider {
 //            }
     }
 }
+//MARK: - Ext. Delegate SFSafariViewControllerDelegate
+//extension ProjectImagePicker: SFSafariViewControllerDelegate {
+//    public func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+//        //image was returned by Copy
+//        if pasteboard.hasImages {
+//            guard let image = pasteboard.image else { return }
+//            self.delegate?.didSelect(image: image)
+//        //Image Url was returned by Copy
+//        } else if pasteboard.hasURLs {
+//            guard let url = pasteboard.url else { return }
+//
+//            if let data = try? Data(contentsOf: url) {
+//                if let image = UIImage(data: data) {
+//                    self.delegate?.didSelect(image: image)
+//                }
+//            }
+//        }
+//        pasteboard.items.removeAll()
+//        controller.dismiss(animated: true, completion: nil)
+//    }
+//}

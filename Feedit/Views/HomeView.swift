@@ -28,6 +28,7 @@ struct HomeView: View {
     @State private var revealFeedsDisclosureGroup = true
     @State private var revealSmartFilters = true
     @State private var isRead = false
+    @State private var isLoading = false
     @State var isExpanded = false
     @State var sources: [RSS] = []
 
@@ -228,17 +229,13 @@ struct HomeView: View {
     private let addRSSPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("addNewRSSPublisher"))
     private let rssRefreshPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("rssListNeedRefresh"))
     
-    var dateFormatter: DateFormatter {
-        let formatter = DateFormatter()
-        formatter.timeStyle = .short
-        return formatter
-    }
-    
     var body: some View {
         NavigationView{
             VStack {
                 ZStack {
+                    
                     List{
+
                         Spacer()
                             .accentColor(Color("tab"))
                             .foregroundColor(Color("darkerAccent"))
@@ -248,17 +245,31 @@ struct HomeView: View {
                         feedsSection
                     }
                     .navigationBarItems(trailing:
-                                            HStack(spacing: 24) {
+                                            HStack(spacing: 10) {
+                                                Button(action: {
+                                                    self.isLoading = true
+                                                }) {
+                                                Image(systemName: "arrow.clockwise").font(.system(size: 16, weight: .bold))
+                                                    .foregroundColor(Color("tab"))
+                                                    .frame(width: 50, height: 50)
+                                                    .rotationEffect(Angle(degrees: isLoading ? 360 : 0))
+                                                    .animation(Animation.linear(duration: 2).repeatCount(3, autoreverses: false))
+                                                    .onAppear() {
+                                                        self.isLoading = true
+                                                    }
+                                                }
                                                 Toggle("", isOn: $isRead)
-                                                    .toggleStyle(CheckboxStyle())})
+                                                    .toggleStyle(CheckboxStyle())
+                                                
+                                            })
                     .listStyle(PlainListStyle())
                     .navigationBarTitle("Account")
                 }
             Spacer()
-            if addRSSProgressValue > 0 && addRSSProgressValue < 1.0 {
-                LinerProgressBar(lineWidth: 3, color: .blue, progress: $addRSSProgressValue)
-                    .frame(width: UIScreen.main.bounds.width, height: 3, alignment: .leading)
-            }
+                if addRSSProgressValue > 0 && addRSSProgressValue < 1.0 {
+                    LinerProgressBar(lineWidth: 3, color: .blue, progress: $addRSSProgressValue)
+                        .frame(width: UIScreen.main.bounds.width, height: 3, alignment: .leading)
+                }
             navButtons
                 .frame(width: UIScreen.main.bounds.width, height: 49, alignment: .leading)
             NavigationLink(
@@ -310,6 +321,15 @@ extension HomeView {
     func deleteItems(at offsets: IndexSet) {
         viewModel.items.remove(atOffsets: offsets)
     }
+    func startProgressBar() {
+        for _ in 0...100 {
+            self.addRSSProgressValue += 0.015
+            
+        }
+    }
+    func resetProgressBar() {
+        self.addRSSProgressValue = 0.0
+    }
 }
 
 struct HomeView_Previews: PreviewProvider {
@@ -350,20 +370,3 @@ extension DisclosureGroup where Label == Text {
     )
   }
 }
-
-struct HomeFooter: View {
-    
-    var dateFormatter: DateFormatter {
-        let formatter = DateFormatter()
-        formatter.timeStyle = .short
-        return formatter
-    }
-    var body: some View {
-        HStack {
-            Text("Today at \(dateFormatter.string(from: Date()))")
-                .font(.system(size: 12, weight: .regular, design: .rounded))
-        }//.padding(.leading)
-    }
-}
-
-

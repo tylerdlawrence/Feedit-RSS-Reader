@@ -44,12 +44,12 @@ struct InfoView: View {
                     HStack {
                         KFImage(URL(string: rssSource.image))
                             .placeholder({
-                                Image("Thumbnail")
+                                Image("getInfo")
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
                                     .frame(width: 50, height: 50,alignment: .center)
                                     .cornerRadius(5)
-                                    .border(Color.clear, width: 1)
+                                    .border(Color("Color"), width: 2)
                                     .multilineTextAlignment(.center)
 
                             })
@@ -106,7 +106,7 @@ struct InfoView: View {
                                     }
                          
                                     Button(action: {
-//                                        NavigationLink("", destination: Link("", destination: URL(string: rss.url.host!)!))
+//                                        NavigationLink("", destination: Link("", destination: URL(string: rss.url)!))
                                     }) {
                                         Text("Go To Website")
                                         Spacer()
@@ -118,7 +118,7 @@ struct InfoView: View {
 //                                Link("", destination: URL(string: rssSource.url)!)
                             }) {
                                 Image(systemName: "safari")
-                                    .font(.system(size: 18, weight: .bold, design: .rounded)).foregroundColor(Color("tab"))
+                                    .font(.system(size: 20, weight: .regular, design: .rounded)).foregroundColor(Color("tab"))
                             }
                         }
                     }
