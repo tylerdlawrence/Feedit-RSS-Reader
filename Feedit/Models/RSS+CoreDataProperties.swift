@@ -20,7 +20,6 @@ extension RSS {
     }
 
     @NSManaged public var urlString: String?
-//    @NSManaged public var imageURL: String
     @NSManaged public var url: String
     @NSManaged public var title: String
     @NSManaged public var desc: String
@@ -33,7 +32,9 @@ extension RSS {
     @NSManaged public var isArchive: Bool
     @NSManaged public var isRead: Bool
     @NSManaged public var readDate : Date?
-
+    @NSManaged public var order: Int32
+    @NSManaged public var item: RSSItem
+    
     public var rssURL: URL? {
         return URL(string: url)
     }
@@ -56,7 +57,7 @@ extension RSS {
     }
     
     static func simple() -> RSS {
-        let rss = RSS(context: Persistence.current.context)
+        let rss = RSS(context: CoreData.stack.context)
         rss.title = "demo"
         rss.image = ""
         rss.desc = "desc demo"

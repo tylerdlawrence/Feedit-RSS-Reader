@@ -12,6 +12,6 @@ class DataSourceService: NSObject {
     
     static let current = DataSourceService()
     
-    var rss = RSSDataSource(parentContext: Persistence.current.context)
-    var rssItem = RSSItemDataSource(parentContext: Persistence.current.context)
+    var rss = RSSDataSource(parentContext: CoreData.stack.context)
+    var rssItem = RSSItemDataSource(parentContext: CoreData.stack.context)
 }

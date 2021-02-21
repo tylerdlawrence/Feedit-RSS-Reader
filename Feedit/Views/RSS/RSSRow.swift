@@ -27,7 +27,7 @@ struct RSSRow: View {
         case info
         case url
     }
-    
+
     @ObservedObject var rss: RSS
     @ObservedObject var imageLoader: ImageLoader
     @State var showActionSheet: Bool = false
@@ -50,10 +50,13 @@ struct RSSRow: View {
 
     var contextMenuAction: ((RSS) -> Void)?
     var isRead: ((RSS) -> Void)?
+    
+
+    
     init(rss: RSS) {
         self.rss = rss
-//        self.imageLoader = ImageLoader(urlString: rss.imageURL)
         self.imageLoader = ImageLoader(path: rss.image)
+
 //        rssItemDataSource = rssItem
 //        let db = DataSourceService.current
 //        dataViewModel = DataNStorageViewModel(rss: db.rss, rssItem: db.rssItem)
@@ -191,34 +194,34 @@ struct RSSRow: View {
                 }) {
                     Text("Unsubscribe from \(rss.title)?")
                     Image(systemName: "xmark")
-                }
+                }.foregroundColor(.red)
             }
             .actionSheet(isPresented: $showAlert) {
                 ActionSheet(
                     title: Text(rss.title),
                     message: nil,
                     buttons: [
-                        .default(Text("Get Info").foregroundColor(Color("tab")), action: {
+                        .default(Text("Get Info"), action: {
                             infoHaptic.toggle()
                         }),
-                        .default(Text("Go To Website").foregroundColor(Color("tab")), action: {
+                        .default(Text("Go To Website"), action: {
                             openURL(URL(string: rss.url)!)
                         }
                         ),
-                        .default(Text("Copy Feed URL").foregroundColor(Color("tab")), action: {
+                        .default(Text("Copy Feed URL"), action: {
                             self.actionSheetShown = true
                             UIPasteboard.general.setValue(rss.url,
                                                           forPasteboardType: kUTTypePlainText as String)
                         }),
-                        .default(Text("Copy Website URL").foregroundColor(Color("tab")), action: {
+                        .default(Text("Copy Website URL"), action: {
                             self.actionSheetShown = true
                             UIPasteboard.general.setValue(rss.url,
                                                           forPasteboardType: kUTTypePlainText as String)
                         }),
-//                        .default(Text("Unsubscribe").foregroundColor(.red), action: {
-////                            self.deleteItem()
-//                        }),
-                        .cancel(Text("Cancel").foregroundColor(.red)),
+                        .destructive(Text("Unsubscribe"), action: {
+//                            self.deleteItem()
+                        }),
+                        .cancel(),
                     ]
                 )
             }.frame(height: 25)
@@ -299,13 +302,13 @@ struct RSSRow_Previews: PreviewProvider {
     static let db = DataSourceService.current
     static var dataViewModel = DataNStorageViewModel(rss: db.rss, rssItem: db.rssItem)
     static let rss = DataSourceService.current
-    static let rssFeedViewModel = RSSFeedViewModel(rss: RSS(context: Persistence.current.context), dataSource: DataSourceService.current.rssItem)
+    static let rssFeedViewModel = RSSFeedViewModel(rss: RSS(context: CoreData.stack.context), dataSource: DataSourceService.current.rssItem)
 
     static var previews: some View {
         let rss = RSS.create(url: "https://",
                              title: "The GitHub Blog",
                              desc: "Updates, ideas, and inspiration from GitHub to help developers build and design software.",
-                             image: "https://github.blog/wp-content/uploads/2019/01/cropped-github-favicon-512.png?fit=32%2C32", in: Persistence.current.context)
+                             image: "https://github.blog/wp-content/uploads/2019/01/cropped-github-favicon-512.png?fit=32%2C32", in: CoreData.stack.context)
 
         return
 

@@ -20,6 +20,12 @@ final class UserData: ObservableObject {
 }
 
 struct RSSFeedListView: View {
+    
+    @StateObject private var dataSource = CoreDataDataSource<RSSItem>()
+    @State private var sortAscending: Bool = true
+    @State private var showingItemAddView: Bool = false
+    @State private var editMode: EditMode = .inactive
+    
     enum FilterType {
         case all, unread, starred
     }
@@ -123,7 +129,7 @@ struct RSSFeedListView: View {
                         .buttonStyle(PlainButtonStyle())
                         
                         HStack {
-                            
+                            //, order: item.order, check: item.selected
                             RSSItemRow(wrapper: item, menu: self.contextmenuAction(_:))
                                 .contentShape(Rectangle())
                                 .onTapGesture {
@@ -183,8 +189,11 @@ struct RSSFeedListView: View {
                     }
                     ToolbarItem(placement: .bottomBar) {
                                 
-                        Toggle("", isOn: $starOnly)
-                            .toggleStyle(StarStyle())
+//                        Toggle("", isOn: $starOnly)
+//                            .toggleStyle(StarStyle())
+                        Image(systemName: (sortAscending ? "arrow.down" : "arrow.up"))
+                            .foregroundColor(Color("tab"))
+                            .onTapGesture(perform: self.onToggleSort )
                                         
                         }
                     ToolbarItem(placement: .bottomBar) {
@@ -227,6 +236,9 @@ struct RSSFeedListView: View {
     }
     func contextmenuAction(_ item: RSSItem) {
         rssFeedViewModel.archiveOrCancel(item)
+    }
+    public func onToggleSort() {
+        self.sortAscending.toggle()
     }
 }
 //    var body: some View {

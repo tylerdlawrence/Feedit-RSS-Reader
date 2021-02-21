@@ -6,14 +6,15 @@
 //
 
 import UIKit
+import SwiftUI
 import CoreData
 import Foundation
 
-class AppEnvironment: NSObject {
+class UserEnvironment: NSObject, ObservableObject {
     
     static let prefix = "com.tylerdlawrence.feedit.app.environment"
     
-    static let current = AppEnvironment()
+    static let current = UserEnvironment()
     
     @UserDefault(key: "\(prefix).light", default: false)
     var lightMode: Bool

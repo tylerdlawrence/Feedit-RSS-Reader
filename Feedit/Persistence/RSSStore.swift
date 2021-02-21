@@ -25,7 +25,7 @@ class RSSStore: NSObject {
     
     
     static let instance = RSSStore()
-    private let persistence = Persistence.current
+    private let persistence = CoreData.stack
     
     private lazy var fetchedResultsController: NSFetchedResultsController<RSS> = {
         let fetchRequest: NSFetchRequest<RSS> = RSS.fetchRequest()

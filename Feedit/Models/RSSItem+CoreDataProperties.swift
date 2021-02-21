@@ -9,10 +9,6 @@ import SwiftUI
 import Foundation
 import CoreData
 
-extension RSSItem: Identifiable {
-    
-}
-
 extension RSSItem {
     static func == (lhs: RSSItem, rhs: RSSItem) -> Bool {
         return lhs.title == rhs.title && lhs.isArchive == rhs.isArchive
@@ -34,10 +30,12 @@ extension RSSItem {
     @NSManaged public var url: String
     @NSManaged public var uuid: UUID?
     @NSManaged public var author: String
-//    @NSManaged public var imageURL: String
     @NSManaged public var isArchive: Bool
     @NSManaged public var isRead: Bool
     @NSManaged public var image: String
+    @NSManaged public var order: Int32
+    @NSManaged public var selected: Bool
+//    @NSManaged public var attribute: RSS
     
     public override func awakeFromInsert() {
         super.awakeFromInsert()

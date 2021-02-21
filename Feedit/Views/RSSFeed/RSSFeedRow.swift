@@ -21,18 +21,19 @@ import Intents
 struct RSSItemRow: View {
 //    @ObservedObject var rssFeedViewModel: RSSFeedViewModel
     @ObservedObject var itemWrapper: RSSItem
-//    @ObservedObject var rss: RSS
     @State private var isStarred = false
     @State private var isRead = false
     @State private var selectedItem: RSSItem?
     var contextMenuAction: ((RSSItem) -> Void)?
     var markPostRead: (() -> Void)?
-//    var rssSource: RSS {
-//        return self.rssFeedViewModel.rss
-//    }
-    init(wrapper: RSSItem, isRead: ((RSSItem) -> Void)? = nil, menu action: ((RSSItem) -> Void)? = nil) {
+
+//    var order: Int32
+//    var check: Bool
+    init(wrapper: RSSItem, isRead: ((RSSItem) -> Void)? = nil, menu action: ((RSSItem) -> Void)? = nil) { //, order: Int32, check: Bool
         itemWrapper = wrapper
         contextMenuAction = action
+//        self.order = order
+//        self.check = check
     }
     var body: some View {
         let toggleStarred = SwipeCellButton(
@@ -178,8 +179,18 @@ struct RSSItemRow: View {
     //                    .clipShape(RoundedRectangle(cornerRadius: 10))
     //                    .opacity(self.isRead ? 1 : 0)
                     }
-                }
+//                HStack {
+//                    Text(String(order))
+//                        .font(.subheadline)
+//                        .foregroundColor(.gray)
+//                    Spacer()
+//                }
+//            }
+//            if self.check {
+//                Image(systemName: "checkmark")
+               }
             }
+
             .swipeCell(cellPosition: .both, leftSlot: read, rightSlot: star)
             .contextMenu {
                 Section{

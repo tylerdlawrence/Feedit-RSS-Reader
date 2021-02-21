@@ -92,7 +92,7 @@ struct SourceDisplayView_Previews: PreviewProvider {
         let rss = RSS.create(url: "https://",
                              title: "simple demo",
                              desc: "show me your desc",
-                             image: "", in: Persistence.current.context)
+                             image: "", in: CoreData.stack.context)
         return RSSDisplayView(rss: rss)
     }
 }

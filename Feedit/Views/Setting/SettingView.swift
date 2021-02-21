@@ -187,10 +187,10 @@ struct SettingView: View {
             }
             .onAppear {
 //                UITableView.appearance().separatorStyle = .none
-                self.isSelected = AppEnvironment.current.useSafari
+                self.isSelected = UserEnvironment.current.useSafari
             }
             .onDisappear {
-                AppEnvironment.current.useSafari = self.isSelected
+                UserEnvironment.current.useSafari = self.isSelected
         }
         }
     }

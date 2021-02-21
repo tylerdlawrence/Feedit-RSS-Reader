@@ -100,7 +100,7 @@ import SwiftUI
 
 class RSSItemStore: NSObject, ObservableObject {
 
-    private let persistence = Persistence.current
+    private let persistence = CoreData.stack
 
     static let instance = RSSItemStore()
 

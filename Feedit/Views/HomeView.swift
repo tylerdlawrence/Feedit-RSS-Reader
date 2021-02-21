@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import CoreData
+import Introspect
 
 struct HomeView: View {
     
@@ -229,13 +231,16 @@ struct HomeView: View {
     private let addRSSPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("addNewRSSPublisher"))
     private let rssRefreshPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("rssListNeedRefresh"))
     
+//    @State private var progressAmount = 0.0
+//    @State private var progress = 0.5
+//    let timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
+
+    @State private var isShowing = false
     var body: some View {
         NavigationView{
             VStack {
                 ZStack {
-                    
                     List{
-
                         Spacer()
                             .accentColor(Color("tab"))
                             .foregroundColor(Color("darkerAccent"))
@@ -243,6 +248,7 @@ struct HomeView: View {
                         allItemsSection
                         Spacer()
                         feedsSection
+                        
                     }
                     .navigationBarItems(trailing:
                                             HStack(spacing: 10) {
@@ -260,7 +266,6 @@ struct HomeView: View {
                                                 }
                                                 Toggle("", isOn: $isRead)
                                                     .toggleStyle(CheckboxStyle())
-                                                
                                             })
                     .listStyle(PlainListStyle())
                     .navigationBarTitle("Account")
@@ -370,3 +375,5 @@ extension DisclosureGroup where Label == Text {
     )
   }
 }
+
+

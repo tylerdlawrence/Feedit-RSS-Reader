@@ -50,7 +50,7 @@ struct ArchiveListView: View {
                         .buttonStyle(PlainButtonStyle())
                         
                         HStack{
-                            RSSItemRow(wrapper: item)
+                            RSSItemRow(wrapper: item) //, order: item.order, check: item.selected
                                 .onTapGesture {
                                     self.selectedItem = item
                                 }
