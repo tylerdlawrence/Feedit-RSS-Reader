@@ -6,18 +6,9 @@
 //
 
 import SwiftUI
-import Foundation
 import MobileCoreServices
-import SDWebImageSwiftUI
 import SwipeCell
-import UIKit
-import Combine
-import AudioToolbox
-import Foundation
-import FeedKit
 import KingfisherSwiftUI
-
-var reporter = PassthroughSubject<String, Never>()
 
 struct RSSRow: View {
     @Environment(\.presentationMode) var presentationMode
@@ -30,36 +21,14 @@ struct RSSRow: View {
 
     @ObservedObject var rss: RSS
     @ObservedObject var imageLoader: ImageLoader
-    @State var showActionSheet: Bool = false
     @State private var actionSheetShown = false
     @State private var showAlert = false
     @State var infoHaptic = false
     @State private var toggle = false
-//    var rssSource: RSS {
-//        return self.rssFeedViewModel.rss
-//    }
-    var actionSheet: ActionSheet {
-        ActionSheet(title: Text("Action Sheet"), message: Text("Choose Option"), buttons: [
-            .default(Text("Save")),
-            .default(Text("Delete")),
-            .destructive(Text("Cancel"))
-        ])
-    }
-    
-
-
-    var contextMenuAction: ((RSS) -> Void)?
-    var isRead: ((RSS) -> Void)?
-    
-
     
     init(rss: RSS) {
         self.rss = rss
         self.imageLoader = ImageLoader(path: rss.image)
-
-//        rssItemDataSource = rssItem
-//        let db = DataSourceService.current
-//        dataViewModel = DataNStorageViewModel(rss: db.rss, rssItem: db.rssItem)
     }
     
     private func iconImageView(_ image: UIImage) -> some View {
@@ -69,13 +38,8 @@ struct RSSRow: View {
                 .frame(width: 20, height: 20,alignment: .center)
                 .cornerRadius(5)
                 .animation(.easeInOut)
-                .border(Color.clear, width: 1)
+                .border(Color("text"), width: 1)
     }
-    
-    let didChange = PassthroughSubject<RSSStore, Never>()
-    var imageURL: URL?
-    static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
-//    static var viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     
     var body: some View {
         
@@ -105,14 +69,14 @@ struct RSSRow: View {
                 HStack(alignment: .center){
                     KFImage(URL(string: rss.image))
                         .placeholder({
-                            Image("Thumbnail")
+                            Image("getInfo")
                                 .renderingMode(.original)
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
                                 .frame(width: 20, height: 20,alignment: .center)
                                 .cornerRadius(2)
                                 .opacity(0.9)
-                                .border(Color.clear, width: 1)
+                                .border(Color("text"), width: 1)
                         })
                         .renderingMode(.original)
                         .resizable()
@@ -141,8 +105,8 @@ struct RSSRow: View {
                 .swipeCell(cellPosition: .both, leftSlot: swipeSlots, rightSlot: nil)
                 .dismissSwipeCell()
                 .frame(height: 25)
-                .sheet(isPresented: $infoHaptic, content: { InfoView(rss: rss) })
-
+                .sheet(isPresented: $infoHaptic, content: { InfoView(rss: rss)
+                })
                 .contextMenu {
                     Button(action: {
                         infoHaptic.toggle()
@@ -154,18 +118,18 @@ struct RSSRow: View {
                     Divider()
                     
                     Button(action: {
-        //                    if self.rss.filter({ !$0.isRead }).count == 0 {
-        //                    Text("")
-        //                    }
-        //                    else {
-        //                        self.rss.filter { !$0.isRead }.count
-        //                            .font(.footnote)
-        //                            .foregroundColor(Color("tab"))
-        //                    }
+//                    if self.rss.filter({ !$0.isRead }).count == 0 {
+//                    Text("")
+//                    }
+//                    else {
+//                        self.rss.filter { !$0.isRead }.count
+//                            .font(.footnote)
+//                            .foregroundColor(Color("tab"))
+//                    }
                     }) {
                     Text("Mark All As Read in \(rss.title)")
                     Image("Symbol").font(.system(size: 6, weight: .thin, design: .rounded))
-                }
+                    }
                     
                     Divider()
                 
@@ -186,45 +150,42 @@ struct RSSRow: View {
                     }
                     
                     Divider()
-                    
 
-                
-                Button(action: {
-//                    withAnimation(.easeIn){rss.deleteItem()}
-                }) {
-                    Text("Unsubscribe from \(rss.title)?")
-                    Image(systemName: "xmark")
-                }.foregroundColor(.red)
-            }
-            .actionSheet(isPresented: $showAlert) {
-                ActionSheet(
-                    title: Text(rss.title),
-                    message: nil,
-                    buttons: [
-                        .default(Text("Get Info"), action: {
-                            infoHaptic.toggle()
-                        }),
-                        .default(Text("Go To Website"), action: {
-                            openURL(URL(string: rss.url)!)
-                        }
-                        ),
-                        .default(Text("Copy Feed URL"), action: {
-                            self.actionSheetShown = true
-                            UIPasteboard.general.setValue(rss.url,
-                                                          forPasteboardType: kUTTypePlainText as String)
-                        }),
-                        .default(Text("Copy Website URL"), action: {
-                            self.actionSheetShown = true
-                            UIPasteboard.general.setValue(rss.url,
-                                                          forPasteboardType: kUTTypePlainText as String)
-                        }),
-                        .destructive(Text("Unsubscribe"), action: {
-//                            self.deleteItem()
-                        }),
-                        .cancel(),
-                    ]
-                )
-            }.frame(height: 25)
+                    Button(action: {
+    //                    withAnimation(.easeIn){rss.deleteItem()}
+                    }) {
+                        Text("Unsubscribe from \(rss.title)?")
+                        Image(systemName: "xmark")
+                    }.foregroundColor(.red)
+                }
+                .actionSheet(isPresented: $showAlert) {
+                    ActionSheet(
+                        title: Text(rss.title),
+                        message: nil,
+                        buttons: [
+                            .default(Text("Get Info"), action: {
+                                infoHaptic.toggle()
+                            }),
+                            .default(Text("Go To Website"), action: {
+                                openURL(URL(string: rss.url)!)
+                            }),
+                            .default(Text("Copy Feed URL"), action: {
+                                self.actionSheetShown = true
+                                UIPasteboard.general.setValue(rss.url,
+                                                              forPasteboardType: kUTTypePlainText as String)
+                            }),
+                            .default(Text("Copy Website URL"), action: {
+                                self.actionSheetShown = true
+                                UIPasteboard.general.setValue(rss.url,
+                                                              forPasteboardType: kUTTypePlainText as String)
+                            }),
+                            .destructive(Text("Unsubscribe"), action: {
+                                //self.deleteItem()
+                            }),
+                            .cancel(),
+                        ]
+                    )
+                }.frame(height: 25)
     }
     private func destinationView(rss: RSS) -> some View {
         RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
@@ -254,50 +215,6 @@ struct customMenu: View {
     }
 }
     
-//        VStack(alignment: .leading) {
-//            HStack(alignment: .center) {
-//                if
-//                    self.imageLoader.imageURL != nil {
-//                    iconImageView(self.imageLoader.imageURL!)
-//                        .frame(width: 25, height: 25,alignment: .center)
-//                        .layoutPriority(10)
-//                    } else {
-//                        KFImage(URL(string: rss.imageURL))
-//                            .placeholder({
-//                                Image("Thumbnail")
-//                                    .renderingMode(.original)
-//                                    .resizable()
-//                                    .aspectRatio(contentMode: .fit)
-//                                    .frame(width: 20, height: 20,alignment: .center)
-//                                    .cornerRadius(2)
-//                                    .border(Color.clear, width: 1)
-//                            })
-//                            .renderingMode(.original)
-//                            .resizable()
-//                            .aspectRatio(contentMode: .fit)
-//                            .frame(width: 20, height: 20,alignment: .center)
-//                            .cornerRadius(2)
-//                            .border(Color.clear, width: 1)
-//                    }
-//                }
-//            }
-//            .contextMenu {
-//                Button(action: {
-//                    self.showInfoSheet = true
-//                }) {
-//                    Text("Edit")
-//                    Image(systemName: "rectangle.and.pencil.and.ellipsis").font(.system(size: 16, weight: .medium))
-//                }
-//                Button(action: {
-//                    self.showActionSheet.toggle()
-//                }) {
-//                    Text("Display Action Sheet")
-//                }
-//                .actionSheet(isPresented: $showActionSheet, content: {
-//                    self.actionSheet })
-//            }
-//    }
-//}
 struct RSSRow_Previews: PreviewProvider {
     static let db = DataSourceService.current
     static var dataViewModel = DataNStorageViewModel(rss: db.rss, rssItem: db.rssItem)
@@ -311,34 +228,9 @@ struct RSSRow_Previews: PreviewProvider {
                              image: "https://github.blog/wp-content/uploads/2019/01/cropped-github-favicon-512.png?fit=32%2C32", in: CoreData.stack.context)
 
         return
+            RSSRow(rss: rss)
+                .padding()
+                .frame(width: 400, height: 25, alignment: .center)
 
-//            NavigationView {
-//                HStack {
-                    RSSRow(rss: rss)
-                        .padding()
-                        .frame(width: 400, height: 25, alignment: .center)
-//                }
-//            }
     }
 }
-//MARK: - Ext. Delegate SFSafariViewControllerDelegate
-//extension ProjectImagePicker: SFSafariViewControllerDelegate {
-//    public func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
-//        //image was returned by Copy
-//        if pasteboard.hasImages {
-//            guard let image = pasteboard.image else { return }
-//            self.delegate?.didSelect(image: image)
-//        //Image Url was returned by Copy
-//        } else if pasteboard.hasURLs {
-//            guard let url = pasteboard.url else { return }
-//
-//            if let data = try? Data(contentsOf: url) {
-//                if let image = UIImage(data: data) {
-//                    self.delegate?.didSelect(image: image)
-//                }
-//            }
-//        }
-//        pasteboard.items.removeAll()
-//        controller.dismiss(animated: true, completion: nil)
-//    }
-//}

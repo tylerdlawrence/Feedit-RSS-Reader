@@ -38,16 +38,16 @@ struct WebView: View {
     var webViewWrapper: WKWebViewWrapper
     
     var onCloseClosure: (() -> Void)?
-    var onArchiveAction: (() -> Void)?
+    var onArchiveClosure: (() -> Void)?
     var onReadAction: (() -> Void)?
     var onDoneAction: (() -> Void)?
     
-    init(rssItem: RSSItem, onCloseClosure: @escaping (() -> Void), onArchiveAction: (() -> Void)? = nil, onReadAction: (() -> Void)? = nil) {
+    init(rssItem: RSSItem, onCloseClosure: @escaping (() -> Void), onArchiveClosure: (() -> Void)? = nil, onReadAction: (() -> Void)? = nil) {
         let viewModel = WKWebViewModel(rssItem: rssItem)
         self.rssItem = rssItem
         self.viewModel = viewModel
         self.onCloseClosure = onCloseClosure
-        self.onArchiveAction = onArchiveAction
+        self.onArchiveClosure = onArchiveClosure
         self.onReadAction = onReadAction
         self.webViewWrapper = WKWebViewWrapper(viewModel: viewModel)
     }
@@ -74,7 +74,7 @@ struct WebView: View {
                     disable: !self.viewModel.canGoForward,
                     action: self.onGoForwardAction
                 )
-                makeFeatureItemView(imageName: FeatureItem.archive(self.rssItem.isArchive).icon, action: self.onArchiveAction)
+                makeFeatureItemView(imageName: FeatureItem.archive(self.rssItem.isArchive).icon, action: self.onArchiveClosure)
                 
                 makeFeatureItemView(imageName: FeatureItem.read(self.rssItem.isRead).icon, action: self.onReadAction)
                 
@@ -88,7 +88,7 @@ struct WebView: View {
                         )
                         .padding(10)
                     }
-                    .frame(width: 50, height: 50, alignment: .center)
+                    .frame(width: 40, height: 50, alignment: .center)
 //                }
 //                Spacer()
             }
@@ -120,7 +120,7 @@ extension WebView {
             .onTapGesture {
                 action?()
             }
-            .disabled(disable)
+//            .disabled(disable)
     }
 }
 
@@ -130,9 +130,10 @@ struct WebActions_Previews: PreviewProvider {
         let simple = DataSourceService.current.rssItem.simple()
         return WebView(rssItem: simple!, onCloseClosure: {
 
-        }, onArchiveAction: {
+        }, onArchiveClosure: {
 
         })
+        .preferredColorScheme(.dark)
     }
 }
 

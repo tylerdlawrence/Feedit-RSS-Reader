@@ -13,26 +13,18 @@ import Intents
 import SwipeCell
 
 struct ArchiveListView: View {
-    enum FilterType {
-        case all, unread, starred
-    }
-//    var rssSource: RSS {
-//        return self.rssFeedViewModel.rss
-//    }
-//    @ObservedObject var rss: RSS
     @EnvironmentObject var rssDataSource: RSSDataSource
-//    @ObservedObject var rssFeedViewModel: RSSFeedViewModel
     @ObservedObject var archiveListViewModel: ArchiveListViewModel
     @ObservedObject var searchBar: SearchBar = SearchBar()
-    var markAllPostsRead: (() -> Void)?
-    var markPostRead: (() -> Void)?
-    @State var showStarOnly = true
+    
     @State private var selectedItem: RSSItem?
     @State var footer = "Load More Articles"
     
+    @State private var sortAscending: Bool = true
+    @State var isRead: Bool = false
+    
     init(viewModel: ArchiveListViewModel) {
         self.archiveListViewModel = viewModel
-//        self.rssFeedViewModel = rssFeedViewModel
     }
     
     var body: some View {
@@ -50,7 +42,7 @@ struct ArchiveListView: View {
                         .buttonStyle(PlainButtonStyle())
                         
                         HStack{
-                            RSSItemRow(wrapper: item) //, order: item.order, check: item.selected
+                            RSSItemRow(wrapper: item)
                                 .onTapGesture {
                                     self.selectedItem = item
                                 }
@@ -66,8 +58,7 @@ struct ArchiveListView: View {
                 }
             }
             .listStyle(PlainListStyle())
-        .navigationBarTitle("", displayMode: .inline)
-
+            .navigationBarTitle("", displayMode: .inline)
             .add(self.searchBar)
             .toolbar {
                 ToolbarItem(placement: .principal) {
@@ -88,27 +79,36 @@ struct ArchiveListView: View {
                         }
                     }
                 }
-            }
-            .toolbar {
                 ToolbarItem(placement: .bottomBar) {
-                    FilterBar(selectedFilter: .constant(.starredOnly),
-                               showFilter: .constant(true), markedAllPostsRead: nil)
+                    Image(systemName: (sortAscending ? "arrow.down" : "arrow.up"))
+                        .foregroundColor(Color("tab"))
+                        .onTapGesture(perform: self.onToggleSort )
+                                    
+                    }
+                ToolbarItem(placement: .bottomBar) {
+                    Spacer()
+                                    
+                    }
+                ToolbarItem(placement: .bottomBar) {
+                            
+                    Toggle("", isOn: $isRead)
+                        .toggleStyle(CheckboxStyle())
                 }
             }
-//            .sheet(item: $selectedItem, content: { item in
-//                if AppEnvironment.current.useSafari {
-//                    SafariView(url: URL(string: item.url)!)
-//                } else {
-//                    WebView(
-//                        rssItem: item,
-//                        onCloseClosure: {
-//
-//                        },
-//                        onArchiveClosure: {
-//                            self.viewModel.archiveOrCancel(item)
-//                    })
-//                }
-//            })
+            .sheet(item: $selectedItem, content: { item in
+                if UserEnvironment.current.useSafari {
+                    SafariView(url: URL(string: item.url)!)
+                } else {
+                    WebView(
+                        rssItem: item,
+                        onCloseClosure: {
+
+                        },
+                        onArchiveClosure: {
+                            self.archiveListViewModel.archiveOrCancel(item)
+                    })
+                }
+            })
             .onAppear {
                 self.archiveListViewModel.fecthResults()
         }
@@ -116,21 +116,12 @@ struct ArchiveListView: View {
 }
 
 extension ArchiveListView {
-
+    public func onToggleSort() {
+        self.sortAscending.toggle()
+    }
 }
 
 struct ArchiveListView_Previews: PreviewProvider {
-//    static let db = DataSourceService.current
-//
-//    static var viewModel = DataNStorageViewModel(rss: db.rss, rssItem: db.rssItem)
-//
-//    static let archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
-//
-//    static let rssFeedViewModel = RSSFeedViewModel(rss: RSS(context: Persistence.current.context), dataSource: DataSourceService.current.rssItem)
-//
-//    static let rssViewModel = RSSListViewModel(dataSource: DataSourceService.current.rss, rss: db.rss, rssItem: db.rssItem)
-//    static let rss = RSS()
-//    static let rss = DataSourceService.current
     static var previews: some View {
         ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
     }

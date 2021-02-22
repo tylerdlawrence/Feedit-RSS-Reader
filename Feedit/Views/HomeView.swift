@@ -155,9 +155,6 @@ struct HomeView: View {
                         Spacer()
                     }
                 }
-                .accentColor(Color("tab"))
-                .foregroundColor(Color("darkerAccent"))
-                .listRowBackground(Color("accent"))
                 ZStack{
                     NavigationLink(destination: archiveListView) {
                         EmptyView()
@@ -175,21 +172,14 @@ struct HomeView: View {
                             Spacer()
                     }
                 }
-                .accentColor(Color("tab"))
-                .foregroundColor(Color("darkerAccent"))
-                .listRowBackground(Color("accent"))
             },
             label: {
                 HStack {
                     Text("All Items")
                         .font(.system(size: 18, weight: .medium, design: .rounded))
                 }
-                
             })
             .textCase(nil)
-            .accentColor(Color("tab"))
-            .foregroundColor(Color("darkerAccent"))
-            .listRowBackground(Color("accent"))
     }
     private var feedsSection: some View {
         DisclosureGroup(
@@ -212,9 +202,9 @@ struct HomeView: View {
                         self.viewModel.delete(at: index)
                     }
                 }
-                .accentColor(Color("tab"))
-                .foregroundColor(Color("darkerAccent"))
-                .listRowBackground(Color("accent"))
+//                .accentColor(Color("tab"))
+//                .foregroundColor(Color("darkerAccent"))
+//                .listRowBackground(Color("accent"))
             },
             label: {
                 HStack {
@@ -224,8 +214,6 @@ struct HomeView: View {
                 }
             })
             .accentColor(Color("tab"))
-            .foregroundColor(Color("darkerAccent"))
-            .listRowBackground(Color("accent"))
         }
     
     private let addRSSPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("addNewRSSPublisher"))
@@ -242,9 +230,6 @@ struct HomeView: View {
                 ZStack {
                     List{
                         Spacer()
-                            .accentColor(Color("tab"))
-                            .foregroundColor(Color("darkerAccent"))
-                            .listRowBackground(Color("accent"))
                         allItemsSection
                         Spacer()
                         feedsSection

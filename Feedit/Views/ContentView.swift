@@ -10,12 +10,12 @@ import CoreData
 import Combine
 
 struct ContentView: View {
-    init() {
-        UITableView.appearance(whenContainedInInstancesOf: [UIHostingController<ContentView>.self]).separatorColor = .clear
-        
-        UIToolbar.appearance().barTintColor = UIColor(Color("accent"))
-        UIToolbar.appearance().isTranslucent = false
-    }
+//    init() {
+//        UITableView.appearance(whenContainedInInstancesOf: [UIHostingController<ContentView>.self]).separatorColor = UIColor(Color("accent"))
+//        
+//        UIToolbar.appearance().barTintColor = UIColor(Color("accent"))
+//        UIToolbar.appearance().isTranslucent = false
+//    }
     var body: some View {
         ContentView()
     }

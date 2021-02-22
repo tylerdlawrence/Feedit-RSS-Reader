@@ -24,7 +24,6 @@ struct AddRSSView: View {
         Button(action: {
             self.viewModel.commitCreateNewRSS()
             self.onDoneAction?()
-            
             do {
                 try self.managedObjectContext.save()
             } catch {
@@ -47,12 +46,6 @@ struct AddRSSView: View {
         }
     }
     
-    private var trailingView: some View {
-        HStack(alignment: .top, spacing: 24) {
-            doneButton
-        }
-    }
-    
     private var sectionHeader: some View {
         VStack(alignment: .center) {
             HStack{
@@ -71,13 +64,14 @@ struct AddRSSView: View {
     @State private var feedUrl: String = ""
     @State private var feedTitle: String = ""
 
-//    init(viewModel: AddRSSViewModel,
-//         onDoneAction: (() -> Void)? = nil,
-//         onCancelAction: (() -> Void)? = nil) {
-//        self.viewModel = viewModel
-//        self.onDoneAction = onDoneAction
-//        self.onCancelAction = onCancelAction
-//    }
+    init(viewModel: AddRSSViewModel,
+         onDoneAction: (() -> Void)? = nil,
+         onCancelAction: (() -> Void)? = nil) {
+        self.viewModel = viewModel
+        self.onDoneAction = onDoneAction
+        self.onCancelAction = onCancelAction
+    }
+    
     var body: some View {
         NavigationView {
             Form {
@@ -95,8 +89,6 @@ struct AddRSSView: View {
                     }
                     HStack(alignment: .center){
                         sectionHeader
-                        
-                    
                     }
                 }
                     if !hasFetchResult {
@@ -121,23 +113,9 @@ struct AddRSSView: View {
             self.viewModel.cancelCreateNewRSS()
         }
     }
-//    func fetchDetail() {
-//        guard let url = URL(string: self.feedUrl),
-//              let rss = self.viewModel.rss else {
-//            return
-//        }
-//        updateNewRSS(url: url, for: rss) { result in
-//            switch result {
-//            case .success(let rss):
-//                self.viewModel.rss = rss
-//                self.hasFetchResult = true
-//            case .failure(let error):
-//                print("fetchDetail error = \(error)")
-//            }
-//        }
     func fetchDetail() {
         guard let url = URL(string: self.feedUrl),
-              let rss = self.viewModel.rss else {
+            let rss = viewModel.rss else {
             return
         }
         updateNewRSS(url: url, for: rss) { result in
@@ -152,4 +130,13 @@ struct AddRSSView: View {
     }
 }
 
+#if DEBUG
 
+struct AddRSSView_Previews: PreviewProvider {
+    static var previews: some View {
+        AddRSSView(viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss))
+            .preferredColorScheme(.dark)
+    }
+}
+
+#endif
