@@ -7,7 +7,6 @@
 
 import SwiftUI
 import UIKit
-import WidgetKit
 
 class DataNStorageViewModel: NSObject, ObservableObject {
     

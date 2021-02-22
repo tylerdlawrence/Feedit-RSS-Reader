@@ -22,7 +22,6 @@ struct ContentView: View {
 }
 
 struct ContentView_Previews: PreviewProvider {
-    static let rssViewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     
     static var previews: some View {
         ContentView()

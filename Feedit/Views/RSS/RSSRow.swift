@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreData
 import MobileCoreServices
 import SwipeCell
 import KingfisherSwiftUI
@@ -13,12 +14,12 @@ import KingfisherSwiftUI
 struct RSSRow: View {
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.openURL) var openURL
-
+    
     enum ActionItem {
         case info
         case url
     }
-
+    
     @ObservedObject var rss: RSS
     @ObservedObject var imageLoader: ImageLoader
     @State private var actionSheetShown = false
@@ -88,16 +89,17 @@ struct RSSRow: View {
                         .font(.system(size: 18, weight: .regular, design: .rounded))
                         .lineLimit(1)
                         .foregroundColor(Color("text"))
-//                    Spacer()
-//                    Text("\(self.rssFeedViewModel.items.count)")
-//                        .font(.caption)
-//                        .fontWeight(.bold)
-//                        .padding(.horizontal, 7)
-//                        .padding(.vertical, 1)
-//                        .background(Color.gray.opacity(0.5))
-//                        .opacity(0.4)
-//                        .foregroundColor(Color("text"))
-//                        .cornerRadius(8)
+                    Spacer()
+//                    Text("\(rss.title.count)")
+                    Text("\(rss.title.count)")
+                        .font(.caption)
+                        .fontWeight(.bold)
+                        .padding(.horizontal, 7)
+                        .padding(.vertical, 1)
+                        .background(Color.gray.opacity(0.5))
+                        .opacity(0.4)
+                        .foregroundColor(Color("text"))
+                        .cornerRadius(8)
                 }
                 .frame(height: 40)
                 .onTapGesture {
@@ -187,9 +189,9 @@ struct RSSRow: View {
                     )
                 }.frame(height: 25)
     }
-    private func destinationView(rss: RSS) -> some View {
-        RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
-            .environmentObject(DataSourceService.current.rss)
+
+    func countItems() -> Int {
+        return CoreDataDataSource<RSSItem>().count
     }
 }
 
@@ -216,21 +218,17 @@ struct customMenu: View {
 }
     
 struct RSSRow_Previews: PreviewProvider {
-    static let db = DataSourceService.current
-    static var dataViewModel = DataNStorageViewModel(rss: db.rss, rssItem: db.rssItem)
     static let rss = DataSourceService.current
-    static let rssFeedViewModel = RSSFeedViewModel(rss: RSS(context: CoreData.stack.context), dataSource: DataSourceService.current.rssItem)
-
     static var previews: some View {
-        let rss = RSS.create(url: "https://",
-                             title: "The GitHub Blog",
-                             desc: "Updates, ideas, and inspiration from GitHub to help developers build and design software.",
-                             image: "https://github.blog/wp-content/uploads/2019/01/cropped-github-favicon-512.png?fit=32%2C32", in: CoreData.stack.context)
+        let rss = RSS.create(url: "https://chorus.substack.com/people/2323141-jason-tate",
+                             title: "Liner Notes",
+                             desc: "Liner Notes is a weekly newsletter from Jason Tate of Chorus.fm.",
+                             image: "https://bucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com/public/images/8a938a56-8a1e-42dc-8802-a75c20e8df4c_256x256.png", in: CoreData.stack.context)
 
         return
             RSSRow(rss: rss)
                 .padding()
                 .frame(width: 400, height: 25, alignment: .center)
-
+            .preferredColorScheme(.dark)
     }
 }

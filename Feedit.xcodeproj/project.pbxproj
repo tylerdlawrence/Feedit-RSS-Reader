@@ -16,7 +16,6 @@
 		6117365924E83C9F00A2DEA5 /* BatchImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6117365824E83C9F00A2DEA5 /* BatchImportView.swift */; };
 		6117365B24E83CC500A2DEA5 /* BatchImportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6117365A24E83CC500A2DEA5 /* BatchImportViewModel.swift */; };
 		612FB85A2540F04200D9822B /* RSSListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612FB83D2540F04000D9822B /* RSSListView.swift */; };
-		615D8EEA25E2D0090089D058 /* PullToRefresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615D8EE925E2D0090089D058 /* PullToRefresh.swift */; };
 		615E971F25323C1900891083 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615E971E25323C1900891083 /* Reachability.swift */; };
 		615E98402533AFAE00891083 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615E983F2533AFAE00891083 /* ContentView.swift */; };
 		616121E42553670B0074F061 /* FeedKit in Frameworks */ = {isa = PBXBuildFile; productRef = 616121E32553670B0074F061 /* FeedKit */; };
@@ -168,7 +167,6 @@
 		6117365824E83C9F00A2DEA5 /* BatchImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchImportView.swift; sourceTree = "<group>"; };
 		6117365A24E83CC500A2DEA5 /* BatchImportViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchImportViewModel.swift; sourceTree = "<group>"; };
 		612FB83D2540F04000D9822B /* RSSListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RSSListView.swift; path = Feedit/Views/RSSListView.swift; sourceTree = SOURCE_ROOT; };
-		615D8EE925E2D0090089D058 /* PullToRefresh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PullToRefresh.swift; sourceTree = "<group>"; };
 		615E971E25323C1900891083 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		615E983F2533AFAE00891083 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContentView.swift; path = Feedit/Views/ContentView.swift; sourceTree = SOURCE_ROOT; };
 		6162F25725B68BA1008E7FA7 /* Searchbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Searchbar.swift; sourceTree = "<group>"; };
@@ -396,7 +394,6 @@
 				61B95ED225D1069600829741 /* RSS.xcdatamodeld */,
 				617E4C53255DE8F20010CEE8 /* HomeView.swift */,
 				6110296725E305A900EFE56F /* ItemEditView.swift */,
-				615D8EE925E2D0090089D058 /* PullToRefresh.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -699,7 +696,6 @@
 				61967EF224E2061100AA647C /* RSSFeedViewModel.swift in Sources */,
 				61C8189624E1F3FB00593939 /* AppDelegate.swift in Sources */,
 				61967EE324E205AD00AA647C /* RSSStore.swift in Sources */,
-				615D8EEA25E2D0090089D058 /* PullToRefresh.swift in Sources */,
 				61967EFB24E2063D00AA647C /* SettingView.swift in Sources */,
 				61C818DF24E1F7F300593939 /* ArchiveListView.swift in Sources */,
 				61C818DB24E1F77C00593939 /* RSSListViewModel.swift in Sources */,

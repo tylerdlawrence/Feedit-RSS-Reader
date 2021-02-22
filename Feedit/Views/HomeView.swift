@@ -16,9 +16,9 @@ struct HomeView: View {
         case setting
         case star
     }
-    
     @ObservedObject var viewModel: RSSListViewModel
-
+    @EnvironmentObject var rssDataSource: RSSDataSource
+    @StateObject var archiveListViewModel: ArchiveListViewModel
 //    @State private var refreshID = UUID()
     @State private var archiveScale: Image.Scale = .medium
     @State private var addRSSProgressValue = 1.0
@@ -103,24 +103,17 @@ struct HomeView: View {
                 Text("All Items")
                     .font(.system(size: 20, weight: .medium, design: .rounded))
                 Spacer()
-                Text("\(self.viewModel.items.count)")
-                    .font(.caption)
-                    .fontWeight(.bold)
-                    .padding(.horizontal, 7)
-                    .padding(.vertical, 1)
-                    .background(Color.gray.opacity(0.5))
-                    .opacity(0.4)
-                    .foregroundColor(Color("text"))
-                    .cornerRadius(8)
+                
             }
-            
-            HStack {
-                ZStack{
-                    NavigationLink(destination: DataNStorageView()) {
-                        EmptyView()
-                    }
-                    .opacity(0.0)
-                    .buttonStyle(PlainButtonStyle())
+            VStack{
+                HStack {
+                    ZStack{
+                        NavigationLink(destination: DataNStorageView()) {
+                            EmptyView()
+                        }
+                        .opacity(0.0)
+                        .buttonStyle(PlainButtonStyle())
+                        
                     HStack{
                         Image(systemName: "archivebox.fill").font(.system(size: 20, weight: .ultraLight))
                             .foregroundColor(Color("text"))
@@ -129,8 +122,48 @@ struct HomeView: View {
                         Text("Archive")
                             .font(.system(size: 18, weight: .regular, design: .rounded))
                         Spacer()
+                        Text("\(countItems())")
+                            .font(.caption)
+                            .fontWeight(.bold)
+                            .padding(.horizontal, 7)
+                            .padding(.vertical, 1)
+                            .background(Color.gray.opacity(0.5))
+                            .opacity(0.4)
+                            .foregroundColor(Color("text"))
+                            .cornerRadius(8)
                         }
+                    }
                 }
+            }
+            ZStack{
+                NavigationLink(destination: archiveListView) {
+                    EmptyView()
+                }
+                .opacity(0.0)
+                .buttonStyle(PlainButtonStyle())
+                
+                HStack{
+                    Image(systemName: "star.square.fill")
+                        .font(.system(size: 20))
+                        .foregroundColor(.yellow)
+                        .opacity(0.8)
+                        .frame(width: 25, height: 25)
+                    Text("Starred")
+                        .font(.system(size: 17, weight: .regular, design: .rounded))
+                        Spacer()
+                    Text("\(archiveListViewModel.items.count)")
+                        .font(.caption)
+                        .fontWeight(.bold)
+                        .padding(.horizontal, 7)
+                        .padding(.vertical, 1)
+                        .background(Color.gray.opacity(0.5))
+                        .opacity(0.4)
+                        .foregroundColor(Color("text"))
+                        .cornerRadius(8)
+                }
+            }
+            .onAppear {
+                self.archiveListViewModel.fecthResults()
             }
         }
     }
@@ -202,9 +235,9 @@ struct HomeView: View {
                         self.viewModel.delete(at: index)
                     }
                 }
-//                .accentColor(Color("tab"))
-//                .foregroundColor(Color("darkerAccent"))
-//                .listRowBackground(Color("accent"))
+                .accentColor(Color("tab"))
+                .foregroundColor(Color("darkerAccent"))
+                .listRowBackground(Color("accent"))
             },
             label: {
                 HStack {
@@ -218,12 +251,7 @@ struct HomeView: View {
     
     private let addRSSPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("addNewRSSPublisher"))
     private let rssRefreshPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("rssListNeedRefresh"))
-    
-//    @State private var progressAmount = 0.0
-//    @State private var progress = 0.5
-//    let timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
 
-    @State private var isShowing = false
     var body: some View {
         NavigationView{
             VStack {
@@ -311,14 +339,9 @@ extension HomeView {
     func deleteItems(at offsets: IndexSet) {
         viewModel.items.remove(atOffsets: offsets)
     }
-    func startProgressBar() {
-        for _ in 0...100 {
-            self.addRSSProgressValue += 0.015
-            
-        }
-    }
-    func resetProgressBar() {
-        self.addRSSProgressValue = 0.0
+    
+    func countItems() -> Int {
+        return CoreDataDataSource<RSSItem>().count
     }
 }
 
@@ -326,12 +349,14 @@ struct HomeView_Previews: PreviewProvider {
     
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     
+    
+        
     static var previews: some View {
         Group{
-            HomeView(viewModel: self.viewModel)
+            HomeView(viewModel: self.viewModel, archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
             .environment(\.colorScheme, .dark)
 
-            HomeView(viewModel: self.viewModel)
+            HomeView(viewModel: self.viewModel, archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
         }.environmentObject(DataSourceService.current.rss)
     }
 }

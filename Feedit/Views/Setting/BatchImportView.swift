@@ -63,9 +63,9 @@ struct BatchImportView: View {
                 Spacer()
             }
         }
-//        GroupBox(label: Text("Import & Export Feeds")) {
-//            TextEditor(text: $document.message)
-//        }
+        GroupBox(label: Text("")) {
+            TextEditor(text: $document.message)
+        }
     .padding()
     .fileImporter(
         isPresented: $isImporting,
