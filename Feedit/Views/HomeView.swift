@@ -320,7 +320,7 @@ extension HomeView {
         }
     }
     private func destinationView(rss: RSS) -> some View {
-        RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), rss: rss)
+        RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
             .environmentObject(DataSourceService.current.rss)
     }
     func deleteItems(at offsets: IndexSet) {

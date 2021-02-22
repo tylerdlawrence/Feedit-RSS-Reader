@@ -136,6 +136,21 @@ extension RSSStore: NSFetchedResultsControllerDelegate {
     }
 }
 
+extension RSSStore {
+    func reloadAllPosts(handler: (() -> Void)? = nil) {
+        var updatedCount = 0
+        for _ in self.items {
+            print("RELOADING POST")
+//            reloadFeedPosts(feed: items) { success in
+//                print("GOT POST")
+                updatedCount += 1
+                if updatedCount >= self.items.count {
+                    handler?()
+            }
+        }
+    }
+}
+
 //class RSSStore: NSObject {
 //    static let instance = RSSStore()
 //    @Published var feeds: [FeedObject] = []

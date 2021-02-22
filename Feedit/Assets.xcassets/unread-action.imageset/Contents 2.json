@@ -1,12 +1,12 @@
 {
   "images" : [
     {
-      "filename" : "Image.png",
+      "filename" : "unread-action.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Image 2.png",
+      "filename" : "unread-action-1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
