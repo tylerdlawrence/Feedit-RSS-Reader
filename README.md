@@ -6,6 +6,6 @@ Feedit: RSS Reader is a minimal, no-nonsense RSS reader for iOS with functionali
 TODO:
 - iCloud Support
 
-![dark](https://user-images.githubusercontent.com/63733784/98559370-83ef9780-2274-11eb-8c5b-ed131e41b3cf.PNG)
-![light](https://user-images.githubusercontent.com/63733784/98559377-85b95b00-2274-11eb-9c7b-6027a3f9178c.PNG)
+![Image 2](https://user-images.githubusercontent.com/63733784/108665533-20941900-74a3-11eb-9dab-6843e4f5232f.PNG)
+![Image](https://user-images.githubusercontent.com/63733784/108665536-21c54600-74a3-11eb-95f3-8158c4605a63.PNG)
 
