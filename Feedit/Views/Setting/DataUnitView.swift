@@ -30,21 +30,27 @@ struct DataUnitView: View {
     var body: some View {
         VStack(spacing: 8) {
             HStack {
-                VStack {
+//                VStack {
+                Spacer()
                     Text(label)
-                }
+                        .font(.system(size: 20, weight: .medium, design: .rounded))
+                        .foregroundColor(Color("text"))
+//                }
                 Spacer()
             }
             .padding(.top, 12)
             Spacer()
             HStack {
                 Spacer()
-                VStack {
-                    Text("items: \(content)")
-                        .font(.footnote)
-                }
+//                VStack {
+                    Text("\(content)")
+                        .font(.system(size: 20, weight: .medium, design: .rounded))
+                        .foregroundColor(Color("text"))
+//                        .font(.footnote)
+                Spacer()
+//                }
             }
-            .padding(.bottom, 12)
+            .padding(.bottom, 40)
         }
         .padding(.leading, 12)
         .padding(.trailing, 12)
@@ -63,7 +69,9 @@ struct DataUnitView: View {
 
 struct DataUnitView_Previews: PreviewProvider {
     static var previews: some View {
-        DataUnitView(label: "RSS", content: .constant(12), colorType: .blue)
-            .frame(height: 120)
+        Group{
+            DataUnitView(label: "Subscriptions", content: .constant(125), colorType: .orange)
+                .frame(height: 120)
+        }
     }
 }

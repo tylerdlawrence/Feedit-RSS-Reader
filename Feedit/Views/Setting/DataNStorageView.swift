@@ -17,21 +17,27 @@ struct DataNStorageView: View {
     }
     
     var body: some View {
-        VStack {
-            HStack(spacing: 12) {
-                DataUnitView(label: "Feeds", content: self.$viewModel.rssCount, colorType: .blue)
-                DataUnitView(label: "Article Count", content: self.$viewModel.rssItemCount, colorType: .orange)
+        ScrollView {
+            VStack {
+                HStack(spacing: 12) {
+                    DataUnitView(label: "Subscriptions", content: self.$viewModel.rssCount, colorType: .blue)
+                    DataUnitView(label: "Article Count", content: self.$viewModel.rssItemCount, colorType: .orange)
+                        .font(.system(size: 20, weight: .medium, design: .rounded))
+                }
+                .padding(.leading, 12)
+                .padding(.trailing, 12)
+                .frame(height: 120)
+                
+                Spacer()
             }
-            .padding(.leading, 12)
-            .padding(.trailing, 12)
-            .frame(height: 120)
+            .padding(.top, 40)
             
-            Spacer()
-        }
-        .padding(.top, 40)
-        .onAppear {
-            self.viewModel.getRSSCount()
-            self.viewModel.getRSSItemCount()
+            
+            
+            .onAppear {
+                self.viewModel.getRSSCount()
+                self.viewModel.getRSSItemCount()
+            }
         }
     }
 }
@@ -39,5 +45,6 @@ struct DataNStorageView: View {
 struct DataNStorageView_Previews: PreviewProvider {
     static var previews: some View {
         DataNStorageView()
+            .preferredColorScheme(.dark)
     }
 }
