@@ -18,6 +18,12 @@ struct HomeView: View {
     }
     @ObservedObject var viewModel: RSSListViewModel
     @EnvironmentObject var rssDataSource: RSSDataSource
+    
+    @EnvironmentObject var rssFeedViewModel: RSSFeedViewModel
+    var rssSource: RSS {
+        return self.rssFeedViewModel.rss
+    }
+    
     @StateObject var archiveListViewModel: ArchiveListViewModel
 //    @State private var refreshID = UUID()
     @State private var archiveScale: Image.Scale = .medium
@@ -227,6 +233,17 @@ struct HomeView: View {
                         .buttonStyle(PlainButtonStyle())
                     HStack {
                         RSSRow(rss: rss)
+//                        Spacer()
+////                        Text("\(viewModel.articles.count)")
+//                        Text("\(countItems())")
+//                            .font(.caption)
+//                            .fontWeight(.bold)
+//                            .padding(.horizontal, 7)
+//                            .padding(.vertical, 1)
+//                            .background(Color.gray.opacity(0.5))
+//                            .opacity(0.4)
+//                            .foregroundColor(Color("text"))
+//                            .cornerRadius(8)
                         }
                     }
                 }
@@ -319,6 +336,7 @@ struct HomeView: View {
                 self.viewModel.fecthResults()
             }
         }
+        .environmentObject(DataSourceService.current.rss)
     }
 }
 

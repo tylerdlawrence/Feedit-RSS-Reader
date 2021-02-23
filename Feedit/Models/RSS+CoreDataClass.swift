@@ -15,6 +15,8 @@ import BackgroundTasks
 
 @objc(RSS)
 class RSS: NSManagedObject, Identifiable {
+    
+    
     //MARK: Helpers
     
     class func count() -> Int {
