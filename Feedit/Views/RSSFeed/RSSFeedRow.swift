@@ -19,8 +19,10 @@ import SDWebImageSwiftUI
 import Intents
 
 struct RSSItemRow: View {
-    @ObservedObject var itemWrapper: RSSItem
     
+    
+    @ObservedObject var itemWrapper: RSSItem
+
     @State private var isStarred = false
     @State private var isRead = false
     
@@ -111,6 +113,24 @@ struct RSSItemRow: View {
                             .padding([.top, .leading])
                     }
                 }
+                VStack{
+                    KFImage(URL(string: itemWrapper.image))
+                        .placeholder({
+                            Image("getInfo")
+                                .renderingMode(.original)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 20, height: 20,alignment: .center)
+                                .cornerRadius(1)
+                                .border(Color("text"), width: 2)
+                        })
+                        .renderingMode(.original)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 20, height: 20,alignment: .center)
+                        .cornerRadius(1)
+                        .border(Color("text"), width: 2)
+                }.padding(.top)
                     HStack{
                         VStack(alignment: .leading){
                             HStack {
@@ -191,14 +211,6 @@ struct RSSItemRow: View {
                 }
             }
         }
-    }
-}
-
-struct RSSFeedRow_Previews: PreviewProvider {
-    static var previews: some View {
-        let simple = DataSourceService.current.rssItem.simple()
-        return
-            RSSItemRow(wrapper: simple!)
     }
 }
 
