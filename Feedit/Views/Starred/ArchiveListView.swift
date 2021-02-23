@@ -17,6 +17,7 @@ struct ArchiveListView: View {
     @ObservedObject var archiveListViewModel: ArchiveListViewModel
     @ObservedObject var searchBar: SearchBar = SearchBar()
     
+    @State var offset : CGFloat = UIScreen.main.bounds.height
     @State private var selectedItem: RSSItem?
     @State var footer = "Load More Articles"
     
@@ -56,11 +57,18 @@ struct ArchiveListView: View {
                         }
                     }
                 }
-            }
+//            }
             .listStyle(PlainListStyle())
             .navigationBarTitle("", displayMode: .inline)
             .add(self.searchBar)
             .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        self.offset = 0
+                    }) {
+                        Image(systemName: "ellipsis")
+                    }
+                }
                 ToolbarItem(placement: .principal) {
                     VStack{
                         HStack{
@@ -79,22 +87,54 @@ struct ArchiveListView: View {
                         }
                     }
                 }
-                ToolbarItem(placement: .bottomBar) {
-                    Image(systemName: (sortAscending ? "arrow.down" : "arrow.up"))
-                        .foregroundColor(Color("tab"))
-                        .onTapGesture(perform: self.onToggleSort )
-                                    
+                    ToolbarItem(placement: .bottomBar) {
+//                        Image(systemName: (sortAscending ? "arrow.down" : "arrow.up"))
+//                            .foregroundColor(Color("tab"))
+//                            .onTapGesture(perform: self.onToggleSort )
+                        Button(action: {
+                            //
+                        }) {
+                            Image(systemName: "magnifyingglass")
+                        }
                     }
-                ToolbarItem(placement: .bottomBar) {
-                    Spacer()
-                                    
+                    ToolbarItem(placement: .bottomBar) {
+                        Spacer()
                     }
-                ToolbarItem(placement: .bottomBar) {
-                            
-                    Toggle("", isOn: $isRead)
-                        .toggleStyle(CheckboxStyle())
+                    ToolbarItem(placement: .bottomBar) {
+//                        Toggle("", isOn: $isRead)
+//                            .toggleStyle(CheckboxStyle())
+                        Button(action: {
+                            //
+                        }) {
+                            Image(systemName: "checkmark.circle")
+                        }
+                    }
                 }
-            }
+        
+        VStack{
+            Spacer()
+            RSSActionSheet()
+            .offset(y: self.offset)
+            .gesture(DragGesture()
+                .onChanged({ (value) in
+                    if value.translation.height > 0{
+                        self.offset = value.location.y
+                    }
+                })
+                .onEnded({ (value) in
+                    if self.offset > 100{
+                        self.offset = UIScreen.main.bounds.height
+                    }
+                    else{
+                        self.offset = 0
+                    }
+                })
+            )
+        }.background((self.offset <= 100 ? Color(UIColor.label).opacity(0.3) : Color.clear).edgesIgnoringSafeArea(.all)
+        .onTapGesture {
+            self.offset = 0
+        })
+        
             .sheet(item: $selectedItem, content: { item in
                 if UserEnvironment.current.useSafari {
                     SafariView(url: URL(string: item.url)!)
@@ -109,6 +149,7 @@ struct ArchiveListView: View {
                     })
                 }
             })
+        }.animation(.default)
             .onAppear {
                 self.archiveListViewModel.fecthResults()
         }

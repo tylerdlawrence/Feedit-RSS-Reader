@@ -17,6 +17,7 @@ struct RSSFeedListView: View {
     @StateObject private var dataSource = CoreDataDataSource<RSSItem>()
     @State private var sortAscending: Bool = true
     @State private var editMode: EditMode = .inactive
+    @State var offset : CGFloat = UIScreen.main.bounds.height
     
     var rssSource: RSS {
         return self.rssFeedViewModel.rss
@@ -44,6 +45,7 @@ struct RSSFeedListView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .edgesIgnoringSafeArea(.all)
             List {
+
                 ForEach(self.rssFeedViewModel.items, id: \.self) { item in
                     ZStack {
                         NavigationLink(destination: WebView(rssItem: item, onCloseClosure: {})) {
@@ -75,58 +77,94 @@ struct RSSFeedListView: View {
                 
             }
                 .toolbar{
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: {
+                            self.offset = 0
+                        }) {
+                            Image(systemName: "ellipsis")
+                        }
+                    }
                     ToolbarItem(placement: .principal) {
-                            HStack{
-                                KFImage(URL(string: rssSource.image))
-                                    .placeholder({
-                                        Image("getInfo")
-                                            .renderingMode(.original)
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fit)
-                                            .frame(width: 20, height: 20,alignment: .center)
-                                            .cornerRadius(2)
-                                            .border(Color("text"), width: 2)
-                                    })
-                                    .renderingMode(.original)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 20, height: 20,alignment: .center)
-                                    .cornerRadius(2)
-                                    .border(Color("text"), width: 2)
-                                
-                                Text(rssSource.title)
-                                    .font(.system(size: 20, weight: .medium, design: .rounded))
-                                
-                                Text("\(rssFeedViewModel.items.count)")
-                                    .font(.caption)
-                                    .fontWeight(.bold)
-                                    .padding(.horizontal, 7)
-                                    .padding(.vertical, 1)
-                                    .background(Color.gray.opacity(0.5))
-                                    .opacity(0.4)
-                                    .foregroundColor(Color("text"))
-                                    .cornerRadius(8)
+                        HStack{
+                            KFImage(URL(string: rssSource.image))
+                                .placeholder({
+                                    Image("getInfo")
+                                        .renderingMode(.original)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 20, height: 20,alignment: .center)
+                                        .cornerRadius(2)
+                                        .border(Color("text"), width: 2)
+                                })
+                                .renderingMode(.original)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 20, height: 20,alignment: .center)
+                                .cornerRadius(2)
+                                .border(Color("text"), width: 2)
+
+                            Text(rssSource.title)
+                                .font(.system(size: 20, weight: .medium, design: .rounded))
+
+                            Text("\(rssFeedViewModel.items.count)")
+                                .font(.caption)
+                                .fontWeight(.bold)
+                                .padding(.horizontal, 7)
+                                .padding(.vertical, 1)
+                                .background(Color.gray.opacity(0.5))
+                                .opacity(0.4)
+                                .foregroundColor(Color("text"))
+                                .cornerRadius(8)
                         }
                     }
                     
                     ToolbarItem(placement: .bottomBar) {
-//                        Toggle("", isOn: $starOnly)
-//                            .toggleStyle(StarStyle())
-                        Image(systemName: (sortAscending ? "arrow.down" : "arrow.up"))
-                            .foregroundColor(Color("tab"))
-                            .onTapGesture(perform: self.onToggleSort )
-                                        
-                        }
-                    ToolbarItem(placement: .bottomBar) {
-                        Spacer()
-                                        
-                        }
-                    ToolbarItem(placement: .bottomBar) {
-                                
-                        Toggle("", isOn: $isRead)
-                            .toggleStyle(CheckboxStyle())
+//                        Image(systemName: (sortAscending ? "arrow.down" : "arrow.up"))
+//                            .foregroundColor(Color("tab"))
+//                            .onTapGesture(perform: self.onToggleSort )
+                        Button(action: {
+                            //
+                        }) {
+                            Image(systemName: "magnifyingglass")
                         }
                     }
+                    ToolbarItem(placement: .bottomBar) {
+                        Spacer()
+                    }
+                    ToolbarItem(placement: .bottomBar) {
+//                        Toggle("", isOn: $isRead)
+//                            .toggleStyle(CheckboxStyle())
+                        Button(action: {
+                            //
+                        }) {
+                            Image(systemName: "checkmark.circle")
+                        }
+                    }
+                }
+            
+            VStack{
+                Spacer()
+                RSSActionSheet()
+                .offset(y: self.offset)
+                .gesture(DragGesture()
+                    .onChanged({ (value) in
+                        if value.translation.height > 0{
+                            self.offset = value.location.y
+                        }
+                    })
+                    .onEnded({ (value) in
+                        if self.offset > 100{
+                            self.offset = UIScreen.main.bounds.height
+                        }
+                        else{
+                            self.offset = 0
+                        }
+                    })
+                )
+            }.background((self.offset <= 100 ? Color(UIColor.label).opacity(0.3) : Color.clear).edgesIgnoringSafeArea(.all)
+            .onTapGesture {
+                self.offset = 0
+            })
             
             .sheet(item: $selectedItem, content: { item in
                 if UserEnvironment.current.useSafari {
@@ -143,8 +181,8 @@ struct RSSFeedListView: View {
                     )
                 }
             })
-        }
-        .navigationViewStyle(StackNavigationViewStyle())
+        }.animation(.default)
+//        .navigationViewStyle(StackNavigationViewStyle())
         .onAppear {
             self.rssFeedViewModel.fecthResults()
             self.rssFeedViewModel.fetchRemoteRSSItems()

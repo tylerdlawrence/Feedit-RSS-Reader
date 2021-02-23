@@ -225,7 +225,7 @@ struct HomeView: View {
                         .opacity(0.0)
                         .buttonStyle(PlainButtonStyle())
                     HStack {
-                        RSSRow(rss: rss)
+                        RSSRow(rss: rss, viewModel: viewModel)
                         }
                     }
                 }

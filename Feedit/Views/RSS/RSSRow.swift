@@ -14,6 +14,8 @@ import KingfisherSwiftUI
 struct RSSRow: View {
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.openURL) var openURL
+    @ObservedObject var viewModel: RSSListViewModel
+
     
     enum ActionItem {
         case info
@@ -27,9 +29,10 @@ struct RSSRow: View {
     @State var infoHaptic = false
     @State private var toggle = false
     
-    init(rss: RSS) {
+    init(rss: RSS, viewModel: RSSListViewModel) {
         self.rss = rss
         self.imageLoader = ImageLoader(path: rss.image)
+        self.viewModel = viewModel
     }
     
     private func iconImageView(_ image: UIImage) -> some View {
@@ -112,29 +115,12 @@ struct RSSRow: View {
                 .contextMenu {
                     Button(action: {
                         infoHaptic.toggle()
-                    }) {
-                        Text("Get Info")
-                        Image(systemName: "info")
-                    }
+                    }, label: {
+                        Label("Get Info", systemImage: "info")
+                    })
                 
                     Divider()
-                    
-                    Button(action: {
-//                    if self.rss.filter({ !$0.isRead }).count == 0 {
-//                    Text("")
-//                    }
-//                    else {
-//                        self.rss.filter { !$0.isRead }.count
-//                            .font(.footnote)
-//                            .foregroundColor(Color("tab"))
-//                    }
-                    }) {
-                    Text("Mark All As Read in \(rss.title)")
-                    Image("Symbol").font(.system(size: 6, weight: .thin, design: .rounded))
-                    }
-                    
-                    Divider()
-                
+                                    
                     Button(action: {
                         UIPasteboard.general.setValue(rss.url,
                                                       forPasteboardType: kUTTypePlainText as String)
@@ -152,13 +138,28 @@ struct RSSRow: View {
                     }
                     
                     Divider()
+                    
+                    Button(action: {
+//                    if self.rss.filter({ !$0.isRead }).count == 0 {
+//                    Text("")
+//                    }
+//                    else {
+//                        self.rss.filter { !$0.isRead }.count
+//                            .font(.footnote)
+//                            .foregroundColor(Color("tab"))
+//                    }
+                    }, label: {
+                        Label("Mark All As Read in \(rss.title)", image: "Symbol")
+                    })
+                    
+                    Divider()
 
                     Button(action: {
-    //                    withAnimation(.easeIn){rss.deleteItem()}
-                    }) {
-                        Text("Unsubscribe from \(rss.title)?")
-                        Image(systemName: "xmark")
-                    }.foregroundColor(.red)
+                        self.deleteItems()
+//                        withAnimation(.easeIn){deleteItem()}
+                    }, label: {
+                        Label("Unsubscribe from \(rss.title)?", systemImage: "xmark")
+                    })
                 }
                 .actionSheet(isPresented: $showAlert) {
                     ActionSheet(
@@ -182,7 +183,7 @@ struct RSSRow: View {
                                                               forPasteboardType: kUTTypePlainText as String)
                             }),
                             .destructive(Text("Unsubscribe"), action: {
-                                //self.deleteItem()
+                                self.deleteItems()
                             }),
                             .cancel(),
                         ]
@@ -193,32 +194,14 @@ struct RSSRow: View {
     func countItems() -> Int {
         return CoreDataDataSource<RSSItem>().count
     }
-}
-
-struct customMenu: View {
-
-    var onDelete: (() -> Void)?
-
-    init(onDelete: @escaping () -> Void) {
-        self.onDelete = onDelete;
-    }
-
-    var body: some View {
-        VStack {
-            if (self.onDelete != nil) {
-                Button(action: self.onDelete!) {
-                    HStack {
-                        Text("delete")
-                        Image(systemName: "trash")
-                    }
-                }
-            }
-        }
+    func deleteItems() {
+        viewModel.items.remove(at: viewModel.start)
     }
 }
     
 struct RSSRow_Previews: PreviewProvider {
     static let rss = DataSourceService.current
+    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     static var previews: some View {
         let rss = RSS.create(url: "https://chorus.substack.com/people/2323141-jason-tate",
                              title: "Liner Notes",
@@ -226,7 +209,7 @@ struct RSSRow_Previews: PreviewProvider {
                              image: "https://bucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com/public/images/8a938a56-8a1e-42dc-8802-a75c20e8df4c_256x256.png", in: CoreData.stack.context)
 
         return
-            RSSRow(rss: rss)
+            RSSRow(rss: rss, viewModel: self.viewModel)
                 .padding()
                 .frame(width: 400, height: 25, alignment: .center)
             .preferredColorScheme(.dark)

@@ -56,6 +56,7 @@
 		618E640D25E4C81400F46B4D /* DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C818EA24E1FAB000593939 /* DataSource.swift */; };
 		618E640E25E4C81400F46B4D /* RSSDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C818E324E1F91B00593939 /* RSSDataSource.swift */; };
 		618E640F25E4C87200F46B4D /* RSSActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B95D8725CEEAA800829741 /* RSSActions.swift */; };
+		618E641125E57BFD00F46B4D /* RSSActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618E641025E57BFB00F46B4D /* RSSActionSheet.swift */; };
 		618F9021250DC63B00D5A03E /* RSSRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61967EFE24E2068400AA647C /* RSSRow.swift */; };
 		618F902B250DCD4F00D5A03E /* ModelHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618F9026250DCD4F00D5A03E /* ModelHelper.swift */; };
 		618F902C250DCD4F00D5A03E /* RSS+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618F9027250DCD4F00D5A03E /* RSS+CoreDataClass.swift */; };
@@ -188,6 +189,7 @@
 		61822138250542BF005636B2 /* OPMLParserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OPMLParserTests.swift; sourceTree = "<group>"; };
 		61822139250542BF005636B2 /* BatchImportViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatchImportViewModelTests.swift; sourceTree = "<group>"; };
 		6182213C250542E9005636B2 /* Subscriptions-test.opml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "Subscriptions-test.opml"; sourceTree = "<group>"; };
+		618E641025E57BFB00F46B4D /* RSSActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSSActionSheet.swift; sourceTree = "<group>"; };
 		618F9026250DCD4F00D5A03E /* ModelHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelHelper.swift; sourceTree = "<group>"; };
 		618F9027250DCD4F00D5A03E /* RSS+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RSS+CoreDataClass.swift"; sourceTree = "<group>"; };
 		618F9028250DCD4F00D5A03E /* RSS+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RSS+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -418,6 +420,7 @@
 				61967EFC24E2068400AA647C /* AddRSSView.swift */,
 				61967EFD24E2068400AA647C /* AddRSSViewModel.swift */,
 				61967EFE24E2068400AA647C /* RSSRow.swift */,
+				618E641025E57BFB00F46B4D /* RSSActionSheet.swift */,
 				61967EFF24E2068400AA647C /* RSSDisplayView.swift */,
 				612FB83D2540F04000D9822B /* RSSListView.swift */,
 				61C818DA24E1F77C00593939 /* RSSListViewModel.swift */,
@@ -769,6 +772,7 @@
 				61F5711825DE0B4100FDD761 /* UnreadListView.swift in Sources */,
 				61B95EC125D08E3300829741 /* AppDefaults.swift in Sources */,
 				6162F25825B68BA1008E7FA7 /* Searchbar.swift in Sources */,
+				618E641125E57BFD00F46B4D /* RSSActionSheet.swift in Sources */,
 				618F902F250DCD4F00D5A03E /* RSSItem+CoreDataProperties.swift in Sources */,
 				61E9D16F25A24CA300880550 /* GetInfo.swift in Sources */,
 			);
