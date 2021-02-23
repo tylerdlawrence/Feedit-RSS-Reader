@@ -75,7 +75,7 @@ struct AddRSSView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section() {
+                Section(footer: Text("Supports RSS, Atom & JSON")) {
                     HStack(alignment: .center){
                         Image(systemName: "magnifyingglass")
                             .opacity(0.4)
@@ -109,9 +109,9 @@ struct AddRSSView: View {
             .animation(Animation.easeIn(duration: 0.1))
             .animation(Animation.easeIn(duration: 0.5))
         }
-        .onDisappear {
-            self.viewModel.cancelCreateNewRSS()
-        }
+//        .onDisappear {
+//            self.viewModel.cancelCreateNewRSS()
+//        }
     }
     func fetchDetail() {
         guard let url = URL(string: self.feedUrl),

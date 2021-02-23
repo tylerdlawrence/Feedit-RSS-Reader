@@ -10,8 +10,8 @@ import Foundation
 import CoreData
 
 extension RSSItem {
-    static func == (lhs: RSSItem, rhs: RSSItem) -> Bool {
-        return lhs.title == rhs.title && lhs.isArchive == rhs.isArchive && lhs.isRead == rhs.isRead
+    static public func == (lhs: RSSItem, rhs: RSSItem) -> Bool {
+        return lhs.title == rhs.title && lhs.updateTime == rhs.updateTime && lhs.createTime == rhs.createTime && lhs.desc == rhs.desc && lhs.progress == rhs.progress && lhs.rssUUID == rhs.rssUUID && lhs.url == rhs.url && lhs.uuid == rhs.uuid && lhs.author == rhs.author && lhs.image == rhs.image && lhs.isArchive == rhs.isArchive && lhs.isRead == rhs.isRead
     }
 }
 

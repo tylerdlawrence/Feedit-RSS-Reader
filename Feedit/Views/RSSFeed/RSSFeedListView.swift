@@ -9,7 +9,6 @@ import SwiftUI
 import Foundation
 import Combine
 import UIKit
-import BetterSafariView
 import SwipeCell
 import FeedKit
 import KingfisherSwiftUI

@@ -19,11 +19,6 @@ struct HomeView: View {
     @ObservedObject var viewModel: RSSListViewModel
     @EnvironmentObject var rssDataSource: RSSDataSource
     
-    @EnvironmentObject var rssFeedViewModel: RSSFeedViewModel
-    var rssSource: RSS {
-        return self.rssFeedViewModel.rss
-    }
-    
     @StateObject var archiveListViewModel: ArchiveListViewModel
 //    @State private var refreshID = UUID()
     @State private var archiveScale: Image.Scale = .medium
@@ -119,7 +114,6 @@ struct HomeView: View {
                         }
                         .opacity(0.0)
                         .buttonStyle(PlainButtonStyle())
-                        
                     HStack{
                         Image(systemName: "archivebox.fill").font(.system(size: 20, weight: .ultraLight))
                             .foregroundColor(Color("text"))
@@ -147,7 +141,6 @@ struct HomeView: View {
                 }
                 .opacity(0.0)
                 .buttonStyle(PlainButtonStyle())
-                
                 HStack{
                     Image(systemName: "star.square.fill")
                         .font(.system(size: 20))
@@ -233,17 +226,6 @@ struct HomeView: View {
                         .buttonStyle(PlainButtonStyle())
                     HStack {
                         RSSRow(rss: rss)
-//                        Spacer()
-////                        Text("\(viewModel.articles.count)")
-//                        Text("\(countItems())")
-//                            .font(.caption)
-//                            .fontWeight(.bold)
-//                            .padding(.horizontal, 7)
-//                            .padding(.vertical, 1)
-//                            .background(Color.gray.opacity(0.5))
-//                            .opacity(0.4)
-//                            .foregroundColor(Color("text"))
-//                            .cornerRadius(8)
                         }
                     }
                 }
@@ -252,9 +234,6 @@ struct HomeView: View {
                         self.viewModel.delete(at: index)
                     }
                 }
-                .accentColor(Color("tab"))
-                .foregroundColor(Color("darkerAccent"))
-                .listRowBackground(Color("accent"))
             },
             label: {
                 HStack {
@@ -278,7 +257,6 @@ struct HomeView: View {
                         allItemsSection
                         Spacer()
                         feedsSection
-                        
                     }
                     .navigationBarItems(trailing:
                                             HStack(spacing: 10) {
@@ -336,7 +314,7 @@ struct HomeView: View {
                 self.viewModel.fecthResults()
             }
         }
-        .environmentObject(DataSourceService.current.rss)
+//        .environmentObject(DataSourceService.current.rss)
     }
 }
 
@@ -365,9 +343,7 @@ extension HomeView {
 
 struct HomeView_Previews: PreviewProvider {
     
-    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-    
-    
+    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)    
         
     static var previews: some View {
         Group{

@@ -52,6 +52,10 @@
 		618610B3256ED5BE0083A96D /* KingfisherSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 618610B2256ED5BE0083A96D /* KingfisherSwiftUI */; };
 		618610D5256EF7A00083A96D /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 618610D4256EF7A00083A96D /* SwiftSoup */; };
 		618610DC256EF8420083A96D /* Reachability in Frameworks */ = {isa = PBXBuildFile; productRef = 618610DB256EF8420083A96D /* Reachability */; };
+		618E640C25E4C81400F46B4D /* RSSItemDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C818E824E1FA7D00593939 /* RSSItemDataSource.swift */; };
+		618E640D25E4C81400F46B4D /* DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C818EA24E1FAB000593939 /* DataSource.swift */; };
+		618E640E25E4C81400F46B4D /* RSSDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C818E324E1F91B00593939 /* RSSDataSource.swift */; };
+		618E640F25E4C87200F46B4D /* RSSActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B95D8725CEEAA800829741 /* RSSActions.swift */; };
 		618F9021250DC63B00D5A03E /* RSSRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61967EFE24E2068400AA647C /* RSSRow.swift */; };
 		618F902B250DCD4F00D5A03E /* ModelHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618F9026250DCD4F00D5A03E /* ModelHelper.swift */; };
 		618F902C250DCD4F00D5A03E /* RSS+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618F9027250DCD4F00D5A03E /* RSS+CoreDataClass.swift */; };
@@ -658,6 +662,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				618E640F25E4C87200F46B4D /* RSSActions.swift in Sources */,
+				618E640C25E4C81400F46B4D /* RSSItemDataSource.swift in Sources */,
+				618E640D25E4C81400F46B4D /* DataSource.swift in Sources */,
+				618E640E25E4C81400F46B4D /* RSSDataSource.swift in Sources */,
 				618F9030250DCD7E00D5A03E /* ModelHelper.swift in Sources */,
 				618F9031250DCD7E00D5A03E /* RSS+CoreDataClass.swift in Sources */,
 				618F9032250DCD7E00D5A03E /* RSS+CoreDataProperties.swift in Sources */,
@@ -824,7 +832,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7Z3Z6D3TH7;
 				INFOPLIST_FILE = rssTests/Info.plist;
@@ -845,7 +853,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7Z3Z6D3TH7;
 				INFOPLIST_FILE = rssTests/Info.plist;

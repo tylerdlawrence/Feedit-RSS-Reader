@@ -203,6 +203,7 @@ struct GetInfo_Previews: PreviewProvider {
                              image: "https://bucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com/public/images/8a938a56-8a1e-42dc-8802-a75c20e8df4c_256x256.png", in: CoreData.stack.context)
 
         return
-            InfoView(rss: rss).preferredColorScheme(.dark)
+            InfoView(rss: rss)
+            //.preferredColorScheme(.dark)
     }
 }

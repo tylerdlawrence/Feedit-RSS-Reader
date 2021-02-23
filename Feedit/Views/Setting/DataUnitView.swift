@@ -16,9 +16,9 @@ struct DataUnitView: View {
         var gradient: Gradient {
             switch self {
             case .blue:
-                return Gradient(colors: [Color(hex: 0x13ABD6), Color(hex: 0x0036FF)])
+                return Gradient(colors: [Color(0x13ABD6), Color(0x0036FF)])
             case .orange:
-                return Gradient(colors: [Color(hex: 0xF1C300), Color(hex: 0xF37102)])
+                return Gradient(colors: [Color(0xF1C300), Color(0xF37102)])
             }
         }
     }
