@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Introspect
 
 struct DataNStorageView: View {
     
@@ -29,15 +30,14 @@ struct DataNStorageView: View {
                 .frame(height: 120)
                 
                 Spacer()
-            }
-            .padding(.top, 40)
-            
-            
-            
-            .onAppear {
-                self.viewModel.getRSSCount()
-                self.viewModel.getRSSItemCount()
-            }
+            }.padding(.top, 40)
+        }
+        .introspectScrollView { scrollView in
+            scrollView.refreshControl = UIRefreshControl()
+        }
+        .onAppear {
+            self.viewModel.getRSSCount()
+            self.viewModel.getRSSItemCount()
         }
     }
 }

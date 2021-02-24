@@ -225,7 +225,7 @@ struct HomeView: View {
                         .opacity(0.0)
                         .buttonStyle(PlainButtonStyle())
                     HStack {
-                        RSSRow(rss: rss, viewModel: viewModel)
+                        RSSRow(rss: rss)
                         }
                     }
                 }
@@ -252,11 +252,15 @@ struct HomeView: View {
         NavigationView{
             VStack {
                 ZStack {
+//                    ScrollView {
                     List{
                         Spacer()
                         allItemsSection
                         Spacer()
                         feedsSection
+                    }
+                    .introspectTableView { tableView in
+                        tableView.separatorStyle = .none
                     }
                     .navigationBarItems(trailing:
                                             HStack(spacing: 10) {

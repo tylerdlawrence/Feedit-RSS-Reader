@@ -14,7 +14,7 @@ import KingfisherSwiftUI
 struct RSSRow: View {
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.openURL) var openURL
-    @ObservedObject var viewModel: RSSListViewModel
+//    @ObservedObject var viewModel: RSSListViewModel
 
     
     enum ActionItem {
@@ -29,10 +29,10 @@ struct RSSRow: View {
     @State var infoHaptic = false
     @State private var toggle = false
     
-    init(rss: RSS, viewModel: RSSListViewModel) {
+    init(rss: RSS) { //viewModel: RSSListViewModel) {
         self.rss = rss
         self.imageLoader = ImageLoader(path: rss.image)
-        self.viewModel = viewModel
+//        self.viewModel = viewModel
     }
     
     private func iconImageView(_ image: UIImage) -> some View {
@@ -155,7 +155,7 @@ struct RSSRow: View {
                     Divider()
 
                     Button(action: {
-                        self.deleteItems()
+//                        self.deleteItems()
 //                        withAnimation(.easeIn){deleteItem()}
                     }, label: {
                         Label("Unsubscribe from \(rss.title)?", systemImage: "xmark")
@@ -183,7 +183,7 @@ struct RSSRow: View {
                                                               forPasteboardType: kUTTypePlainText as String)
                             }),
                             .destructive(Text("Unsubscribe"), action: {
-                                self.deleteItems()
+//                                self.deleteItems()
                             }),
                             .cancel(),
                         ]
@@ -194,9 +194,9 @@ struct RSSRow: View {
     func countItems() -> Int {
         return CoreDataDataSource<RSSItem>().count
     }
-    func deleteItems() {
-        viewModel.items.remove(at: viewModel.start)
-    }
+//    func deleteItems() {
+//        viewModel.items.remove(at: viewModel.start)
+//    }
 }
     
 struct RSSRow_Previews: PreviewProvider {
@@ -209,7 +209,7 @@ struct RSSRow_Previews: PreviewProvider {
                              image: "https://bucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com/public/images/8a938a56-8a1e-42dc-8802-a75c20e8df4c_256x256.png", in: CoreData.stack.context)
 
         return
-            RSSRow(rss: rss, viewModel: self.viewModel)
+            RSSRow(rss: rss)//, viewModel: self.viewModel)
                 .padding()
                 .frame(width: 400, height: 25, alignment: .center)
             .preferredColorScheme(.dark)
