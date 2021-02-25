@@ -98,28 +98,27 @@ struct InfoView: View {
                                 .contextMenu {
                                     Button(action: {
                                         self.actionSheetShown = true
-                                        UIPasteboard.general.setValue(rss.url,
+                                        UIPasteboard.general.setValue(rssSource.url,
                                                                       forPasteboardType: kUTTypePlainText as String)
                                     }) {
                                         Text("Copy URL")
                                         Image(systemName: "doc.on.clipboard")
                                     }
                          
-                                    Button(action: {
-//                                        NavigationLink("", destination: Link("", destination: URL(string: rss.url)!))
-                                    }) {
-                                        Text("Go To Website")
-                                        Spacer()
-                                        Image(systemName: "safari")
-                                    }.padding()
+                                    Link(destination: URL(string: rssSource.url)!, label: {
+                                        HStack {
+                                            Text("Go To Website")
+                                            Spacer()
+                                            Image(systemName: "safari")
+                                        }
+                                    })
                                 }
                             Spacer()
-                            Button(action: {
-//                                Link("", destination: URL(string: rssSource.url)!)
-                            }) {
-                                Image(systemName: "safari")
-                                    .font(.system(size: 20, weight: .regular, design: .rounded)).foregroundColor(Color("tab"))
-                            }
+                            Link(destination: URL(string: rssSource.url)!, label: {
+                                HStack {
+                                    Image(systemName: "safari")
+                                }
+                            })
                         }
                     }
                 }

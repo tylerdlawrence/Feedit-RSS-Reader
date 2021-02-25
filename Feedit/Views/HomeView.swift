@@ -18,7 +18,7 @@ struct HomeView: View {
     }
     @ObservedObject var viewModel: RSSListViewModel
     @EnvironmentObject var rssDataSource: RSSDataSource
-    
+    @StateObject var rssFeedViewModel: RSSFeedViewModel
     @StateObject var archiveListViewModel: ArchiveListViewModel
 //    @State private var refreshID = UUID()
     @State private var archiveScale: Image.Scale = .medium
@@ -28,7 +28,7 @@ struct HomeView: View {
     @State private var isSettingPresented = false
     @State private var isAddFormPresented = false
     @State private var selectedFeatureItem = FeaureItem.add
-    @State private var revealFeedsDisclosureGroup = true
+    @State private var revealFeedsDisclosureGroup = false
     @State private var revealSmartFilters = true
     @State private var isRead = false
     @State private var isLoading = false
@@ -109,7 +109,7 @@ struct HomeView: View {
             VStack{
                 HStack {
                     ZStack{
-                        NavigationLink(destination: DataNStorageView()) {
+                        NavigationLink(destination: DataNStorageView(rssFeedViewModel: self.rssFeedViewModel, viewModel: self.viewModel)) {
                             EmptyView()
                         }
                         .opacity(0.0)
@@ -166,53 +166,6 @@ struct HomeView: View {
             }
         }
     }
-    private var smartSection: some View {
-        DisclosureGroup(
-            isExpanded: $revealSmartFilters,
-            content: {
-                ZStack{
-                    NavigationLink(destination: DataNStorageView()) {
-                        EmptyView()
-                    }
-                    .opacity(0.0)
-                    .buttonStyle(PlainButtonStyle())
-                    
-                    HStack{
-                        Image(systemName: "archivebox.fill").font(.system(size: 20, weight: .thin))
-                            .foregroundColor(Color("tab"))
-                            .opacity(0.8)
-                            .frame(width: 25, height: 25)
-                        Text("Archive")
-                            .font(.system(size: 17, weight: .regular, design: .rounded))
-                        Spacer()
-                    }
-                }
-                ZStack{
-                    NavigationLink(destination: archiveListView) {
-                        EmptyView()
-                    }
-                    .opacity(0.0)
-                    .buttonStyle(PlainButtonStyle())
-                    HStack{
-                        Image(systemName: "star.square.fill")
-                            .font(.system(size: 20))
-                            .foregroundColor(.yellow)
-                            .opacity(0.8)
-                            .frame(width: 25, height: 25)
-                        Text("Starred")
-                            .font(.system(size: 17, weight: .regular, design: .rounded))
-                            Spacer()
-                    }
-                }
-            },
-            label: {
-                HStack {
-                    Text("All Items")
-                        .font(.system(size: 18, weight: .medium, design: .rounded))
-                }
-            })
-            .textCase(nil)
-    }
     private var feedsSection: some View {
         DisclosureGroup(
             isExpanded: $revealFeedsDisclosureGroup,
@@ -239,7 +192,6 @@ struct HomeView: View {
                 HStack {
                     Text("Feeds")
                         .font(.system(size: 20, weight: .medium, design: .rounded))
-                    Spacer()
                 }
             })
             .accentColor(Color("tab"))
@@ -252,35 +204,34 @@ struct HomeView: View {
         NavigationView{
             VStack {
                 ZStack {
-//                    ScrollView {
                     List{
                         Spacer()
                         allItemsSection
                         Spacer()
                         feedsSection
                     }
-                    .introspectTableView { tableView in
-                        tableView.separatorStyle = .none
-                    }
                     .navigationBarItems(trailing:
                                             HStack(spacing: 10) {
                                                 Button(action: {
-                                                    self.isLoading = true
+                                                    startNetworkCall()
                                                 }) {
-                                                Image(systemName: "arrow.clockwise").font(.system(size: 16, weight: .bold))
-                                                    .foregroundColor(Color("tab"))
-                                                    .frame(width: 50, height: 50)
-                                                    .rotationEffect(Angle(degrees: isLoading ? 360 : 0))
-                                                    .animation(Animation.linear(duration: 2).repeatCount(3, autoreverses: false))
-                                                    .onAppear() {
-                                                        self.isLoading = true
+                                                    if isLoading {
+                                                        ProgressView()
+                                                            .progressViewStyle(CircularProgressViewStyle(tint: Color("tab")))
+                                                            .scaleEffect(1)
+                                                        } else {
+                                                            Image(systemName: "arrow.clockwise").font(.system(size: 16, weight: .bold)).foregroundColor(Color("tab"))
                                                     }
                                                 }
-                                                Toggle("", isOn: $isRead)
-                                                    .toggleStyle(CheckboxStyle())
+//                                                Toggle("", isOn: $isRead)
+//                                                    .toggleStyle(CheckboxStyle())
                                             })
+
                     .listStyle(PlainListStyle())
                     .navigationBarTitle("Account")
+                }
+                .onAppear {
+                    startNetworkCall()
                 }
             Spacer()
                 if addRSSProgressValue > 0 && addRSSProgressValue < 1.0 {
@@ -318,13 +269,21 @@ struct HomeView: View {
                 self.viewModel.fecthResults()
             }
         }
-//        .environmentObject(DataSourceService.current.rss)
+//        .navigationViewStyle(StackNavigationViewStyle())
+        .navigationViewStyle(DoubleColumnNavigationViewStyle())
     }
 }
 
 extension HomeView {
     func onDoneAction() {
         self.viewModel.fecthResults()
+    }
+    
+    func startNetworkCall() {
+        isLoading = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            isLoading = false
+        }
     }
     func moveRow(from indexes: IndexSet, to destination: Int) {
         if let first = indexes.first {
@@ -347,14 +306,16 @@ extension HomeView {
 
 struct HomeView_Previews: PreviewProvider {
     
+    static let rss = RSS()
+    
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)    
         
     static var previews: some View {
         Group{
-            HomeView(viewModel: self.viewModel, archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
+            HomeView(viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
             .environment(\.colorScheme, .dark)
 
-            HomeView(viewModel: self.viewModel, archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
+            HomeView(viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
         }.environmentObject(DataSourceService.current.rss)
     }
 }
@@ -383,5 +344,3 @@ extension DisclosureGroup where Label == Text {
     )
   }
 }
-
-

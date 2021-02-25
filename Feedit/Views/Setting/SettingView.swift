@@ -48,10 +48,10 @@ struct SettingView: View {
         return BatchImportView(viewModel: BatchImportViewModel(dataSource: dataSource))
     }
     
-    var dataNStorage: DataNStorageView {
-        let storage = DataNStorageView()
-        return storage
-    }
+//    var dataNStorage: DataNStorageView {
+//        let storage = DataNStorageView()
+//        return storage
+//    }
     
     private var doneButton: some View {
         Button(action: {
@@ -103,19 +103,19 @@ struct SettingView: View {
                                             }
                                         }
                                     }
-                                HStack {
-                                    NavigationLink(destination: self.dataNStorage) {
-                                        HStack {
-                                            Image(systemName: "internaldrive")
-                                                .frame(width: 25, height: 25)
-                                                .foregroundColor(.white)
-                                                .background(Color.gray)
-                                                .opacity(0.9)
-                                                .clipShape(RoundedRectangle(cornerRadius: 5))
-                                            Text("Data & Storage")
-                                        }
-                                    }
-                                }
+//                                HStack {
+//                                    NavigationLink(destination: self.dataNStorage) {
+//                                        HStack {
+//                                            Image(systemName: "internaldrive")
+//                                                .frame(width: 25, height: 25)
+//                                                .foregroundColor(.white)
+//                                                .background(Color.gray)
+//                                                .opacity(0.9)
+//                                                .clipShape(RoundedRectangle(cornerRadius: 5))
+//                                            Text("Data & Storage")
+//                                        }
+//                                    }
+//                                }
                                 HStack {
                                     Image(systemName: "safari")
                                         .frame(width: 25, height: 25)

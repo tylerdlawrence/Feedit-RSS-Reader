@@ -110,10 +110,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     
     let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+    let rss = RSS()
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
-        let homeView = HomeView(viewModel: self.viewModel, archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
+        let homeView = HomeView(viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: self.rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
