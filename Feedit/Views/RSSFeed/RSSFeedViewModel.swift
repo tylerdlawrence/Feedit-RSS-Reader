@@ -8,7 +8,10 @@
 import Foundation
 
 class RSSFeedViewModel: NSObject, ObservableObject {
-
+    
+    @Published var isOn: Bool = false
+    @Published var unreadIsOn: Bool = false
+    
     @Published var items: [RSSItem] = []
     @Published var feed: [RSS] = []
     @Published var filteredPosts: [RSSItem] = []
@@ -30,6 +33,15 @@ class RSSFeedViewModel: NSObject, ObservableObject {
     func archiveOrCancel(_ item: RSSItem) {
         let updatedItem = dataSource.readObject(item)
         updatedItem.isArchive = !item.isArchive
+        updatedItem.updateTime = Date()
+        dataSource.setUpdateObject(updatedItem)
+
+        _ = dataSource.saveUpdateObject()
+    }
+    
+    func unreadOrCancel(_ item: RSSItem) {
+        let updatedItem = dataSource.readObject(item)
+        updatedItem.isRead = !item.isRead
         updatedItem.updateTime = Date()
         dataSource.setUpdateObject(updatedItem)
 

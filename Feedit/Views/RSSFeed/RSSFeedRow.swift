@@ -20,7 +20,7 @@ import Intents
 
 struct RSSItemRow: View {
     
-    
+//    @ObservedObject var rssFeedViewModel: RSSFeedViewModel
     @ObservedObject var itemWrapper: RSSItem
 
     @State private var isStarred = false
@@ -29,9 +29,10 @@ struct RSSItemRow: View {
     @State private var selectedItem: RSSItem?
     var contextMenuAction: ((RSSItem) -> Void)?
     
-    init(wrapper: RSSItem, menu action: ((RSSItem) -> Void)? = nil) {
+    init(wrapper: RSSItem, menu action: ((RSSItem) -> Void)? = nil) { //, rssFeedViewModel: RSSFeedViewModel) {
         itemWrapper = wrapper
         contextMenuAction = action
+//        self.rssFeedViewModel = rssFeedViewModel
     }
     var body: some View {
         let toggleStarred = SwipeCellButton(
@@ -217,5 +218,14 @@ struct RSSItemRow: View {
 extension Int {
     static func * (lhs: Int, rhs: CGFloat) -> CGFloat {
         return CGFloat(lhs) * rhs
+    }
+}
+
+struct RSSFeedRow_Previews: PreviewProvider {
+    static var previews: some View {
+        let simple = DataSourceService.current.rssItem.simple()
+        return RSSItemRow(wrapper: simple!).environmentObject(DataSourceService.current.rssItem)
+            .frame(width: 360, height: 60)
+            .preferredColorScheme(.dark)
     }
 }

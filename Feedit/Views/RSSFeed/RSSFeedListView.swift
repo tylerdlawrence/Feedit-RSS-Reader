@@ -14,6 +14,7 @@ import FeedKit
 import KingfisherSwiftUI
 
 struct RSSFeedListView: View {
+    
     @StateObject private var dataSource = CoreDataDataSource<RSSItem>()
     @State private var sortAscending: Bool = true
     @State private var editMode: EditMode = .inactive
@@ -30,9 +31,9 @@ struct RSSFeedListView: View {
     
     @State private var selectedItem: RSSItem?
     @State private var start: Int = 0
-    @State private var footer: String = "Refresh"
+    @State private var footer: String = "Load More Articles"
     @State var cancellables = Set<AnyCancellable>()
-    @State var isRead = false
+//    @State var isRead = false
     @State var starOnly = false
     
     init(viewModel: RSSFeedViewModel) {
@@ -45,8 +46,8 @@ struct RSSFeedListView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .edgesIgnoringSafeArea(.all)
             List {
-
-                ForEach(self.rssFeedViewModel.items, id: \.self) { item in
+//                ForEach(self.rssFeedViewModel.items, id: \.self) { item in
+                ForEach(self.rssFeedViewModel.items.filter {rssFeedViewModel.isOn ? $0.isArchive : true && rssFeedViewModel.isOn ? $0.isRead : true}) { item in
                     ZStack {
                         NavigationLink(destination: WebView(rssItem: item, onCloseClosure: {})) {
                             EmptyView()
@@ -62,9 +63,14 @@ struct RSSFeedListView: View {
                         }
                     }
                 }
+
                 VStack(alignment: .center) {
                     Button(action: self.rssFeedViewModel.loadMore) {
-                        Text(self.footer)
+                        HStack {
+                            Text(self.footer).font(.system(size: 18, weight: .medium, design: .rounded))
+                            Spacer()
+                            Image(systemName: "arrow.down.circle").font(.system(size: 18, weight: .medium, design: .rounded))
+                        }.foregroundColor(Color("bg"))
                     }
                 }
             }
@@ -78,11 +84,9 @@ struct RSSFeedListView: View {
             }
                 .toolbar{
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(action: {
-                            self.offset = 0
-                        }) {
-                            Image(systemName: "ellipsis")
-                        }
+                        Image(systemName: (sortAscending ? "arrow.down" : "arrow.up")).font(.system(size: 18, weight: .medium, design: .rounded))
+                            .foregroundColor(Color("tab"))
+                            .onTapGesture(perform: self.onToggleSort )
                     }
                     ToolbarItem(placement: .principal) {
                         HStack{
@@ -119,52 +123,41 @@ struct RSSFeedListView: View {
                     }
                     
                     ToolbarItem(placement: .bottomBar) {
-//                        Image(systemName: (sortAscending ? "arrow.down" : "arrow.up"))
-//                            .foregroundColor(Color("tab"))
-//                            .onTapGesture(perform: self.onToggleSort )
-                        Button(action: {
-                            //
-                        }) {
-                            Image(systemName: "magnifyingglass")
-                        }
+                        Toggle(isOn: $rssFeedViewModel.unreadIsOn) { Text("") }
+                            .toggleStyle(CheckboxStyle())
                     }
                     ToolbarItem(placement: .bottomBar) {
                         Spacer()
                     }
                     ToolbarItem(placement: .bottomBar) {
-//                        Toggle("", isOn: $isRead)
-//                            .toggleStyle(CheckboxStyle())
-                        Button(action: {
-                            //
-                        }) {
-                            Image(systemName: "checkmark.circle")
-                        }
+                        Toggle(isOn: $rssFeedViewModel.isOn) { Text("") }
+                            .toggleStyle(StarStyle())
                     }
                 }
             
-            VStack{
-                Spacer()
-                RSSActionSheet()
-                .offset(y: self.offset)
-                .gesture(DragGesture()
-                    .onChanged({ (value) in
-                        if value.translation.height > 0{
-                            self.offset = value.location.y
-                        }
-                    })
-                    .onEnded({ (value) in
-                        if self.offset > 100{
-                            self.offset = UIScreen.main.bounds.height
-                        }
-                        else{
-                            self.offset = 0
-                        }
-                    })
-                )
-            }.background((self.offset <= 100 ? Color(UIColor.label).opacity(0.3) : Color.clear).edgesIgnoringSafeArea(.all)
-            .onTapGesture {
-                self.offset = 0
-            })
+//            VStack{
+//                Spacer()
+//                RSSActionSheet()
+//                .offset(y: self.offset)
+//                .gesture(DragGesture()
+//                    .onChanged({ (value) in
+//                        if value.translation.height > 0{
+//                            self.offset = value.location.y
+//                        }
+//                    })
+//                    .onEnded({ (value) in
+//                        if self.offset > 100{
+//                            self.offset = UIScreen.main.bounds.height
+//                        }
+//                        else{
+//                            self.offset = 0
+//                        }
+//                    })
+//                )
+//            }.background((self.offset <= 100 ? Color(UIColor.label).opacity(0.3) : Color.clear).edgesIgnoringSafeArea(.all)
+//            .onTapGesture {
+//                self.offset = 0
+//            })
             
             .sheet(item: $selectedItem, content: { item in
                 if UserEnvironment.current.useSafari {
@@ -190,8 +183,21 @@ struct RSSFeedListView: View {
     }
     func contextmenuAction(_ item: RSSItem) {
         rssFeedViewModel.archiveOrCancel(item)
+        rssFeedViewModel.unreadOrCancel(item)
     }
     public func onToggleSort() {
         self.sortAscending.toggle()
+    }
+}
+
+struct RSSFeedList_Previews: PreviewProvider {
+    static let rss = RSS()
+    
+    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+        
+    static var previews: some View {
+            HomeView(viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
+                .environment(\.colorScheme, .dark)
+                .environmentObject(DataSourceService.current.rss)
     }
 }

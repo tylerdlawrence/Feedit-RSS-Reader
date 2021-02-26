@@ -109,6 +109,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
     
+//    override init() {
+//        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor(Color("tab"))]
+//        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor(Color("tab"))]
+//    }
+    
     let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     let rss = RSS()
     

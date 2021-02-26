@@ -93,10 +93,13 @@ class ParentResolverViewController: UIViewController {
 struct Searchbar: View {
     @ObservedObject var searchBar: SearchBar = SearchBar()
 
+    
     var body: some View {
         NavigationView{
-            List(0 ..< 5) { item in
-                Text("Test")
+            List {
+                Text("test")
+                Text("hi")
+                Text("hello")
             }
             .navigationBarTitle("Search")
             .listStyle(InsetGroupedListStyle())

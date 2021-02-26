@@ -305,11 +305,11 @@ extension HomeView {
 }
 
 struct HomeView_Previews: PreviewProvider {
-    
+
     static let rss = RSS()
-    
-    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)    
-        
+
+    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+
     static var previews: some View {
         Group{
             HomeView(viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))

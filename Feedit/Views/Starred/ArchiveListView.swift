@@ -63,11 +63,8 @@ struct ArchiveListView: View {
             .add(self.searchBar)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        self.offset = 0
-                    }) {
-                        Image(systemName: "ellipsis")
-                    }
+                    
+
                 }
                 ToolbarItem(placement: .principal) {
                     VStack{
@@ -111,29 +108,29 @@ struct ArchiveListView: View {
                     }
                 }
         
-        VStack{
-            Spacer()
-            RSSActionSheet()
-            .offset(y: self.offset)
-            .gesture(DragGesture()
-                .onChanged({ (value) in
-                    if value.translation.height > 0{
-                        self.offset = value.location.y
-                    }
-                })
-                .onEnded({ (value) in
-                    if self.offset > 100{
-                        self.offset = UIScreen.main.bounds.height
-                    }
-                    else{
-                        self.offset = 0
-                    }
-                })
-            )
-        }.background((self.offset <= 100 ? Color(UIColor.label).opacity(0.3) : Color.clear).edgesIgnoringSafeArea(.all)
-        .onTapGesture {
-            self.offset = 0
-        })
+//        VStack{
+//            Spacer()
+//            RSSActionSheet()
+//            .offset(y: self.offset)
+//            .gesture(DragGesture()
+//                .onChanged({ (value) in
+//                    if value.translation.height > 0{
+//                        self.offset = value.location.y
+//                    }
+//                })
+//                .onEnded({ (value) in
+//                    if self.offset > 100{
+//                        self.offset = UIScreen.main.bounds.height
+//                    }
+//                    else{
+//                        self.offset = 0
+//                    }
+//                })
+//            )
+//        }.background((self.offset <= 100 ? Color(UIColor.label).opacity(0.3) : Color.clear).edgesIgnoringSafeArea(.all)
+//        .onTapGesture {
+//            self.offset = 0
+//        })
         
             .sheet(item: $selectedItem, content: { item in
                 if UserEnvironment.current.useSafari {

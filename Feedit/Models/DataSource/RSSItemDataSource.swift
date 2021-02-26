@@ -44,7 +44,10 @@ class RSSItemDataSource: NSObject, DataSource {
 extension RSSItemDataSource {
     func simple() -> RSSItem? {
         let item = RSSItem.init(context: createContext)
-        item.url = "https://www.github.com"
+        item.title = "Lorem Ipsum Dolor"
+        item.desc = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+        item.createTime = Date()
+        item.author = "tyler d lawrence"
         return item
     }
 }
