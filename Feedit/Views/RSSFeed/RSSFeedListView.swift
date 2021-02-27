@@ -14,6 +14,7 @@ import FeedKit
 import KingfisherSwiftUI
 
 struct RSSFeedListView: View {
+
     
     @StateObject private var dataSource = CoreDataDataSource<RSSItem>()
     @State private var sortAscending: Bool = true
@@ -33,12 +34,16 @@ struct RSSFeedListView: View {
     @State private var start: Int = 0
     @State private var footer: String = "Load More Articles"
     @State var cancellables = Set<AnyCancellable>()
-//    @State var isRead = false
-    @State var starOnly = false
     
     init(viewModel: RSSFeedViewModel) {
         self.rssFeedViewModel = viewModel
     }
+    
+//    var filteredArticles: [RSSItem] {
+//        return rssFeedViewModel.filteredArticles.filter({ (item) -> Bool in
+//            return !((rssFeedViewModel.isOn && item.isArchive) || (rssFeedViewModel.unreadIsOn && item.isRead))
+//        })
+//    }
     
     var body: some View {
         ZStack {
@@ -47,7 +52,7 @@ struct RSSFeedListView: View {
                 .edgesIgnoringSafeArea(.all)
             List {
 //                ForEach(self.rssFeedViewModel.items, id: \.self) { item in
-                ForEach(self.rssFeedViewModel.items.filter {rssFeedViewModel.isOn ? $0.isArchive : true && rssFeedViewModel.isOn ? $0.isRead : true}) { item in
+                ForEach(self.rssFeedViewModel.items.filter {rssFeedViewModel.isOn ? $0.isArchive : true && rssFeedViewModel.unreadIsOn ? $0.isRead : true}) { item in
                     ZStack {
                         NavigationLink(destination: WebView(rssItem: item, onCloseClosure: {})) {
                             EmptyView()
@@ -55,15 +60,18 @@ struct RSSFeedListView: View {
                         .opacity(0.0)
                         .buttonStyle(PlainButtonStyle())
                         HStack {
+                            
+                            
                             RSSItemRow(wrapper: item, menu: self.contextmenuAction(_:))
                                 .contentShape(Rectangle())
                                 .onTapGesture {
                                     self.selectedItem = item
+                                    
                             }
                         }
                     }
                 }
-
+                    
                 VStack(alignment: .center) {
                     Button(action: self.rssFeedViewModel.loadMore) {
                         HStack {
@@ -125,6 +133,9 @@ struct RSSFeedListView: View {
                     ToolbarItem(placement: .bottomBar) {
                         Toggle(isOn: $rssFeedViewModel.unreadIsOn) { Text("") }
                             .toggleStyle(CheckboxStyle())
+//                        FilterBar(selectedFilter: $rssFeedViewModel.filterType, isOn: $rssFeedViewModel.showFilter, markedAllPostsRead: {})
+                                    
+                                    //self.$rssFeedViewModel.markAllPostsRead()})
                     }
                     ToolbarItem(placement: .bottomBar) {
                         Spacer()
@@ -183,7 +194,8 @@ struct RSSFeedListView: View {
     }
     func contextmenuAction(_ item: RSSItem) {
         rssFeedViewModel.archiveOrCancel(item)
-        rssFeedViewModel.unreadOrCancel(item)
+//        rssFeedViewModel.unreadOrCancel(item)
+        rssFeedViewModel.setPostRead(item)
     }
     public func onToggleSort() {
         self.sortAscending.toggle()

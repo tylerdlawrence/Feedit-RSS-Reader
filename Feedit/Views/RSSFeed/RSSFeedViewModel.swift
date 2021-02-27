@@ -14,8 +14,8 @@ class RSSFeedViewModel: NSObject, ObservableObject {
     
     @Published var items: [RSSItem] = []
     @Published var feed: [RSS] = []
-    @Published var filteredPosts: [RSSItem] = []
-    @Published var filterType = FilterType.unreadOnly
+    @Published var filteredArticles: [RSSItem] = []
+    @Published var filterType = FilterType.unreadIsOn
     @Published var selectedPost: RSSItem?
     @Published var showingDetail = false
     @Published var shouldReload = false
@@ -23,6 +23,8 @@ class RSSFeedViewModel: NSObject, ObservableObject {
     let dataSource: RSSItemDataSource
     let rss: RSS
     var start = 0
+    
+    
 
     init(rss: RSS, dataSource: RSSItemDataSource) {
         self.dataSource = dataSource
@@ -37,6 +39,31 @@ class RSSFeedViewModel: NSObject, ObservableObject {
         dataSource.setUpdateObject(updatedItem)
 
         _ = dataSource.saveUpdateObject()
+    }
+
+    func setPostRead(_ item: RSSItem) {
+        item.objectWillChange.send()
+        if let index = item.author.firstIndex(where: {$0.description == item.url}) {
+            item.author.remove(at: index)
+        }
+        if let index = self.items.firstIndex(where: {$0.url == item.url}) {
+            self.items.remove(at: index)
+            self.items.insert(item, at: index)
+        }
+//        self.updateFeeds()
+    }
+
+    func markAllPostsRead(item: RSSItem) {}
+
+    var isRead: Bool
+    {
+        return readDate != nil
+    }
+
+    var readDate: Date? {
+        didSet {
+            objectWillChange.send()
+        }
     }
     
     func unreadOrCancel(_ item: RSSItem) {

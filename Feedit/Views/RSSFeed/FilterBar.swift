@@ -12,99 +12,106 @@ import Foundation
 
 enum FilterType: String {
     case all = "All"
-    case unreadOnly = "Unread"
-    case starredOnly = "Starred"
+    case unreadIsOn = "Unread"
+    case isArchive = "Starred"
 }
 
 struct FilterBar: View {
-    @State private var refresh = UUID()
     @Binding var selectedFilter: FilterType
-    @Binding var showFilter: Bool
+//    @Binding var showFilter: Bool
+    @Binding var isOn: Bool
     var markedAllPostsRead: (() -> Void)?
     
     var body: some View {
-        HStack(alignment:.center) {
-                    ZStack {
-                        if selectedFilter == .starredOnly {
-                            Capsule()
-                                .frame(width: 90, height: 25)
-                                .opacity(0.5)
-                                .foregroundColor(Color.gray.opacity(0.5))
+        ZStack {
+//            Capsule()
+            RoundedRectangle(cornerRadius: 25.0)
+                .frame(width: 205, height: 35).foregroundColor(Color("text")).opacity(0.1)
+            HStack(spacing: 0) {
+                Spacer()
+                ZStack {
+                    if selectedFilter == .isArchive {
+                        Capsule()
+                            .frame(width: 85, height: 25)
+                            .opacity(0.5)
+                            .foregroundColor(Color.gray.opacity(0.5))
 
-                        HStack {
-                            Image(systemName: "star.fill").font(.system(size: 10, weight: .black))
-                            Text(FilterType.starredOnly.rawValue)
-                                .textCase(.uppercase)
-                                .font(.system(size: 12, weight: .medium, design: .rounded))
-                                .foregroundColor(Color("text"))
-                            }
-                        } else {
-                            Image(systemName: "star.fill").font(.system(size: 10, weight: .black))
+                    HStack {
+                        Image(systemName: "star.fill").font(.system(size: 10, weight: .black))
+                        Text(FilterType.isArchive.rawValue)
+                            .textCase(.uppercase)
+                            .font(.system(size: 10, weight: .medium, design: .rounded))
+                            .foregroundColor(Color("text"))
                         }
+                    } else {
+                        Image(systemName: "star.fill").font(.system(size: 10, weight: .black))
                     }
-                    .padding()
+                }
+                .padding()
+                .onTapGesture {
+                    self.selectedFilter = .isArchive
+                }
+                Divider()
+        
+                ZStack {
+                    if selectedFilter == .unreadIsOn {
+                        Capsule()
+                            .frame(width: 85, height: 25)
+                            .opacity(0.5)
+                            .foregroundColor(Color.gray.opacity(0.5))
+                    HStack {
+                        Image(systemName: "circle.fill").font(.system(size: 10, weight: .black))
+                        Text(FilterType.unreadIsOn.rawValue)
+                            .textCase(.uppercase)
+                            .font(.system(size: 10, weight: .medium, design: .rounded))
+                                .foregroundColor(Color("text"))
+                        }
+                    } else {
+                        Image(systemName: "circle.fill").font(.system(size: 10, weight: .black)).padding()
+                    }
+                }//.padding()
+                .onTapGesture {
+                    self.selectedFilter = .unreadIsOn
+                }
+                Divider()
+                
+                ZStack {
+                    if selectedFilter == .all {
+                        Capsule()
+                            .frame(width: 65, height: 25)
+                            .opacity(0.5)
+                            .foregroundColor(Color.gray.opacity(0.5))
+
+
+                    HStack{
+                        Image(systemName: "text.justifyleft").font(.system(size: 10, weight: .black))
+                        Text(FilterType.all.rawValue)
+                            .textCase(.uppercase)
+                            .font(.system(size: 10, weight: .medium, design: .rounded))
+                            .foregroundColor(Color("text"))
+                        }
+                    } else {
+                        Image(systemName: "text.justifyleft").font(.system(size: 10, weight: .black))
+                        }
+                    }.padding()
                     .onTapGesture {
-                        self.selectedFilter = .starredOnly
+                        self.selectedFilter = .all
                     }
                     Spacer()
-            
-                    ZStack {
-                        if selectedFilter == .unreadOnly {
-                            Capsule()
-                                .frame(width: 85, height: 25)
-                                .opacity(0.5)
-                                .foregroundColor(Color.gray.opacity(0.5))
-                        HStack {
-                            Image(systemName: "circle.fill").font(.system(size: 10, weight: .black))
-                            Text(FilterType.unreadOnly.rawValue)
-                                .textCase(.uppercase)
-                                .font(.system(size: 12, weight: .medium, design: .rounded))
-                                    .foregroundColor(Color("text"))
-                            }
-                        } else {
-                            Image(systemName: "circle.fill").font(.system(size: 10, weight: .black))
-                        }
-                    }
-                    .padding()
-                    .onTapGesture {
-                        self.selectedFilter = .unreadOnly
-                    }
-                    Spacer()
-                    
-                    ZStack {
-                        if selectedFilter == .all {
-                            Capsule()
-                                .frame(width: 65, height: 25)
-                                .opacity(0.5)
-                                .foregroundColor(Color.gray.opacity(0.5))
-
-
-                        HStack{
-                            Image(systemName: "text.justifyleft").font(.system(size: 10, weight: .black))
-                            Text(FilterType.all.rawValue)
-                                .textCase(.uppercase)
-                                .font(.system(size: 10, weight: .medium, design: .rounded))
-                                .foregroundColor(Color("text"))
-                            }
-                        } else {
-                            Image(systemName: "text.justifyleft").font(.system(size: 10, weight: .black))
-                            }
-                        }
-                        .padding()
-                        .onTapGesture {
-                            self.selectedFilter = .all
-                        }
-                        Spacer()
-        }.id(refresh)
-            .frame(height: 20)
-
+            }
+            .frame(width: 125, height: 20)
+        }
     }
 }
 
 struct FilterBar_Previews: PreviewProvider {
     static var previews: some View {
-        FilterBar(selectedFilter: .constant(.all),
-                   showFilter: .constant(true), markedAllPostsRead: nil)
+        VStack{
+            Spacer()
+            FilterBar(selectedFilter: .constant(.unreadIsOn),
+                   isOn: .constant(true), markedAllPostsRead: nil)
+                .preferredColorScheme(.dark)
+        }
     }
 }
 

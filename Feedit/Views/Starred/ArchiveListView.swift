@@ -50,21 +50,32 @@ struct ArchiveListView: View {
                             }
                         }
                     }
-                    .onDelete { indexSet in
-                        if let index = indexSet.first {
-                            let item = self.archiveListViewModel.items[index]
-                            self.archiveListViewModel.unarchive(item)
-                        }
+                
+                .onDelete { indexSet in
+                    if let index = indexSet.first {
+                        let item = self.archiveListViewModel.items[index]
+                        self.archiveListViewModel.unarchive(item)
                     }
                 }
-//            }
+                
+                VStack(alignment: .center) {
+                    Button(action: self.archiveListViewModel.loadMore) {
+                        HStack {
+                            Text(self.footer).font(.system(size: 18, weight: .medium, design: .rounded))
+                            Spacer()
+                            Image(systemName: "arrow.down.circle").font(.system(size: 18, weight: .medium, design: .rounded))
+                        }.foregroundColor(Color("bg"))
+                    }
+                }
+            }
             .listStyle(PlainListStyle())
             .navigationBarTitle("", displayMode: .inline)
             .add(self.searchBar)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    
-
+                    Image(systemName: (sortAscending ? "arrow.down" : "arrow.up"))
+                        .foregroundColor(Color("tab"))
+                        .onTapGesture(perform: self.onToggleSort )
                 }
                 ToolbarItem(placement: .principal) {
                     VStack{
@@ -85,26 +96,16 @@ struct ArchiveListView: View {
                     }
                 }
                     ToolbarItem(placement: .bottomBar) {
-//                        Image(systemName: (sortAscending ? "arrow.down" : "arrow.up"))
-//                            .foregroundColor(Color("tab"))
-//                            .onTapGesture(perform: self.onToggleSort )
-                        Button(action: {
-                            //
-                        }) {
-                            Image(systemName: "magnifyingglass")
-                        }
+//                        FilterBar(selectedFilter: .constant(.isArchive), isOn: $archiveListViewModel.isArchive, markedAllPostsRead: {})
+                        Toggle("", isOn: $isRead)
+                            .toggleStyle(CheckboxStyle())
                     }
                     ToolbarItem(placement: .bottomBar) {
                         Spacer()
                     }
                     ToolbarItem(placement: .bottomBar) {
-//                        Toggle("", isOn: $isRead)
-//                            .toggleStyle(CheckboxStyle())
-                        Button(action: {
-                            //
-                        }) {
-                            Image(systemName: "checkmark.circle")
-                        }
+                        Toggle(isOn: $archiveListViewModel.isArchive) { Text("") }
+                            .toggleStyle(StarStyle())
                     }
                 }
         
