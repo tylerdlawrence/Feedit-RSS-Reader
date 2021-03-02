@@ -11,17 +11,16 @@ import UIKit
 import KingfisherSwiftUI
 import Intents
 import SwipeCell
+import MobileCoreServices
 
 struct ArchiveListView: View {
-    @EnvironmentObject var rssDataSource: RSSDataSource
     @ObservedObject var archiveListViewModel: ArchiveListViewModel
     @ObservedObject var searchBar: SearchBar = SearchBar()
     
-    @State var offset : CGFloat = UIScreen.main.bounds.height
     @State private var selectedItem: RSSItem?
     @State var footer = "Load More Articles"
     
-    @State private var sortAscending: Bool = true
+    @State private var disabled = true
     @State var isRead: Bool = false
     
     init(viewModel: ArchiveListViewModel) {
@@ -43,6 +42,7 @@ struct ArchiveListView: View {
                         .buttonStyle(PlainButtonStyle())
                         
                         HStack{
+
                             RSSItemRow(wrapper: item)
                                 .onTapGesture {
                                     self.selectedItem = item
@@ -72,11 +72,6 @@ struct ArchiveListView: View {
             .navigationBarTitle("", displayMode: .inline)
             .add(self.searchBar)
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Image(systemName: (sortAscending ? "arrow.down" : "arrow.up"))
-                        .foregroundColor(Color("tab"))
-                        .onTapGesture(perform: self.onToggleSort )
-                }
                 ToolbarItem(placement: .principal) {
                     VStack{
                         HStack{
@@ -96,7 +91,6 @@ struct ArchiveListView: View {
                     }
                 }
                     ToolbarItem(placement: .bottomBar) {
-//                        FilterBar(selectedFilter: .constant(.isArchive), isOn: $archiveListViewModel.isArchive, markedAllPostsRead: {})
                         Toggle("", isOn: $isRead)
                             .toggleStyle(CheckboxStyle())
                     }
@@ -106,32 +100,9 @@ struct ArchiveListView: View {
                     ToolbarItem(placement: .bottomBar) {
                         Toggle(isOn: $archiveListViewModel.isArchive) { Text("") }
                             .toggleStyle(StarStyle())
+                            .disabled(self.disabled)
                     }
                 }
-        
-//        VStack{
-//            Spacer()
-//            RSSActionSheet()
-//            .offset(y: self.offset)
-//            .gesture(DragGesture()
-//                .onChanged({ (value) in
-//                    if value.translation.height > 0{
-//                        self.offset = value.location.y
-//                    }
-//                })
-//                .onEnded({ (value) in
-//                    if self.offset > 100{
-//                        self.offset = UIScreen.main.bounds.height
-//                    }
-//                    else{
-//                        self.offset = 0
-//                    }
-//                })
-//            )
-//        }.background((self.offset <= 100 ? Color(UIColor.label).opacity(0.3) : Color.clear).edgesIgnoringSafeArea(.all)
-//        .onTapGesture {
-//            self.offset = 0
-//        })
         
             .sheet(item: $selectedItem, content: { item in
                 if UserEnvironment.current.useSafari {
@@ -155,8 +126,10 @@ struct ArchiveListView: View {
 }
 
 extension ArchiveListView {
-    public func onToggleSort() {
-        self.sortAscending.toggle()
-    }
 }
 
+struct ArchiveListView_Previews: PreviewProvider {
+    static var previews: some View {
+        ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
+    }
+}

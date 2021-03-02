@@ -14,8 +14,6 @@ import KingfisherSwiftUI
 struct RSSRow: View {
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.openURL) var openURL
-//    @ObservedObject var viewModel: RSSListViewModel
-
     
     enum ActionItem {
         case info
@@ -29,10 +27,9 @@ struct RSSRow: View {
     @State var infoHaptic = false
     @State private var toggle = false
     
-    init(rss: RSS) { //viewModel: RSSListViewModel) {
+    init(rss: RSS) {
         self.rss = rss
         self.imageLoader = ImageLoader(path: rss.image)
-//        self.viewModel = viewModel
     }
     
     private func iconImageView(_ image: UIImage) -> some View {
@@ -94,15 +91,15 @@ struct RSSRow: View {
                         .foregroundColor(Color("text"))
                     Spacer()
 //                    Text("\(rss.title.count)")
-                    Text("\(rss.title.count)")
-                        .font(.caption)
-                        .fontWeight(.bold)
-                        .padding(.horizontal, 7)
-                        .padding(.vertical, 1)
-                        .background(Color.gray.opacity(0.5))
-                        .opacity(0.4)
-                        .foregroundColor(Color("text"))
-                        .cornerRadius(8)
+//                    Text("\(rss.title.count)")
+//                        .font(.caption)
+//                        .fontWeight(.bold)
+//                        .padding(.horizontal, 7)
+//                        .padding(.vertical, 1)
+//                        .background(Color.gray.opacity(0.5))
+//                        .opacity(0.4)
+//                        .foregroundColor(Color("text"))
+//                        .cornerRadius(8)
                 }
                 .frame(height: 40)
                 .onTapGesture {
@@ -190,13 +187,6 @@ struct RSSRow: View {
                     )
                 }.frame(height: 25)
     }
-
-    func countItems() -> Int {
-        return CoreDataDataSource<RSSItem>().count
-    }
-//    func deleteItems() {
-//        viewModel.items.remove(at: viewModel.start)
-//    }
 }
     
 struct RSSRow_Previews: PreviewProvider {
@@ -206,10 +196,10 @@ struct RSSRow_Previews: PreviewProvider {
         let rss = RSS.create(url: "https://chorus.substack.com/people/2323141-jason-tate",
                              title: "Liner Notes",
                              desc: "Liner Notes is a weekly newsletter from Jason Tate of Chorus.fm.",
-                             image: "https://bucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com/public/images/8a938a56-8a1e-42dc-8802-a75c20e8df4c_256x256.png", in: CoreData.stack.context)
+                             image: "https://bucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com/public/images/8a938a56-8a1e-42dc-8802-a75c20e8df4c_256x256.png", in: Persistence.current.context)
 
         return
-            RSSRow(rss: rss)//, viewModel: self.viewModel)
+            RSSRow(rss: rss)
                 .padding()
                 .frame(width: 400, height: 25, alignment: .center)
             .preferredColorScheme(.dark)

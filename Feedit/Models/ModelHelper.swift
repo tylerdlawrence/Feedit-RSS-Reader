@@ -24,7 +24,9 @@ extension Array where Element: RSSItemConvertable {
 
 extension RSSFeedItem: RSSItemConvertable {
     func asRSSItem(container uuid: UUID, in context: NSManagedObjectContext) -> RSSItem {
-        return RSSItem.create(uuid: uuid, isRead: false, title: title ?? "", desc: description ?? "", image: "",
+        return RSSItem.create(uuid: uuid,
+                              title: title ?? "",
+                              desc: description ?? "",
                               author: author ?? "",
                               url: link ?? "",
                               createTime: pubDate ?? Date(),
@@ -34,7 +36,9 @@ extension RSSFeedItem: RSSItemConvertable {
 
 extension AtomFeedEntry: RSSItemConvertable {
     func asRSSItem(container uuid: UUID, in context: NSManagedObjectContext) -> RSSItem {
-        return RSSItem.create(uuid: uuid, isRead: false, title: title ?? "", desc: "", image: "",
+        return RSSItem.create(uuid: uuid,
+                              title: title ?? "",
+                              desc: "",
                               author: authors?.first?.name ?? "",
                               url: links?.first?.attributes?.href ?? "",
                               createTime: (published ?? updated) ?? Date(),
@@ -44,7 +48,8 @@ extension AtomFeedEntry: RSSItemConvertable {
 
 extension JSONFeedItem: RSSItemConvertable {
     func asRSSItem(container uuid: UUID, in context: NSManagedObjectContext) -> RSSItem {
-        return RSSItem.create(uuid: uuid, isRead: false, title: title ?? "", image: "",
+        return RSSItem.create(uuid: uuid,
+                              title: title ?? "",
                               author: author?.name ?? "",
                               url: url ?? "",
                               createTime: datePublished ?? Date(),

@@ -19,7 +19,6 @@ struct DataNStorageView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var rssDataSource: RSSDataSource
     @ObservedObject var rssFeedViewModel: RSSFeedViewModel
-    @ObservedObject var searchBar: SearchBar = SearchBar()
     
     @State private var selectedItem: RSSItem?
     @State private var start: Int = 0
@@ -31,11 +30,12 @@ struct DataNStorageView: View {
     @ObservedObject var viewModel: RSSListViewModel
     @State private var revealFeedsDisclosureGroup = true
     
-    init(rssFeedViewModel: RSSFeedViewModel, viewModel: RSSListViewModel) {
+    init(rssFeedViewModel: RSSFeedViewModel, viewModel: RSSListViewModel, isRead: Bool) {
         let db = DataSourceService.current
         dataViewModel = DataNStorageViewModel(rss: db.rss, rssItem: db.rssItem)
-        self.rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
+        self.rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem, isRead: isRead)
         self.viewModel = viewModel
+        self.isRead = isRead
     }
 
     var body: some View {
@@ -67,15 +67,15 @@ struct DataNStorageView: View {
     }
 }
 
-struct DataNStorageView_Previews: PreviewProvider {
-    static let rss = RSS()
-    static let rssFeedViewModel = RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem)
-    
-    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-    
-    static var previews: some View {
-        DataNStorageView(rssFeedViewModel: self.rssFeedViewModel, viewModel: self.viewModel)
-            .preferredColorScheme(.dark)
-    }
-}
+//struct DataNStorageView_Previews: PreviewProvider {
+//    static let rss = RSS()
+//    static let rssFeedViewModel = RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem)
+//
+//    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+//
+//    static var previews: some View {
+//        DataNStorageView(rssFeedViewModel: self.rssFeedViewModel, viewModel: self.viewModel)
+//            .preferredColorScheme(.dark)
+//    }
+//}
 

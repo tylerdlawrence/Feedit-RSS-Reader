@@ -9,116 +9,15 @@ import Foundation
 import Combine
 import CoreData
 import FeedKit
-import SwiftUI
 
-//class RSSItemStore: NSObject {
-//
-//    private let persistence = Persistence.current
-//
-//    private lazy var fetchedResultsController: NSFetchedResultsController<RSSItem> = {
-//        let fetchRequest: NSFetchRequest<RSSItem> = RSSItem.fetchRequest()
-//        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "createTime", ascending: false)]
-//
-//        let fetechedResultsController = NSFetchedResultsController(
-//            fetchRequest: fetchRequest,
-//            managedObjectContext: persistence.context,
-//            sectionNameKeyPath: nil,
-//            cacheName: nil)
-//        fetechedResultsController.delegate = self
-//        return fetechedResultsController
-//    }()
-//
-//    var context: NSManagedObjectContext {
-//        return persistence.context
-//    }
-//
-//    let didChange = PassthroughSubject<RSSItemStore, Never>()
-//
-//    override init() {
-//        super.init()
-//        fetchRSS()
-//    }
-//
-//    public func createAndSave(rss uuid: UUID, tilte: String, desc: String, author: String, url: String, createTime: Date) -> RSSItem {
-//        let item = RSSItem.create(uuid: uuid, title: tilte, desc: desc, author: author, url: url, createTime: createTime,
-//                                  in: persistence.context)
-//        saveChanges()
-//        return item
-//    }
-//
-//    public func batchInsert(items: [RSSItem]) {
-//        items.forEach { item in
-//            item.didSave()
-//        }
-//    }
-//
-//    public func fetchRSSItem(RSS item: RSS, start: Int, limit: Int = 20) throws -> [RSSItem] {
-//        guard let uuid = item.uuid else {
-//            throw RSSError.invalidParameter
-//        }
-//        let fetchRequest: NSFetchRequest<RSSItem> = RSSItem.fetchRequest()
-//        let predicate = NSPredicate(format: "rssUUID = %@", argumentArray: [uuid])
-//        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "createTime", ascending: false)]
-//        fetchRequest.predicate = predicate
-//        fetchRequest.fetchLimit = limit
-//        fetchRequest.fetchOffset = start
-//        do {
-//            let rs = try fetchedResultsController.managedObjectContext.fetch(fetchRequest)
-//            rs.forEach { item in
-//                print("item created time = \(String(describing: item.createTime))")
-//            }
-//            return rs
-//        } catch let error {
-//            throw error
-//        }
-//    }
-//
-//    private func fetchRSS() {
-//        do {
-//            try fetchedResultsController.performFetch()
-//            dump(fetchedResultsController.sections)
-//        } catch {
-//            fatalError()
-//        }
-//    }
-//
-//    private func saveChanges() {
-//        guard context.hasChanges else { return }
-//        do {
-//            try context.save()
-//        } catch { fatalError() }
-//    }
-//}
-//
-//extension RSSItemStore: NSFetchedResultsControllerDelegate {
-//    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-//        didChange.send(self)
-//    }
-//}
-
-
-
-class RSSItemStore: NSObject, ObservableObject {
-
-    private let persistence = CoreData.stack
-
-    static let instance = RSSItemStore()
-
-
-    var isRead: Bool {
-        return readDate != nil
-    }
-
-    var readDate: Date? {
-        didSet {
-            objectWillChange.send()
-        }
-    }
+class RSSItemStore: NSObject {
+    
+    private let persistence = Persistence.current
 
     private lazy var fetchedResultsController: NSFetchedResultsController<RSSItem> = {
         let fetchRequest: NSFetchRequest<RSSItem> = RSSItem.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "createTime", ascending: false)]
-
+        
         let fetechedResultsController = NSFetchedResultsController(
             fetchRequest: fetchRequest,
             managedObjectContext: persistence.context,
@@ -127,60 +26,41 @@ class RSSItemStore: NSObject, ObservableObject {
         fetechedResultsController.delegate = self
         return fetechedResultsController
     }()
-
+    
     var context: NSManagedObjectContext {
         return persistence.context
     }
-
+    
     let didChange = PassthroughSubject<RSSItemStore, Never>()
-
+    
     override init() {
         super.init()
         fetchRSS()
     }
-
-    public func createAndSave(rss uuid: UUID, isDone: Bool, isRead: Bool, image: String, title: String, desc: String, author: String, url: String, createTime: Date) -> RSSItem {
-        let item = RSSItem.create(uuid: uuid, isRead: isRead, title: title, desc: desc, image: image, author: author, url: url, createTime: createTime,
+    
+    public func createAndSave(rss uuid: UUID, tilte: String, desc: String, author: String, url: String, createTime: Date) -> RSSItem {
+        let item = RSSItem.create(uuid: uuid, title: tilte, desc: desc, author: author, url: url, createTime: createTime,
                                   in: persistence.context)
         saveChanges()
         return item
     }
-
+    
     public func batchInsert(items: [RSSItem]) {
         items.forEach { item in
             item.didSave()
         }
     }
-
-    public var items: [RSSItem] {
-        return fetchedResultsController.fetchedObjects ?? []
-    }
-    func reloadAllPosts(handler: (() -> Void)? = nil) {
-        var updatedCount = 0
-        for _ in self.items {
-            print("RELOADING POST")
-
-            reloadAllPosts()
-                print("GOT POST")
-
-                updatedCount += 1
-                if updatedCount >= self.items.count {
-                    handler?()
-                }
-            }
-        }
-
+    
     public func fetchRSSItem(RSS item: RSS, start: Int, limit: Int = 20) throws -> [RSSItem] {
         guard let uuid = item.uuid else {
             throw RSSError.invalidParameter
         }
         let fetchRequest: NSFetchRequest<RSSItem> = RSSItem.fetchRequest()
         let predicate = NSPredicate(format: "rssUUID = %@", argumentArray: [uuid])
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "createTime", ascending: true)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "createTime", ascending: false)]
         fetchRequest.predicate = predicate
         fetchRequest.fetchLimit = limit
         fetchRequest.fetchOffset = start
-
         do {
             let rs = try fetchedResultsController.managedObjectContext.fetch(fetchRequest)
             rs.forEach { item in
@@ -191,7 +71,7 @@ class RSSItemStore: NSObject, ObservableObject {
             throw error
         }
     }
-
+    
     private func fetchRSS() {
         do {
             try fetchedResultsController.performFetch()
@@ -200,7 +80,7 @@ class RSSItemStore: NSObject, ObservableObject {
             fatalError()
         }
     }
-
+    
     private func saveChanges() {
         guard context.hasChanges else { return }
         do {
@@ -208,10 +88,9 @@ class RSSItemStore: NSObject, ObservableObject {
         } catch { fatalError() }
     }
 }
-//
+
 extension RSSItemStore: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         didChange.send(self)
     }
 }
-//

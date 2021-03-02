@@ -55,37 +55,30 @@ extension RSS {
         rss.isFetched = false
         return rss
     }
-    
+
     static func simple() -> RSS {
-        let rss = RSS(context: CoreData.stack.context)
+        let rss = RSS(context: Persistence.current.context)
         rss.title = "demo"
         rss.image = ""
         rss.desc = "desc demo"
         rss.url = "http://images.apple.com/main/rss/hotnews/hotnews.rss"
         return rss
     }
-    
+
     static func requestObjects() -> NSFetchRequest<RSS> {
         let request = RSS.fetchRequest() as NSFetchRequest<RSS>
         request.predicate = .init(value: true)
         request.sortDescriptors = [.init(key: #keyPath(RSS.title), ascending: true)]
         return request
     }
-    
-    static func requestUnreadObjects() -> NSFetchRequest<RSS> {
-        let request = RSS.fetchRequest() as NSFetchRequest<RSS>
-        request.predicate = .init(value: true)
-        request.sortDescriptors = [.init(key: #keyPath(RSS.isRead), ascending: true)]
-        return request
-    }
-    
+
     static func requestStarredObjects() -> NSFetchRequest<RSS> {
         let request = RSS.fetchRequest() as NSFetchRequest<RSS>
         request.predicate = .init(value: true)
         request.sortDescriptors = [.init(key: #keyPath(RSS.isArchive), ascending: true)]
         return request
     }
-    
+
     static func requestDefaultObjects() -> NSFetchRequest<RSS> {
         let request = RSS.fetchRequest() as NSFetchRequest<RSS>
         return request

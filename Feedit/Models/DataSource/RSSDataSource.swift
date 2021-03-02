@@ -21,8 +21,6 @@ class RSSDataSource: NSObject, DataSource {
     
     var updateObject: RSS?
     
-    
-    
     required init(parentContext: NSManagedObjectContext) {
         self.parentContext = parentContext
         createContext = parentContext.newChildContext()
@@ -40,7 +38,6 @@ class RSSDataSource: NSObject, DataSource {
         
         super.init()
         fetchedResult.delegate = self
-        
     }
 }
 

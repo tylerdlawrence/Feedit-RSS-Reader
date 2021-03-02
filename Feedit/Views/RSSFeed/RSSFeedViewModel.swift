@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import CoreData
+import SwiftUI
 
 class RSSFeedViewModel: NSObject, ObservableObject {
     
@@ -20,15 +22,17 @@ class RSSFeedViewModel: NSObject, ObservableObject {
     @Published var showingDetail = false
     @Published var shouldReload = false
     @Published var showFilter = false
+    
+    @Published var isRead: Bool
+    
     let dataSource: RSSItemDataSource
     let rss: RSS
     var start = 0
-    
-    
 
-    init(rss: RSS, dataSource: RSSItemDataSource) {
+    init(rss: RSS, dataSource: RSSItemDataSource, isRead: Bool) {
         self.dataSource = dataSource
         self.rss = rss
+        self.isRead = isRead
         super.init()
     }
 
@@ -40,29 +44,36 @@ class RSSFeedViewModel: NSObject, ObservableObject {
 
         _ = dataSource.saveUpdateObject()
     }
+    
+    func readOrCancel(_ item: RSSItem) {
+        let updatedItem = dataSource.readObject(item)
+        updatedItem.isArchive = !item.isRead
+        updatedItem.updateTime = Date()
+        dataSource.setUpdateObject(updatedItem)
 
-    func setPostRead(_ item: RSSItem) {
-        item.objectWillChange.send()
-        if let index = item.author.firstIndex(where: {$0.description == item.url}) {
-            item.author.remove(at: index)
-        }
-        if let index = self.items.firstIndex(where: {$0.url == item.url}) {
-            self.items.remove(at: index)
-            self.items.insert(item, at: index)
-        }
-//        self.updateFeeds()
+        _ = dataSource.saveUpdateObject()
     }
 
     func markAllPostsRead(item: RSSItem) {}
 
-    var isRead: Bool
-    {
-        return readDate != nil
-    }
+//    var isRead: Bool
+//    {
+//        return readDate != nil
+//    }
 
-    var readDate: Date? {
-        didSet {
-            objectWillChange.send()
+//    var readDate: Date? {
+//        didSet {
+//            objectWillChange.send()
+//        }
+//    }
+        
+    var read: Bool {
+        set {
+            //This function fetches the Object and marks it as read
+            self.selectedPost!.isRead = newValue
+        }
+        get {
+            self.selectedPost!.isRead
         }
     }
     
@@ -112,6 +123,7 @@ class RSSFeedViewModel: NSObject, ObservableObject {
                             }
                             items.append(item.asRSSItem(container: uuid, in: self.dataSource.createContext))
                         }
+                        
                     case .json(let jsonFeed):
                         for item in jsonFeed.items ?? [] {
                             if let fetchDate = self.rss.lastFetchTime, let pubDate = item.datePublished, pubDate < fetchDate {
@@ -122,6 +134,7 @@ class RSSFeedViewModel: NSObject, ObservableObject {
                             }
                             items.append(item.asRSSItem(container: uuid, in: self.dataSource.createContext))
                         }
+                        
                     case .rss(let rssFeed):
                         for item in rssFeed.items ?? [] {
                             if let fetchDate = self.rss.lastFetchTime, let pubDate = item.pubDate, pubDate < fetchDate {

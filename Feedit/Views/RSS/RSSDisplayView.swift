@@ -51,13 +51,15 @@ struct RSSDisplayView: View {
                     .renderingMode(.original)
                     .resizable()
                     .placeholder {
-                        Image(systemName: "arrow.clockwise").font(.system(size: 16, weight: .bold))
+                        Image("getInfo").font(.system(size: 16, weight: .bold))
                             .frame(width: 50, height: 50)
-                            .rotationEffect(Angle(degrees: isLoading ? 360 : 0))
-                            .animation(Animation.linear(duration: 1).repeatForever(autoreverses: false))
-                            .onAppear() {
-                                self.isLoading = true
-                            }
+//                        Image(systemName: "arrow.clockwise").font(.system(size: 16, weight: .bold))
+//                            .frame(width: 50, height: 50)
+//                            .rotationEffect(Angle(degrees: isLoading ? 360 : 0))
+//                            .animation(Animation.linear(duration: 1).repeatForever(autoreverses: false))
+//                            .onAppear() {
+//                                self.isLoading = true
+//                            }
                     }
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 50, height: 50)
@@ -75,11 +77,11 @@ struct RSSDisplayView: View {
             }
             Divider()
             Group {
-                TextFieldView(label: "Title", placeholder: "", text: $rss.title)
-                TextFieldView(label: "Description", placeholder: "", text: $rss.desc)
-                TextFieldView(label: "Feed URL", placeholder: "", text: $rss.url)
-                TextFieldView(label: "Image URL", placeholder: "", text: $rss.image)
-            }.padding(.top)
+                TextFieldView(label: "Title:", placeholder: "", text: $rss.title)
+                TextFieldView(label: "Description:", placeholder: "", text: $rss.desc)
+                TextFieldView(label: "Feed URL:", placeholder: "", text: $rss.url)
+                TextFieldView(label: "Image URL:", placeholder: "", text: $rss.image)
+            }.padding(.vertical)
         }
     }
 }
@@ -92,7 +94,7 @@ struct SourceDisplayView_Previews: PreviewProvider {
         let rss = RSS.create(url: "https://",
                              title: "simple demo",
                              desc: "show me your desc",
-                             image: "", in: CoreData.stack.context)
+                             image: "", in: Persistence.current.context)
         return RSSDisplayView(rss: rss)
     }
 }

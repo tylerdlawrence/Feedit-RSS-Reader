@@ -199,7 +199,7 @@ struct GetInfo_Previews: PreviewProvider {
         let rss = RSS.create(url: "https://chorus.substack.com/people/2323141-jason-tate",
                              title: "Liner Notes",
                              desc: "Liner Notes is a weekly newsletter from Jason Tate of Chorus.fm.",
-                             image: "https://bucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com/public/images/8a938a56-8a1e-42dc-8802-a75c20e8df4c_256x256.png", in: CoreData.stack.context)
+                             image: "https://bucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com/public/images/8a938a56-8a1e-42dc-8802-a75c20e8df4c_256x256.png", in: Persistence.current.context)
 
         return
             InfoView(rss: rss)

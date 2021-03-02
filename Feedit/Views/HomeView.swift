@@ -16,11 +16,11 @@ struct HomeView: View {
         case setting
         case star
     }
+    
     @ObservedObject var viewModel: RSSListViewModel
-    @EnvironmentObject var rssDataSource: RSSDataSource
     @StateObject var rssFeedViewModel: RSSFeedViewModel
     @StateObject var archiveListViewModel: ArchiveListViewModel
-//    @State private var refreshID = UUID()
+    
     @State private var archiveScale: Image.Scale = .medium
     @State private var addRSSProgressValue = 1.0
     @State private var isSheetPresented = false
@@ -73,28 +73,13 @@ struct HomeView: View {
     
     private var navButtons: some View {
         HStack(alignment: .top, spacing: 24) {
+//            FilterPicker(isOn: 2, rssFeedViewModel: rssFeedViewModel)
             settingButton
             Spacer()
-            archiveButton
+//            settingButton
+//            archiveButton
             addSourceButton
         }.padding(24)
-    }
-    
-    private var navTopButtons: some View {
-        HStack {
-            settingButton
-            Spacer()
-            archiveButton
-            addSourceButton
-        }
-    }
-    
-    private var trailingView: some View {
-        HStack(spacing: 125) {
-            settingButton
-            Spacer()
-            addSourceButton
-        }
     }
     
     //MARK: LISTVIEWS
@@ -109,7 +94,7 @@ struct HomeView: View {
             VStack{
                 HStack {
                     ZStack{
-                        NavigationLink(destination: DataNStorageView(rssFeedViewModel: self.rssFeedViewModel, viewModel: self.viewModel)) {
+                        NavigationLink(destination: DataNStorageView(rssFeedViewModel: self.rssFeedViewModel, viewModel: self.viewModel, isRead: isRead)) {
                             EmptyView()
                         }
                         .opacity(0.0)
@@ -122,7 +107,7 @@ struct HomeView: View {
                         Text("Archive")
                             .font(.system(size: 18, weight: .regular, design: .rounded))
                         Spacer()
-                        Text("\(countItems())")
+                        Text("\(viewModel.items.count)")
                             .font(.caption)
                             .fontWeight(.bold)
                             .padding(.horizontal, 7)
@@ -142,8 +127,8 @@ struct HomeView: View {
                 .opacity(0.0)
                 .buttonStyle(PlainButtonStyle())
                 HStack{
-                    Image(systemName: "star.square.fill")
-                        .font(.system(size: 20))
+                    Image(systemName: "star.fill")
+                        .font(.system(size: 18, weight: .regular, design: .rounded))
                         .foregroundColor(.yellow)
                         .opacity(0.8)
                         .frame(width: 25, height: 25)
@@ -223,8 +208,6 @@ struct HomeView: View {
                                                             Image(systemName: "arrow.clockwise").font(.system(size: 16, weight: .bold)).foregroundColor(Color("tab"))
                                                     }
                                                 }
-//                                                Toggle("", isOn: $isRead)
-//                                                    .toggleStyle(CheckboxStyle())
                                             })
 
                     .listStyle(PlainListStyle())
@@ -241,7 +224,7 @@ struct HomeView: View {
             navButtons
                 .frame(width: UIScreen.main.bounds.width, height: 49, alignment: .leading)
             NavigationLink(
-                destination: ArchiveListView(viewModel: ArchiveListViewModel( dataSource: DataSourceService.current.rssItem)),
+                destination: ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)),
                 tag: 1,
                 selection: $action) {
                 EmptyView()
@@ -269,8 +252,6 @@ struct HomeView: View {
                 self.viewModel.fecthResults()
             }
         }
-//        .navigationViewStyle(StackNavigationViewStyle())
-        .navigationViewStyle(DoubleColumnNavigationViewStyle())
     }
 }
 
@@ -278,69 +259,29 @@ extension HomeView {
     func onDoneAction() {
         self.viewModel.fecthResults()
     }
-    
     func startNetworkCall() {
         isLoading = true
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
             isLoading = false
         }
     }
-    func moveRow(from indexes: IndexSet, to destination: Int) {
-        if let first = indexes.first {
-            viewModel.items.insert(viewModel.items.remove(at: first), at: destination)
-            return
-        }
-    }
     private func destinationView(rss: RSS) -> some View {
-        RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
+        RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem, isRead: isRead), isRead: isRead)
             .environmentObject(DataSourceService.current.rss)
-    }
-    func deleteItems(at offsets: IndexSet) {
-        viewModel.items.remove(atOffsets: offsets)
-    }
-    
-    func countItems() -> Int {
-        return CoreDataDataSource<RSSItem>().count
     }
 }
 
 struct HomeView_Previews: PreviewProvider {
-
     static let rss = RSS()
-
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+    static let isRead = true
 
     static var previews: some View {
         Group{
-            HomeView(viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
+            HomeView(viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem, isRead: isRead), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
             .environment(\.colorScheme, .dark)
-
-            HomeView(viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
         }.environmentObject(DataSourceService.current.rss)
     }
 }
 
-extension DisclosureGroup where Label == Text {
-  public init<V: Hashable, S: StringProtocol>(
-    _ label: S,
-    tag: V,
-    selection: Binding<V?>,
-    content: @escaping () -> Content) {
-    let boolBinding: Binding<Bool> = Binding(
-      get: { selection.wrappedValue == tag },
-      set: { newValue in
-        if newValue {
-          selection.wrappedValue = tag
-        } else {
-          selection.wrappedValue = nil
-        }
-      }
-    )
 
-    self.init(
-      label,
-      isExpanded: boolBinding,
-      content: content
-    )
-  }
-}

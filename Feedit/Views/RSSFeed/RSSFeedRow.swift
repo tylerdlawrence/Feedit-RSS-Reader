@@ -20,20 +20,19 @@ import Intents
 
 struct RSSItemRow: View {
     
-//    @ObservedObject var rssFeedViewModel: RSSFeedViewModel
     @ObservedObject var itemWrapper: RSSItem
-
+    
     @State private var isStarred = false
     @State private var isRead = false
     
     @State private var selectedItem: RSSItem?
     var contextMenuAction: ((RSSItem) -> Void)?
     
-    init(wrapper: RSSItem, menu action: ((RSSItem) -> Void)? = nil) { //, rssFeedViewModel: RSSFeedViewModel) {
+    init(wrapper: RSSItem, menu action: ((RSSItem) -> Void)? = nil) {
         itemWrapper = wrapper
         contextMenuAction = action
-//        self.rssFeedViewModel = rssFeedViewModel
     }
+    
     var body: some View {
         let toggleStarred = SwipeCellButton(
             buttonStyle: .view,
@@ -85,6 +84,7 @@ struct RSSItemRow: View {
             action: {
                 itemWrapper.progress = 1
                 self.isRead.toggle()
+                
             },
             feedback: false
         )
@@ -123,14 +123,15 @@ struct RSSItemRow: View {
                                 .aspectRatio(contentMode: .fit)
                                 .frame(width: 20, height: 20,alignment: .center)
                                 .cornerRadius(1)
-                                .border(Color("text"), width: 2)
+                                .border(Color("text"), width: 1)
                         })
                         .renderingMode(.original)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 20, height: 20,alignment: .center)
                         .cornerRadius(1)
-                        .border(Color("text"), width: 2)
+                        .border(Color("text"), width: 1)
+                    
                 }.padding(.top)
                     HStack{
                         VStack(alignment: .leading){
@@ -190,6 +191,7 @@ struct RSSItemRow: View {
                         label: itemWrapper.progress > 0 ? "Mark As Unread" : "Mark As Read",
                         systemName: "circle\(itemWrapper.progress > 0 ? ".fill" : "")",
                         onAction: {
+                            
                             itemWrapper.progress = 1
                     })
                     ActionContextMenu(
@@ -209,6 +211,12 @@ struct RSSItemRow: View {
                         Image(systemName: "link")
                     }
                     
+                    Button(action: {
+//                        self.isHidden(true, remove: true)
+                    }) {
+                        Text("Hide")
+                        Image(systemName: "eye")
+                    }
                 }
             }
         }
@@ -222,6 +230,9 @@ extension Int {
 }
 
 struct RSSFeedRow_Previews: PreviewProvider {
+    static var rss = RSS()
+    static var rssFeedViewModel = RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem, isRead: false)
+    
     static var previews: some View {
         let simple = DataSourceService.current.rssItem.simple()
         return RSSItemRow(wrapper: simple!).environmentObject(DataSourceService.current.rssItem)

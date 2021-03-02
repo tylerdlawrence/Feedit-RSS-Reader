@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct CheckboxStyle: ToggleStyle {
+    @State private var disabled = false
     func makeBody(configuration: Self.Configuration) -> some View {
         return HStack {
             configuration.label
@@ -19,11 +20,13 @@ struct CheckboxStyle: ToggleStyle {
                 .onTapGesture {
                     configuration.isOn.toggle()
             }
+                .disabled(self.disabled)
         }
     }
 }
 
 struct StarStyle: ToggleStyle {
+    @State private var disabled = false
     func makeBody(configuration: Self.Configuration) -> some View {
         return HStack {
             configuration.label
@@ -35,6 +38,7 @@ struct StarStyle: ToggleStyle {
                 .onTapGesture {
                     configuration.isOn.toggle()
             }
+                .disabled(self.disabled)
         }
     }
 }

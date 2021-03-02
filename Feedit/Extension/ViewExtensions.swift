@@ -210,3 +210,39 @@ extension View {
         }
     }
 }
+
+extension CATransition {
+    func fadeTransition() -> CATransition {
+        let transition = CATransition()
+        transition.duration = 0.4
+        transition.type = CATransitionType.fade
+        transition.subtype = CATransitionSubtype.fromRight
+
+        return transition
+    }
+}
+
+extension DisclosureGroup where Label == Text {
+  public init<V: Hashable, S: StringProtocol>(
+    _ label: S,
+    tag: V,
+    selection: Binding<V?>,
+    content: @escaping () -> Content) {
+    let boolBinding: Binding<Bool> = Binding(
+      get: { selection.wrappedValue == tag },
+      set: { newValue in
+        if newValue {
+          selection.wrappedValue = tag
+        } else {
+          selection.wrappedValue = nil
+        }
+      }
+    )
+
+    self.init(
+      label,
+      isExpanded: boolBinding,
+      content: content
+    )
+  }
+}

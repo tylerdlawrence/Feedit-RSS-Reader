@@ -9,9 +9,13 @@ import SwiftUI
 import Foundation
 import CoreData
 
+extension RSSItem: Identifiable {
+    
+}
+
 extension RSSItem {
-    static public func == (lhs: RSSItem, rhs: RSSItem) -> Bool {
-        return lhs.title == rhs.title && lhs.updateTime == rhs.updateTime && lhs.createTime == rhs.createTime && lhs.desc == rhs.desc && lhs.progress == rhs.progress && lhs.rssUUID == rhs.rssUUID && lhs.url == rhs.url && lhs.uuid == rhs.uuid && lhs.author == rhs.author && lhs.image == rhs.image && lhs.isArchive == rhs.isArchive && lhs.isRead == rhs.isRead
+    static func == (lhs: RSSItem, rhs: RSSItem) -> Bool {
+        return lhs.title == rhs.title && lhs.isArchive == rhs.isArchive
     }
 }
 
@@ -33,16 +37,30 @@ extension RSSItem {
     @NSManaged public var isArchive: Bool
     @NSManaged public var isRead: Bool
     @NSManaged public var image: String
-    @NSManaged public var order: Int32
-    @NSManaged public var selected: Bool
-//    @NSManaged public var attribute: RSS
     
     public override func awakeFromInsert() {
         super.awakeFromInsert()
         uuid = UUID()
     }
     
-    static func create(uuid: UUID, isRead: Bool, title: String = "", desc: String = "", image: String, author: String = "", url: String = "",
+//    static func create(uuid: UUID, isRead: Bool, title: String = "", desc: String = "", image: String, author: String = "", url: String = "",
+//                       createTime: Date = Date(), progress: Double = 0, in context: NSManagedObjectContext) -> RSSItem {
+//        let item = RSSItem(context: context)
+//        item.rssUUID = uuid
+//        item.uuid = UUID()
+//        item.title = title
+//        item.desc = desc
+//        item.author = author
+//        item.url = url
+//        item.createTime = createTime
+//        item.progress = 0
+//        item.image = image
+//        item.isArchive = false
+//        item.isRead = false
+//        return item
+//    }
+    
+    static func create(uuid: UUID, title: String = "", desc: String = "", author: String = "", url: String = "",
                        createTime: Date = Date(), progress: Double = 0, in context: NSManagedObjectContext) -> RSSItem {
         let item = RSSItem(context: context)
         item.rssUUID = uuid
@@ -53,19 +71,24 @@ extension RSSItem {
         item.url = url
         item.createTime = createTime
         item.progress = 0
-        item.image = image
         item.isArchive = false
-        item.isRead = false
         return item
     }
     
-    static func requestObjects(rssUUID: UUID, start: Int = 0, limit: Int = 10) -> NSFetchRequest<RSSItem> {
+    static func requestObjects(rssUUID: UUID, start: Int = 0, limit: Int = 30) -> NSFetchRequest<RSSItem> {
         let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
         let predicate = NSPredicate(format: "rssUUID = %@", argumentArray: [rssUUID])
         request.predicate = predicate
         request.sortDescriptors = [.init(key: #keyPath(RSSItem.createTime), ascending: false)]
         request.fetchOffset = start
         request.fetchLimit = limit
+        return request
+    }
+    
+    static func requestCountObjects() -> NSFetchRequest<RSSItem> {
+        let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
+        let predicate = NSPredicate(format: "rssUUID = %@")
+        request.predicate = predicate
         return request
     }
     
@@ -82,23 +105,6 @@ extension RSSItem {
     static func requestCountArchiveObjects() -> NSFetchRequest<RSSItem> {
         let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
         let predicate = NSPredicate(format: "isArchive = true")
-        request.predicate = predicate
-        return request
-    }
-    
-    static func requestUnreadObjects(start: Int = 0, limit: Int = 20) -> NSFetchRequest<RSSItem> {
-        let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
-        let predicate = NSPredicate(format: "isRead = true")
-        request.predicate = predicate
-        request.sortDescriptors = [.init(key: #keyPath(RSSItem.isRead), ascending: false)]
-        request.fetchOffset = start
-        request.fetchLimit = limit
-        return request
-    }
-    
-    static func requestCountUnreadObjects() -> NSFetchRequest<RSSItem> {
-        let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
-        let predicate = NSPredicate(format: "isRead = true")
         request.predicate = predicate
         return request
     }

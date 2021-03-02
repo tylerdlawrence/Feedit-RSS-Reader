@@ -14,6 +14,9 @@ class ArchiveListViewModel: NSObject, ObservableObject {
     @Published var filterType = FilterType.isArchive
     @Published var selectedPost: RSSItem?
     @Published var isArchive: Bool = true
+    @Published var disabled = true
+    
+    @Published var selectedFilterToggle = 0
     
     func markAllPostsRead(item: RSSItem) {}
     

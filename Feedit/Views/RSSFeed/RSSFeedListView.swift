@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Foundation
+import EasySwiftUI
 import Combine
 import UIKit
 import SwipeCell
@@ -14,18 +15,14 @@ import FeedKit
 import KingfisherSwiftUI
 
 struct RSSFeedListView: View {
-
     
-    @StateObject private var dataSource = CoreDataDataSource<RSSItem>()
-    @State private var sortAscending: Bool = true
-    @State private var editMode: EditMode = .inactive
-    @State var offset : CGFloat = UIScreen.main.bounds.height
+//    @Binding var isRead: Bool
+    @State var isRead: Bool
     
     var rssSource: RSS {
         return self.rssFeedViewModel.rss
     }
-    
-    @Environment(\.presentationMode) var presentationMode
+        
     @EnvironmentObject var rssDataSource: RSSDataSource
     @ObservedObject var rssFeedViewModel: RSSFeedViewModel
     @ObservedObject var searchBar: SearchBar = SearchBar()
@@ -34,16 +31,11 @@ struct RSSFeedListView: View {
     @State private var start: Int = 0
     @State private var footer: String = "Load More Articles"
     @State var cancellables = Set<AnyCancellable>()
-    
-    init(viewModel: RSSFeedViewModel) {
+        
+    init(viewModel: RSSFeedViewModel, isRead: Bool) {
         self.rssFeedViewModel = viewModel
+        self.isRead = isRead
     }
-    
-//    var filteredArticles: [RSSItem] {
-//        return rssFeedViewModel.filteredArticles.filter({ (item) -> Bool in
-//            return !((rssFeedViewModel.isOn && item.isArchive) || (rssFeedViewModel.unreadIsOn && item.isRead))
-//        })
-//    }
     
     var body: some View {
         ZStack {
@@ -51,8 +43,12 @@ struct RSSFeedListView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .edgesIgnoringSafeArea(.all)
             List {
-//                ForEach(self.rssFeedViewModel.items, id: \.self) { item in
-                ForEach(self.rssFeedViewModel.items.filter {rssFeedViewModel.isOn ? $0.isArchive : true && rssFeedViewModel.unreadIsOn ? $0.isRead : true}) { item in
+                ForEach(self.rssFeedViewModel.items.filter {rssFeedViewModel.isOn ? $0.isArchive : true}, id: \.self) { item in
+                
+//                ForEach(self.rssFeedViewModel.items.filter {rssFeedViewModel.isOn ? $0.isArchive : true && rssFeedViewModel.unreadIsOn ? $0.isRead : true}) { item in
+                
+//                ForEach(self.rssFeedViewModel.items.filter {rssFeedViewModel.isOn ? $0.isArchive : true}) { item in
+                                        
                     ZStack {
                         NavigationLink(destination: WebView(rssItem: item, onCloseClosure: {})) {
                             EmptyView()
@@ -60,18 +56,14 @@ struct RSSFeedListView: View {
                         .opacity(0.0)
                         .buttonStyle(PlainButtonStyle())
                         HStack {
-                            
-                            
                             RSSItemRow(wrapper: item, menu: self.contextmenuAction(_:))
                                 .contentShape(Rectangle())
                                 .onTapGesture {
                                     self.selectedItem = item
-                                    
                             }
                         }
                     }
                 }
-                    
                 VStack(alignment: .center) {
                     Button(action: self.rssFeedViewModel.loadMore) {
                         HStack {
@@ -81,7 +73,7 @@ struct RSSFeedListView: View {
                         }.foregroundColor(Color("bg"))
                     }
                 }
-            }
+            }.animation(.default)
             .listStyle(PlainListStyle())
             .add(self.searchBar)
             .accentColor(Color("tab"))
@@ -90,86 +82,53 @@ struct RSSFeedListView: View {
             .onAppear {
                 
             }
-                .toolbar{
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Image(systemName: (sortAscending ? "arrow.down" : "arrow.up")).font(.system(size: 18, weight: .medium, design: .rounded))
-                            .foregroundColor(Color("tab"))
-                            .onTapGesture(perform: self.onToggleSort )
-                    }
-                    ToolbarItem(placement: .principal) {
-                        HStack{
-                            KFImage(URL(string: rssSource.image))
-                                .placeholder({
-                                    Image("getInfo")
-                                        .renderingMode(.original)
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .frame(width: 20, height: 20,alignment: .center)
-                                        .cornerRadius(2)
-                                        .border(Color("text"), width: 2)
-                                })
-                                .renderingMode(.original)
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 20, height: 20,alignment: .center)
-                                .cornerRadius(2)
-                                .border(Color("text"), width: 2)
+            .toolbar{
+                ToolbarItem(placement: .principal) {
+                    HStack{
+                        KFImage(URL(string: rssSource.image))
+                            .placeholder({
+                                Image("getInfo")
+                                    .renderingMode(.original)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 20, height: 20,alignment: .center)
+                                    .cornerRadius(2)
+                                    .border(Color("text"), width: 1)
+                            })
+                            .renderingMode(.original)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 20, height: 20,alignment: .center)
+                            .cornerRadius(2)
+                            .border(Color("text"), width: 1)
 
-                            Text(rssSource.title)
-                                .font(.system(size: 20, weight: .medium, design: .rounded))
+                        Text(rssSource.title)
+                            .font(.system(size: 20, weight: .medium, design: .rounded))
 
-                            Text("\(rssFeedViewModel.items.count)")
-                                .font(.caption)
-                                .fontWeight(.bold)
-                                .padding(.horizontal, 7)
-                                .padding(.vertical, 1)
-                                .background(Color.gray.opacity(0.5))
-                                .opacity(0.4)
-                                .foregroundColor(Color("text"))
-                                .cornerRadius(8)
-                        }
-                    }
-                    
-                    ToolbarItem(placement: .bottomBar) {
-                        Toggle(isOn: $rssFeedViewModel.unreadIsOn) { Text("") }
-                            .toggleStyle(CheckboxStyle())
-//                        FilterBar(selectedFilter: $rssFeedViewModel.filterType, isOn: $rssFeedViewModel.showFilter, markedAllPostsRead: {})
-                                    
-                                    //self.$rssFeedViewModel.markAllPostsRead()})
-                    }
-                    ToolbarItem(placement: .bottomBar) {
-                        Spacer()
-                    }
-                    ToolbarItem(placement: .bottomBar) {
-                        Toggle(isOn: $rssFeedViewModel.isOn) { Text("") }
-                            .toggleStyle(StarStyle())
+                        Text("\(rssFeedViewModel.items.count)")
+                            .font(.caption)
+                            .fontWeight(.bold)
+                            .padding(.horizontal, 7)
+                            .padding(.vertical, 1)
+                            .background(Color.gray.opacity(0.5))
+                            .opacity(0.4)
+                            .foregroundColor(Color("text"))
+                            .cornerRadius(8)
                     }
                 }
-            
-//            VStack{
-//                Spacer()
-//                RSSActionSheet()
-//                .offset(y: self.offset)
-//                .gesture(DragGesture()
-//                    .onChanged({ (value) in
-//                        if value.translation.height > 0{
-//                            self.offset = value.location.y
-//                        }
-//                    })
-//                    .onEnded({ (value) in
-//                        if self.offset > 100{
-//                            self.offset = UIScreen.main.bounds.height
-//                        }
-//                        else{
-//                            self.offset = 0
-//                        }
-//                    })
-//                )
-//            }.background((self.offset <= 100 ? Color(UIColor.label).opacity(0.3) : Color.clear).edgesIgnoringSafeArea(.all)
-//            .onTapGesture {
-//                self.offset = 0
-//            })
-            
+                
+                ToolbarItem(placement: .bottomBar) {
+                    Toggle(isOn: $rssFeedViewModel.unreadIsOn) { Text("") }
+                        .toggleStyle(CheckboxStyle())
+                }
+                ToolbarItem(placement: .bottomBar) {
+                    Spacer()
+                }
+                ToolbarItem(placement: .bottomBar) {
+                    Toggle(isOn: $rssFeedViewModel.isOn) { Text("") }
+                        .toggleStyle(StarStyle())
+                }
+            }
             .sheet(item: $selectedItem, content: { item in
                 if UserEnvironment.current.useSafari {
                     SafariView(url: URL(string: item.url)!)
@@ -185,8 +144,7 @@ struct RSSFeedListView: View {
                     )
                 }
             })
-        }.animation(.default)
-//        .navigationViewStyle(StackNavigationViewStyle())
+        }
         .onAppear {
             self.rssFeedViewModel.fecthResults()
             self.rssFeedViewModel.fetchRemoteRSSItems()
@@ -194,22 +152,12 @@ struct RSSFeedListView: View {
     }
     func contextmenuAction(_ item: RSSItem) {
         rssFeedViewModel.archiveOrCancel(item)
-//        rssFeedViewModel.unreadOrCancel(item)
-        rssFeedViewModel.setPostRead(item)
+        rssFeedViewModel.readOrCancel(item)
     }
-    public func onToggleSort() {
-        self.sortAscending.toggle()
-    }
-}
-
-struct RSSFeedList_Previews: PreviewProvider {
-    static let rss = RSS()
     
-    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-        
-    static var previews: some View {
-            HomeView(viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
-                .environment(\.colorScheme, .dark)
-                .environmentObject(DataSourceService.current.rss)
+    private func isReadToggle() {
+      guard !self.isRead else { return }
+        guard let index = self.rssFeedViewModel.items.firstIndex(where: { $0.isRead == self.rssFeedViewModel.isOn }) else { return }
+      self.rssFeedViewModel.items[index].isRead.toggle()
     }
 }

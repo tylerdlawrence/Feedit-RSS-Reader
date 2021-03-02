@@ -20,6 +20,15 @@
         }
       },
       {
+        "package": "EasySwiftUI",
+        "repositoryURL": "https://github.com/onmyway133/EasySwiftUI.git",
+        "state": {
+          "branch": null,
+          "revision": "22b4e8e759fc2c0059d3b1439940a4d3fc161cbe",
+          "version": "0.2.11"
+        }
+      },
+      {
         "package": "FaviconFinder",
         "repositoryURL": "https://github.com/will-lumley/FaviconFinder.git",
         "state": {
@@ -98,6 +107,15 @@
           "branch": null,
           "revision": "4d6315ef11a55ee3d0764d3a71e56a6da7bd90ad",
           "version": "0.9.2"
+        }
+      },
+      {
+        "package": "Valet",
+        "repositoryURL": "https://github.com/square/Valet.git",
+        "state": {
+          "branch": null,
+          "revision": "2bf3329055f5d71d42a12801dd69d1d770fafa5e",
+          "version": "4.1.2"
         }
       }
     ]

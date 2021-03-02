@@ -136,3 +136,32 @@ class FeedObject: Identifiable, ObservableObject {
     }
 
 }
+
+
+struct FilterPicker: View {
+    @State var isOn = 1
+    @ObservedObject var rssFeedViewModel: RSSFeedViewModel
+    var body: some View {
+        Picker(selection: $isOn, label: Text(""), content: {
+            Image(systemName: "star.fill")
+                .font(.system(size: 10, weight: .black)).tag(0)
+            
+            Image(systemName: "circle.fill").font(.system(size: 10, weight: .black)).tag(1)
+            
+            Image(systemName: "text.justifyleft").font(.system(size: 10, weight: .black)).tag(2)
+                
+        }).pickerStyle(SegmentedPickerStyle()).frame(width: 160, height: 20).padding(.top)
+    }
+}
+
+struct FilterPicker_Previews: PreviewProvider {
+    static let rss = RSS()
+    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+    
+    static var previews: some View {
+
+        FilterPicker(isOn: 1, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem, isRead: false))
+                .preferredColorScheme(.dark)
+        
+    }
+}
