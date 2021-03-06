@@ -31,6 +31,22 @@ class RSSItemStore: NSObject {
         return persistence.context
     }
     
+    
+    
+    private var readItems: [RSSItem] {
+        return fetchedResultsController.fetchedObjects ?? []
+    }
+    private var undoneUnread: [RSSItem] {
+        return readItems.filter { !$0.isRead }
+    }
+    private var doneFavorites: [RSSItem] {
+        return readItems.filter { $0.isRead }
+    }
+    public var unreadList: [RSSItem] = []
+    public var readList: [RSSItem] = []
+    
+    
+    
     let didChange = PassthroughSubject<RSSItemStore, Never>()
     
     override init() {

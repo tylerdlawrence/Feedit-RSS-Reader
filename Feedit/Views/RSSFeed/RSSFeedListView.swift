@@ -18,7 +18,7 @@ struct RSSFeedListView: View {
     
 //    @Binding var isRead: Bool
     @State var isRead: Bool
-    
+        
     var rssSource: RSS {
         return self.rssFeedViewModel.rss
     }
@@ -44,10 +44,10 @@ struct RSSFeedListView: View {
                 .edgesIgnoringSafeArea(.all)
             List {
                 ForEach(self.rssFeedViewModel.items.filter {rssFeedViewModel.isOn ? $0.isArchive : true}, id: \.self) { item in
-                
-//                ForEach(self.rssFeedViewModel.items.filter {rssFeedViewModel.isOn ? $0.isArchive : true && rssFeedViewModel.unreadIsOn ? $0.isRead : true}) { item in
-                
+
 //                ForEach(self.rssFeedViewModel.items.filter {rssFeedViewModel.isOn ? $0.isArchive : true}) { item in
+                    
+                
                                         
                     ZStack {
                         NavigationLink(destination: WebView(rssItem: item, onCloseClosure: {})) {

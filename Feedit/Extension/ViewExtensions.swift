@@ -48,6 +48,21 @@ public struct IfLet<T, Content: View>: View {
     }
 }
 
+extension Bool: ExpressibleByStringLiteral {
+    public init(stringLiteral value: String) {
+        switch value.lowercased() {
+        case "nope":
+            self = false
+        case "yep":
+            self = true
+        case "maybe", "🤷🏼‍♂️":
+            self = [true, false].randomElement() ?? false
+        default:
+            self = false
+        }
+    }
+}
+
 @available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 public struct MakeView<Content: View>: View {
     let content: Content
@@ -108,98 +123,6 @@ public struct VisualEffectView: UIViewRepresentable {
 }
 
 #endif
-
-//struct NavigationBarColor: ViewModifier {
-//
-//  init(backgroundColor: UIColor, tintColor: UIColor) {
-//    let coloredAppearance = UINavigationBarAppearance()
-//    coloredAppearance.configureWithOpaqueBackground()
-//    coloredAppearance.backgroundColor = backgroundColor
-//    coloredAppearance.titleTextAttributes = [.foregroundColor: tintColor]
-//    coloredAppearance.largeTitleTextAttributes = [.foregroundColor: tintColor]
-//                   
-//    UINavigationBar.appearance().standardAppearance = coloredAppearance
-//    UINavigationBar.appearance().scrollEdgeAppearance = coloredAppearance
-//    UINavigationBar.appearance().compactAppearance = coloredAppearance
-//    UINavigationBar.appearance().tintColor = tintColor
-//  }
-//
-//  func body(content: Content) -> some View {
-//    content
-//  }
-//}
-//extension View {
-//  func navigationBarColor(backgroundColor: UIColor, tintColor: UIColor) -> some View {
-//    self.modifier(NavigationBarColor(backgroundColor: backgroundColor, tintColor: tintColor))
-//  }
-//}
-
-//struct NavigationBarModifier: ViewModifier {
-//        
-//    var backgroundColor: UIColor?
-//    
-//    init( backgroundColor: UIColor?) {
-//        self.backgroundColor = backgroundColor
-//        let coloredAppearance = UINavigationBarAppearance()
-//        coloredAppearance.configureWithTransparentBackground()
-//        coloredAppearance.backgroundColor = .clear
-//        coloredAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-//        coloredAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-//        
-//        UINavigationBar.appearance().standardAppearance = coloredAppearance
-//        UINavigationBar.appearance().compactAppearance = coloredAppearance
-//        UINavigationBar.appearance().scrollEdgeAppearance = coloredAppearance
-//        UINavigationBar.appearance().tintColor = .white
-//
-//    }
-//    
-//    func body(content: Content) -> some View {
-//        ZStack{
-//            content
-//            VStack {
-//                GeometryReader { geometry in
-//                    Color(self.backgroundColor ?? .clear)
-//                        .frame(height: geometry.safeAreaInsets.top)
-//                        .edgesIgnoringSafeArea(.top)
-//                    Spacer()
-//                }
-//            }
-//        }
-//    }
-//}
-//
-//extension View {
-// 
-//    func navigationBarColor(_ backgroundColor: UIColor?) -> some View {
-//        self.modifier(NavigationBarModifier(backgroundColor: backgroundColor))
-//    }
-//}
-//
-//extension View {
-//  func background(with color: Color) -> some View {
-//    background(GeometryReader { geometry in
-//      Rectangle().path(in: geometry.frame(in: .local)).foregroundColor(color)
-//    })
-//  }
-//}
-
-//extension UINavigationController {
-//    override open func viewDidLoad() {
-//        super.viewDidLoad()
-//        let standardAppearance = UINavigationBarAppearance()
-//        standardAppearance.backgroundColor = UIColor(Color("accent"))
-//        
-//        let compactAppearance = UINavigationBarAppearance()
-//        compactAppearance.backgroundColor = UIColor(Color("accent"))
-//        
-//        let scrollEdgeAppearance = UINavigationBarAppearance()
-//        scrollEdgeAppearance.backgroundColor = UIColor(Color("accent"))
-//        
-//        navigationBar.standardAppearance = standardAppearance
-//        navigationBar.compactAppearance = compactAppearance
-//        navigationBar.scrollEdgeAppearance = scrollEdgeAppearance
-//    }
-//}
 
 extension View {
     func phoneOnlyStackNavigationView() -> some View {

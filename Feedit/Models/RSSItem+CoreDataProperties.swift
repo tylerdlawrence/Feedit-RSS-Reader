@@ -37,6 +37,8 @@ extension RSSItem {
     @NSManaged public var isArchive: Bool
     @NSManaged public var isRead: Bool
     @NSManaged public var image: String
+    @NSManaged public var thumbnailURL: URL
+    
     
     public override func awakeFromInsert() {
         super.awakeFromInsert()
@@ -60,6 +62,7 @@ extension RSSItem {
 //        return item
 //    }
     
+    @discardableResult
     static func create(uuid: UUID, title: String = "", desc: String = "", author: String = "", url: String = "",
                        createTime: Date = Date(), progress: Double = 0, in context: NSManagedObjectContext) -> RSSItem {
         let item = RSSItem(context: context)

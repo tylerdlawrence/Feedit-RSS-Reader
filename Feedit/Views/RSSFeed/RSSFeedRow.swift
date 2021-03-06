@@ -28,7 +28,10 @@ struct RSSItemRow: View {
     @State private var selectedItem: RSSItem?
     var contextMenuAction: ((RSSItem) -> Void)?
     
+//    var feed: Feed
+    
     init(wrapper: RSSItem, menu action: ((RSSItem) -> Void)? = nil) {
+//        self.feed = feed
         itemWrapper = wrapper
         contextMenuAction = action
     }
@@ -183,6 +186,10 @@ struct RSSItemRow: View {
 //                    .opacity(self.isRead ? 1 : 0)
                         }
                }
+//                KFImage(self.feed.thumbnailURL)
+//                    .resizable()
+//                    .aspectRatio(contentMode: .fit)
+//                    .frame(width: 120, height: 120)
             }
             .swipeCell(cellPosition: .both, leftSlot: read, rightSlot: star)
             .contextMenu {
@@ -229,14 +236,15 @@ extension Int {
     }
 }
 
-struct RSSFeedRow_Previews: PreviewProvider {
-    static var rss = RSS()
-    static var rssFeedViewModel = RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem, isRead: false)
-    
-    static var previews: some View {
-        let simple = DataSourceService.current.rssItem.simple()
-        return RSSItemRow(wrapper: simple!).environmentObject(DataSourceService.current.rssItem)
-            .frame(width: 360, height: 60)
-            .preferredColorScheme(.dark)
-    }
-}
+//struct RSSFeedRow_Previews: PreviewProvider {
+//    static var rss = RSS()
+//
+//    static var rssFeedViewModel = RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem, isRead: false)
+//
+//    static var previews: some View {
+//        let simple = DataSourceService.current.rssItem.simple()
+//        return RSSItemRow(feed: feed, wrapper: simple!).environmentObject(DataSourceService.current.rssItem)
+//            .frame(width: 360, height: 60)
+//            .preferredColorScheme(.dark)
+//    }
+//}

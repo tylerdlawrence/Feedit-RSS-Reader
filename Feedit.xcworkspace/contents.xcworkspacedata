@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:/Users/tylerdlawrence/Desktop/Feedit-RSS-Reader-main/Feedit/Models/FeedsViewModel.swift">
+   </FileRef>
+   <FileRef
       location = "container:Feedit.xcodeproj">
    </FileRef>
 </Workspace>
