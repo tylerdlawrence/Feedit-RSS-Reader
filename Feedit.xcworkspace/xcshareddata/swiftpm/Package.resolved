@@ -110,6 +110,15 @@
         }
       },
       {
+        "package": "SwipeCellKit",
+        "repositoryURL": "https://github.com/SwipeCellKit/SwipeCellKit.git",
+        "state": {
+          "branch": null,
+          "revision": "7219cad3098637176ace311510d11467dbfb9bb0",
+          "version": "2.7.1"
+        }
+      },
+      {
         "package": "Valet",
         "repositoryURL": "https://github.com/square/Valet.git",
         "state": {

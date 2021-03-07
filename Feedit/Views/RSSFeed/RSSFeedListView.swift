@@ -45,9 +45,7 @@ struct RSSFeedListView: View {
             List {
                 ForEach(self.rssFeedViewModel.items.filter {rssFeedViewModel.isOn ? $0.isArchive : true}, id: \.self) { item in
 
-//                ForEach(self.rssFeedViewModel.items.filter {rssFeedViewModel.isOn ? $0.isArchive : true}) { item in
-                    
-                
+//                ForEach(self.rssFeedViewModel.items.filter {rssFeedViewModel.isOn ? $0.isArchive : true}) { item in                
                                         
                     ZStack {
                         NavigationLink(destination: WebView(rssItem: item, onCloseClosure: {})) {

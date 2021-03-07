@@ -24,6 +24,7 @@
 		6162F25825B68BA1008E7FA7 /* Searchbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6162F25725B68BA1008E7FA7 /* Searchbar.swift */; };
 		6162F28025B69071008E7FA7 /* FaviconFinder in Frameworks */ = {isa = PBXBuildFile; productRef = 6162F27F25B69071008E7FA7 /* FaviconFinder */; };
 		6162F2A625B71AF3008E7FA7 /* FilterBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6162F2A525B71AF3008E7FA7 /* FilterBar.swift */; };
+		6165A54B25F42C5600672EE1 /* SwipeCellKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6165A54A25F42C5600672EE1 /* SwipeCellKit */; };
 		616CAF6024F7131000690804 /* OPMLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616CAF5F24F7131000690804 /* OPMLParser.swift */; };
 		616CAF6324F7154600690804 /* DateSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616CAF6224F7154600690804 /* DateSpec.swift */; };
 		616CAF6524F7158200690804 /* RFC3339DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616CAF6424F7158200690804 /* RFC3339DateFormatter.swift */; };
@@ -55,7 +56,6 @@
 		618E640E25E4C81400F46B4D /* RSSDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C818E324E1F91B00593939 /* RSSDataSource.swift */; };
 		618E640F25E4C87200F46B4D /* RSSActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B95D8725CEEAA800829741 /* RSSActions.swift */; };
 		618E641125E57BFD00F46B4D /* RSSActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618E641025E57BFB00F46B4D /* RSSActionSheet.swift */; };
-		618E641525E6013D00F46B4D /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618E641425E6013D00F46B4D /* ShareSheet.swift */; };
 		618F9021250DC63B00D5A03E /* RSSRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61967EFE24E2068400AA647C /* RSSRow.swift */; };
 		618F902B250DCD4F00D5A03E /* ModelHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618F9026250DCD4F00D5A03E /* ModelHelper.swift */; };
 		618F902C250DCD4F00D5A03E /* RSS+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618F9027250DCD4F00D5A03E /* RSS+CoreDataClass.swift */; };
@@ -127,7 +127,6 @@
 		61F5711525DE08A100FDD761 /* UnreadListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F5711425DE08A100FDD761 /* UnreadListViewModel.swift */; };
 		61F5711825DE0B4100FDD761 /* UnreadListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F5711725DE0B4100FDD761 /* UnreadListView.swift */; };
 		61FD0CE025EAFB2900084A20 /* EasySwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 61FD0CDF25EAFB2900084A20 /* EasySwiftUI */; };
-		61FD0CE425EC1D4C00084A20 /* View-Hidden.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FD0CE325EC1D4B00084A20 /* View-Hidden.swift */; };
 		61FD0CE725EC530500084A20 /* Valet in Frameworks */ = {isa = PBXBuildFile; productRef = 61FD0CE625EC530500084A20 /* Valet */; };
 /* End PBXBuildFile section */
 
@@ -191,7 +190,6 @@
 		61822139250542BF005636B2 /* BatchImportViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatchImportViewModelTests.swift; sourceTree = "<group>"; };
 		6182213C250542E9005636B2 /* Subscriptions-test.opml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "Subscriptions-test.opml"; sourceTree = "<group>"; };
 		618E641025E57BFB00F46B4D /* RSSActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSSActionSheet.swift; sourceTree = "<group>"; };
-		618E641425E6013D00F46B4D /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 		618F9026250DCD4F00D5A03E /* ModelHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelHelper.swift; sourceTree = "<group>"; };
 		618F9027250DCD4F00D5A03E /* RSS+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RSS+CoreDataClass.swift"; sourceTree = "<group>"; };
 		618F9028250DCD4F00D5A03E /* RSS+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RSS+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -258,7 +256,6 @@
 		61E9D16E25A24CA200880550 /* GetInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetInfo.swift; sourceTree = "<group>"; };
 		61F5711425DE08A100FDD761 /* UnreadListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnreadListViewModel.swift; sourceTree = "<group>"; };
 		61F5711725DE0B4100FDD761 /* UnreadListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnreadListView.swift; sourceTree = "<group>"; };
-		61FD0CE325EC1D4B00084A20 /* View-Hidden.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View-Hidden.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -279,6 +276,7 @@
 				61DE7AC125CCAE83008F8DDE /* BetterSafariView in Frameworks */,
 				616121E42553670B0074F061 /* FeedKit in Frameworks */,
 				618610B3256ED5BE0083A96D /* KingfisherSwiftUI in Frameworks */,
+				6165A54B25F42C5600672EE1 /* SwipeCellKit in Frameworks */,
 				616121F0255367B60074F061 /* SDWebImageSwiftUI in Frameworks */,
 				618610D5256EF7A00083A96D /* SwiftSoup in Frameworks */,
 				61FD0CE025EAFB2900084A20 /* EasySwiftUI in Frameworks */,
@@ -403,7 +401,6 @@
 				615E983F2533AFAE00891083 /* ContentView.swift */,
 				61B95ED225D1069600829741 /* RSS.xcdatamodeld */,
 				617E4C53255DE8F20010CEE8 /* HomeView.swift */,
-				618E641425E6013D00F46B4D /* ShareSheet.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -474,7 +471,6 @@
 				61967ED024E2053D00AA647C /* RSSError.swift */,
 				61967ED124E2053D00AA647C /* String+Ext.swift */,
 				61DE7AC225CD1E18008F8DDE /* CheckboxToggle.swift */,
-				61FD0CE325EC1D4B00084A20 /* View-Hidden.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -570,6 +566,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				6165A54D25F42C6A00672EE1 /* PBXTargetDependency */,
 				61FD0CE925EC531600084A20 /* PBXTargetDependency */,
 				61FD0CE225EAFB7100084A20 /* PBXTargetDependency */,
 				616121F9255376F30074F061 /* PBXTargetDependency */,
@@ -594,6 +591,7 @@
 				61DE7AC025CCAE83008F8DDE /* BetterSafariView */,
 				61FD0CDF25EAFB2900084A20 /* EasySwiftUI */,
 				61FD0CE625EC530500084A20 /* Valet */,
+				6165A54A25F42C5600672EE1 /* SwipeCellKit */,
 			);
 			productName = Feedit;
 			productReference = 61C8189224E1F3FB00593939 /* Feedit.app */;
@@ -638,6 +636,7 @@
 				61DE7ABF25CCAE82008F8DDE /* XCRemoteSwiftPackageReference "BetterSafariView" */,
 				61FD0CDE25EAFB2800084A20 /* XCRemoteSwiftPackageReference "EasySwiftUI" */,
 				61FD0CE525EC530400084A20 /* XCRemoteSwiftPackageReference "Valet" */,
+				6165A54925F42C5600672EE1 /* XCRemoteSwiftPackageReference "SwipeCellKit" */,
 			);
 			productRefGroup = 61C8189324E1F3FB00593939 /* Products */;
 			projectDirPath = "";
@@ -725,7 +724,6 @@
 				61967ED424E2053D00AA647C /* RSSError.swift in Sources */,
 				616CAF6524F7158200690804 /* RFC3339DateFormatter.swift in Sources */,
 				61967EE924E205DD00AA647C /* ActionContextMenu.swift in Sources */,
-				61FD0CE425EC1D4C00084A20 /* View-Hidden.swift in Sources */,
 				61C818E724E1F9BA00593939 /* PersistenceManager.swift in Sources */,
 				616CAF6024F7131000690804 /* OPMLParser.swift in Sources */,
 				617E4C54255DE8F20010CEE8 /* HomeView.swift in Sources */,
@@ -778,7 +776,6 @@
 				61B95EC525D0B51300829741 /* Binding.swift in Sources */,
 				61C8189824E1F3FB00593939 /* SceneDelegate.swift in Sources */,
 				61967ED324E2053D00AA647C /* ManagedObjectContext.swift in Sources */,
-				618E641525E6013D00F46B4D /* ShareSheet.swift in Sources */,
 				61C818E124E1F81C00593939 /* ArchiveListViewModel.swift in Sources */,
 				6117365724E83C7B00A2DEA5 /* DataNStorageViewModel.swift in Sources */,
 				61F5711825DE0B4100FDD761 /* UnreadListView.swift in Sources */,
@@ -812,6 +809,10 @@
 		6162F28325B6907B008E7FA7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = 6162F28225B6907B008E7FA7 /* FaviconFinder */;
+		};
+		6165A54D25F42C6A00672EE1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 6165A54C25F42C6A00672EE1 /* SwipeCellKit */;
 		};
 		6182213025053FEE005636B2 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1155,6 +1156,14 @@
 				minimumVersion = 2.2.0;
 			};
 		};
+		6165A54925F42C5600672EE1 /* XCRemoteSwiftPackageReference "SwipeCellKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwipeCellKit/SwipeCellKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.7.1;
+			};
+		};
 		618610B1256ED5BE0083A96D /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
@@ -1263,6 +1272,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6162F27E25B69071008E7FA7 /* XCRemoteSwiftPackageReference "FaviconFinder" */;
 			productName = FaviconFinder;
+		};
+		6165A54A25F42C5600672EE1 /* SwipeCellKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6165A54925F42C5600672EE1 /* XCRemoteSwiftPackageReference "SwipeCellKit" */;
+			productName = SwipeCellKit;
+		};
+		6165A54C25F42C6A00672EE1 /* SwipeCellKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6165A54925F42C5600672EE1 /* XCRemoteSwiftPackageReference "SwipeCellKit" */;
+			productName = SwipeCellKit;
 		};
 		618610B2256ED5BE0083A96D /* KingfisherSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;

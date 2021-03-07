@@ -18,6 +18,7 @@ struct HomeView: View {
     }
     
     @ObservedObject var viewModel: RSSListViewModel
+    @ObservedObject var searchBar: SearchBar = SearchBar()
     @StateObject var rssFeedViewModel: RSSFeedViewModel
     @StateObject var archiveListViewModel: ArchiveListViewModel
     
@@ -82,15 +83,8 @@ struct HomeView: View {
         }.padding(24)
     }
     
-    //MARK: LISTVIEWS
-    private var allItemsSection: some View {
-        Group{
-            HStack {
-                Text("All Items")
-                    .font(.system(size: 20, weight: .medium, design: .rounded))
-                Spacer()
-                
-            }
+    private var feedsView: some View {
+        Section(header: Text("All Items").font(.system(size: 18, weight: .medium, design: .rounded)).textCase(nil)) {
             VStack{
                 HStack {
                     ZStack{
@@ -100,12 +94,7 @@ struct HomeView: View {
                         .opacity(0.0)
                         .buttonStyle(PlainButtonStyle())
                     HStack{
-                        Image(systemName: "archivebox.fill").font(.system(size: 20, weight: .ultraLight))
-                            .foregroundColor(Color("text"))
-                            .opacity(0.8)
-                            .frame(width: 25, height: 25)
-                        Text("Archive")
-                            .font(.system(size: 18, weight: .regular, design: .rounded))
+                        Label("Archive", systemImage: "archivebox")
                         Spacer()
                         Text("\(viewModel.items.count)")
                             .font(.caption)
@@ -127,13 +116,7 @@ struct HomeView: View {
                 .opacity(0.0)
                 .buttonStyle(PlainButtonStyle())
                 HStack{
-                    Image(systemName: "star.fill")
-                        .font(.system(size: 18, weight: .regular, design: .rounded))
-                        .foregroundColor(.yellow)
-                        .opacity(0.8)
-                        .frame(width: 25, height: 25)
-                    Text("Starred")
-                        .font(.system(size: 17, weight: .regular, design: .rounded))
+                    Label("Starred", systemImage: "star")
                         Spacer()
                     Text("\(archiveListViewModel.items.count)")
                         .font(.caption)
@@ -150,49 +133,53 @@ struct HomeView: View {
                 self.archiveListViewModel.fecthResults()
             }
         }
+        .accentColor(Color("tab"))
     }
+    
     private var feedsSection: some View {
-        DisclosureGroup(
-            isExpanded: $revealFeedsDisclosureGroup,
-            content: {
-                ForEach(viewModel.items, id: \.self) { rss in
-                    ZStack {
-                        NavigationLink(destination: self.destinationView(rss: rss)) { //.onDisappear(perform: {self.refreshID = UUID()})
-                            EmptyView()
-                        }
-                        .opacity(0.0)
-                        .buttonStyle(PlainButtonStyle())
-                    HStack {
-                        RSSRow(rss: rss)
-                        }
+//        DisclosureGroup(
+//            isExpanded: $revealFeedsDisclosureGroup,
+//            content: {
+        Section(header: Text("Feeds (\(viewModel.items.lazy.count))").font(.system(size: 18, weight: .medium, design: .rounded)).textCase(nil)) {
+            ForEach(viewModel.items, id: \.self) { rss in
+                ZStack {
+                    NavigationLink(destination: self.destinationView(rss: rss)) { //.onDisappear(perform: {self.refreshID = UUID()})
+                        EmptyView()
                     }
-                }
-                .onDelete { indexSet in
-                    if let index = indexSet.first {
-                        self.viewModel.delete(at: index)
-                    }
-                }
-            },
-            label: {
+                    .opacity(0.0)
+                    .buttonStyle(PlainButtonStyle())
                 HStack {
-                    Text("Feeds")
-                        .font(.system(size: 20, weight: .medium, design: .rounded))
+                    RSSRow(rss: rss)
+                    }
                 }
-            })
+            }
+            .onDelete { indexSet in
+                if let index = indexSet.first {
+                    self.viewModel.delete(at: index)
+                }
+            }
+        }
+//            },
+//            label: {
+//                HStack {
+//                    Text("Feeds")
+//                        .font(.system(size: 20, weight: .medium, design: .rounded))
+//                }
+//            })
             .accentColor(Color("tab"))
         }
-    
+        
     private let addRSSPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("addNewRSSPublisher"))
     private let rssRefreshPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("rssListNeedRefresh"))
+    
+    @State private var multiSelection = Set<UUID>()
 
     var body: some View {
         NavigationView{
             VStack {
                 ZStack {
-                    List{
-                        Spacer()
-                        allItemsSection
-                        Spacer()
+                    List {
+                        feedsView
                         feedsSection
                     }
                     .navigationBarItems(trailing:
@@ -209,9 +196,11 @@ struct HomeView: View {
                                                     }
                                                 }
                                             })
-
-                    .listStyle(PlainListStyle())
-                    .navigationBarTitle("Account")
+                    .listStyle(SidebarListStyle())
+//                    .listStyle(InsetGroupedListStyle())
+//                    .listStyle(PlainListStyle())
+                    .navigationBarTitle("Account", displayMode: .automatic)
+                    .add(self.searchBar)
                 }
                 .onAppear {
                     startNetworkCall()
@@ -283,5 +272,3 @@ struct HomeView_Previews: PreviewProvider {
         }.environmentObject(DataSourceService.current.rss)
     }
 }
-
-
