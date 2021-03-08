@@ -25,6 +25,7 @@
 		6162F28025B69071008E7FA7 /* FaviconFinder in Frameworks */ = {isa = PBXBuildFile; productRef = 6162F27F25B69071008E7FA7 /* FaviconFinder */; };
 		6162F2A625B71AF3008E7FA7 /* FilterBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6162F2A525B71AF3008E7FA7 /* FilterBar.swift */; };
 		6165A54B25F42C5600672EE1 /* SwipeCellKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6165A54A25F42C5600672EE1 /* SwipeCellKit */; };
+		6165A57425F5E36800672EE1 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6165A57325F5E36500672EE1 /* ShareSheet.swift */; };
 		616CAF6024F7131000690804 /* OPMLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616CAF5F24F7131000690804 /* OPMLParser.swift */; };
 		616CAF6324F7154600690804 /* DateSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616CAF6224F7154600690804 /* DateSpec.swift */; };
 		616CAF6524F7158200690804 /* RFC3339DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616CAF6424F7158200690804 /* RFC3339DateFormatter.swift */; };
@@ -176,6 +177,7 @@
 		615E983F2533AFAE00891083 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContentView.swift; path = Feedit/Views/ContentView.swift; sourceTree = SOURCE_ROOT; };
 		6162F25725B68BA1008E7FA7 /* Searchbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Searchbar.swift; sourceTree = "<group>"; };
 		6162F2A525B71AF3008E7FA7 /* FilterBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterBar.swift; sourceTree = "<group>"; };
+		6165A57325F5E36500672EE1 /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 		616CAF5F24F7131000690804 /* OPMLParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OPMLParser.swift; sourceTree = "<group>"; };
 		616CAF6224F7154600690804 /* DateSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateSpec.swift; sourceTree = "<group>"; };
 		616CAF6424F7158200690804 /* RFC3339DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RFC3339DateFormatter.swift; sourceTree = "<group>"; };
@@ -401,6 +403,7 @@
 				615E983F2533AFAE00891083 /* ContentView.swift */,
 				61B95ED225D1069600829741 /* RSS.xcdatamodeld */,
 				617E4C53255DE8F20010CEE8 /* HomeView.swift */,
+				6165A57325F5E36500672EE1 /* ShareSheet.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -738,6 +741,7 @@
 				618F902E250DCD4F00D5A03E /* RSSItem+CoreDataClass.swift in Sources */,
 				616CAF6324F7154600690804 /* DateSpec.swift in Sources */,
 				618F902C250DCD4F00D5A03E /* RSS+CoreDataClass.swift in Sources */,
+				6165A57425F5E36800672EE1 /* ShareSheet.swift in Sources */,
 				6117364924E83C0600A2DEA5 /* DataUnitView.swift in Sources */,
 				61967F0324E2068400AA647C /* RSSDisplayView.swift in Sources */,
 				6162F2A625B71AF3008E7FA7 /* FilterBar.swift in Sources */,

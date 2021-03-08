@@ -218,12 +218,13 @@ struct RSSItemRow: View {
                         Image(systemName: "link")
                     }
                     
-                    Button(action: {
-//                        self.isHidden(true, remove: true)
-                    }) {
-                        Text("Hide")
-                        Image(systemName: "eye")
-                    }
+                    Screen()
+//                    Button(action: {
+////                        self.isHidden(true, remove: true)
+//                    }) {
+//                        Text("Share Article")
+//                        Image(systemName: "square.and.arrow.up")
+//                    }
                 }
             }
         }
