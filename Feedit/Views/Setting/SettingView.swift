@@ -13,6 +13,7 @@ import Foundation
 struct SettingView: View {
     
     @Environment(\.presentationMode) var presentationMode
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     @State private var quantity = 1
     @State private var isSelected: Bool = false
     var onDoneAction: (() -> Void)?
@@ -58,7 +59,7 @@ struct SettingView: View {
             self.onDoneAction?()
             self.presentationMode.wrappedValue.dismiss()
         }) {
-            Text("Done")
+            Image(systemName: "xmark")
         }
     }
     
@@ -137,8 +138,8 @@ struct SettingView: View {
                                         .clipShape(RoundedRectangle(cornerRadius: 5))
                                     Toggle("Dark Mode", isOn: $isDarkModeOn)
                                 }.toggleStyle(SwitchToggleStyle(tint: .blue))
-                                }
                             }
+                        }
                     
                     Section(header: Text("About")) {
                             Group {
@@ -185,7 +186,7 @@ struct SettingView: View {
                 }
                 .listStyle(GroupedListStyle())
                 .navigationBarTitle("Settings", displayMode: .automatic)
-                .navigationBarItems(trailing: doneButton)
+                .navigationBarItems(leading: doneButton)
                 .environment(\.horizontalSizeClass, .regular)
             }
             .onAppear {

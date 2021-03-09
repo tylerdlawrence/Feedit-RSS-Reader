@@ -39,26 +39,33 @@ struct InfoView: View {
 
     var body: some View {
         NavigationView{
-            Form {
+            ZStack {
+                List {
+                    VStack(alignment: .center){
+                        HStack {
+                            KFImage(URL(string: rssSource.image))
+                                .placeholder({
+                                    Image("getInfo")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 50, height: 50,alignment: .center)
+                                        .cornerRadius(5)
+                                        .border(Color("Color"), width: 2)
+                                        .multilineTextAlignment(.center)
+
+                                })
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 50, height: 50,alignment: .center)
+                                .cornerRadius(5)
+                                .border(Color.clear, width: 1)
+                                .multilineTextAlignment(.center)
+                        }
+                    }
+                    .padding(.leading, 130.0)
+                    .listRowBackground(Color("modalAccent"))
                 Section(header: Header(), footer: Footer(rss: rss)) {
                     HStack {
-                        KFImage(URL(string: rssSource.image))
-                            .placeholder({
-                                Image("getInfo")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 50, height: 50,alignment: .center)
-                                    .cornerRadius(5)
-                                    .border(Color("Color"), width: 2)
-                                    .multilineTextAlignment(.center)
-
-                            })
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 50, height: 50,alignment: .center)
-                            .cornerRadius(5)
-                            .border(Color.clear, width: 1)
-                            .multilineTextAlignment(.center)
                         TextField(rss.title, text: $rss.title)
                             .font(.system(size: 24, weight: .medium, design: .rounded))
                     }
@@ -68,15 +75,15 @@ struct InfoView: View {
                             .foregroundColor(Color("text"))
                     }
                 }
-                
+                    
                 HStack {
                     ForEach([InfoItem.webView], id: \.self) { _ in
                             Toggle("Safari Reader View", isOn: self.$isSelected)
                         }
                     .toggleStyle(SwitchToggleStyle(tint: .blue))
                     }
-                
-                Section(header: Text("Feed URL")
+                    
+                    Section(header: Text("Feed URL")
                             .padding(.leading).textCase(nil)) {
                     HStack{
                         Text(rss.url).textCase(.lowercase)
@@ -92,44 +99,47 @@ struct InfoView: View {
                             }
                         }
                 }
-                    Section(header: Text("Home Page").padding(.leading).textCase(nil)){
-                        HStack{
-                            Text(rssSource.url).textCase(.lowercase)
-                                .contextMenu {
-                                    Button(action: {
-                                        self.actionSheetShown = true
-                                        UIPasteboard.general.setValue(rssSource.url,
-                                                                      forPasteboardType: kUTTypePlainText as String)
-                                    }) {
-                                        Text("Copy URL")
-                                        Image(systemName: "doc.on.clipboard")
+                Section(header: Text("Home Page").padding(.leading).textCase(nil)){
+                    HStack{
+                        Text(rssSource.url).textCase(.lowercase)
+                            .contextMenu {
+                                Button(action: {
+                                    self.actionSheetShown = true
+                                    UIPasteboard.general.setValue(rssSource.url,
+                                                                  forPasteboardType: kUTTypePlainText as String)
+                                }) {
+                                    Text("Copy URL")
+                                    Image(systemName: "doc.on.clipboard")
+                                }
+                     
+                                Link(destination: URL(string: rssSource.url)!, label: {
+                                    HStack {
+                                        Text("Go To Website")
+                                        Spacer()
+                                        Image(systemName: "safari")
                                     }
-                         
-                                    Link(destination: URL(string: rssSource.url)!, label: {
-                                        HStack {
-                                            Text("Go To Website")
-                                            Spacer()
-                                            Image(systemName: "safari")
-                                        }
-                                    })
-                                }
-                            Spacer()
-                            Link(destination: URL(string: rssSource.url)!, label: {
-                                HStack {
-                                    Image(systemName: "safari")
-                                }
-                            })
-                        }
+                                })
+                            }
+                        Spacer()
+                        Link(destination: URL(string: rssSource.url)!, label: {
+                            HStack {
+                                Image(systemName: "safari")
+                            }
+                        })
                     }
                 }
+            }
+            .listStyle(InsetGroupedListStyle())
             .navigationBarTitle(rss.title, displayMode: .inline)
-            .navigationBarItems(trailing:
+            .navigationBarItems(leading:
                 Button(action: {
                     self.presentationMode.wrappedValue.dismiss()
             }) {
-                    Text("Done")
+                    Image(systemName: "xmark")
                 }
             )}
+        }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

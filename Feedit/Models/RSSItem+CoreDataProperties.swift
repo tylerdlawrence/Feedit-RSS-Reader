@@ -76,6 +76,7 @@ extension RSSItem {
         item.createTime = createTime
         item.progress = 0
         item.isArchive = false
+        item.isRead = false
         return item
     }
     
@@ -109,6 +110,23 @@ extension RSSItem {
     static func requestCountArchiveObjects() -> NSFetchRequest<RSSItem> {
         let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
         let predicate = NSPredicate(format: "isArchive = true")
+        request.predicate = predicate
+        return request
+    }
+    
+    static func requestUnreadObjects(start: Int = 0, limit: Int = 20) -> NSFetchRequest<RSSItem> {
+        let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
+        let predicate = NSPredicate(format: "isRead = true")
+        request.predicate = predicate
+        request.sortDescriptors = [.init(key: #keyPath(RSSItem.updateTime), ascending: false)]
+        request.fetchOffset = start
+        request.fetchLimit = limit
+        return request
+    }
+    
+    static func requestCountUnreadObjects() -> NSFetchRequest<RSSItem> {
+        let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
+        let predicate = NSPredicate(format: "isRead = true")
         request.predicate = predicate
         return request
     }

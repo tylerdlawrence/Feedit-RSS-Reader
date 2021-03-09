@@ -15,8 +15,7 @@ import KingfisherSwiftUI
 
 struct RSSFeedListView: View {
     
-    @State private var isRead = false
-    @State private var hideView = false
+    @State var isRead = false
         
     var rssSource: RSS {
         return self.rssFeedViewModel.rss
@@ -45,9 +44,11 @@ struct RSSFeedListView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .edgesIgnoringSafeArea(.all)
             List {
+//                ForEach(self.rssFeedViewModel.items.filter { rssFeedViewModel.isOn ? $0.isArchive : true }, id: \.self) { item in
                 ForEach(self.rssFeedViewModel.items.filter { rssFeedViewModel.isOn ? $0.isArchive : true }, id: \.self) { item in
                 //&& rssFeedViewModel.unreadIsOn ? $0.isRead : true
-                    if !self.rssFeedViewModel.unreadIsOn || item.isRead {
+//                    if !self.rssFeedViewModel.unreadIsOn || item.isRead {
+                    if (!self.rssFeedViewModel.unreadIsOn || item.isRead) {
                                         
                     ZStack {
                         NavigationLink(destination: WebView(rssItem: item, onCloseClosure: {})) {
@@ -150,6 +151,8 @@ struct RSSFeedListView: View {
                 }
                 
                 ToolbarItem(placement: .bottomBar) {
+//                    Toggle(isOn: self.$isRead) { Text("") }
+//                        .toggleStyle(CheckboxStyle())
                     Toggle(isOn: $rssFeedViewModel.unreadIsOn) { Text("") }
                         .toggleStyle(CheckboxStyle())
                     
@@ -189,4 +192,17 @@ struct RSSFeedListView: View {
     }
     func sortStarred() { sortType = "star" }
     func sortUnread() { sortType = "unread" }
+}
+
+struct RSSFeedListView_Previews: PreviewProvider {
+    static let rss = RSS()
+    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+    static let isRead = true
+
+    static var previews: some View {
+        Group{
+            HomeView(viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem, isRead: isRead), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
+            .environment(\.colorScheme, .dark)
+        }.environmentObject(DataSourceService.current.rss)
+    }
 }
