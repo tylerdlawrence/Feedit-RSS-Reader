@@ -39,7 +39,7 @@ struct SectionView<Content: View>: View {
                     Text(title).font(.title3).bold()
                 }
                 content()
-                Text(description).font(.body).foregroundColor(.secondary)
+                Text(description).font(.body)//.foregroundColor(.secondary)
                 Divider()
             }
             #endif

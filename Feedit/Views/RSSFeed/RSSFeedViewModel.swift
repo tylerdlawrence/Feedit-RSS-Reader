@@ -8,6 +8,7 @@
 import Foundation
 import CoreData
 import SwiftUI
+import UIKit
 
 class RSSFeedViewModel: NSObject, ObservableObject {
     
@@ -24,6 +25,12 @@ class RSSFeedViewModel: NSObject, ObservableObject {
     @Published var showFilter = false
     
     @Published var isRead: Bool
+    
+    @Published var showAll = false {
+        didSet {
+            fetchRemoteRSSItems()
+        }
+    }
     
     let dataSource: RSSItemDataSource
     let rss: RSS
@@ -47,7 +54,7 @@ class RSSFeedViewModel: NSObject, ObservableObject {
     
     func readOrCancel(_ item: RSSItem) {
         let updatedItem = dataSource.readObject(item)
-        updatedItem.isArchive = !item.isRead
+        updatedItem.isRead = !item.isRead
         updatedItem.updateTime = Date()
         dataSource.setUpdateObject(updatedItem)
 

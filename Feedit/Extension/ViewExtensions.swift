@@ -31,99 +31,6 @@ public struct ActivityIndicator: UIViewRepresentable {
 
 #endif
 
-@available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
-public struct IfLet<T, Content: View>: View {
-    let value: T?
-    let content: (T) -> Content
-
-    public init(_ value: T?, @ViewBuilder content: @escaping (T) -> Content) {
-        self.value = value
-        self.content = content
-    }
-
-    public var body: some View {
-        if let value = value {
-            content(value)
-        }
-    }
-}
-
-extension Bool: ExpressibleByStringLiteral {
-    public init(stringLiteral value: String) {
-        switch value.lowercased() {
-        case "nope":
-            self = false
-        case "yep":
-            self = true
-        case "maybe", "🤷🏼‍♂️":
-            self = [true, false].randomElement() ?? false
-        default:
-            self = false
-        }
-    }
-}
-
-@available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
-public struct MakeView<Content: View>: View {
-    let content: Content
-
-    public init(@ViewBuilder make: () -> Content) {
-        self.content = make()
-    }
-
-    public var body: some View {
-        content
-    }
-}
-
-#if canImport(AppKit)
-
-public struct VisualEffectView: NSViewRepresentable {
-    let material: NSVisualEffectView.Material
-    let blendingMode: NSVisualEffectView.BlendingMode
-
-    public init(
-        material: NSVisualEffectView.Material = .contentBackground,
-        blendingMode: NSVisualEffectView.BlendingMode = .withinWindow
-    ) {
-        self.material = material
-        self.blendingMode = blendingMode
-    }
-
-    public func makeNSView(context: Context) -> NSVisualEffectView {
-        let visualEffectView = NSVisualEffectView()
-        visualEffectView.material = material
-        visualEffectView.blendingMode = blendingMode
-        visualEffectView.state = NSVisualEffectView.State.active
-        return visualEffectView
-    }
-
-    public func updateNSView(_ visualEffectView: NSVisualEffectView, context: Context) {
-        visualEffectView.material = material
-        visualEffectView.blendingMode = blendingMode
-    }
-}
-
-#else
-
-public struct VisualEffectView: UIViewRepresentable {
-    let effect: UIVisualEffect
-
-    public init(effect: UIVisualEffect) {
-        self.effect = effect
-    }
-
-    public func makeUIView(context: Context) -> UIVisualEffectView {
-        UIVisualEffectView()
-    }
-
-    public func updateUIView(_ uiView: UIVisualEffectView, context: Context) {
-        uiView.effect = effect
-    }
-}
-
-#endif
-
 extension View {
     func phoneOnlyStackNavigationView() -> some View {
         if UIDevice.current.userInterfaceIdiom == .phone {
@@ -188,3 +95,25 @@ extension View {
         ModifiedContent(content: self, modifier: ListSeparatorStyle(style: style))
     }
 }
+
+struct VisibilityStyle: ViewModifier {
+   
+   @Binding var hidden: Bool
+   func body(content: Content) -> some View {
+      Group {
+         if hidden {
+            content.hidden()
+         } else {
+            content
+         }
+      }
+   }
+}
+
+extension View {
+   func visibility(hidden: Binding<Bool>) -> some View {
+      modifier(VisibilityStyle(hidden: hidden))
+   }
+}
+
+//view.visibility(hidden: $hideView)

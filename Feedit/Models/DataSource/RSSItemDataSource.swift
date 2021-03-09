@@ -20,7 +20,7 @@ class RSSItemDataSource: NSObject, DataSource {
     var newObject: RSSItem?
     
     var updateObject: RSSItem?
-    
+        
     required init(parentContext: NSManagedObjectContext) {
         self.parentContext = parentContext
         createContext = parentContext.newChildContext()

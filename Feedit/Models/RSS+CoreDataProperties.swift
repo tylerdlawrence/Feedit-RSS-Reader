@@ -33,6 +33,7 @@ extension RSS {
     @NSManaged public var isRead: Bool
     @NSManaged public var readDate : Date?
     @NSManaged public var order: Int32
+    @NSManaged public var unread: Bool
     @NSManaged public var item: RSSItem
     
     public var rssURL: URL? {

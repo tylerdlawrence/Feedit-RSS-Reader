@@ -27,11 +27,8 @@ struct RSSItemRow: View {
     
     @State private var selectedItem: RSSItem?
     var contextMenuAction: ((RSSItem) -> Void)?
-    
-//    var feed: Feed
-    
+        
     init(wrapper: RSSItem, menu action: ((RSSItem) -> Void)? = nil) {
-//        self.feed = feed
         itemWrapper = wrapper
         contextMenuAction = action
     }
@@ -87,7 +84,6 @@ struct RSSItemRow: View {
             action: {
                 itemWrapper.progress = 1
                 self.isRead.toggle()
-                
             },
             feedback: false
         )
@@ -186,7 +182,7 @@ struct RSSItemRow: View {
 //                    .opacity(self.isRead ? 1 : 0)
                         }
                }
-//                KFImage(self.feed.thumbnailURL)
+//                KFImage(self.itemWrapper.thumbnailURL)
 //                    .resizable()
 //                    .aspectRatio(contentMode: .fit)
 //                    .frame(width: 120, height: 120)
@@ -198,7 +194,6 @@ struct RSSItemRow: View {
                         label: itemWrapper.progress > 0 ? "Mark As Unread" : "Mark As Read",
                         systemName: "circle\(itemWrapper.progress > 0 ? ".fill" : "")",
                         onAction: {
-                            
                             itemWrapper.progress = 1
                     })
                     ActionContextMenu(
@@ -207,9 +202,9 @@ struct RSSItemRow: View {
                         onAction: {
                             self.contextMenuAction?(self.itemWrapper)
                     })
-                    
+
                     Divider()
-                    
+
                     Button(action: {
                         UIPasteboard.general.setValue(itemWrapper.url,
                                                       forPasteboardType: kUTTypePlainText as String)
@@ -217,7 +212,7 @@ struct RSSItemRow: View {
                         Text("Copy Article Link")
                         Image(systemName: "link")
                     }
-                    
+
                     Screen()
 //                    Button(action: {
 ////                        self.isHidden(true, remove: true)

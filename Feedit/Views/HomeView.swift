@@ -84,7 +84,7 @@ struct HomeView: View {
     }
     
     private var feedsView: some View {
-        Section(header: Text("All Items").font(.system(size: 20, weight: .medium, design: .rounded)).foregroundColor(Color("text")).textCase(nil)) {
+        Section(header: Text("All Items").font(.system(size: 18, weight: .medium, design: .rounded)).foregroundColor(Color("text")).textCase(nil)) {
             VStack{
                 HStack {
                     ZStack{
@@ -103,7 +103,6 @@ struct HomeView: View {
                             .padding(.vertical, 1)
                             .background(Color.gray.opacity(0.5))
                             .opacity(0.4)
-                            .foregroundColor(Color("text"))
                             .cornerRadius(8)
                         }
                     }
@@ -125,7 +124,6 @@ struct HomeView: View {
                         .padding(.vertical, 1)
                         .background(Color.gray.opacity(0.5))
                         .opacity(0.4)
-                        .foregroundColor(Color("text"))
                         .cornerRadius(8)
                 }
             }
@@ -140,7 +138,7 @@ struct HomeView: View {
 //        DisclosureGroup(
 //            isExpanded: $revealFeedsDisclosureGroup,
 //            content: {
-        Section(header: Text("Feeds (\(viewModel.items.lazy.count))").font(.system(size: 20, weight: .medium, design: .rounded)).foregroundColor(Color("text")).textCase(nil)) {
+        Section(header: Text("Feeds (\(viewModel.items.lazy.count))").font(.system(size: 18, weight: .medium, design: .rounded)).foregroundColor(Color("text")).textCase(nil)) {
             ForEach(viewModel.items, id: \.self) { rss in
                 ZStack {
                     NavigationLink(destination: self.destinationView(rss: rss)) { //.onDisappear(perform: {self.refreshID = UUID()})
@@ -181,6 +179,7 @@ struct HomeView: View {
 //                        Spacer()
                         feedsSection
                     }
+//                    .listRowInsets(EdgeInsets())
                     .navigationBarItems(trailing:
                                             HStack(spacing: 10) {
                                                 Button(action: {
@@ -195,6 +194,7 @@ struct HomeView: View {
                                                     }
                                                 }
                                             })
+//                    .listStyle(GroupedListStyle())
                     .listStyle(SidebarListStyle())
 //                    .listStyle(InsetGroupedListStyle())
 //                    .listStyle(PlainListStyle())

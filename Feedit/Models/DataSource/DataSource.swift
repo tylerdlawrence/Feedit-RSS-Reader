@@ -40,6 +40,8 @@ protocol DataSource: ObservableObject, NSFetchedResultsControllerDelegate {
     
     var updateObject: Model? { set get }
     
+//    var toggleIsCompleted: Model? { set get }
+    
     func saveNewObject() -> DataSourceSaveResult
     
     func saveUpdateObject() -> DataSourceSaveResult

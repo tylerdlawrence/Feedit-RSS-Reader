@@ -30,7 +30,7 @@ struct ActionContextMenu: View {
                     Text(self.label)
                     Image(systemName: self.systemName)
                         .imageScale(.small)
-                        .foregroundColor(.primary)
+//                        .foregroundColor(.primary)
                 }
             }
         }
