@@ -179,7 +179,7 @@ struct HomeView: View {
 //                        Spacer()
                         feedsSection
                     }
-//                    .listRowInsets(EdgeInsets())
+                    .listRowInsets(EdgeInsets())
                     .navigationBarItems(trailing:
                                             HStack(spacing: 10) {
                                                 Button(action: {

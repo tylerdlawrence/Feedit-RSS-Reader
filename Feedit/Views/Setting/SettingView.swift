@@ -151,6 +151,7 @@ struct SettingView: View {
                                                     .frame(width: 25, height: 25)
                                                     .cornerRadius(3.0)
                                             Text("GitHub")
+                                                .foregroundColor(Color("text"))
                                             }
                                         }
                                     }
@@ -163,6 +164,7 @@ struct SettingView: View {
                                                     .frame(width: 25, height: 25)
                                                     .cornerRadius(3.0)
                                             Text("Twitter")
+                                                .foregroundColor(Color("text"))
                                             }
                                         }
                                     }
@@ -176,6 +178,7 @@ struct SettingView: View {
                                     .frame(width: 35, height: 35)
                                     .cornerRadius(3.0)
                                 Text("Website")
+                                    .foregroundColor(Color("text"))
                             }
                         }
                     }

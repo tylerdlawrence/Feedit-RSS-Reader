@@ -52,7 +52,7 @@ struct AddRSSView: View {
         VStack(alignment: .center) {
             HStack{
                 Button(action: self.fetchDetail) {
-                    Text("Search").font(.system(size: 17, weight: .medium, design: .rounded))
+                    Text("Search").font(.system(size: 17, weight: .medium, design: .rounded)).foregroundColor(Color("text"))
                 }
             }.padding(.horizontal, 120.0)
         }
