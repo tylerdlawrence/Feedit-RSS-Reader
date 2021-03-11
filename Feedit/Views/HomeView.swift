@@ -255,168 +255,19 @@ extension HomeView {
         }
     }
     private func destinationView(rss: RSS) -> some View {
-        RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem, isRead: isRead), isRead: isRead)
+        RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
             .environmentObject(DataSourceService.current.rss)
     }
 }
 
-struct HomeView_Previews: PreviewProvider {
-    static let rss = RSS()
-    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-    static let isRead = true
-
-    static var previews: some View {
-        Group{
-            HomeView(viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem, isRead: isRead), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
-            .environment(\.colorScheme, .dark)
-        }.environmentObject(DataSourceService.current.rss)
-    }
-}
-
-//struct searchBar: View {
-//    @State var input = ""
-//    var body: some View {
-//        VStack {
-//            HStack {
-//                Image(systemName: "magnifyingglass")
-//                TextField("Search", text: $input)
-//                Spacer()
-//                Image(systemName: "mic.fill")
-//            }
-//            .foregroundColor(Color(UIColor.secondaryLabel))
-//            .padding(12)
-//            .background(Color(UIColor.secondarySystemBackground))
-//            .cornerRadius(14)
-//        }
-//    }
-//}
+//struct HomeView_Previews: PreviewProvider {
+//    static let rss = RSS()
+//    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
 //
-//struct categorySection: View {
-//    @State var label: String
-//    @State var isExpanded = true
-//    @State var tagRow: Bool = false
-//    var body: some View {
-//        VStack (spacing: 14) {
-//            HStack {
-//                HStack {
-//                    Text("All Items")
-//                        .font(.system(size: 20, weight: .medium, design: .rounded))
-//                        .fontWeight(.semibold)
-//                        .onTapGesture {
-//                            self.isExpanded.toggle()
-//                    }
-//                    Spacer()
-//                    VStack {
-//                        Image(systemName: "chevron.right")
-//                            .font(.system(size: 16, weight: .bold, design: .rounded))
-//                            .foregroundColor(Color("tab"))
-//                    }
-//                    .rotationEffect(self.isExpanded ? Angle(degrees: 90):  Angle(degrees: 0))
-//                    .animation(.easeOut(duration: 0.30))
-//                    .onTapGesture {
-//                        self.isExpanded.toggle()
-//                    }
-//                }
-//            }
-//            HStack {
-//                if isExpanded == true {
-//                    VStack (spacing: 0) {
-//                        listItemRow(
-//                            tagRow: $tagRow,
-//                            label: "News",
-//                            tagColor: Color.blue
-//                        )
-//                        listItemRow(
-//                            tagRow: $tagRow,
-//                            label: "Technology",
-//                            tagColor: Color.red
-//                        )
-//                        listItemRow(
-//                            tagRow: $tagRow,
-//                            label: "Entertainment",
-//                            tagColor: Color.gray
-//                        )
-//                        listItemRow(
-//                            tagRow: $tagRow,
-//                            label: "Money",
-//                            tagColor: Color.green
-//                        )
-//                    }
-//                }
-//            }
-//            .animation(.easeOut(duration: 0.30))
-//            .frame(maxWidth: .infinity)
-//        }
-//    }
-//}
-//
-//struct listItemRow: View {
-//    @Binding var tagRow: Bool
-//    @State var label: String
-//    @State var tagColor: Color
-//    var body: some View {
-//        VStack (alignment: .leading, spacing: 0) {
-//            HStack (alignment: .center, spacing: 12) {
-//                if tagRow {
-//                    Circle()
-//                        .fill(tagColor)
-//                        .frame(width: 14, height: 14)
-//                } else {
-//                    Image(systemName: "folder")
-//                }
-//                Text(label)
-//            }
-//            .padding()
-//            Divider()
-//        }
-//    }
-//}
-//
-//struct FinderView: View {
-//    @ObservedObject var searchBar: SearchBar = SearchBar()
-//
-//    var body: some View {
-//        ZStack {
-//            NavigationView {
-//                List{
-//                    ScrollView(showsIndicators: false) {
-//                        VStack (alignment: .leading, spacing: 24) {
-//                            categorySection(
-//                                label: "All Items",
-//                                isExpanded: false,
-//                                tagRow: false
-//                            )
-//                            categorySection(
-//                                label: "Feeds",
-//                                isExpanded: true,
-//                                tagRow: false
-//                            )
-//                            categorySection(
-//                                label: "Tags",
-//                                isExpanded: true,
-//                                tagRow: true
-//                            )
-//                        }
-////                    }
-//                    .listRowBackground(Color("Color"))
-//                }
-//
-//                .add(self.searchBar)
-//                .listStyle(SidebarListStyle())
-//                .navigationBarItems(trailing: Button(action: {}) {
-//                    Image(systemName: "ellipsis.circle")
-//                })
-//                .navigationBarTitle("Finder")
-//            }
-//            .frame(width: 400, height: 780)
-//
-//        }
-//    }
-//}
-//
-//struct FinderView_Previews: PreviewProvider {
 //    static var previews: some View {
-//        FinderView()
-//            .preferredColorScheme(.dark)
+//        Group{
+//            HomeView(viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
+//            .environment(\.colorScheme, .dark)
+//        }.environmentObject(DataSourceService.current.rss)
 //    }
 //}

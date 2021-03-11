@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 import Combine
 import CoreData
 import FeedKit
@@ -44,11 +45,9 @@ class RSSItemStore: NSObject {
     }
     public var unreadList: [RSSItem] = []
     public var readList: [RSSItem] = []
-    
-    
-    
-    let didChange = PassthroughSubject<RSSItemStore, Never>()
-    
+
+    var didChange = PassthroughSubject<RSSItemStore, Never>()
+
     override init() {
         super.init()
         fetchRSS()

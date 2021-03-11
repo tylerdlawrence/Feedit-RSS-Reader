@@ -77,7 +77,7 @@ struct AddRSSView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section(footer: Text("Supports RSS, Atom & JSON").padding(.leading)) {
+                Section(footer: Text("Supports RSS, Atom & JSON")) {
                     HStack(alignment: .center){
                         Image(systemName: "magnifyingglass")
                             .opacity(0.4)

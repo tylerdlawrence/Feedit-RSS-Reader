@@ -160,7 +160,7 @@ struct FilterPicker_Previews: PreviewProvider {
     
     static var previews: some View {
 
-        FilterPicker(isOn: 1, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem, isRead: false))
+        FilterPicker(isOn: 1, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
                 .preferredColorScheme(.dark)
         
     }

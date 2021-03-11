@@ -101,8 +101,6 @@
 		61B95ECB25D0B8F800829741 /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B95ECA25D0B8F800829741 /* ViewExtension.swift */; };
 		61B95ECD25D0BA4C00829741 /* Shake.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B95ECC25D0BA4C00829741 /* Shake.swift */; };
 		61B95ED425D1069600829741 /* RSS.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 61B95ED225D1069600829741 /* RSS.xcdatamodeld */; };
-		61BF2F9425F2F658000E2444 /* FeedsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61BF2F9325F2F657000E2444 /* FeedsViewModel.swift */; };
-		61BF2F9525F2F658000E2444 /* FeedsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61BF2F9325F2F657000E2444 /* FeedsViewModel.swift */; };
 		61C8189624E1F3FB00593939 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C8189524E1F3FB00593939 /* AppDelegate.swift */; };
 		61C8189824E1F3FB00593939 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C8189724E1F3FB00593939 /* SceneDelegate.swift */; };
 		61C8189F24E1F3FD00593939 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 61C8189E24E1F3FD00593939 /* Assets.xcassets */; };
@@ -232,7 +230,6 @@
 		61B95ECA25D0B8F800829741 /* ViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
 		61B95ECC25D0BA4C00829741 /* Shake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shake.swift; sourceTree = "<group>"; };
 		61B95ED325D1069600829741 /* RSS.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = RSS.xcdatamodel; sourceTree = "<group>"; };
-		61BF2F9325F2F657000E2444 /* FeedsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedsViewModel.swift; path = "/Users/tylerdlawrence/Desktop/Feedit-RSS-Reader-main/Feedit/Models/FeedsViewModel.swift"; sourceTree = "<absolute>"; };
 		61C8189224E1F3FB00593939 /* Feedit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Feedit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		61C8189524E1F3FB00593939 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		61C8189724E1F3FB00593939 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -332,7 +329,6 @@
 		618F9025250DCD4F00D5A03E /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				61BF2F9325F2F657000E2444 /* FeedsViewModel.swift */,
 				61F9D6C1256A3E41005776C6 /* DataSource */,
 				618F9028250DCD4F00D5A03E /* RSS+CoreDataProperties.swift */,
 				618F9027250DCD4F00D5A03E /* RSS+CoreDataClass.swift */,
@@ -691,7 +687,6 @@
 				6182215325054511005636B2 /* RFC3339DateFormatter.swift in Sources */,
 				6182215225054506005636B2 /* RFC822DateFormatter.swift in Sources */,
 				61822151250544FD005636B2 /* ISO8601DateFormatter.swift in Sources */,
-				61BF2F9525F2F658000E2444 /* FeedsViewModel.swift in Sources */,
 				61822150250544F6005636B2 /* OPMLParser.swift in Sources */,
 				6182214E250544EA005636B2 /* String+Ext.swift in Sources */,
 				6182214D250544E3005636B2 /* Date+Ext.swift in Sources */,
@@ -712,7 +707,6 @@
 			files = (
 				61967EF424E2061100AA647C /* WebView.swift in Sources */,
 				61CDCF5924E845DE007654C5 /* DocumentPicker.swift in Sources */,
-				61BF2F9425F2F658000E2444 /* FeedsViewModel.swift in Sources */,
 				61B95EC725D0B68200829741 /* Color.swift in Sources */,
 				61C818EB24E1FAB000593939 /* DataSource.swift in Sources */,
 				61967EEC24E205DD00AA647C /* SafariView.swift in Sources */,

@@ -8,38 +8,32 @@
 import Foundation
 import CoreData
 import SwiftUI
+import Combine
 import UIKit
 
 class RSSFeedViewModel: NSObject, ObservableObject {
     
-    @Published var isOn: Bool = false
-    @Published var unreadIsOn: Bool = false
-    
+    @Published var isOn = false
+    @Published var unreadIsOn = false
     @Published var items: [RSSItem] = []
-    @Published var feed: [RSS] = []
-    @Published var filteredArticles: [RSSItem] = []
-    @Published var filterType = FilterType.unreadIsOn
+    
+//    @Published var feed: [RSS] = []
+//    @Published var filteredArticles: [RSSItem] = []
+//    @Published var filterType = FilterType.unreadIsOn
     @Published var selectedPost: RSSItem?
-    @Published var showingDetail = false
-    @Published var shouldReload = false
-    @Published var showFilter = false
+//    @Published var showingDetail = false
+//    @Published var shouldReload = false
+//    @Published var showFilter = false
     
-    @Published var isRead: Bool
-    
-    @Published var showAll = false {
-        didSet {
-            fetchRemoteRSSItems()
-        }
-    }
-    
+    static let saveKey = "SavedData"
+     
     let dataSource: RSSItemDataSource
     let rss: RSS
     var start = 0
-
-    init(rss: RSS, dataSource: RSSItemDataSource, isRead: Bool) {
+    
+    init(rss: RSS, dataSource: RSSItemDataSource) {
         self.dataSource = dataSource
         self.rss = rss
-        self.isRead = isRead
         super.init()
     }
 
@@ -51,28 +45,8 @@ class RSSFeedViewModel: NSObject, ObservableObject {
 
         _ = dataSource.saveUpdateObject()
     }
-    
-    func readOrCancel(_ item: RSSItem) {
-        let updatedItem = dataSource.readObject(item)
-        updatedItem.isRead = !item.isRead
-        updatedItem.updateTime = Date()
-        dataSource.setUpdateObject(updatedItem)
 
-        _ = dataSource.saveUpdateObject()
-    }
-
-    func markAllPostsRead(item: RSSItem) {}
-
-//    var isRead: Bool
-//    {
-//        return readDate != nil
-//    }
-
-//    var readDate: Date? {
-//        didSet {
-//            objectWillChange.send()
-//        }
-//    }
+    func markAllPostsRead(_ item: RSSItem) {}
         
     var read: Bool {
         set {

@@ -14,42 +14,74 @@ import FeedKit
 import KingfisherSwiftUI
 
 struct RSSFeedListView: View {
+//    enum FilterType {
+//        case all, starred, unread
+//    }
+//
+//    let filter: FilterType
+//
+//    var filterTitle: String {
+//        switch filter {
+//        case .all:
+//            return "All"
+//        case .starred:
+//            return "Starred"
+//        case .unread:
+//            return "Unread"
+//        }
+//    }
+//    var filteredArticleList: [RSSItem] {
+//        switch filter {
+//        case .all:
+//            return rssFeedViewModel.items
+//        case .starred:
+//            return rssFeedViewModel.items.filter { item in
+//                (!rssFeedViewModel.isOn || item.isArchive)}
+//        case .unread:
+//            return rssFeedViewModel.items.filter { item in
+//                (!rssFeedViewModel.unreadIsOn || item.isRead)
+//            }
+//        }
+//    }
     
-    @State var isRead = false
+    var filteredArticles: [RSSItem] {
+        return rssFeedViewModel.items.filter({ (item) -> Bool in
+            return !((self.rssFeedViewModel.isOn && !item.isArchive) || (self.rssFeedViewModel.unreadIsOn && item.isRead))
+        })
+    }
         
     var rssSource: RSS {
         return self.rssFeedViewModel.rss
     }
-        
+    
     @EnvironmentObject var rssDataSource: RSSDataSource
     @ObservedObject var rssFeedViewModel: RSSFeedViewModel
     @ObservedObject var searchBar: SearchBar = SearchBar()
     
     @State private var selectedItem: RSSItem?
     @State private var start: Int = 0
-    @State private var footer: String = "Load More Articles"
+    @State private var footer: String = "Refresh"
     @State var cancellables = Set<AnyCancellable>()
     
-    @State var sortType = "az"
-    @State private var sort: Int = 0
-    
-    init(viewModel: RSSFeedViewModel, isRead: Bool) {
+    init(viewModel: RSSFeedViewModel) { //, filter: FilterType
         self.rssFeedViewModel = viewModel
-        self.isRead = isRead
+//        self.filter = filter
+    }
+    
+    private var refreshButton: some View {
+        Button(action: self.rssFeedViewModel.loadMore) {
+            Image(systemName: "arrow.clockwise").font(.system(size: 16, weight: .bold)).foregroundColor(Color("tab"))
+        }.buttonStyle(BorderlessButtonStyle())
     }
     
     var body: some View {
+        
         ZStack {
             Color("accent")
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .edgesIgnoringSafeArea(.all)
             List {
-//                ForEach(self.rssFeedViewModel.items.filter { rssFeedViewModel.isOn ? $0.isArchive : true }, id: \.self) { item in
-                ForEach(self.rssFeedViewModel.items.filter { rssFeedViewModel.isOn ? $0.isArchive : true }, id: \.self) { item in
-                //&& rssFeedViewModel.unreadIsOn ? $0.isRead : true
-//                    if !self.rssFeedViewModel.unreadIsOn || item.isRead {
-                    if (!self.rssFeedViewModel.unreadIsOn || item.isRead) {
-                                        
+                ForEach(filteredArticles) { item in
                     ZStack {
                         NavigationLink(destination: WebView(rssItem: item, onCloseClosure: {})) {
                             EmptyView()
@@ -61,22 +93,13 @@ struct RSSFeedListView: View {
                                 .contentShape(Rectangle())
                                 .onTapGesture {
                                     self.selectedItem = item
+                                }
                             }
                         }
                     }
-                }
+
             }
-                VStack(alignment: .center) {
-                    Button(action: self.rssFeedViewModel.loadMore) {
-                        HStack {
-                            Text(self.footer).font(.system(size: 18, weight: .medium, design: .rounded))
-                            Spacer()
-//                            Image(systemName: "arrow.down.circle").font(.system(size: 18, weight: .medium, design: .rounded))
-                        }.foregroundColor(Color("bg"))
-                    }
-                }
-            }.animation(.default)
-            .listStyle(PlainListStyle())
+            .animation(.default)
             .add(self.searchBar)
             .accentColor(Color("tab"))
             .listRowBackground(Color("accent"))
@@ -103,10 +126,12 @@ struct RSSFeedListView: View {
                             .frame(width: 20, height: 20,alignment: .center)
                             .cornerRadius(2)
                             .border(Color("text"), width: 1)
-
+                        
                         Text(rssSource.title)
                             .font(.system(size: 20, weight: .medium, design: .rounded))
-
+//                        Text(filterTitle)
+//                            .font(.system(size: 20, weight: .medium, design: .rounded))
+                        
                         Text("\(rssFeedViewModel.items.count)")
                             .font(.caption)
                             .fontWeight(.bold)
@@ -118,41 +143,11 @@ struct RSSFeedListView: View {
                             .cornerRadius(8)
                     }
                 }
-                
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Menu {
-                        Button(action: sortStarred) {
-                            if sortType == "star" {
-                                Text("Starred")
-                                Image(systemName: "star.fill")
-                            } else {
-                                Text("Starred")
-                                Image(systemName: "star")
-                            }
-                        }
-                        
-                        Button(action: sortUnread) {
-                            if sortType == "unread" {
-                                Text("Unread")
-                                Image(systemName: "line.horizontal.3.decrease.circle.fill")
-                            } else {
-                                Text("Unread")
-                                Image(systemName: "line.horizontal.3.decrease.circle")
-                            }
-                        }
-                        Picker(selection: $sort, label: Text("Sort Articles By")) {
-                                Text("Newest").tag(0)
-                                Text("Oldest").tag(1)
-                        }
-                    }
-                    label: {
-                        Image(systemName: "ellipsis.circle").font(.system(size: 20, weight: .regular, design: .rounded))
-                    }.accentColor(Color("tab"))
+                    refreshButton
                 }
                 
                 ToolbarItem(placement: .bottomBar) {
-//                    Toggle(isOn: self.$isRead) { Text("") }
-//                        .toggleStyle(CheckboxStyle())
                     Toggle(isOn: $rssFeedViewModel.unreadIsOn) { Text("") }
                         .toggleStyle(CheckboxStyle())
                     
@@ -188,20 +183,16 @@ struct RSSFeedListView: View {
     }
     func contextmenuAction(_ item: RSSItem) {
         rssFeedViewModel.archiveOrCancel(item)
-//        rssFeedViewModel.readOrCancel(item)
     }
-    func sortStarred() { sortType = "star" }
-    func sortUnread() { sortType = "unread" }
 }
 
 struct RSSFeedListView_Previews: PreviewProvider {
     static let rss = RSS()
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-    static let isRead = true
 
     static var previews: some View {
         Group{
-            HomeView(viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem, isRead: isRead), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
+            HomeView(viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
             .environment(\.colorScheme, .dark)
         }.environmentObject(DataSourceService.current.rss)
     }

@@ -33,7 +33,7 @@ struct DataNStorageView: View {
     init(rssFeedViewModel: RSSFeedViewModel, viewModel: RSSListViewModel, isRead: Bool) {
         let db = DataSourceService.current
         dataViewModel = DataNStorageViewModel(rss: db.rss, rssItem: db.rssItem)
-        self.rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem, isRead: isRead)
+        self.rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
         self.viewModel = viewModel
         self.isRead = isRead
     }

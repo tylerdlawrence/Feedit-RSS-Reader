@@ -15,7 +15,7 @@ extension RSSItem: Identifiable {
 
 extension RSSItem {
     static func == (lhs: RSSItem, rhs: RSSItem) -> Bool {
-        return lhs.title == rhs.title && lhs.isArchive == rhs.isArchive
+        return lhs.title == rhs.title && lhs.isArchive == rhs.isArchive && lhs.isRead == rhs.isRead
     }
 }
 
@@ -40,7 +40,6 @@ extension RSSItem {
     @NSManaged public var thumbnailURL: URL
     @NSManaged public var unread: Bool
     
-    
     public override func awakeFromInsert() {
         super.awakeFromInsert()
         uuid = UUID()
@@ -63,7 +62,6 @@ extension RSSItem {
 //        return item
 //    }
     
-    @discardableResult
     static func create(uuid: UUID, title: String = "", desc: String = "", author: String = "", url: String = "",
                        createTime: Date = Date(), progress: Double = 0, in context: NSManagedObjectContext) -> RSSItem {
         let item = RSSItem(context: context)
@@ -80,7 +78,7 @@ extension RSSItem {
         return item
     }
     
-    static func requestObjects(rssUUID: UUID, start: Int = 0, limit: Int = 30) -> NSFetchRequest<RSSItem> {
+    static func requestObjects(rssUUID: UUID, start: Int = 0, limit: Int = 10) -> NSFetchRequest<RSSItem> {
         let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
         let predicate = NSPredicate(format: "rssUUID = %@", argumentArray: [rssUUID])
         request.predicate = predicate
@@ -97,7 +95,7 @@ extension RSSItem {
         return request
     }
     
-    static func requestArchiveObjects(start: Int = 0, limit: Int = 20) -> NSFetchRequest<RSSItem> {
+    static func requestArchiveObjects(start: Int = 0, limit: Int = 50) -> NSFetchRequest<RSSItem> {
         let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
         let predicate = NSPredicate(format: "isArchive = true")
         request.predicate = predicate
@@ -114,7 +112,7 @@ extension RSSItem {
         return request
     }
     
-    static func requestUnreadObjects(start: Int = 0, limit: Int = 20) -> NSFetchRequest<RSSItem> {
+    static func requestUnreadObjects(start: Int = 0, limit: Int = 50) -> NSFetchRequest<RSSItem> {
         let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
         let predicate = NSPredicate(format: "isRead = true")
         request.predicate = predicate

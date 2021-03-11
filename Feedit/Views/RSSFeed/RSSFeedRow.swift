@@ -19,11 +19,11 @@ import SDWebImageSwiftUI
 import Intents
 
 struct RSSItemRow: View {
-    
+    @EnvironmentObject var rssFeedViewModel: RSSFeedViewModel
     @ObservedObject var itemWrapper: RSSItem
     
-    @State private var isStarred = false
-    @State private var isRead = false
+//    @State private var isStarred = false
+//    @State private var isRead = false
     
     @State private var selectedItem: RSSItem?
     var contextMenuAction: ((RSSItem) -> Void)?
@@ -67,7 +67,7 @@ struct RSSItemRow: View {
             view: {
                 AnyView(
                     Group {
-                        if self.isRead {
+                        if itemWrapper.isRead {
                             Image(systemName: "largecircle.fill.circle")
                                 .foregroundColor(Color("bg"))
                                 .imageScale(.small)
@@ -83,7 +83,7 @@ struct RSSItemRow: View {
             backgroundColor: Color("accent"),
             action: {
                 itemWrapper.progress = 1
-                self.isRead.toggle()
+                itemWrapper.isRead.toggle()
             },
             feedback: false
         )
@@ -108,7 +108,7 @@ struct RSSItemRow: View {
                             .foregroundColor(Color.yellow)
                             .multilineTextAlignment(.center)
                             .aspectRatio(contentMode: .fit)
-                            .opacity(self.isStarred ? 1 : 0)
+                            .opacity(itemWrapper.isArchive ? 1 : 0)
                             .frame(width: 8, height: 8)
                             .padding([.top, .leading])
                     }
@@ -142,6 +142,7 @@ struct RSSItemRow: View {
                                     .opacity(0.8)
                                 Spacer()
                             }
+                            
                             if itemWrapper.progress >= 1.0 {
                                 Text(itemWrapper.title)
                                     .font(.system(size: 17, weight: .medium, design: .rounded))
@@ -158,7 +159,7 @@ struct RSSItemRow: View {
                                 Text(itemWrapper.title)
                                     .font(.system(size: 17, weight: .medium, design: .rounded))
                                     .foregroundColor(Color("text"))
-                                    .opacity(self.isRead ? 0.6 : 1)
+                                    .opacity(itemWrapper.isRead ? 0.6 : 1)
                                     .lineLimit(3)
                             }
                                 
@@ -182,10 +183,8 @@ struct RSSItemRow: View {
 //                    .opacity(self.isRead ? 1 : 0)
                         }
                }
-//                KFImage(self.itemWrapper.thumbnailURL)
-//                    .resizable()
-//                    .aspectRatio(contentMode: .fit)
-//                    .frame(width: 120, height: 120)
+                
+                
             }
             .swipeCell(cellPosition: .both, leftSlot: read, rightSlot: star)
             .contextMenu {
@@ -213,17 +212,22 @@ struct RSSItemRow: View {
                         Image(systemName: "link")
                     }
 
-                    Screen()
-//                    Button(action: {
-////                        self.isHidden(true, remove: true)
-//                    }) {
-//                        Text("Share Article")
-//                        Image(systemName: "square.and.arrow.up")
-//                    }
+
+                    Button(action: actionSheet) {
+                        Text("Share Article")
+                        Image(systemName: "square.and.arrow.up")
+
+                        }
                 }
             }
         }
     }
+    
+    func actionSheet() {
+        guard let urlShare = URL(string: itemWrapper.url) else { return }
+           let activityVC = UIActivityViewController(activityItems: [urlShare], applicationActivities: nil)
+           UIApplication.shared.windows.first?.rootViewController?.present(activityVC, animated: true, completion: nil)
+       }
 }
 
 extension Int {
@@ -232,15 +236,15 @@ extension Int {
     }
 }
 
-//struct RSSFeedRow_Previews: PreviewProvider {
-//    static var rss = RSS()
-//
-//    static var rssFeedViewModel = RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem, isRead: false)
-//
-//    static var previews: some View {
-//        let simple = DataSourceService.current.rssItem.simple()
-//        return RSSItemRow(feed: feed, wrapper: simple!).environmentObject(DataSourceService.current.rssItem)
-//            .frame(width: 360, height: 60)
-//            .preferredColorScheme(.dark)
-//    }
-//}
+struct RSSFeedRow_Previews: PreviewProvider {
+    static var rss = RSS()
+
+    static var rssFeedViewModel = RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem)
+
+    static var previews: some View {
+        let simple = DataSourceService.current.rssItem.simple()
+        return RSSItemRow(wrapper: simple!).environmentObject(DataSourceService.current.rssItem)
+            .frame(width: 360, height: 60)
+            .preferredColorScheme(.dark)
+    }
+}

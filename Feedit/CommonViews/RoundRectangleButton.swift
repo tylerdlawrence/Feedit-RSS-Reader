@@ -60,3 +60,24 @@ struct RoundRectangeButton_Previews: PreviewProvider {
         }
     }
 }
+
+struct RefreshFeedButton: View {
+    
+    var title: String
+    
+    var body: some View {
+        Text(title)
+            .font(.title2)
+            .fontWeight(.semibold)
+            .frame(width: 280, height: 50)
+            .background(Color("tab"))
+            .foregroundColor(.white)
+            .cornerRadius(10)
+    }
+}
+
+struct RefreshFeedButton_Previews: PreviewProvider {
+    static var previews: some View {
+        RefreshFeedButton(title: "Refresh")
+    }
+}
