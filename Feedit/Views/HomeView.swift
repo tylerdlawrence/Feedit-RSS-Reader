@@ -37,7 +37,7 @@ struct HomeView: View {
     @State var sources: [RSS] = []
 
     private var archiveListView: some View {
-        ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
+        ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: self.rssFeedViewModel)
     }
     
     private var archiveButton: some View {
@@ -212,7 +212,7 @@ struct HomeView: View {
             navButtons
                 .frame(width: UIScreen.main.bounds.width, height: 49, alignment: .leading)
             NavigationLink(
-                destination: ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)),
+                destination: ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: self.rssFeedViewModel),
                 tag: 1,
                 selection: $action) {
                 EmptyView()

@@ -70,7 +70,7 @@ struct RSSFeedListView: View {
     
     private var refreshButton: some View {
         Button(action: self.rssFeedViewModel.loadMore) {
-            Image(systemName: "arrow.clockwise").font(.system(size: 16, weight: .bold)).foregroundColor(Color("tab"))
+            Image(systemName: "arrow.clockwise").font(.system(size: 16, weight: .bold)).foregroundColor(Color("tab")).padding()
         }.buttonStyle(BorderlessButtonStyle())
     }
     
@@ -108,6 +108,7 @@ struct RSSFeedListView: View {
             .accentColor(Color("tab"))
             .listRowBackground(Color("accent"))
             .navigationBarTitle("", displayMode: .inline)
+            .navigationBarItems(trailing: refreshButton)
             .onAppear {
                 
             }
@@ -144,9 +145,6 @@ struct RSSFeedListView: View {
                             .foregroundColor(Color("text"))
                             .cornerRadius(8)
                     }
-                }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    refreshButton
                 }
                 
                 ToolbarItem(placement: .bottomBar) {

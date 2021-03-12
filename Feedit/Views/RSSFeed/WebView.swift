@@ -54,17 +54,17 @@ struct WebView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             webViewWrapper
-            HStack(alignment: .top, spacing: 30) {
+            HStack(alignment: .top, spacing: 32) {
                 if !self.viewModel.canGoBack {
                     makeFeatureItemView(
                         imageName: FeatureItem.close.icon,
-                        disable: true,
+                        disable: false,
                         action: self.onGoBackAction
                     )
                 } else {
                     makeFeatureItemView(
                         imageName: FeatureItem.goBack.icon,
-                        disable: true,
+                        disable: false,
                         action: self.onGoBackAction
                     )
                 }
@@ -73,28 +73,45 @@ struct WebView: View {
                     disable: !self.viewModel.canGoForward,
                     action: self.onGoForwardAction
                 )
-                makeFeatureItemView(imageName: FeatureItem.archive(self.rssItem.isArchive).icon, action: self.onArchiveClosure)
+//                makeFeatureItemView(imageName: FeatureItem.archive(self.rssItem.isArchive).icon, action: self.onArchiveClosure)
+//
+//                makeFeatureItemView(imageName: FeatureItem.read(self.rssItem.isRead).icon, action: self.onReadAction)
                 
-                makeFeatureItemView(imageName: FeatureItem.read(self.rssItem.isRead).icon, action: self.onReadAction)
+                VStack(alignment: .center) {
+                    ProgressBar(
+                        boardWidth: 7,
+                        font: Font.system(size: 10),
+                        color: Color("tab"), progress:
+                        self.$viewModel.progress
+                    )
+                    .padding(10)
+                }
+                .frame(width: 40, height: 50, alignment: .center)
                 
-//                StarArticleButton(isArchive: $isArchive).padding(.top)
+                Button(action: actionSheet) {
+                    Image(systemName: "square.and.arrow.up")
+                        .imageScale(.medium)
+                        .foregroundColor(Color("tab"))
+                        .font(.system(size: 20, weight: .regular, design: .default))
+                }.frame(width: 50, height: 50, alignment: .center)
                 
-//                if !self.viewModel.progressHide {
-                    VStack(alignment: .center) {
-                        ProgressBar(
-                            boardWidth: 7,
-                            font: Font.system(size: 10),
-                            color: Color("tab"), progress:
-                            self.$viewModel.progress
-                        )
-                        .padding(10)
-                    }
-                    .frame(width: 40, height: 50, alignment: .center)
-//                }
-//                Spacer()
+                Link(destination: URL(string: rssItem.url)!, label: {
+                    HStack {
+                        Image(systemName: "safari")
+                            .imageScale(.medium)
+                            .foregroundColor(Color("tab"))
+                            .font(.system(size: 20, weight: .regular, design: .default))
+                        }
+                    })
+                    .frame(width: 50, height: 50, alignment: .center)
             }
         }
     }
+    func actionSheet() {
+        guard let urlShare = URL(string: rssItem.url) else { return }
+           let activityVC = UIActivityViewController(activityItems: [urlShare], applicationActivities: nil)
+           UIApplication.shared.windows.first?.rootViewController?.present(activityVC, animated: true, completion: nil)
+       }
 }
 
 extension WebView {
@@ -121,6 +138,7 @@ extension WebView {
             .onTapGesture {
                 action?()
             }
+            .disabled(disable)
     }
 }
 

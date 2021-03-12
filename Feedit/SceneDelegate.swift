@@ -19,7 +19,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     let rss = RSS()
-    
+
+    private(set) static var shared: SceneDelegate?
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
         let homeView = HomeView(viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: self.rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
@@ -62,5 +63,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         // Save changes in the application's managed object context when the application transitions to the background.
         (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
+    }
+}
+
+struct ToggleModel {
+    var isDark: Bool = true {
+        didSet {
+            SceneDelegate.shared?.window!.overrideUserInterfaceStyle = isDark ? .dark : .light
+        }
     }
 }

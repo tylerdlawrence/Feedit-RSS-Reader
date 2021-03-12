@@ -25,6 +25,8 @@ struct SettingView: View {
     @State private var previewIndex = 0
     @Binding var fetchContentTime: String
     
+    @State var model = ToggleModel()
+    
     enum ReadMode {
         case safari
         case webview
@@ -136,7 +138,10 @@ struct SettingView: View {
                                         .background(Color("bg"))
                                         .opacity(0.9)
                                         .clipShape(RoundedRectangle(cornerRadius: 5))
-                                    Toggle("Dark Mode", isOn: $isDarkModeOn)
+                                    Toggle(isOn: $model.isDark) {
+                                                 Text("Appearence")
+                                            }
+//                                    Toggle("Dark Mode", isOn: $isDarkModeOn)
                                 }.toggleStyle(SwitchToggleStyle(tint: .blue))
                             }
                         }

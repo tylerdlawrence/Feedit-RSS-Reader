@@ -16,6 +16,7 @@ import MobileCoreServices
 struct ArchiveListView: View {
     @ObservedObject var archiveListViewModel: ArchiveListViewModel
     @ObservedObject var searchBar: SearchBar = SearchBar()
+    @ObservedObject var rssFeedViewModel: RSSFeedViewModel
     
     @State private var selectedItem: RSSItem?
     @State var footer = "Load More Articles"
@@ -23,8 +24,19 @@ struct ArchiveListView: View {
     @State private var disabled = true
     @State var isRead: Bool = false
     
-    init(viewModel: ArchiveListViewModel) {
+    var rssSource: RSS {
+        return self.rssFeedViewModel.rss
+    }
+    
+    init(viewModel: ArchiveListViewModel, rssFeedViewModel: RSSFeedViewModel) {
         self.archiveListViewModel = viewModel
+        self.rssFeedViewModel = rssFeedViewModel
+    }
+    
+    private var refreshButton: some View {
+        Button(action: self.archiveListViewModel.loadMore) {
+            Image(systemName: "arrow.clockwise").font(.system(size: 16, weight: .bold)).foregroundColor(Color("tab")).padding()
+        }.buttonStyle(BorderlessButtonStyle())
     }
     
     var body: some View {
@@ -36,6 +48,7 @@ struct ArchiveListView: View {
                 ForEach(self.archiveListViewModel.items, id: \.self) { item in
                     ZStack{
                         NavigationLink(destination: WebView(rssItem: item, onCloseClosure: {})) {
+//                        NavigationLink(destination: RSSFeedDetailView(rssItem: item, rssFeedViewModel: self.rssFeedViewModel)) {
                             EmptyView()
                         }
                         .opacity(0.0)
@@ -57,19 +70,10 @@ struct ArchiveListView: View {
                         self.archiveListViewModel.unarchive(item)
                     }
                 }
-                
-                VStack(alignment: .center) {
-                    Button(action: self.archiveListViewModel.loadMore) {
-                        HStack {
-                            Text(self.footer).font(.system(size: 18, weight: .medium, design: .rounded))
-                            Spacer()
-                            Image(systemName: "arrow.down.circle").font(.system(size: 18, weight: .medium, design: .rounded))
-                        }.foregroundColor(Color("bg"))
-                    }
-                }
             }
             .listStyle(PlainListStyle())
             .navigationBarTitle("", displayMode: .inline)
+            .navigationBarItems(trailing: refreshButton)
             .add(self.searchBar)
             .toolbar {
                 ToolbarItem(placement: .principal) {
