@@ -14,35 +14,34 @@ import FeedKit
 import KingfisherSwiftUI
 
 struct RSSFeedListView: View {
-//    enum FilterType {
-//        case all, starred, unread
-//    }
-//
-//    let filter: FilterType
-//
-//    var filterTitle: String {
-//        switch filter {
-//        case .all:
-//            return "All"
-//        case .starred:
-//            return "Starred"
-//        case .unread:
-//            return "Unread"
-//        }
-//    }
-//    var filteredArticleList: [RSSItem] {
-//        switch filter {
-//        case .all:
-//            return rssFeedViewModel.items
-//        case .starred:
-//            return rssFeedViewModel.items.filter { item in
-//                (!rssFeedViewModel.isOn || item.isArchive)}
-//        case .unread:
-//            return rssFeedViewModel.items.filter { item in
-//                (!rssFeedViewModel.unreadIsOn || item.isRead)
-//            }
-//        }
-//    }
+    enum FilterType {
+        case all, starred, unread
+    }
+
+    let filter: FilterType
+
+    var filterTitle: String {
+        switch filter {
+        case .all:
+            return "All"
+        case .starred:
+            return "Starred"
+        case .unread:
+            return "Unread"
+        }
+    }
+    var filteredArticleList: [RSSItem] {
+        switch filter {
+        case .all:
+            return rssFeedViewModel.items
+        case .starred:
+            return rssFeedViewModel.items.filter { item in
+                (!self.rssFeedViewModel.isOn && !item.isArchive)}
+        case .unread:
+            return rssFeedViewModel.items.filter { item in
+                (!self.rssFeedViewModel.unreadIsOn && item.isRead)}
+        }
+    }
     
     var filteredArticles: [RSSItem] {
         return rssFeedViewModel.items.filter({ (item) -> Bool in
@@ -63,9 +62,10 @@ struct RSSFeedListView: View {
     @State private var footer: String = "Refresh"
     @State var cancellables = Set<AnyCancellable>()
     
-    init(viewModel: RSSFeedViewModel, wrapper: RSSItem) {
+    init(viewModel: RSSFeedViewModel, wrapper: RSSItem, filter: FilterType) {
         self.rssFeedViewModel = viewModel
         itemWrapper = wrapper
+        self.filter = filter
     }
     
     private var refreshButton: some View {
@@ -186,34 +186,14 @@ struct RSSFeedListView: View {
     }
 }
 
+#if DEBUG
 struct RSSFeedListView_Previews: PreviewProvider {
     static let rss = RSS()
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
 
     static var previews: some View {
-        Group{
-            HomeView(viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
-            .environment(\.colorScheme, .dark)
-        }.environmentObject(DataSourceService.current.rss)
+        HomeView(viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)).environmentObject(DataSourceService.current.rss)
+                .environment(\.colorScheme, .dark)
     }
 }
-
-
-//struct StarArticleButton: View {
-//    @Binding var isArchive: Bool
-//
-//    var body: some View {
-//        Button(action: {
-//            isArchive.toggle()
-//        }) {
-//            Image(systemName: isArchive ? "star.fill" : "star")
-//                .foregroundColor(isArchive ? Color.yellow : Color.gray)
-//        }
-//    }
-//}
-//
-//struct StarArticleButtonButton_Previews: PreviewProvider {
-//    static var previews: some View {
-//        StarArticleButton(isArchive: .constant(true))
-//    }
-//}
+#endif

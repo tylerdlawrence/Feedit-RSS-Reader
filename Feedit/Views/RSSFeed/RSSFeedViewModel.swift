@@ -22,9 +22,9 @@ class RSSFeedViewModel: NSObject, ObservableObject {
 //    @Published var filterType = FilterType.unreadIsOn
     @Published var selectedPost: RSSItem?
 //    @Published var showingDetail = false
-//    @Published var shouldReload = false
+    @Published var shouldReload = false
 //    @Published var showFilter = false
-    
+//    @Published var rssFeedViewModel: RSSFeedViewModel
     static let saveKey = "SavedData"
      
     let dataSource: RSSItemDataSource
@@ -34,7 +34,13 @@ class RSSFeedViewModel: NSObject, ObservableObject {
     init(rss: RSS, dataSource: RSSItemDataSource) {
         self.dataSource = dataSource
         self.rss = rss
+//        self.rssFeedViewModel = rssFeedViewModel
         super.init()
+    }
+    
+    func markAllPostsRead(start: Int = 0, _ item: RSSItem) {
+        self.markAllPostsRead(item)
+        shouldReload = true
     }
 
     func archiveOrCancel(_ item: RSSItem) {
@@ -46,7 +52,7 @@ class RSSFeedViewModel: NSObject, ObservableObject {
         _ = dataSource.saveUpdateObject()
     }
 
-    func markAllPostsRead(_ item: RSSItem) {}
+//    func markAllPostsRead(_ item: RSSItem) {}
         
     var read: Bool {
         set {

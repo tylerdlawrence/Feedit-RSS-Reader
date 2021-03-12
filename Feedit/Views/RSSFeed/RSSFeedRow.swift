@@ -231,6 +231,7 @@ extension Int {
     }
 }
 
+#if DEBUG
 struct RSSFeedRow_Previews: PreviewProvider {
     static var rss = RSS()
 
@@ -239,7 +240,8 @@ struct RSSFeedRow_Previews: PreviewProvider {
     static var previews: some View {
         let simple = DataSourceService.current.rssItem.simple()
         return RSSItemRow(wrapper: simple!).environmentObject(DataSourceService.current.rssItem)
-            .previewLayout(.fixed(width: 375, height: 60))
+            .previewLayout(.fixed(width: 375, height: 70))
             .preferredColorScheme(.dark)
     }
 }
+#endif

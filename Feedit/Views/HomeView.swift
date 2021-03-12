@@ -250,13 +250,13 @@ extension HomeView {
     }
     func startNetworkCall() {
         isLoading = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             isLoading = false
         }
     }
     private func destinationView(rss: RSS) -> some View {
         let item = RSSItem()
-        return RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), wrapper: item)
+        return RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), wrapper: item, filter: .all)
             .environmentObject(DataSourceService.current.rss)
     }
 }

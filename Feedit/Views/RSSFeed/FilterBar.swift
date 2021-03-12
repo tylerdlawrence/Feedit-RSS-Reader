@@ -104,16 +104,16 @@ struct FilterBar: View {
     }
 }
 
-struct FilterBar_Previews: PreviewProvider {
-    static var previews: some View {
-        VStack{
-            Spacer()
-            FilterBar(selectedFilter: .constant(.unreadIsOn),
-                   isOn: .constant(true), markedAllPostsRead: nil)
-                .preferredColorScheme(.dark)
-        }
-    }
-}
+//struct FilterBar_Previews: PreviewProvider {
+//    static var previews: some View {
+//        VStack{
+//            Spacer()
+//            FilterBar(selectedFilter: .constant(.unreadIsOn),
+//                   isOn: .constant(true), markedAllPostsRead: nil)
+//                .preferredColorScheme(.dark)
+//        }
+//    }
+//}
 
 class FeedObject: Identifiable, ObservableObject {
     var id = UUID()
@@ -137,7 +137,6 @@ class FeedObject: Identifiable, ObservableObject {
 
 }
 
-
 struct FilterPicker: View {
     @State var isOn = 1
     @ObservedObject var rssFeedViewModel: RSSFeedViewModel
@@ -150,7 +149,7 @@ struct FilterPicker: View {
             
             Image(systemName: "text.justifyleft").font(.system(size: 10, weight: .black)).tag(2)
                 
-        }).pickerStyle(SegmentedPickerStyle()).frame(width: 160, height: 20).padding(.top)
+        }).pickerStyle(SegmentedPickerStyle()).frame(width: 160, height: 20)//.padding(.top)
     }
 }
 
@@ -161,6 +160,7 @@ struct FilterPicker_Previews: PreviewProvider {
     static var previews: some View {
 
         FilterPicker(isOn: 1, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
+            .previewLayout(.fixed(width: 250, height: 70))
                 .preferredColorScheme(.dark)
         
     }
