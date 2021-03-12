@@ -255,7 +255,8 @@ extension HomeView {
         }
     }
     private func destinationView(rss: RSS) -> some View {
-        RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
+        let item = RSSItem()
+        return RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), wrapper: item)
             .environmentObject(DataSourceService.current.rss)
     }
 }

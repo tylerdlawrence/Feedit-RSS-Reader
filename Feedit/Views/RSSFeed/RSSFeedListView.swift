@@ -53,7 +53,7 @@ struct RSSFeedListView: View {
     var rssSource: RSS {
         return self.rssFeedViewModel.rss
     }
-    
+    @ObservedObject var itemWrapper: RSSItem
     @EnvironmentObject var rssDataSource: RSSDataSource
     @ObservedObject var rssFeedViewModel: RSSFeedViewModel
     @ObservedObject var searchBar: SearchBar = SearchBar()
@@ -63,9 +63,9 @@ struct RSSFeedListView: View {
     @State private var footer: String = "Refresh"
     @State var cancellables = Set<AnyCancellable>()
     
-    init(viewModel: RSSFeedViewModel) { //, filter: FilterType
+    init(viewModel: RSSFeedViewModel, wrapper: RSSItem) {
         self.rssFeedViewModel = viewModel
-//        self.filter = filter
+        itemWrapper = wrapper
     }
     
     private var refreshButton: some View {
@@ -83,7 +83,10 @@ struct RSSFeedListView: View {
             List {
                 ForEach(filteredArticles) { item in
                     ZStack {
-                        NavigationLink(destination: WebView(rssItem: item, onCloseClosure: {})) {
+//                        NavigationLink(destination: WebView(rssItem: item, onCloseClosure: {})) {
+//                            EmptyView()
+//                        }
+                        NavigationLink(destination: RSSFeedDetailView(rssItem: item, rssFeedViewModel: self.rssFeedViewModel)) {
                             EmptyView()
                         }
                         .opacity(0.0)
@@ -97,6 +100,7 @@ struct RSSFeedListView: View {
                             }
                         }
                     }
+
 
             }
             .animation(.default)
@@ -129,8 +133,6 @@ struct RSSFeedListView: View {
                         
                         Text(rssSource.title)
                             .font(.system(size: 20, weight: .medium, design: .rounded))
-//                        Text(filterTitle)
-//                            .font(.system(size: 20, weight: .medium, design: .rounded))
                         
                         Text("\(rssFeedViewModel.items.count)")
                             .font(.caption)
@@ -197,3 +199,23 @@ struct RSSFeedListView_Previews: PreviewProvider {
         }.environmentObject(DataSourceService.current.rss)
     }
 }
+
+
+//struct StarArticleButton: View {
+//    @Binding var isArchive: Bool
+//
+//    var body: some View {
+//        Button(action: {
+//            isArchive.toggle()
+//        }) {
+//            Image(systemName: isArchive ? "star.fill" : "star")
+//                .foregroundColor(isArchive ? Color.yellow : Color.gray)
+//        }
+//    }
+//}
+//
+//struct StarArticleButtonButton_Previews: PreviewProvider {
+//    static var previews: some View {
+//        StarArticleButton(isArchive: .constant(true))
+//    }
+//}

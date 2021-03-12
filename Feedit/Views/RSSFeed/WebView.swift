@@ -16,7 +16,6 @@ struct WebView: View {
         case goForward
         case archive(Bool)
         case read(Bool)
-//        case starred(Bool)
         
         var icon: String {
             switch self {
@@ -24,15 +23,13 @@ struct WebView: View {
             case .goBack: return "chevron.backward"
             case .goForward: return "chevron.forward"
             case .archive(let isArchived):
-//                return "tray.and.arrow.\(isArchived ? "up" : "down")"
                 return "star\(isArchived ? ".fill" : "")"
             case .read(let isRead):
                 return "circle\(isRead ? ".fill" : "")"
-//            case .starred(let isStarred):
-//                return "star.\(isStarred ? "" : "fill")"
             }
         }
     }
+    
     @ObservedObject var viewModel: WKWebViewModel
     @ObservedObject var rssItem: RSSItem
     var webViewWrapper: WKWebViewWrapper
@@ -51,6 +48,8 @@ struct WebView: View {
         self.onReadAction = onReadAction
         self.webViewWrapper = WKWebViewWrapper(viewModel: viewModel)
     }
+    
+    @State var isArchive = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -78,6 +77,8 @@ struct WebView: View {
                 
                 makeFeatureItemView(imageName: FeatureItem.read(self.rssItem.isRead).icon, action: self.onReadAction)
                 
+//                StarArticleButton(isArchive: $isArchive).padding(.top)
+                
 //                if !self.viewModel.progressHide {
                     VStack(alignment: .center) {
                         ProgressBar(
@@ -97,6 +98,7 @@ struct WebView: View {
 }
 
 extension WebView {
+    
     func onGoBackAction() {
         webViewWrapper.webView.goBack()
     }
@@ -106,7 +108,6 @@ extension WebView {
     }
     
     func onCloseAction() {
-//        webViewWrapper.webView.
         self.onCloseClosure?()
     }
 }
@@ -120,7 +121,6 @@ extension WebView {
             .onTapGesture {
                 action?()
             }
-//            .disabled(disable)
     }
 }
 

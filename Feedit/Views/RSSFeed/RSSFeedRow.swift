@@ -22,9 +22,6 @@ struct RSSItemRow: View {
     @EnvironmentObject var rssFeedViewModel: RSSFeedViewModel
     @ObservedObject var itemWrapper: RSSItem
     
-//    @State private var isStarred = false
-//    @State private var isRead = false
-    
     @State private var selectedItem: RSSItem?
     var contextMenuAction: ((RSSItem) -> Void)?
         
@@ -174,21 +171,20 @@ struct RSSItemRow: View {
                                 .foregroundColor(.gray)
                         }
                         Spacer()
-//                Image(systemName: "eye")
-//                    .frame(height: 15)
-//                    .foregroundColor(.white)
-//                    .padding(.all, 8)
-//                    .background(Color.blue)
-//                    .clipShape(RoundedRectangle(cornerRadius: 10))
-//                    .opacity(self.isRead ? 1 : 0)
-                        }
+                    }
                }
-                
-                
             }
             .swipeCell(cellPosition: .both, leftSlot: read, rightSlot: star)
             .contextMenu {
                 Section{
+                    
+                    NavigationLink(destination: RSSFeedDetailView(rssItem: itemWrapper, rssFeedViewModel: self.rssFeedViewModel)) {
+                        Text("Open Article")
+                        Image(systemName: "doc.richtext")
+                    }
+                    
+                    Divider()
+                    
                     ActionContextMenu(
                         label: itemWrapper.progress > 0 ? "Mark As Unread" : "Mark As Read",
                         systemName: "circle\(itemWrapper.progress > 0 ? ".fill" : "")",
@@ -216,8 +212,7 @@ struct RSSItemRow: View {
                     Button(action: actionSheet) {
                         Text("Share Article")
                         Image(systemName: "square.and.arrow.up")
-
-                        }
+                    }
                 }
             }
         }
@@ -244,7 +239,7 @@ struct RSSFeedRow_Previews: PreviewProvider {
     static var previews: some View {
         let simple = DataSourceService.current.rssItem.simple()
         return RSSItemRow(wrapper: simple!).environmentObject(DataSourceService.current.rssItem)
-            .frame(width: 360, height: 60)
+            .previewLayout(.fixed(width: 375, height: 60))
             .preferredColorScheme(.dark)
     }
 }
