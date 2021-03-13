@@ -217,7 +217,7 @@ struct HomeView: View {
                 selection: $action) {
                 EmptyView()
                 }
-            }
+            }.redacted(reason: isLoading ? .placeholder : [])
             .onReceive(addRSSPublisher, perform: { output in
                 guard
                     let userInfo = output.userInfo,

@@ -92,7 +92,7 @@ struct RSSFeedListView: View {
                         .opacity(0.0)
                         .buttonStyle(PlainButtonStyle())
                         HStack {
-                            RSSItemRow(wrapper: item, menu: self.contextmenuAction(_:))
+                            RSSItemRow(wrapper: item, menu: self.contextmenuAction(_:), rssFeedViewModel: rssFeedViewModel)
                                 .contentShape(Rectangle())
                                 .onTapGesture {
                                     self.selectedItem = item
@@ -123,14 +123,12 @@ struct RSSFeedListView: View {
                                     .aspectRatio(contentMode: .fit)
                                     .frame(width: 20, height: 20,alignment: .center)
                                     .cornerRadius(2)
-                                    .border(Color("text"), width: 1)
                             })
                             .renderingMode(.original)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 20, height: 20,alignment: .center)
                             .cornerRadius(2)
-                            .border(Color("text"), width: 1)
                         
                         Text(rssSource.title)
                             .font(.system(size: 20, weight: .medium, design: .rounded))

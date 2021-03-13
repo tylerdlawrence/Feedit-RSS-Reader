@@ -105,6 +105,7 @@ struct RSSRow: View {
         
         let deleteSlot = SwipeCellSlot(slots: [deleteButton], slotStyle: .destructive, buttonWidth: 60)
                 HStack(alignment: .center){
+                    
                     KFImage(URL(string: rss.image))
                         .placeholder({
                             Image("getInfo")
@@ -114,14 +115,13 @@ struct RSSRow: View {
                                 .frame(width: 20, height: 20,alignment: .center)
                                 .cornerRadius(2)
                                 .opacity(0.9)
-                                .border(Color("text"), width: 1)
                         })
                         .renderingMode(.original)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 20, height: 20,alignment: .center)
                         .cornerRadius(2)
-                        .border(Color("text"), width: 1)
+                    
                     Text(rss.title)
                         .font(.system(size: 18, weight: .regular, design: .rounded))
                         .lineLimit(1)

@@ -19,15 +19,16 @@ import SDWebImageSwiftUI
 import Intents
 
 struct RSSItemRow: View {
-    @EnvironmentObject var rssFeedViewModel: RSSFeedViewModel
+    @ObservedObject var rssFeedViewModel: RSSFeedViewModel
     @ObservedObject var itemWrapper: RSSItem
     
     @State private var selectedItem: RSSItem?
     var contextMenuAction: ((RSSItem) -> Void)?
         
-    init(wrapper: RSSItem, menu action: ((RSSItem) -> Void)? = nil) {
+    init(wrapper: RSSItem, menu action: ((RSSItem) -> Void)? = nil, rssFeedViewModel: RSSFeedViewModel) {
         itemWrapper = wrapper
         contextMenuAction = action
+        self.rssFeedViewModel = rssFeedViewModel
     }
     
     var body: some View {
@@ -119,14 +120,12 @@ struct RSSItemRow: View {
                                 .aspectRatio(contentMode: .fit)
                                 .frame(width: 20, height: 20,alignment: .center)
                                 .cornerRadius(1)
-                                .border(Color("text"), width: 1)
                         })
                         .renderingMode(.original)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 20, height: 20,alignment: .center)
                         .cornerRadius(1)
-                        .border(Color("text"), width: 1)
                     
                 }.padding(.top)
                     HStack{
@@ -177,11 +176,16 @@ struct RSSItemRow: View {
             .swipeCell(cellPosition: .both, leftSlot: read, rightSlot: star)
             .contextMenu {
                 Section{
-                    
-                    NavigationLink(destination: RSSFeedDetailView(rssItem: itemWrapper, rssFeedViewModel: self.rssFeedViewModel)) {
-                        Text("Open Article")
-                        Image(systemName: "doc.richtext")
-                    }
+//                    NavigationLink(destination: RSSFeedDetailView(rssItem: itemWrapper, rssFeedViewModel: self.rssFeedViewModel)) {
+//                        Text("Open Article")
+//                        Image(systemName: "doc.richtext")
+//                    }
+                    Link(destination: URL(string: itemWrapper.url)!, label: {
+                        HStack {
+                            Text("Open Article")
+                            Image(systemName: "doc.richtext")
+                        }
+                    })
                     
                     Divider()
                     
@@ -231,17 +235,18 @@ extension Int {
     }
 }
 
-#if DEBUG
-struct RSSFeedRow_Previews: PreviewProvider {
-    static var rss = RSS()
 
-    static var rssFeedViewModel = RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem)
-
-    static var previews: some View {
-        let simple = DataSourceService.current.rssItem.simple()
-        return RSSItemRow(wrapper: simple!).environmentObject(DataSourceService.current.rssItem)
-            .previewLayout(.fixed(width: 375, height: 70))
-            .preferredColorScheme(.dark)
-    }
-}
-#endif
+//#if DEBUG
+//struct RSSFeedRow_Previews: PreviewProvider {
+//    static var rss = RSS()
+//
+//    static var rssFeedViewModel = RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem)
+//
+//    static var previews: some View {
+//        let simple = DataSourceService.current.rssItem.simple()
+//        return RSSItemRow(wrapper: simple!, rssFeedViewModel: rssFeedViewModel).environmentObject(DataSourceService.current.rssItem)
+//            .previewLayout(.fixed(width: 375, height: 70))
+//            .preferredColorScheme(.dark)
+//    }
+//}
+//#endif

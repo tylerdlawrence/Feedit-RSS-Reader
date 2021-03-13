@@ -56,7 +56,7 @@ struct ArchiveListView: View {
                         
                         HStack{
 
-                            RSSItemRow(wrapper: item)
+                            RSSItemRow(wrapper: item, rssFeedViewModel: rssFeedViewModel)
                                 .onTapGesture {
                                     self.selectedItem = item
                                 }
