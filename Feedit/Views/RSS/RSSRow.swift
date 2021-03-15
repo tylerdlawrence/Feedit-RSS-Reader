@@ -31,6 +31,8 @@ struct RSSRow: View {
     @State var infoHaptic = false
     @State private var toggle = false
     
+    let rssGroup = RSSGroup()
+    
     var actionSheet: ActionSheet {
         ActionSheet(
             title: Text(rss.title),
@@ -89,21 +91,21 @@ struct RSSRow: View {
                                                     forPasteboardType: kUTTypePlainText as String)
             }
         )
-        let deleteButton = SwipeCellButton(
-            buttonStyle: .image,
-            title: "",
-            systemImage: "xmark",
-            titleColor: .white,
-            imageColor: .white,
-            view: nil,
-            backgroundColor: .red,
-            action: { showSheet.toggle() },
-            feedback: true
-        )
+//        let deleteButton = SwipeCellButton(
+//            buttonStyle: .image,
+//            title: "",
+//            systemImage: "xmark",
+//            titleColor: .white,
+//            imageColor: .white,
+//            view: nil,
+//            backgroundColor: .red,
+//            action: { showSheet.toggle() },
+//            feedback: true
+//        )
         
         let swipeSlots = SwipeCellSlot(slots: [clipboardButton, infoButton], slotStyle: .destructive, buttonWidth: 60)
         
-        let deleteSlot = SwipeCellSlot(slots: [deleteButton], slotStyle: .destructive, buttonWidth: 60)
+//        let deleteSlot = SwipeCellSlot(slots: [deleteButton], slotStyle: .destructive, buttonWidth: 60)
                 HStack(alignment: .center){
                     
                     KFImage(URL(string: rss.image))
@@ -140,10 +142,10 @@ struct RSSRow: View {
                 .frame(height: 40)
                 .onTapGesture {
                 }
-                .swipeCell(cellPosition: .both, leftSlot: swipeSlots, rightSlot: deleteSlot)
+                .swipeCell(cellPosition: .both, leftSlot: swipeSlots, rightSlot: nil)
                 .dismissSwipeCell()
                 .frame(height: 25)
-                .sheet(isPresented: $infoHaptic, content: { InfoView(rss: rss)})
+                .sheet(isPresented: $infoHaptic, content: { InfoView(rssGroup: rssGroup, rss: rss)})
                 .actionSheet(isPresented: $showAlert, content: {
                             self.actionSheet })
 //                .sheet(isPresented: $showSheet, content: { Text("Hello world")})
@@ -205,8 +207,6 @@ struct RSSRow: View {
 
                     Button(action: {
                         dismissDestructiveDelayButton()
-//                        self.deleteItems()
-//                        withAnimation(.easeIn){deleteItem()}
                     }, label: {
                         Label("Unsubscribe from \(rss.title)?", systemImage: "xmark")
                     })
@@ -214,19 +214,15 @@ struct RSSRow: View {
     }
 }
     
+#if DEBUG
 struct RSSRow_Previews: PreviewProvider {
     static let rss = DataSourceService.current
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+    
     static var previews: some View {
-        let rss = RSS.create(url: "https://chorus.substack.com/people/2323141-jason-tate",
-                             title: "Liner Notes",
-                             desc: "Liner Notes is a weekly newsletter from Jason Tate of Chorus.fm.",
-                             image: "https://bucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com/public/images/8a938a56-8a1e-42dc-8802-a75c20e8df4c_256x256.png", in: Persistence.current.context)
-
-        return
-            RSSRow(rss: rss)
-                .padding()
-                .frame(width: 400, height: 25, alignment: .center)
+        return RSSRow(rss: DataSourceService.current.rss.simple()!)
+            .previewLayout(.fixed(width: 400, height: 30))
             .preferredColorScheme(.dark)
     }
 }
+#endif

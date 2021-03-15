@@ -16,8 +16,8 @@ import UIKit
 import MobileCoreServices
 
 struct AddRSSView: View {
+    @AppStorage("darkMode") var darkMode = false
     @Environment(\.presentationMode) var presentationMode
-    @Environment(\.managedObjectContext) var managedObjectContext
     @ObservedObject var viewModel: AddRSSViewModel
     var onDoneAction: (() -> Void)?
     var onCancelAction: (() -> Void)?
@@ -26,12 +26,6 @@ struct AddRSSView: View {
         Button(action: {
             self.viewModel.commitCreateNewRSS()
             self.onDoneAction?()
-            do {
-                try self.managedObjectContext.save()
-            } catch {
-                print(error)
-                print(self.feedTitle)
-            }
             self.presentationMode.wrappedValue.dismiss()
         }) {
             Image(systemName: "checkmark.circle")
@@ -65,13 +59,36 @@ struct AddRSSView: View {
     @State private var hasFetchResult: Bool = false
     @State private var feedUrl: String = ""
     @State private var feedTitle: String = ""
+    
+//    var group: RSSGroup
+//    @Binding var selection: Set<RSSGroup>
 
-    init(viewModel: AddRSSViewModel,
-         onDoneAction: (() -> Void)? = nil,
-         onCancelAction: (() -> Void)? = nil) {
-        self.viewModel = viewModel
-        self.onDoneAction = onDoneAction
-        self.onCancelAction = onCancelAction
+//    init(viewModel: AddRSSViewModel,
+//         onDoneAction: (() -> Void)? = nil,
+//         onCancelAction: (() -> Void)? = nil, group: RSSGroup, selection: Set<RSSGroup>) {
+//        self.viewModel = viewModel
+//        self.onDoneAction = onDoneAction
+//        self.onCancelAction = onCancelAction
+//        self.group = group
+//        self.selection = selection
+//    }
+    
+    @EnvironmentObject private var persistence: Persistence
+    @EnvironmentObject var rss: RSS
+//    let rss = RSS()
+    @State var groupPickerIsPresented = false
+    
+    private var addFolderButton: some View {
+        Button(action: { groupPickerIsPresented.toggle() }) {
+          Image(systemName: "tray.and.arrow.down.fill")
+        }
+    }
+    
+    private var trailingButtons: some View {
+        HStack(alignment: .top, spacing: 24) {
+            addFolderButton
+            doneButton
+        }
     }
     
     var body: some View {
@@ -92,8 +109,14 @@ struct AddRSSView: View {
                     HStack(alignment: .center){
                         sectionHeader
                     }
-                    
                 }
+                
+                NavigationLink(destination: SelectGroupView(selectedGroups: []) { _ in }
+                                .environment(\.managedObjectContext, Persistence.current.context)
+                                .environmentObject(Persistence.current)) {
+                    Label("Folders", systemImage: "folder")
+                }
+                
                     if !hasFetchResult {
                         //EmptyView()
                     } else {
@@ -107,14 +130,28 @@ struct AddRSSView: View {
                     }
                 }
             }
+            .sheet(isPresented: $groupPickerIsPresented) {
+                SelectGroupView(selectedGroups: (rss.groups as? Set<RSSGroup>) ?? []) {
+                setGroups($0)
+                groupPickerIsPresented = false
+            }
+        }
             .navigationBarTitle("Add Feed")
+            .navigationBarBackButtonHidden(true)
             .navigationBarItems(leading: cancelButton, trailing: doneButton)
+            .preferredColorScheme(darkMode ? .dark : .light)
             .animation(Animation.easeIn(duration: 0.1))
             .animation(Animation.easeIn(duration: 0.5))
+            
         }
         .onDisappear {
             self.viewModel.cancelCreateNewRSS()
         }
+    }
+    
+    private func setGroups(_ groups: Set<RSSGroup>) {
+      rss.groups = groups as NSSet
+      persistence.saveChanges()
     }
     
     func readFromClipboard() {
@@ -144,10 +181,20 @@ struct AddRSSView: View {
 #if DEBUG
 
 struct AddRSSView_Previews: PreviewProvider {
+
+    static var group: RSSGroup = {
+      let controller = Persistence.preview
+      return controller.makeRandomFolder(context: controller.context)
+    }()
+
+    @State static var selection: Set<RSSGroup> = [group]
+
     static var previews: some View {
         AddRSSView(viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss))
+            .environment(\.managedObjectContext, Persistence.preview.context)
+            .environmentObject(Persistence.preview)
             .preferredColorScheme(.dark)
-    }
+    }//, group: group, selection: $selection
 }
 
 #endif

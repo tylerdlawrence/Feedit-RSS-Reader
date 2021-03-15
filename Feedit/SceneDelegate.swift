@@ -17,13 +17,23 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor(Color("tab"))]
 //    }
     
+    @Environment(\.scenePhase) private var scenePhase
+    @EnvironmentObject private var persistence: Persistence
+    @Environment(\.managedObjectContext) private var context
+    
     let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     let rss = RSS()
-
+    let rssItem = RSSItem()
+    
     private(set) static var shared: SceneDelegate?
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
-        let homeView = HomeView(viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: self.rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
+        let homeView = HomeView(rssItem: self.rssItem, viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: self.rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
+            .environmentObject(DataSourceService.current.rssItem)
+            .environment(\.managedObjectContext, Persistence.current.context)
+            .environmentObject(Persistence.current)
+//            .environment(\.managedObjectContext, persistence.context)
+//            .environmentObject(persistence)
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
@@ -33,6 +43,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             window.makeKeyAndVisible()
         }
     }
+    
 
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.

@@ -8,10 +8,11 @@
 import SwiftUI
 import Foundation
 import Combine
-import UIKit
+import CoreMotion
 import KingfisherSwiftUI
 
 struct RSSFeedDetailView: View {
+    @AppStorage("darkMode") var darkMode = false
     @ObservedObject var rssItem: RSSItem
     @StateObject var rssFeedViewModel: RSSFeedViewModel
     
@@ -38,6 +39,14 @@ struct RSSFeedDetailView: View {
                     .font(.system(size: 20, weight: .regular, design: .default))
             }
         }
+    }
+    
+    private func iconImageView(_ image: UIImage) -> some View {
+        Image(uiImage: image)
+        .resizable()
+        .frame(width: 60, height: 60, alignment: .center)
+        .cornerRadius(4)
+        .animation(.easeInOut)
     }
     
     var body: some View {
@@ -99,6 +108,10 @@ struct RSSFeedDetailView: View {
                             .font(.system(size: 16, weight: .medium, design: .rounded))
                     }
                 }
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {Text("")}
+                    ToolbarItem(placement: .navigationBarTrailing) { DarkmModeSettingView(darkMode: $darkMode) }
+                }
                 .padding(EdgeInsets(top: 200.0, leading: 16.0, bottom: 0.0, trailing: 16.0))
                 .offset(x: 0, y: -200.0)
             }
@@ -113,18 +126,18 @@ struct RSSFeedDetailView: View {
        }
 }
 
-#if DEBUG
-struct RSSFeedDetailView_Previews: PreviewProvider {
-    static var rss = RSS()
-    static var rssFeedViewModel = RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem)
-    
-    static var previews: some View {
-        let simple = DataSourceService.current.rssItem.simple()
-        return RSSFeedDetailView(rssItem: simple!, rssFeedViewModel: self.rssFeedViewModel).environmentObject(DataSourceService.current.rssItem)
-            .environment(\.colorScheme, .dark)
-    }
-}
-#endif
+//#if DEBUG
+//struct RSSFeedDetailView_Previews: PreviewProvider {
+//    static var rss = RSS()
+//    static var rssFeedViewModel = RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem)
+//
+//    static var previews: some View {
+//        let simple = DataSourceService.current.rssItem.simple()
+//        return RSSFeedDetailView(rssItem: simple!, rssFeedViewModel: self.rssFeedViewModel).environmentObject(DataSourceService.current.rssItem)
+//            .environment(\.colorScheme, .dark)
+//    }
+//}
+//#endif
 
 struct MarkAsStarredButton: View {
     @Binding var isSet: Bool

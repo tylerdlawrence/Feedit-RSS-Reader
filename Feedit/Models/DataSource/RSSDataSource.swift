@@ -47,3 +47,12 @@ extension RSSDataSource {
         newObject = RSS.create(in: createContext)
     }
 }
+
+extension RSSDataSource {
+    func simple() -> RSS? {
+        let rss = RSS.init(context: createContext)
+        rss.title = "Lorem ipsum dolor"
+        rss.image = "getInfo"
+        return rss
+    }
+}

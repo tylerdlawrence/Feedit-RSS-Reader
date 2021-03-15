@@ -16,9 +16,14 @@ import SDWebImageSwiftUI
 import KingfisherSwiftUI
 
 struct InfoView: View {
+    @AppStorage("darkMode") var darkMode = false
+    @EnvironmentObject var rssDataSource: RSSDataSource
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.managedObjectContext) var managedObjectContext
-
+//    @Environment(\.managedObjectContext) var context
+    @EnvironmentObject private var persistence: Persistence
+    
+    let rssGroup: RSSGroup
     @ObservedObject var rss: RSS
     @State private var isSelected: Bool = false
     @State private var actionSheetShown = false
@@ -36,6 +41,8 @@ struct InfoView: View {
     var rssSource: RSS {
         return self.rss
     }
+    
+    @State var groupPickerIsPresented = false
 
     var body: some View {
         NavigationView{
@@ -64,6 +71,7 @@ struct InfoView: View {
                     }
                     .padding(.leading, 130.0)
                     .listRowBackground(Color("modalAccent"))
+                    
                 Section(header: Header(), footer: Footer(rss: rss)) {
                     HStack {
                         TextField(rss.title, text: $rss.title)
@@ -129,6 +137,12 @@ struct InfoView: View {
                     }
                 }
             }
+//                .sheet(isPresented: $groupPickerIsPresented) {
+//                    SelectGroupView(selectedGroups: (rss.groups as? Set<RSSGroup>) ?? []) {
+//                    setGroups($0)
+//                    groupPickerIsPresented = false
+//                }
+//            }
             .listStyle(InsetGroupedListStyle())
             .navigationBarTitle(rss.title, displayMode: .inline)
             .navigationBarItems(leading:
@@ -137,9 +151,28 @@ struct InfoView: View {
             }) {
                     Image(systemName: "xmark")
                 }
-            )}
+            , trailing:
+                Button(action: { groupPickerIsPresented.toggle() }) {
+                  Image(systemName: "tray.and.arrow.down.fill")
+                }
+              )
+            }
+            .accentColor(Color("tab"))
+            
+            .sheet(isPresented: $groupPickerIsPresented) {
+                SelectGroupView(selectedGroups: (rss.groups as? Set<RSSGroup>) ?? []) {
+                setGroups($0)
+                groupPickerIsPresented = false
+            }
+        }
+            .preferredColorScheme(darkMode ? .dark : .light)
+            
         }
         .navigationViewStyle(StackNavigationViewStyle())
+    }
+    private func setGroups(_ groups: Set<RSSGroup>) {
+      rss.groups = groups as NSSet
+      persistence.saveChanges()
     }
 }
 
@@ -204,6 +237,7 @@ extension Collection where Element == URLQueryItem {
 
 struct GetInfo_Previews: PreviewProvider {
     static let rss = RSSListViewModel(dataSource: DataSourceService.current.rss)
+    static let rssGroup = RSSGroup()
     
     static var previews: some View {
         let rss = RSS.create(url: "https://chorus.substack.com/people/2323141-jason-tate",
@@ -212,7 +246,9 @@ struct GetInfo_Previews: PreviewProvider {
                              image: "https://bucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com/public/images/8a938a56-8a1e-42dc-8802-a75c20e8df4c_256x256.png", in: Persistence.current.context)
 
         return
-            InfoView(rss: rss)
-            //.preferredColorScheme(.dark)
+            InfoView(rssGroup: rssGroup, rss: rss)
+            .environment(\.managedObjectContext, Persistence.preview.context)
+            .environmentObject(Persistence.preview)
+            .preferredColorScheme(.dark)
     }
 }

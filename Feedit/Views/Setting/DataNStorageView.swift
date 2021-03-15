@@ -30,19 +30,17 @@ struct DataNStorageView: View {
     @ObservedObject var viewModel: RSSListViewModel
     @State private var revealFeedsDisclosureGroup = true
     
-    init(rssFeedViewModel: RSSFeedViewModel, viewModel: RSSListViewModel, isRead: Bool) {
+    init(rssFeedViewModel: RSSFeedViewModel, viewModel: RSSListViewModel) {
         let db = DataSourceService.current
         dataViewModel = DataNStorageViewModel(rss: db.rss, rssItem: db.rssItem)
         self.rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
         self.viewModel = viewModel
-        self.isRead = isRead
     }
 
     var body: some View {
         GeometryReader { geo in
             ScrollView {
                 VStack(alignment: .leading, spacing: 10) {
-                    Text("Archive").font(.system(size: 28, weight: .medium, design: .rounded)).padding()
                     HStack(spacing: 12) {
                         DataUnitView(label: "Feeds", content: self.$dataViewModel.rssCount, colorType: .blue)
                         DataUnitView(label: "Article Count", content: self.$dataViewModel.rssItemCount, colorType: .orange)
@@ -53,6 +51,7 @@ struct DataNStorageView: View {
                     .frame(height: 120)
                 Spacer()
                 }
+                .navigationBarTitle("Archive")
                 .padding([.top, .horizontal])
                 .offset(x: geo.frame(in: .global).minX / 5)
             }

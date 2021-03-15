@@ -10,13 +10,14 @@ import CoreData
 import Introspect
 
 struct HomeView: View {
-    
     enum FeaureItem {
         case add
         case setting
         case star
     }
     
+    @AppStorage("darkMode") var darkMode = false
+    @ObservedObject var rssItem: RSSItem
     @ObservedObject var viewModel: RSSListViewModel
     @ObservedObject var searchBar: SearchBar = SearchBar()
     @StateObject var rssFeedViewModel: RSSFeedViewModel
@@ -29,13 +30,19 @@ struct HomeView: View {
     @State private var isSettingPresented = false
     @State private var isAddFormPresented = false
     @State private var selectedFeatureItem = FeaureItem.add
-    @State private var revealFeedsDisclosureGroup = false
+    @State private var revealFeedsDisclosureGroup = true
     @State private var revealSmartFilters = true
     @State private var isRead = false
     @State private var isLoading = false
-    @State var isExpanded = false
+    @State var isExpanded = true
     @State var sources: [RSS] = []
-
+    
+    var filteredArticles: [RSSItem] {
+        return rssFeedViewModel.items.filter({ (item) -> Bool in
+            return !((self.rssFeedViewModel.isOn && !item.isArchive) || (self.rssFeedViewModel.unreadIsOn && item.isRead))
+        })
+    }
+    
     private var archiveListView: some View {
         ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: self.rssFeedViewModel)
     }
@@ -44,7 +51,7 @@ struct HomeView: View {
         Button(action: {
             self.action = 1
         }) {
-            Image(systemName: "star.fill")
+            Image(systemName: "folder")
                 .font(.system(size: 18, weight: .medium, design: .rounded)).foregroundColor(Color("tab"))
                     .padding([.top, .leading, .bottom])
         }
@@ -77,18 +84,21 @@ struct HomeView: View {
 //            FilterPicker(isOn: 2, rssFeedViewModel: rssFeedViewModel)
             settingButton
             Spacer()
-//            settingButton
 //            archiveButton
+            folderButton
             addSourceButton
         }.padding(24)
     }
     
     private var feedsView: some View {
-        Section(header: Text("All Items").font(.system(size: 18, weight: .medium, design: .rounded)).foregroundColor(Color("text")).textCase(nil)) {
+        DisclosureGroup(
+            isExpanded: $revealSmartFilters,
+            content: {
+//        Section(header: Text("All Items").font(.system(size: 18, weight: .medium, design: .rounded)).foregroundColor(Color("text")).textCase(nil)) {
             VStack{
                 HStack {
                     ZStack{
-                        NavigationLink(destination: DataNStorageView(rssFeedViewModel: self.rssFeedViewModel, viewModel: self.viewModel, isRead: isRead)) {
+                        NavigationLink(destination: DataNStorageView(rssFeedViewModel: self.rssFeedViewModel, viewModel: self.viewModel)) {
                             EmptyView()
                         }
                         .opacity(0.0)
@@ -130,24 +140,48 @@ struct HomeView: View {
             .onAppear {
                 self.archiveListViewModel.fecthResults()
             }
+//        }
+            },
+            label: {
+                HStack {
+                    Text("All Items")
+                        .font(.system(size: 18, weight: .medium, design: .rounded))
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            withAnimation {
+                                self.revealSmartFilters.toggle()
+                            }
+                        }
+                }
+            })
+            .accentColor(Color("tab"))
         }
-        .accentColor(Color("tab"))
-    }
     
     private var feedsSection: some View {
-//        DisclosureGroup(
-//            isExpanded: $revealFeedsDisclosureGroup,
-//            content: {
-        Section(header: Text("Feeds (\(viewModel.items.lazy.count))").font(.system(size: 18, weight: .medium, design: .rounded)).foregroundColor(Color("text")).textCase(nil)) {
+        DisclosureGroup(
+            isExpanded: $revealFeedsDisclosureGroup,
+            content: {
+//        Section(header: Text("Feeds").font(.system(size: 18, weight: .medium, design: .rounded)).foregroundColor(Color("text")).textCase(nil)) {
             ForEach(viewModel.items, id: \.self) { rss in
                 ZStack {
-                    NavigationLink(destination: self.destinationView(rss: rss)) { //.onDisappear(perform: {self.refreshID = UUID()})
+                    NavigationLink(destination: self.destinationView(rss: rss)) {
                         EmptyView()
                     }
                     .opacity(0.0)
                     .buttonStyle(PlainButtonStyle())
                     HStack {
                         RSSRow(rss: rss)
+                        Spacer()
+                        Text("\(rssFeedViewModel.items.filter({ _ in self.isRead }).count)")
+//                        Text("\(viewModel.items.count)")
+                            .font(.caption)
+                            .fontWeight(.bold)
+                            .padding(.horizontal, 7)
+                            .padding(.vertical, 1)
+                            .background(Color.gray.opacity(0.5))
+                            .opacity(0.4)
+                            .foregroundColor(Color("text"))
+                            .cornerRadius(8)
                     }
                 }
             }
@@ -156,17 +190,30 @@ struct HomeView: View {
                     self.viewModel.delete(at: index)
                 }
             }
+//        }
+            },
+            label: {
+                HStack {
+                    Text("Feeds")
+                        .font(.system(size: 18, weight: .medium, design: .rounded))
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            withAnimation {
+                                self.revealFeedsDisclosureGroup.toggle()
+                            }
+                        }
+                }
+            })
+            .accentColor(Color("tab"))
+    }
+    
+    private var folderButton: some View {
+        NavigationLink(destination: RSSGroupListView(persistence: Persistence.current)) {
+            Image(systemName: "folder").font(.system(size: 18, weight: .medium, design: .rounded)).foregroundColor(Color("tab"))
+                .padding([.top, .bottom, .trailing])
         }
-//            },
-//            label: {
-//                HStack {
-//                    Text("Feeds")
-//                        .font(.system(size: 20, weight: .medium, design: .rounded))
-//                }
-//            })
-        .accentColor(Color("tab"))
-        }
-        
+    }
+    
     private let addRSSPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("addNewRSSPublisher"))
     private let rssRefreshPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("rssListNeedRefresh"))
     
@@ -177,11 +224,11 @@ struct HomeView: View {
                     List {
                         feedsView
 //                        Spacer()
+                        RSSFoldersDisclosureGroup(persistence: Persistence.current)
                         feedsSection
                     }
-                    .listRowInsets(EdgeInsets())
                     .navigationBarItems(trailing:
-                                            HStack(spacing: 10) {
+                                            HStack(spacing: 20) {
                                                 Button(action: {
                                                     startNetworkCall()
                                                 }) {
@@ -194,12 +241,13 @@ struct HomeView: View {
                                                     }
                                                 }
                                             })
+                
 //                    .listStyle(GroupedListStyle())
-                    .listStyle(SidebarListStyle())
-//                    .listStyle(InsetGroupedListStyle())
-//                    .listStyle(PlainListStyle())
+//                    .listStyle(SidebarListStyle())
+                    .listStyle(PlainListStyle())
                     .navigationBarTitle("Account", displayMode: .automatic)
-                    .add(self.searchBar)
+//                    .add(self.searchBar)
+                    .preferredColorScheme(darkMode ? .dark : .light)
                 }
                 .onAppear {
                     startNetworkCall()
@@ -231,14 +279,15 @@ struct HomeView: View {
                 if FeaureItem.add == self.selectedFeatureItem {
                     AddRSSView(
                         viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss),
-                        onDoneAction: self.onDoneAction)
+                                            onDoneAction: self.onDoneAction)
+                    //group: group, selection: $selection
                 } else if FeaureItem.setting == self.selectedFeatureItem {
                     SettingView(fetchContentTime: .constant("minute1"))
                 }
             })
-            .onAppear {
-                self.viewModel.fecthResults()
-            }
+        }
+        .onAppear {
+            self.viewModel.fecthResults()
         }
 //        .navigationViewStyle(StackNavigationViewStyle())
     }

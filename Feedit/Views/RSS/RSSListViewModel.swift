@@ -17,6 +17,8 @@ class RSSListViewModel: NSObject, ObservableObject{
 
     let dataSource: RSSDataSource
     var start = 0
+    
+    
 
     init(dataSource: RSSDataSource) {
         self.dataSource = dataSource

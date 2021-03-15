@@ -83,6 +83,7 @@ extension RSSItem {
         let predicate = NSPredicate(format: "rssUUID = %@", argumentArray: [rssUUID])
         request.predicate = predicate
         request.sortDescriptors = [.init(key: #keyPath(RSSItem.createTime), ascending: false)]
+
         request.fetchOffset = start
         request.fetchLimit = limit
         return request

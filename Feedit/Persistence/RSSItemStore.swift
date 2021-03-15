@@ -12,7 +12,7 @@ import CoreData
 import FeedKit
 
 class RSSItemStore: NSObject {
-    
+//    private let persistenceManager = PersistenceManager()
     private let persistence = Persistence.current
 
     private lazy var fetchedResultsController: NSFetchedResultsController<RSSItem> = {
@@ -53,7 +53,7 @@ class RSSItemStore: NSObject {
         fetchRSS()
     }
     
-    public func createAndSave(rss uuid: UUID, tilte: String, desc: String, author: String, url: String, createTime: Date) -> RSSItem {
+    public func createAndSave(rss uuid: UUID, tilte: String, desc: String, author: String, url: String, createTime: Date, image: Image) -> RSSItem {
         let item = RSSItem.create(uuid: uuid, title: tilte, desc: desc, author: author, url: url, createTime: createTime,
                                   in: persistence.context)
         saveChanges()
@@ -102,6 +102,13 @@ class RSSItemStore: NSObject {
             try context.save()
         } catch { fatalError() }
     }
+    
+//    private func saveChanges() {
+//        guard persistenceManager.managedObjectContext.hasChanges else { return }
+//        do {
+//            try persistenceManager.managedObjectContext.save()
+//        } catch { fatalError() }
+//    }
 }
 
 extension RSSItemStore: NSFetchedResultsControllerDelegate {

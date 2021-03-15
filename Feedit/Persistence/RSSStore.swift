@@ -21,16 +21,15 @@ class RSSStore: NSObject {
     @Published var fetchContentType: ContentTimeType = .minute60
     @Published var totalUnreadPosts: Int = 0
     @Published var totalReadPostsToday: Int = 0
-    
-    
-    
+
     static let instance = RSSStore()
+//    private let persistenceManager = PersistenceManager()
     private let persistence = Persistence.current
     
     private lazy var fetchedResultsController: NSFetchedResultsController<RSS> = {
         let fetchRequest: NSFetchRequest<RSS> = RSS.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "createTime", ascending: false)]
-        
+
         let fetechedResultsController = NSFetchedResultsController(
             fetchRequest: fetchRequest,
             managedObjectContext: persistence.context,
@@ -50,12 +49,12 @@ class RSSStore: NSObject {
         return fetchedResultsController.fetchedObjects ?? []
     }
     
-    public var rssSrouces: [RSS] = []
+    public var rssSources: [RSS] = []
     
     override init() {
         super.init()
         fetchRSS()
-        self.rssSrouces = items;
+        self.rssSources = items;
     }
     
     public func createAndSave(url: String, title: String = "", desc: String = "") -> RSS {
@@ -127,7 +126,7 @@ class RSSStore: NSObject {
 }
 
 extension RSSStore: ObservableObject {
-    
+
 }
 
 extension RSSStore: NSFetchedResultsControllerDelegate {

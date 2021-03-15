@@ -48,7 +48,7 @@ struct RSSFeedListView: View {
             return !((self.rssFeedViewModel.isOn && !item.isArchive) || (self.rssFeedViewModel.unreadIsOn && item.isRead))
         })
     }
-        
+            
     var rssSource: RSS {
         return self.rssFeedViewModel.rss
     }
@@ -133,7 +133,7 @@ struct RSSFeedListView: View {
                         Text(rssSource.title)
                             .font(.system(size: 20, weight: .medium, design: .rounded))
                         
-                        Text("\(rssFeedViewModel.items.count)")
+                        Text("\(filteredArticles.count)")
                             .font(.caption)
                             .fontWeight(.bold)
                             .padding(.horizontal, 7)
@@ -148,6 +148,7 @@ struct RSSFeedListView: View {
                 ToolbarItem(placement: .bottomBar) {
                     Toggle(isOn: $rssFeedViewModel.unreadIsOn) { Text("") }
                         .toggleStyle(CheckboxStyle())
+                        
                     
                 }
                 ToolbarItem(placement: .bottomBar) {
@@ -156,6 +157,7 @@ struct RSSFeedListView: View {
                 ToolbarItem(placement: .bottomBar) {
                     Toggle(isOn: $rssFeedViewModel.isOn) { Text("") }
                         .toggleStyle(StarStyle())
+                        
                 }
             }
             .sheet(item: $selectedItem, content: { item in
@@ -187,11 +189,18 @@ struct RSSFeedListView: View {
 #if DEBUG
 struct RSSFeedListView_Previews: PreviewProvider {
     static let rss = RSS()
+    static let rssItem = RSSItem()
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+    
+    static var group: RSSGroup = {
+      let controller = Persistence.preview
+      return controller.makeRandomFolder(context: controller.context)
+    }()
+    @State static var selection: Set<RSSGroup> = [group]
 
     static var previews: some View {
-        HomeView(viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)).environmentObject(DataSourceService.current.rss)
+        HomeView(rssItem: rssItem, viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
                 .environment(\.colorScheme, .dark)
-    }
+    }//, selection: $selection, group: group
 }
 #endif

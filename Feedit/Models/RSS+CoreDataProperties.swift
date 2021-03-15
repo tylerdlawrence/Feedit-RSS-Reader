@@ -18,6 +18,10 @@ extension RSS {
     @nonobjc public class func fetchRequest() -> NSFetchRequest<RSS> {
         return NSFetchRequest<RSS>(entityName: "RSS")
     }
+    
+    @nonobjc public class func fetchAllRequest() -> NSFetchRequest<RSSItem> {
+        return NSFetchRequest<RSSItem>(entityName: "RSS")
+    }
 
     @NSManaged public var urlString: String?
     @NSManaged public var url: String
@@ -32,9 +36,10 @@ extension RSS {
     @NSManaged public var isArchive: Bool
     @NSManaged public var isRead: Bool
     @NSManaged public var readDate : Date?
-    @NSManaged public var order: Int32
-    @NSManaged public var unread: Bool
+//    @NSManaged public var order: Int32
+//    @NSManaged public var unread: Bool
     @NSManaged public var item: RSSItem
+    @NSManaged public var groups: NSSet?
     
     public var rssURL: URL? {
         return URL(string: url)

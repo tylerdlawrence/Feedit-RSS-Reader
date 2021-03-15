@@ -26,6 +26,7 @@ class RSSFeedViewModel: NSObject, ObservableObject {
 //    @Published var showFilter = false
 //    @Published var rssFeedViewModel: RSSFeedViewModel
     static let saveKey = "SavedData"
+    
      
     let dataSource: RSSItemDataSource
     let rss: RSS
@@ -34,7 +35,6 @@ class RSSFeedViewModel: NSObject, ObservableObject {
     init(rss: RSS, dataSource: RSSItemDataSource) {
         self.dataSource = dataSource
         self.rss = rss
-//        self.rssFeedViewModel = rssFeedViewModel
         super.init()
     }
     

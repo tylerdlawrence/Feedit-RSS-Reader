@@ -42,3 +42,20 @@ struct StarStyle: ToggleStyle {
         }
     }
 }
+
+struct ToggleAppearence: ToggleStyle {
+    @AppStorage("darkMode") var darkMode = false
+    func makeBody(configuration: Self.Configuration) -> some View {
+        return HStack {
+            configuration.label
+            Spacer()
+            Image(systemName: darkMode ? "sun.max.fill" : "moon.fill")
+                .imageScale(.medium)
+                .foregroundColor(Color("tab"))
+                .font(.system(size: 20, weight: .regular, design: .default))
+                .onTapGesture {
+                    configuration.isOn.toggle()
+            }
+        }
+    }
+}

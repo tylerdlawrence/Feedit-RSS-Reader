@@ -53,13 +53,6 @@ struct RSSDisplayView: View {
                     .placeholder {
                         Image("getInfo").font(.system(size: 16, weight: .bold))
                             .frame(width: 50, height: 50)
-//                        Image(systemName: "arrow.clockwise").font(.system(size: 16, weight: .bold))
-//                            .frame(width: 50, height: 50)
-//                            .rotationEffect(Angle(degrees: isLoading ? 360 : 0))
-//                            .animation(Animation.linear(duration: 1).repeatForever(autoreverses: false))
-//                            .onAppear() {
-//                                self.isLoading = true
-//                            }
                     }
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 50, height: 50)

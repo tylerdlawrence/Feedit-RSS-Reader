@@ -14,6 +14,6 @@ import Combine
 import BackgroundTasks
 
 @objc(RSS)
-class RSS: NSManagedObject, Identifiable {
+public class RSS: NSManagedObject, Identifiable {
 
 }
