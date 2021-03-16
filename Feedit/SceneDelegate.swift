@@ -11,23 +11,23 @@ import BackgroundTasks
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-    
+
 //    override init() {
 //        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor(Color("tab"))]
 //        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor(Color("tab"))]
 //    }
-    
+
     @Environment(\.scenePhase) private var scenePhase
     @EnvironmentObject private var persistence: Persistence
     @Environment(\.managedObjectContext) private var context
-    
+
     let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     let rss = RSS()
     let rssItem = RSSItem()
-    
+
     private(set) static var shared: SceneDelegate?
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        
+
         let homeView = HomeView(rssItem: self.rssItem, viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: self.rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
             .environmentObject(DataSourceService.current.rssItem)
             .environment(\.managedObjectContext, Persistence.current.context)
@@ -43,7 +43,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             window.makeKeyAndVisible()
         }
     }
-    
+
 
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
@@ -67,14 +67,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to undo the changes made on entering the background.
     }
 
-    func sceneDidEnterBackground(_ scene: UIScene) {
-        // Called as the scene transitions from the foreground to the background.
-        // Use this method to save data, release shared resources, and store enough scene-specific state information
-        // to restore the scene back to its current state.
-
-        // Save changes in the application's managed object context when the application transitions to the background.
-        (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
-    }
+//    func sceneDidEnterBackground(_ scene: UIScene) {
+//        // Called as the scene transitions from the foreground to the background.
+//        // Use this method to save data, release shared resources, and store enough scene-specific state information
+//        // to restore the scene back to its current state.
+//
+//        // Save changes in the application's managed object context when the application transitions to the background.
+//        (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
+//    }
 }
 
 struct ToggleModel {

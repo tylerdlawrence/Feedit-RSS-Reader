@@ -137,12 +137,6 @@ struct InfoView: View {
                     }
                 }
             }
-//                .sheet(isPresented: $groupPickerIsPresented) {
-//                    SelectGroupView(selectedGroups: (rss.groups as? Set<RSSGroup>) ?? []) {
-//                    setGroups($0)
-//                    groupPickerIsPresented = false
-//                }
-//            }
             .listStyle(InsetGroupedListStyle())
             .navigationBarTitle(rss.title, displayMode: .inline)
             .navigationBarItems(leading:

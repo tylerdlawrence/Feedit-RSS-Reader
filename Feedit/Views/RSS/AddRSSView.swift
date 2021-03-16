@@ -111,11 +111,11 @@ struct AddRSSView: View {
                     }
                 }
                 
-                NavigationLink(destination: SelectGroupView(selectedGroups: []) { _ in }
-                                .environment(\.managedObjectContext, Persistence.current.context)
-                                .environmentObject(Persistence.current)) {
-                    Label("Folders", systemImage: "folder")
-                }
+//                NavigationLink(destination: SelectGroupView(selectedGroups: []) { _ in }
+//                                .environment(\.managedObjectContext, Persistence.current.context)
+//                                .environmentObject(Persistence.current)) {
+//                    Label("Folders", systemImage: "folder")
+//                }
                 
                     if !hasFetchResult {
                         //EmptyView()

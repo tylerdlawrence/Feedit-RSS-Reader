@@ -25,6 +25,7 @@ struct RSSGroupListView: View {
     @AppStorage("darkMode") var darkMode = false
     @EnvironmentObject var rssDataSource: RSSDataSource
     
+    @ObservedObject var viewModel: RSSListViewModel
     @State var addGroupIsPresented = false
     
     var body: some View {
@@ -32,7 +33,7 @@ struct RSSGroupListView: View {
           List {
             ForEach(groups, id: \.id) { group in
                 ZStack{
-                    NavigationLink(destination: RSSGroupDetailsView(rssGroup: group)) {
+                    NavigationLink(destination: RSSGroupDetailsView(viewModel: self.viewModel, rssGroup: group, groups: groups)) {
                         EmptyView()
                     }
                     .opacity(0.0)
@@ -82,13 +83,18 @@ struct RSSGroupListView: View {
         }
 }
 
-//struct RSSGroupListView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        return RSSGroupListView(persistence: Persistence.current)
-//            .environment(\.managedObjectContext, Persistence.preview.context)
-//            .environmentObject(Persistence.preview)
-//            .preferredColorScheme(.dark)
-//    }
-//}
+#if DEBUG
+struct RSSGroupListView_Previews: PreviewProvider {
+    static let rss = RSS()
+    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+    static var previews: some View {
+        RSSGroupListView(persistence: Persistence.current, viewModel: self.viewModel)
+            .environment(\.managedObjectContext, Persistence.current.context)
+            .environmentObject(Persistence.current)
+            .preferredColorScheme(.dark)
+    }
+}
+#endif
+
 
 

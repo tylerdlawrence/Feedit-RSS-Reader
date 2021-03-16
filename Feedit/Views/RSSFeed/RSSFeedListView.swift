@@ -12,6 +12,7 @@ import UIKit
 import SwipeCell
 import FeedKit
 import KingfisherSwiftUI
+import SDWebImageSwiftUI
 
 struct RSSFeedListView: View {
     enum FilterType {
@@ -186,21 +187,23 @@ struct RSSFeedListView: View {
     }
 }
 
-#if DEBUG
-struct RSSFeedListView_Previews: PreviewProvider {
-    static let rss = RSS()
-    static let rssItem = RSSItem()
-    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-    
-    static var group: RSSGroup = {
-      let controller = Persistence.preview
-      return controller.makeRandomFolder(context: controller.context)
-    }()
-    @State static var selection: Set<RSSGroup> = [group]
-
-    static var previews: some View {
-        HomeView(rssItem: rssItem, viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
-                .environment(\.colorScheme, .dark)
-    }//, selection: $selection, group: group
-}
-#endif
+//#if DEBUG
+//struct RSSFeedListView_Previews: PreviewProvider {
+//    static let rss = RSS()
+//    static let rssItem = RSSItem()
+//    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+//    
+//    static var group: RSSGroup = {
+//      let controller = Persistence.preview
+//      return controller.makeRandomFolder(context: controller.context)
+//    }()
+//    @State static var selection: Set<RSSGroup> = [group]
+//
+//    static var previews: some View {
+//        HomeView(rssItem: rssItem, viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
+//            .environment(\.managedObjectContext, Persistence.current.context)
+//            .environmentObject(Persistence.current)
+//                .environment(\.colorScheme, .dark)
+//    }
+//}
+//#endif

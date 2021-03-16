@@ -170,6 +170,7 @@ struct RSSItemRow: View {
                                 .foregroundColor(.gray)
                         }
                         Spacer()
+                        
                     }
                }
             }

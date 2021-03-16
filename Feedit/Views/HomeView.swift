@@ -90,6 +90,7 @@ struct HomeView: View {
         }.padding(24)
     }
     
+    @State private var tableView: UITableView?
     private var feedsView: some View {
         DisclosureGroup(
             isExpanded: $revealSmartFilters,
@@ -114,10 +115,15 @@ struct HomeView: View {
                             .background(Color.gray.opacity(0.5))
                             .opacity(0.4)
                             .cornerRadius(8)
+                            
                         }
+                    
                     }
+                    
                 }
-            }
+                
+                
+            }.listRowBackground(Color("accent"))
             ZStack{
                 NavigationLink(destination: archiveListView) {
                     EmptyView()
@@ -141,11 +147,13 @@ struct HomeView: View {
                 self.archiveListViewModel.fecthResults()
             }
 //        }
+            .listRowBackground(Color("accent"))
             },
             label: {
                 HStack {
                     Text("All Items")
                         .font(.system(size: 18, weight: .medium, design: .rounded))
+                        .frame(maxWidth: .infinity, alignment: .leading)
                         .contentShape(Rectangle())
                         .onTapGesture {
                             withAnimation {
@@ -154,6 +162,7 @@ struct HomeView: View {
                         }
                 }
             })
+            .listRowBackground(Color("darkerAccent"))
             .accentColor(Color("tab"))
         }
     
@@ -172,16 +181,6 @@ struct HomeView: View {
                     HStack {
                         RSSRow(rss: rss)
                         Spacer()
-                        Text("\(rssFeedViewModel.items.filter({ _ in self.isRead }).count)")
-//                        Text("\(viewModel.items.count)")
-                            .font(.caption)
-                            .fontWeight(.bold)
-                            .padding(.horizontal, 7)
-                            .padding(.vertical, 1)
-                            .background(Color.gray.opacity(0.5))
-                            .opacity(0.4)
-                            .foregroundColor(Color("text"))
-                            .cornerRadius(8)
                     }
                 }
             }
@@ -190,25 +189,29 @@ struct HomeView: View {
                     self.viewModel.delete(at: index)
                 }
             }
+            .listRowBackground(Color("accent"))
 //        }
             },
             label: {
                 HStack {
                     Text("Feeds")
                         .font(.system(size: 18, weight: .medium, design: .rounded))
+                        .frame(maxWidth: .infinity, alignment: .leading)
                         .contentShape(Rectangle())
                         .onTapGesture {
                             withAnimation {
                                 self.revealFeedsDisclosureGroup.toggle()
                             }
                         }
+                        
                 }
             })
+            .listRowBackground(Color("darkerAccent"))
             .accentColor(Color("tab"))
     }
     
     private var folderButton: some View {
-        NavigationLink(destination: RSSGroupListView(persistence: Persistence.current)) {
+        NavigationLink(destination: RSSGroupListView(persistence: Persistence.current, viewModel: self.viewModel)) {
             Image(systemName: "folder").font(.system(size: 18, weight: .medium, design: .rounded)).foregroundColor(Color("tab"))
                 .padding([.top, .bottom, .trailing])
         }
@@ -217,6 +220,7 @@ struct HomeView: View {
     private let addRSSPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("addNewRSSPublisher"))
     private let rssRefreshPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("rssListNeedRefresh"))
     
+    @State private var showingActionSheet = false
     var body: some View {
         NavigationView{
             VStack {
@@ -224,9 +228,9 @@ struct HomeView: View {
                     List {
                         feedsView
 //                        Spacer()
-                        RSSFoldersDisclosureGroup(persistence: Persistence.current)
+                        RSSFoldersDisclosureGroup(persistence: Persistence.current, viewModel: self.viewModel)
                         feedsSection
-                    }
+                    }//.listSeparatorStyle(.none)
                     .navigationBarItems(trailing:
                                             HStack(spacing: 20) {
                                                 Button(action: {
@@ -244,9 +248,10 @@ struct HomeView: View {
                 
 //                    .listStyle(GroupedListStyle())
 //                    .listStyle(SidebarListStyle())
-                    .listStyle(PlainListStyle())
-                    .navigationBarTitle("Account", displayMode: .automatic)
-//                    .add(self.searchBar)
+//                    .listStyle(PlainListStyle())
+                    .introspectTableView { tableView = $0 }
+                    .navigationBarTitle("Home", displayMode: .automatic)
+                    .add(self.searchBar)
                     .preferredColorScheme(darkMode ? .dark : .light)
                 }
                 .onAppear {
@@ -289,11 +294,18 @@ struct HomeView: View {
         .onAppear {
             self.viewModel.fecthResults()
         }
-//        .navigationViewStyle(StackNavigationViewStyle())
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
 extension HomeView {
+    
+    private func deselectRows() {
+            if let tableView = tableView, let selectedRow = tableView.indexPathForSelectedRow {
+                tableView.deselectRow(at: selectedRow, animated: true)
+            }
+        }
+    
     func onDoneAction() {
         self.viewModel.fecthResults()
     }
@@ -310,14 +322,23 @@ extension HomeView {
     }
 }
 
-//struct HomeView_Previews: PreviewProvider {
-//    static let rss = RSS()
-//    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-//
-//    static var previews: some View {
-//        Group{
-//            HomeView(viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
-//            .environment(\.colorScheme, .dark)
-//        }.environmentObject(DataSourceService.current.rss)
-//    }
-//}
+#if DEBUG
+struct HomeView_Previews: PreviewProvider {
+    static let rss = RSS()
+    static let rssItem = RSSItem()
+    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+    
+    static var group: RSSGroup = {
+      let controller = Persistence.preview
+      return controller.makeRandomFolder(context: controller.context)
+    }()
+    @State static var selection: Set<RSSGroup> = [group]
+
+    static var previews: some View {
+        HomeView(rssItem: rssItem, viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
+            .environment(\.managedObjectContext, Persistence.current.context)
+            .environmentObject(Persistence.current)
+                .environment(\.colorScheme, .dark)
+    }
+}
+#endif

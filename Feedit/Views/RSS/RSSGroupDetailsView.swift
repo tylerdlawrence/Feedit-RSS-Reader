@@ -6,78 +6,68 @@
 //
 
 import SwiftUI
+import CoreData
+import Combine
+import Foundation
 
 struct RSSGroupDetailsView: View {
     @AppStorage("darkMode") var darkMode = false
+    @EnvironmentObject var rssDataSource: RSSDataSource
+    @ObservedObject var viewModel: RSSListViewModel
+    @EnvironmentObject private var persistence: Persistence
     let rssGroup: RSSGroup
-
-    var body: some View {
-      VStack(alignment: .leading, spacing: 8) {
-        Text("Feeds: \(rssGroup.itemCount)")
-          .padding()
-      }
-      .navigationBarTitle(Text(rssGroup.name ?? "Folders"))
-      .preferredColorScheme(darkMode ? .dark : .light)
+    let rss = RSS()
+    let item = RSSItem()
+    static var fetchRequest: NSFetchRequest<RSSGroup> {
+      let request: NSFetchRequest<RSSGroup> = RSSGroup.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \RSSGroup.name, ascending: true)].compactMap { $0 }
+      return request
     }
-}
-
-//#if DEBUG
-//struct RSSGroupDetailsView_Previews: PreviewProvider {
-//    static var group: RSSGroup {
-//      let controller = Persistence.preview
-//      return controller.makeRandomFolder(context: controller.context)
-//    }
-//    static var previews: some View {
-//        RSSGroupDetailsView(rssGroup: group)
-//    }
-//}
-//#endif
-
-struct DemoDisclosureGroups: View {
-    let items: [Bookmark] = [.example1, .example2, .example3]
-    @State private var flags: [Bool] = [false, false, false]
-
+    var groups: FetchedResults<RSSGroup>
+    
+    @State var revealFoldersDisclosureGroup = true
+    
     var body: some View {
+//      VStack(alignment: .leading, spacing: 8) {
+//        Text("Feeds: \(rssGroup.itemCount)")
+//          .padding()
+//      }
         List {
-            ForEach(Array(items.enumerated()), id: \.1.id) { i, group in
-                DisclosureGroup(isExpanded: $flags[i]) {
-                    ForEach(group.items ?? []) { item in
-                        Label(item.name, systemImage: item.icon)
-                    }
-                } label: {
-                    Label(group.name, systemImage: group.icon)
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            withAnimation {
-                                self.flags[i].toggle()
-                            }
-                        }
+            ForEach(viewModel.items, id: \.self) { rss in
+//                ZStack {
+//                NavigationLink(destination: self.destinationView(rss: rss)) {
+//                        EmptyView()
+//                    }
+//                    .opacity(0.0)
+//                    .buttonStyle(PlainButtonStyle())
+                    HStack {
+                        
+                        RSSRow(rss: rss)
+                        
+//                    }
                 }
             }
         }
+        .navigationBarTitle(Text(rssGroup.name ?? "Folders"))
+        .preferredColorScheme(darkMode ? .dark : .light)
+    }
+    private func destinationView(rss: RSS) -> some View {
+        let item = RSSItem()
+        return RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), wrapper: item, filter: .all).environmentObject(DataSourceService.current.rss)
     }
 }
 
-struct DemoDisclosureGroups_Previews: PreviewProvider {
+#if DEBUG
+struct RSSGroupDetailsView_Previews: PreviewProvider {
+    static let rss = RSS()
+    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     static var previews: some View {
-        DemoDisclosureGroups()
+        NavigationView {
+            RSSGroupListView(persistence: Persistence.current, viewModel: self.viewModel)
+                .environment(\.managedObjectContext, Persistence.current.context)
+                .environmentObject(Persistence.current)
+                .preferredColorScheme(.dark)
+        }
     }
 }
-
-struct Bookmark: Identifiable {
-    let id = UUID()
-    let name: String
-    let icon: String
-    var items: [Bookmark]?
-
-    // some example websites
-    static let apple = Bookmark(name: "Apple", icon: "1.circle")
-    static let bbc = Bookmark(name: "BBC", icon: "square.and.pencil")
-    static let swift = Bookmark(name: "Swift", icon: "bolt.fill")
-    static let twitter = Bookmark(name: "Twitter", icon: "mic")
-
-    // some example groups
-    static let example1 = Bookmark(name: "Favorites", icon: "star", items: [Bookmark.apple, Bookmark.bbc, Bookmark.swift, Bookmark.twitter])
-    static let example2 = Bookmark(name: "Recent", icon: "timer", items: [Bookmark.apple, Bookmark.bbc, Bookmark.swift, Bookmark.twitter])
-    static let example3 = Bookmark(name: "Recommended", icon: "hand.thumbsup", items: [Bookmark.apple, Bookmark.bbc, Bookmark.swift, Bookmark.twitter])
-}
+#endif
