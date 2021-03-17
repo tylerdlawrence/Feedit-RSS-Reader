@@ -19,6 +19,7 @@ import SDWebImageSwiftUI
 import Intents
 
 struct RSSItemRow: View {
+    let persistence = Persistence.current
     @ObservedObject var rssFeedViewModel: RSSFeedViewModel
     @ObservedObject var itemWrapper: RSSItem
     
@@ -136,6 +137,7 @@ struct RSSItemRow: View {
                                     .font(.system(size: 11, weight: .medium, design: .rounded))
                                     .foregroundColor(.gray)
                                     .opacity(0.8)
+                                                                
                                 Spacer()
                             }
                             
@@ -246,8 +248,27 @@ struct RSSFeedRow_Previews: PreviewProvider {
     static var previews: some View {
         let simple = DataSourceService.current.rssItem.simple()
         return RSSItemRow(wrapper: simple!, rssFeedViewModel: rssFeedViewModel).environmentObject(DataSourceService.current.rssItem)
+            
             .previewLayout(.fixed(width: 375, height: 75))
             .preferredColorScheme(.dark)
     }
 }
 #endif
+
+struct tags: View {
+    var tags: Array<String>
+    var body: some View {
+        HStack {
+        ForEach(tags, id: \.self) { e in
+            Text(e)
+                .foregroundColor(Color("text"))
+                .font(.system(size: 6))
+                .padding(4)
+                .overlay(
+                   RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color("tab"), lineWidth: 0.5)
+               )
+           }
+        }
+    }
+}

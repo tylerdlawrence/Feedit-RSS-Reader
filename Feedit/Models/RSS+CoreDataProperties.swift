@@ -40,6 +40,7 @@ extension RSS {
 //    @NSManaged public var unread: Bool
     @NSManaged public var item: RSSItem
     @NSManaged public var groups: NSSet?
+    @NSManaged public var itemCount: Int64
     
     public var rssURL: URL? {
         return URL(string: url)

@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SelectRSSGroupRow: View {
+    @AppStorage("darkMode") var darkMode = false
     var group: RSSGroup
     @Binding var selection: Set<RSSGroup>
     var isSelected: Bool {
@@ -21,7 +22,7 @@ struct SelectRSSGroupRow: View {
         if isSelected {
           Image(systemName: "checkmark")
         }
-      }
+      }.preferredColorScheme(darkMode ? .dark : .light)
       .onTapGesture {
         if isSelected {
           selection.remove(group)

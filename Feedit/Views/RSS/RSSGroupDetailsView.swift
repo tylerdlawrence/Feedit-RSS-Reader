@@ -11,7 +11,7 @@ import Combine
 import Foundation
 
 struct RSSGroupDetailsView: View {
-    @AppStorage("darkMode") var darkMode = false
+//    @AppStorage("darkMode") var darkMode = false
     @EnvironmentObject var rssDataSource: RSSDataSource
     @ObservedObject var viewModel: RSSListViewModel
     @EnvironmentObject private var persistence: Persistence
@@ -42,14 +42,14 @@ struct RSSGroupDetailsView: View {
 //                    .buttonStyle(PlainButtonStyle())
                     HStack {
                         
-                        RSSRow(rss: rss)
+                        RSSRow(rss: rss, viewModel: self.viewModel)
                         
 //                    }
                 }
             }
         }
         .navigationBarTitle(Text(rssGroup.name ?? "Folders"))
-        .preferredColorScheme(darkMode ? .dark : .light)
+//        .preferredColorScheme(darkMode ? .dark : .light)
     }
     private func destinationView(rss: RSS) -> some View {
         let item = RSSItem()

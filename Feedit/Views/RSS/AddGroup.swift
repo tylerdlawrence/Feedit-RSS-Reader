@@ -25,6 +25,7 @@ struct AddGroup: View {
           }
         }
         .navigationBarTitle(Text("New Folder"))
+        .preferredColorScheme(darkMode ? .dark : .light)
       }
     }
 

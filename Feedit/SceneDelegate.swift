@@ -21,6 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     @EnvironmentObject private var persistence: Persistence
     @Environment(\.managedObjectContext) private var context
 
+    let articles = AllArticles(dataSource: DataSourceService.current.rssItem)
     let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     let rss = RSS()
     let rssItem = RSSItem()
@@ -28,7 +29,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     private(set) static var shared: SceneDelegate?
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
 
-        let homeView = HomeView(rssItem: self.rssItem, viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: self.rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
+        let homeView = HomeView(articles: self.articles, rssItem: self.rssItem, viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: self.rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
             .environmentObject(DataSourceService.current.rssItem)
             .environment(\.managedObjectContext, Persistence.current.context)
             .environmentObject(Persistence.current)

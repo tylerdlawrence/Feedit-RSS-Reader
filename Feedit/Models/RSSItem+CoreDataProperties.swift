@@ -39,6 +39,7 @@ extension RSSItem {
     @NSManaged public var image: String
     @NSManaged public var thumbnailURL: URL
     @NSManaged public var unread: Bool
+    @NSManaged public var itemCount: Int64
     
     public override func awakeFromInsert() {
         super.awakeFromInsert()
@@ -105,7 +106,6 @@ extension RSSItem {
         request.fetchLimit = limit
         return request
     }
-    
     static func requestCountArchiveObjects() -> NSFetchRequest<RSSItem> {
         let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
         let predicate = NSPredicate(format: "isArchive = true")
@@ -113,20 +113,18 @@ extension RSSItem {
         return request
     }
     
-    static func requestUnreadObjects(start: Int = 0, limit: Int = 50) -> NSFetchRequest<RSSItem> {
+    
+    //MARK: ALL ITEMS FETCHED
+    static func requestAllObjects(start: Int = 0) -> NSFetchRequest<RSSItem> {
         let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
-        let predicate = NSPredicate(format: "isRead = true")
-        request.predicate = predicate
-        request.sortDescriptors = [.init(key: #keyPath(RSSItem.updateTime), ascending: false)]
+        request.sortDescriptors = [.init(key: #keyPath(RSSItem.createTime), ascending: false)]
         request.fetchOffset = start
-        request.fetchLimit = limit
         return request
     }
-    
-    static func requestCountUnreadObjects() -> NSFetchRequest<RSSItem> {
+    static func requestCountAllObjects(start: Int = 0) -> NSFetchRequest<RSSItem> {
         let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
-        let predicate = NSPredicate(format: "isRead = true")
-        request.predicate = predicate
+//        let predicate = NSPredicate(format: "rssUUID = %@")
+//        request.predicate = predicate
         return request
     }
     

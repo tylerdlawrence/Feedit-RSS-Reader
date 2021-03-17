@@ -9,6 +9,7 @@ import SwiftUI
 import Foundation
 import Combine
 import CoreMotion
+import MarkdownUI
 import KingfisherSwiftUI
 
 struct RSSFeedDetailView: View {
@@ -85,6 +86,20 @@ struct RSSFeedDetailView: View {
                     }.padding(.top)
                     
                     Divider()
+                    
+//                    Markdown(self.body as! Document)
+//                        #"""
+//                        ## Inline code
+//                        If you have inline code blocks, wrap them in backticks: `var example = true`.
+//                        """#
+//                    )
+//                    .markdownStyle(
+//                        DefaultMarkdownStyle(
+//                            font: .system(.body, design: .serif),
+//                            codeFontName: "Menlo",
+//                            codeFontSizeMultiple: 0.88
+//                        )
+//                    )
                                         
                     Text(verbatim: rssItem.title)
                         .font(.system(size: 26, weight: .medium, design: .rounded))
@@ -126,18 +141,18 @@ struct RSSFeedDetailView: View {
        }
 }
 
-//#if DEBUG
-//struct RSSFeedDetailView_Previews: PreviewProvider {
-//    static var rss = RSS()
-//    static var rssFeedViewModel = RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem)
-//
-//    static var previews: some View {
-//        let simple = DataSourceService.current.rssItem.simple()
-//        return RSSFeedDetailView(rssItem: simple!, rssFeedViewModel: self.rssFeedViewModel).environmentObject(DataSourceService.current.rssItem)
-//            .environment(\.colorScheme, .dark)
-//    }
-//}
-//#endif
+#if DEBUG
+struct RSSFeedDetailView_Previews: PreviewProvider {
+    static var rss = RSS()
+    static var rssFeedViewModel = RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem)
+
+    static var previews: some View {
+        let simple = DataSourceService.current.rssItem.simple()
+        return RSSFeedDetailView(rssItem: simple!, rssFeedViewModel: self.rssFeedViewModel).environmentObject(DataSourceService.current.rssItem)
+            .environment(\.colorScheme, .dark)
+    }
+}
+#endif
 
 struct MarkAsStarredButton: View {
     @Binding var isSet: Bool

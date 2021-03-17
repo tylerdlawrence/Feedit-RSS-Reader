@@ -78,6 +78,7 @@ class Persistence: ObservableObject {
         self.saveChanges()
       }
     }
+    
 }
 
 extension Persistence {

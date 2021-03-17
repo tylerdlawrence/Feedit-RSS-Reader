@@ -35,6 +35,10 @@
 		616CAF9224F974AF00690804 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616CAF9124F974AF00690804 /* SettingViewModel.swift */; };
 		617B49D8260054090016FC3D /* FeeditApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617B49D7260054090016FC3D /* FeeditApp.swift */; };
 		617B49DA260073520016FC3D /* ListSeperator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617B49D9260073520016FC3D /* ListSeperator.swift */; };
+		617B49DD26010F770016FC3D /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 617B49DC26010F770016FC3D /* MarkdownUI */; };
+		617B49E1260117350016FC3D /* FinderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617B49E0260117350016FC3D /* FinderView.swift */; };
+		617B49E3260264F70016FC3D /* AllArticlesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617B49E2260264F50016FC3D /* AllArticlesView.swift */; };
+		617B49E5260285E20016FC3D /* AllArticles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617B49E4260285E10016FC3D /* AllArticles.swift */; };
 		617E4C54255DE8F20010CEE8 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617E4C53255DE8F20010CEE8 /* HomeView.swift */; };
 		6182212D25053FEE005636B2 /* rssTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6182212C25053FEE005636B2 /* rssTests.swift */; };
 		6182213A250542BF005636B2 /* OPMLParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61822138250542BF005636B2 /* OPMLParserTests.swift */; };
@@ -192,6 +196,9 @@
 		616CAF9124F974AF00690804 /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
 		617B49D7260054090016FC3D /* FeeditApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeeditApp.swift; sourceTree = "<group>"; };
 		617B49D9260073520016FC3D /* ListSeperator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListSeperator.swift; sourceTree = "<group>"; };
+		617B49E0260117350016FC3D /* FinderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinderView.swift; sourceTree = "<group>"; };
+		617B49E2260264F50016FC3D /* AllArticlesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllArticlesView.swift; sourceTree = "<group>"; };
+		617B49E4260285E10016FC3D /* AllArticles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllArticles.swift; sourceTree = "<group>"; };
 		617E4C53255DE8F20010CEE8 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		6182212A25053FEE005636B2 /* rssTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = rssTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6182212C25053FEE005636B2 /* rssTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = rssTests.swift; sourceTree = "<group>"; };
@@ -292,6 +299,7 @@
 				6165A54B25F42C5600672EE1 /* SwipeCellKit in Frameworks */,
 				616121F0255367B60074F061 /* SDWebImageSwiftUI in Frameworks */,
 				618610D5256EF7A00083A96D /* SwiftSoup in Frameworks */,
+				617B49DD26010F770016FC3D /* MarkdownUI in Frameworks */,
 				61FD0CE025EAFB2900084A20 /* EasySwiftUI in Frameworks */,
 				61DEBE3F25152CB90025B1B3 /* SwiftUI.framework in Frameworks */,
 				61DEBE3D25152CB20025B1B3 /* WidgetKit.framework in Frameworks */,
@@ -308,6 +316,7 @@
 			children = (
 				610A854025FF11460027FF48 /* RSSFoldersDisclosureGroup.swift */,
 				610A854225FFFF990027FF48 /* ExpansionHandler.swift */,
+				617B49E0260117350016FC3D /* FinderView.swift */,
 			);
 			path = Folders;
 			sourceTree = "<group>";
@@ -400,6 +409,7 @@
 				61C818D124E1F65D00593939 /* Views */,
 				61C8189E24E1F3FD00593939 /* Assets.xcassets */,
 				617B49D7260054090016FC3D /* FeeditApp.swift */,
+				617B49E4260285E10016FC3D /* AllArticles.swift */,
 			);
 			path = Feedit;
 			sourceTree = "<group>";
@@ -424,6 +434,7 @@
 				615E983F2533AFAE00891083 /* ContentView.swift */,
 				61B95ED225D1069600829741 /* RSS.xcdatamodeld */,
 				617E4C53255DE8F20010CEE8 /* HomeView.swift */,
+				617B49E2260264F50016FC3D /* AllArticlesView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -594,6 +605,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				617B49DF26010F8D0016FC3D /* PBXTargetDependency */,
 				6165A54D25F42C6A00672EE1 /* PBXTargetDependency */,
 				61FD0CE925EC531600084A20 /* PBXTargetDependency */,
 				61FD0CE225EAFB7100084A20 /* PBXTargetDependency */,
@@ -620,6 +632,7 @@
 				61FD0CDF25EAFB2900084A20 /* EasySwiftUI */,
 				61FD0CE625EC530500084A20 /* Valet */,
 				6165A54A25F42C5600672EE1 /* SwipeCellKit */,
+				617B49DC26010F770016FC3D /* MarkdownUI */,
 			);
 			productName = Feedit;
 			productReference = 61C8189224E1F3FB00593939 /* Feedit.app */;
@@ -665,6 +678,7 @@
 				61FD0CDE25EAFB2800084A20 /* XCRemoteSwiftPackageReference "EasySwiftUI" */,
 				61FD0CE525EC530400084A20 /* XCRemoteSwiftPackageReference "Valet" */,
 				6165A54925F42C5600672EE1 /* XCRemoteSwiftPackageReference "SwipeCellKit" */,
+				617B49DB26010F760016FC3D /* XCRemoteSwiftPackageReference "MarkdownUI" */,
 			);
 			productRefGroup = 61C8189324E1F3FB00593939 /* Products */;
 			projectDirPath = "";
@@ -740,6 +754,7 @@
 				61BED57E25FE54E9008F6EA3 /* SelectGroupView.swift in Sources */,
 				61967EF424E2061100AA647C /* WebView.swift in Sources */,
 				61CDCF5924E845DE007654C5 /* DocumentPicker.swift in Sources */,
+				617B49E1260117350016FC3D /* FinderView.swift in Sources */,
 				61B95EC725D0B68200829741 /* Color.swift in Sources */,
 				61C818EB24E1FAB000593939 /* DataSource.swift in Sources */,
 				61967EEC24E205DD00AA647C /* SafariView.swift in Sources */,
@@ -775,6 +790,7 @@
 				6162F2A625B71AF3008E7FA7 /* FilterBar.swift in Sources */,
 				6195028025B115C200277F70 /* Bundle-Decodable.swift in Sources */,
 				61967EC724E204BC00AA647C /* UserDefaultWrapper.swift in Sources */,
+				617B49E5260285E20016FC3D /* AllArticles.swift in Sources */,
 				61967EF524E2061100AA647C /* RSSFeedListView.swift in Sources */,
 				6117365924E83C9F00A2DEA5 /* BatchImportView.swift in Sources */,
 				612FB85A2540F04200D9822B /* RSSListView.swift in Sources */,
@@ -792,6 +808,7 @@
 				61967EF324E2061100AA647C /* RSSFeedRow.swift in Sources */,
 				61C818E424E1F91B00593939 /* RSSDataSource.swift in Sources */,
 				616CAF6724F715B600690804 /* RFC822DateFormatter.swift in Sources */,
+				617B49E3260264F70016FC3D /* AllArticlesView.swift in Sources */,
 				618F902B250DCD4F00D5A03E /* ModelHelper.swift in Sources */,
 				61B95D8825CEEAA800829741 /* RSSActions.swift in Sources */,
 				61967EEA24E205DD00AA647C /* ProgressBar.swift in Sources */,
@@ -847,6 +864,10 @@
 		6165A54D25F42C6A00672EE1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = 6165A54C25F42C6A00672EE1 /* SwipeCellKit */;
+		};
+		617B49DF26010F8D0016FC3D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 617B49DE26010F8D0016FC3D /* MarkdownUI */;
 		};
 		6182213025053FEE005636B2 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1198,6 +1219,14 @@
 				minimumVersion = 2.7.1;
 			};
 		};
+		617B49DB26010F760016FC3D /* XCRemoteSwiftPackageReference "MarkdownUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/gonzalezreal/MarkdownUI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.5.1;
+			};
+		};
 		618610B1256ED5BE0083A96D /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
@@ -1316,6 +1345,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6165A54925F42C5600672EE1 /* XCRemoteSwiftPackageReference "SwipeCellKit" */;
 			productName = SwipeCellKit;
+		};
+		617B49DC26010F770016FC3D /* MarkdownUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 617B49DB26010F760016FC3D /* XCRemoteSwiftPackageReference "MarkdownUI" */;
+			productName = MarkdownUI;
+		};
+		617B49DE26010F8D0016FC3D /* MarkdownUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 617B49DB26010F760016FC3D /* XCRemoteSwiftPackageReference "MarkdownUI" */;
+			productName = MarkdownUI;
 		};
 		618610B2256ED5BE0083A96D /* KingfisherSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;

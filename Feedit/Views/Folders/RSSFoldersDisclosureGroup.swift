@@ -42,7 +42,7 @@ struct RSSFoldersDisclosureGroup: View {
                             .opacity(0.0)
                             .buttonStyle(PlainButtonStyle())
                             HStack {
-                                RSSRow(rss: rss)
+                                RSSRow(rss: rss, viewModel: self.viewModel)
                                 Spacer()
                                 Text("\(viewModel.items.count)")
                                     .font(.caption)
@@ -58,9 +58,14 @@ struct RSSFoldersDisclosureGroup: View {
                     }.listRowBackground(Color("accent"))
                 } label: {
                     HStack {
-                        Image(systemName: "folder").foregroundColor(Color("tab"))
+                        Image(systemName: "folder")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 23, height: 23,alignment: .center)
+                            .foregroundColor(Color("tab").opacity(0.9))
                         Text("\(group.name ?? "Untitled")")
                         Spacer()
+                            
                         Text("\(group.itemCount)")
                             .font(.caption)
                             .fontWeight(.bold)
@@ -75,7 +80,8 @@ struct RSSFoldersDisclosureGroup: View {
                                 withAnimation { self.expansionHandler.toggleExpanded(for: .section) }
                             }
                         }
-                }
+                }.accentColor(Color.gray.opacity(0.7))
+                
 //                ZStack {
 //                    NavigationLink(destination: RSSGroupDetailsView(viewModel: self.viewModel, rssGroup: group, groups: groups)) {
 //                        EmptyView()
@@ -97,6 +103,7 @@ struct RSSFoldersDisclosureGroup: View {
 //                        }
 //                    }
 //                    .listRowBackground(Color("accent"))
+            
                 }
                 .onDelete(perform: deleteObjects)
             .listRowBackground(Color("accent"))
@@ -104,7 +111,7 @@ struct RSSFoldersDisclosureGroup: View {
                 label: {
                     HStack {
                         Text("Folders")
-                            .font(.system(size: 18, weight: .medium, design: .rounded)).listRowBackground(Color("accent"))
+                            .font(.system(size: 20, weight: .semibold, design: .rounded)).listRowBackground(Color("accent"))
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .contentShape(Rectangle())
                             .onTapGesture {
@@ -112,6 +119,7 @@ struct RSSFoldersDisclosureGroup: View {
                                     self.revealFoldersDisclosureGroup.toggle()
                                 }
                             }
+                            .listRowBackground(Color("accent"))
                     }
                     
                 })

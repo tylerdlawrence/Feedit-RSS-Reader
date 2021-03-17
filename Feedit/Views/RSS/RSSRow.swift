@@ -15,9 +15,11 @@ import SwipeCell
 import KingfisherSwiftUI
 
 struct RSSRow: View {
+//    @AppStorage("darkMode") var darkMode = false
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.openURL) var openURL
-    
+    @Environment(\.editMode) var editMode
+    @ObservedObject var viewModel: RSSListViewModel
     enum ActionItem {
         case info
         case url
@@ -30,7 +32,8 @@ struct RSSRow: View {
     @State private var showSheet = false
     @State var infoHaptic = false
     @State private var toggle = false
-    
+//    @State var selection: Set<RSS>
+    @EnvironmentObject var persistence: Persistence
     let rssGroup = RSSGroup()
     
     var actionSheet: ActionSheet {
@@ -55,16 +58,22 @@ struct RSSRow: View {
                                                   forPasteboardType: kUTTypePlainText as String)
                 }),
                 .destructive(Text("Unsubscribe from \(rss.title)?"), action: {
+//                    deleteRow()
                     dismissDestructiveDelayButton()
+                    showSheet.toggle()
+                    self.delete(rss)
+                    
                 }),
                 .cancel(),
             ]
         )
     }
             
-    init(rss: RSS) {
+    init(rss: RSS, viewModel: RSSListViewModel) {
         self.rss = rss
         self.imageLoader = ImageLoader(path: rss.image)
+        self.viewModel = viewModel
+//        self.selection = selection
     }
     
     var body: some View {
@@ -80,17 +89,17 @@ struct RSSRow: View {
             feedback: true
         )
         
-        let clipboardButton = SwipeCellButton(
-            buttonStyle: .image,
-            title: "",
-            systemImage: "doc.on.clipboard",
-            imageColor: .white,
-            view: nil,
-            backgroundColor: .gray,
-            action: { UIPasteboard.general.setValue(rss.url,
-                                                    forPasteboardType: kUTTypePlainText as String)
-            }
-        )
+//        let clipboardButton = SwipeCellButton(
+//            buttonStyle: .image,
+//            title: "",
+//            systemImage: "doc.on.clipboard",
+//            imageColor: .white,
+//            view: nil,
+//            backgroundColor: .gray,
+//            action: { UIPasteboard.general.setValue(rss.url,
+//                                                    forPasteboardType: kUTTypePlainText as String)
+//            }
+//        )
 //        let deleteButton = SwipeCellButton(
 //            buttonStyle: .image,
 //            title: "",
@@ -99,11 +108,31 @@ struct RSSRow: View {
 //            imageColor: .white,
 //            view: nil,
 //            backgroundColor: .red,
-//            action: { showSheet.toggle() },
+//            action: {
+//                deleteRow()
+////                dismissDestructiveDelayButton()
+////                showSheet.toggle()
+////                self.delete(rss)
+//            },
 //            feedback: true
 //        )
         
-        let swipeSlots = SwipeCellSlot(slots: [clipboardButton, infoButton], slotStyle: .destructive, buttonWidth: 60)
+//        let editButton = SwipeCellButton(
+//            buttonStyle: .image,
+//            title: "",
+//            systemImage: "rectangle.and.pencil.and.ellipsis",
+//            titleColor: .white,
+//            imageColor: .white,
+//            view: nil,
+//            backgroundColor: .yellow,
+//            action: {
+//                editMode?.wrappedValue = editMode?.wrappedValue == .active ? .inactive : .active
+////                self.editMode?.wrappedValue = .active
+//            },
+//            feedback: true
+//        )
+        
+        let swipeSlots = SwipeCellSlot(slots: [infoButton], slotStyle: .destructive, buttonWidth: 60)
         
 //        let deleteSlot = SwipeCellSlot(slots: [deleteButton], slotStyle: .destructive, buttonWidth: 60)
                 HStack(alignment: .center){
@@ -114,15 +143,15 @@ struct RSSRow: View {
                                 .renderingMode(.original)
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
-                                .frame(width: 20, height: 20,alignment: .center)
-                                .cornerRadius(2)
+                                .frame(width: 25, height: 25,alignment: .center)
+                                .cornerRadius(3)
                                 .opacity(0.9)
                         })
                         .renderingMode(.original)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: 20, height: 20,alignment: .center)
-                        .cornerRadius(2)
+                        .frame(width: 25, height: 25,alignment: .center)
+                        .cornerRadius(3)
                     
                     Text(rss.title)
                         .font(.system(size: 18, weight: .regular, design: .rounded))
@@ -156,8 +185,10 @@ struct RSSRow: View {
                         primaryButton: .destructive(
                             Text("Unsubscribe"),
                             action: {
-                                print("deleted")
+//                                deleteRow()
                                 dismissDestructiveDelayButton()
+                                showSheet.toggle()
+                                self.delete(rss)
                             }
                         ),
                         secondaryButton: .cancel({ dismissDestructiveDelayButton() })
@@ -206,21 +237,37 @@ struct RSSRow: View {
                     Divider()
 
                     Button(action: {
+//                        deleteRow()
                         dismissDestructiveDelayButton()
+                        showSheet.toggle()
+                        self.delete(rss)
                     }, label: {
                         Label("Unsubscribe from \(rss.title)?", systemImage: "xmark")
                     })
                 }
+                
     }
+    func delete(_ rss: RSS) {
+        self.viewModel.items.removeAll(where: {$0 == rss})
+        viewModel.items.removeAll()
+        }
+//    private func deleteRow() {
+//        for id in viewModel.items {
+//                if let index = viewModel.items.firstIndex(where: { $0 == id })  {
+//                    viewModel.items.remove(at: index)
+//                }
+//            }
+////            selection = Set<RSS>()
+//        }
 }
     
 #if DEBUG
 struct RSSRow_Previews: PreviewProvider {
     static let rss = DataSourceService.current
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-    
+//    static let selection = Set<RSS>()
     static var previews: some View {
-        return RSSRow(rss: DataSourceService.current.rss.simple()!)
+        return RSSRow(rss: DataSourceService.current.rss.simple()!, viewModel: self.viewModel)
             .previewLayout(.fixed(width: 400, height: 30))
             .preferredColorScheme(.dark)
     }

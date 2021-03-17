@@ -15,8 +15,9 @@ struct HomeView: View {
         case setting
         case star
     }
-    
-    @AppStorage("darkMode") var darkMode = false
+    @Environment(\.editMode) var editMode
+//    @AppStorage("darkMode") var darkMode = false
+    @ObservedObject var articles: AllArticles
     @ObservedObject var rssItem: RSSItem
     @ObservedObject var viewModel: RSSListViewModel
     @ObservedObject var searchBar: SearchBar = SearchBar()
@@ -41,6 +42,10 @@ struct HomeView: View {
         return rssFeedViewModel.items.filter({ (item) -> Bool in
             return !((self.rssFeedViewModel.isOn && !item.isArchive) || (self.rssFeedViewModel.unreadIsOn && item.isRead))
         })
+    }
+    
+    private var allArticlesView: some View {
+        AllArticlesView(articles: AllArticles(dataSource: DataSourceService.current.rssItem))
     }
     
     private var archiveListView: some View {
@@ -90,13 +95,44 @@ struct HomeView: View {
         }.padding(24)
     }
     
-    @State private var tableView: UITableView?
     private var feedsView: some View {
         DisclosureGroup(
             isExpanded: $revealSmartFilters,
             content: {
 //        Section(header: Text("All Items").font(.system(size: 18, weight: .medium, design: .rounded)).foregroundColor(Color("text")).textCase(nil)) {
-            VStack{
+//            VStack{
+                HStack {
+                    ZStack{
+                        NavigationLink(destination: allArticlesView) {
+                            EmptyView()
+                        }
+                        .opacity(0.0)
+                        .buttonStyle(PlainButtonStyle())
+                    HStack{
+                        Image(systemName: "tray.fill")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 21, height: 21,alignment: .center)
+                            .foregroundColor(Color("tab").opacity(0.9))
+                        Text("All Articles")
+                        Spacer()
+                        Text("\(articles.items.count)")
+                            .font(.caption)
+                            .fontWeight(.bold)
+                            .padding(.horizontal, 7)
+                            .padding(.vertical, 1)
+                            .background(Color.gray.opacity(0.5))
+                            .opacity(0.4)
+                            .cornerRadius(8)
+                            
+                        }.accentColor(Color("tab").opacity(0.9))
+                    }
+                    .onAppear {
+                        self.articles.fecthResults()
+                        self.articles.fetchCount()
+                    }
+                }.listRowBackground(Color("accent"))
+                    
                 HStack {
                     ZStack{
                         NavigationLink(destination: DataNStorageView(rssFeedViewModel: self.rssFeedViewModel, viewModel: self.viewModel)) {
@@ -105,7 +141,13 @@ struct HomeView: View {
                         .opacity(0.0)
                         .buttonStyle(PlainButtonStyle())
                     HStack{
-                        Label("Archive", systemImage: "archivebox")
+//                        Label("Archive", systemImage: "archivebox")
+                        Image(systemName: "archivebox")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 21, height: 21,alignment: .center)
+                            .foregroundColor(Color("tab").opacity(0.9))
+                        Text("Archive")
                         Spacer()
                         Text("\(viewModel.items.count)")
                             .font(.caption)
@@ -116,43 +158,52 @@ struct HomeView: View {
                             .opacity(0.4)
                             .cornerRadius(8)
                             
-                        }
+                        }.accentColor(Color("tab").opacity(0.9))
                     
                     }
                     
-                }
+                }.listRowBackground(Color("accent"))
                 
                 
-            }.listRowBackground(Color("accent"))
-            ZStack{
-                NavigationLink(destination: archiveListView) {
-                    EmptyView()
+//            }.listRowBackground(Color("accent"))
+                HStack {
+                    ZStack{
+                    NavigationLink(destination: archiveListView) {
+                        EmptyView()
+                    }
+                    .opacity(0.0)
+                    .buttonStyle(PlainButtonStyle())
+                    HStack{
+    //                    Label("Starred", systemImage: "star")
+                        Image(systemName: "star")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 21, height: 21,alignment: .center)
+                            .foregroundColor(Color("tab").opacity(0.9))
+                        Text("Starred")
+                        
+                            Spacer()
+                        Text("\(archiveListViewModel.items.count)")
+                            .font(.caption)
+                            .fontWeight(.bold)
+                            .padding(.horizontal, 7)
+                            .padding(.vertical, 1)
+                            .background(Color.gray.opacity(0.5))
+                            .opacity(0.4)
+                            .cornerRadius(8)
+                    }
+                }.listRowBackground(Color("accent"))
+                    .accentColor(Color("tab").opacity(0.9))
+                .onAppear {
+                    self.archiveListViewModel.fecthResults()
                 }
-                .opacity(0.0)
-                .buttonStyle(PlainButtonStyle())
-                HStack{
-                    Label("Starred", systemImage: "star")
-                        Spacer()
-                    Text("\(archiveListViewModel.items.count)")
-                        .font(.caption)
-                        .fontWeight(.bold)
-                        .padding(.horizontal, 7)
-                        .padding(.vertical, 1)
-                        .background(Color.gray.opacity(0.5))
-                        .opacity(0.4)
-                        .cornerRadius(8)
-                }
-            }
-            .onAppear {
-                self.archiveListViewModel.fecthResults()
-            }
-//        }
-            .listRowBackground(Color("accent"))
+    //        }
+                }.listRowBackground(Color("accent"))
             },
             label: {
                 HStack {
                     Text("All Items")
-                        .font(.system(size: 18, weight: .medium, design: .rounded))
+                        .font(.system(size: 20, weight: .semibold, design: .rounded))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .contentShape(Rectangle())
                         .onTapGesture {
@@ -161,11 +212,12 @@ struct HomeView: View {
                             }
                         }
                 }
-            })
-            .listRowBackground(Color("darkerAccent"))
+            }).listRowBackground(Color("darkerAccent"))
+//            .listRowBackground(Color("darkerAccent"))
             .accentColor(Color("tab"))
         }
     
+    let selection = Set<RSS>()
     private var feedsSection: some View {
         DisclosureGroup(
             isExpanded: $revealFeedsDisclosureGroup,
@@ -173,14 +225,24 @@ struct HomeView: View {
 //        Section(header: Text("Feeds").font(.system(size: 18, weight: .medium, design: .rounded)).foregroundColor(Color("text")).textCase(nil)) {
             ForEach(viewModel.items, id: \.self) { rss in
                 ZStack {
-                    NavigationLink(destination: self.destinationView(rss: rss)) {
+                    NavigationLink(destination: NavigationLazyView(self.destinationView(rss: rss))) {
                         EmptyView()
                     }
                     .opacity(0.0)
                     .buttonStyle(PlainButtonStyle())
                     HStack {
-                        RSSRow(rss: rss)
+                        RSSRow(rss: rss, viewModel: self.viewModel)
                         Spacer()
+                        Text("\(viewModel.items.count)")
+//                        Text("\(rssFeedViewModel.items.count)")
+                            .font(.caption)
+                            .fontWeight(.bold)
+                            .padding(.horizontal, 7)
+                            .padding(.vertical, 1)
+                            .background(Color.gray.opacity(0.5))
+                            .opacity(0.4)
+                            .foregroundColor(Color("text"))
+                            .cornerRadius(8)
                     }
                 }
             }
@@ -189,13 +251,14 @@ struct HomeView: View {
                     self.viewModel.delete(at: index)
                 }
             }
+
             .listRowBackground(Color("accent"))
 //        }
             },
             label: {
                 HStack {
                     Text("Feeds")
-                        .font(.system(size: 18, weight: .medium, design: .rounded))
+                        .font(.system(size: 20, weight: .semibold, design: .rounded))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .contentShape(Rectangle())
                         .onTapGesture {
@@ -203,8 +266,7 @@ struct HomeView: View {
                                 self.revealFeedsDisclosureGroup.toggle()
                             }
                         }
-                        
-                }
+                }.frame(maxWidth: .infinity)
             })
             .listRowBackground(Color("darkerAccent"))
             .accentColor(Color("tab"))
@@ -220,7 +282,6 @@ struct HomeView: View {
     private let addRSSPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("addNewRSSPublisher"))
     private let rssRefreshPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("rssListNeedRefresh"))
     
-    @State private var showingActionSheet = false
     var body: some View {
         NavigationView{
             VStack {
@@ -229,8 +290,10 @@ struct HomeView: View {
                         feedsView
 //                        Spacer()
                         RSSFoldersDisclosureGroup(persistence: Persistence.current, viewModel: self.viewModel)
+//                        Spacer()
                         feedsSection
-                    }//.listSeparatorStyle(.none)
+                    }
+                    //.listSeparatorStyle(.none)
                     .navigationBarItems(trailing:
                                             HStack(spacing: 20) {
                                                 Button(action: {
@@ -249,10 +312,12 @@ struct HomeView: View {
 //                    .listStyle(GroupedListStyle())
 //                    .listStyle(SidebarListStyle())
 //                    .listStyle(PlainListStyle())
-                    .introspectTableView { tableView = $0 }
+//                    .listStyle(InsetGroupedListStyle())
+//                    .introspectTableView { tableView = $0 }
                     .navigationBarTitle("Home", displayMode: .automatic)
                     .add(self.searchBar)
-                    .preferredColorScheme(darkMode ? .dark : .light)
+                    .environment(\.editMode, self.editMode)
+//                    .preferredColorScheme(darkMode ? .dark : .light)
                 }
                 .onAppear {
                     startNetworkCall()
@@ -285,7 +350,7 @@ struct HomeView: View {
                     AddRSSView(
                         viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss),
                                             onDoneAction: self.onDoneAction)
-                    //group: group, selection: $selection
+                    
                 } else if FeaureItem.setting == self.selectedFeatureItem {
                     SettingView(fetchContentTime: .constant("minute1"))
                 }
@@ -300,11 +365,9 @@ struct HomeView: View {
 
 extension HomeView {
     
-    private func deselectRows() {
-            if let tableView = tableView, let selectedRow = tableView.indexPathForSelectedRow {
-                tableView.deselectRow(at: selectedRow, animated: true)
-            }
-        }
+//    func delete(_ rss: RSS) {
+//        self.viewModel.items.removeAll(where: {$0 == rss})
+//        }
     
     func onDoneAction() {
         self.viewModel.fecthResults()
@@ -326,6 +389,7 @@ extension HomeView {
 struct HomeView_Previews: PreviewProvider {
     static let rss = RSS()
     static let rssItem = RSSItem()
+    static let articles = AllArticles(dataSource: DataSourceService.current.rssItem)
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     
     static var group: RSSGroup = {
@@ -335,10 +399,28 @@ struct HomeView_Previews: PreviewProvider {
     @State static var selection: Set<RSSGroup> = [group]
 
     static var previews: some View {
-        HomeView(rssItem: rssItem, viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
+        HomeView(articles: articles, rssItem: rssItem, viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
             .environment(\.managedObjectContext, Persistence.current.context)
             .environmentObject(Persistence.current)
                 .environment(\.colorScheme, .dark)
     }
 }
 #endif
+
+extension Collection {
+    func count(where item: (Element) throws -> Bool) rethrows -> Int {
+        return try self.filter(item).count
+    }
+}
+
+struct NavigationLazyView<Content: View>: View {
+    let build: () -> Content
+
+    init(_ build: @autoclosure @escaping () -> Content) {
+        self.build = build
+    }
+
+    var body: Content {
+        build()
+    }
+ }
