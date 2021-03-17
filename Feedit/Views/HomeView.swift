@@ -18,6 +18,7 @@ struct HomeView: View {
     @Environment(\.editMode) var editMode
 //    @AppStorage("darkMode") var darkMode = false
     @ObservedObject var articles: AllArticles
+    @ObservedObject var unread: Unread
     @ObservedObject var rssItem: RSSItem
     @ObservedObject var viewModel: RSSListViewModel
     @ObservedObject var searchBar: SearchBar = SearchBar()
@@ -50,6 +51,10 @@ struct HomeView: View {
     
     private var archiveListView: some View {
         ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: self.rssFeedViewModel)
+    }
+    
+    private var unreadListView: some View {
+        UnreadListView(unread: Unread(dataSource: DataSourceService.current.rssItem))
     }
     
     private var archiveButton: some View {
@@ -135,21 +140,20 @@ struct HomeView: View {
                     
                 HStack {
                     ZStack{
-                        NavigationLink(destination: DataNStorageView(rssFeedViewModel: self.rssFeedViewModel, viewModel: self.viewModel)) {
+                        NavigationLink(destination: unreadListView) {
                             EmptyView()
                         }
                         .opacity(0.0)
                         .buttonStyle(PlainButtonStyle())
                     HStack{
-//                        Label("Archive", systemImage: "archivebox")
-                        Image(systemName: "archivebox")
+                        Image(systemName: "largecircle.fill.circle")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 21, height: 21,alignment: .center)
                             .foregroundColor(Color("tab").opacity(0.9))
-                        Text("Archive")
+                        Text("Unread")
                         Spacer()
-                        Text("\(viewModel.items.count)")
+                        Text("\(unread.items.count)")
                             .font(.caption)
                             .fontWeight(.bold)
                             .padding(.horizontal, 7)
@@ -161,7 +165,10 @@ struct HomeView: View {
                         }.accentColor(Color("tab").opacity(0.9))
                     
                     }
-                    
+                    .onAppear {
+                        self.unread.fecthResults()
+                        self.unread.fetchUnreadCount()
+                    }
                 }.listRowBackground(Color("accent"))
                 
                 
@@ -174,7 +181,6 @@ struct HomeView: View {
                     .opacity(0.0)
                     .buttonStyle(PlainButtonStyle())
                     HStack{
-    //                    Label("Starred", systemImage: "star")
                         Image(systemName: "star")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
@@ -213,7 +219,6 @@ struct HomeView: View {
                         }
                 }
             }).listRowBackground(Color("darkerAccent"))
-//            .listRowBackground(Color("darkerAccent"))
             .accentColor(Color("tab"))
         }
     
@@ -234,7 +239,6 @@ struct HomeView: View {
                         RSSRow(rss: rss, viewModel: self.viewModel)
                         Spacer()
                         Text("\(viewModel.items.count)")
-//                        Text("\(rssFeedViewModel.items.count)")
                             .font(.caption)
                             .fontWeight(.bold)
                             .padding(.horizontal, 7)
@@ -389,6 +393,7 @@ extension HomeView {
 struct HomeView_Previews: PreviewProvider {
     static let rss = RSS()
     static let rssItem = RSSItem()
+    static let unread = Unread(dataSource: DataSourceService.current.rssItem)
     static let articles = AllArticles(dataSource: DataSourceService.current.rssItem)
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     
@@ -399,7 +404,7 @@ struct HomeView_Previews: PreviewProvider {
     @State static var selection: Set<RSSGroup> = [group]
 
     static var previews: some View {
-        HomeView(articles: articles, rssItem: rssItem, viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
+        HomeView(articles: articles, unread: unread, rssItem: rssItem, viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
             .environment(\.managedObjectContext, Persistence.current.context)
             .environmentObject(Persistence.current)
                 .environment(\.colorScheme, .dark)
