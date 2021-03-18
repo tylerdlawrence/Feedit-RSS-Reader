@@ -19,6 +19,9 @@ import SDWebImageSwiftUI
 import Intents
 
 struct RSSItemRow: View {
+    @Environment(\.managedObjectContext) private var context
+    @EnvironmentObject var rssDataSource: RSSDataSource
+//    @StateObject var rss: RSS
     let persistence = Persistence.current
     @ObservedObject var rssFeedViewModel: RSSFeedViewModel
     @ObservedObject var itemWrapper: RSSItem
@@ -113,20 +116,22 @@ struct RSSItemRow: View {
                     }
                 }
                 VStack{
-                    KFImage(URL(string: itemWrapper.image))
-                        .placeholder({
-                            Image("getInfo")
-                                .renderingMode(.original)
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 20, height: 20,alignment: .center)
-                                .cornerRadius(1)
-                        })
-                        .renderingMode(.original)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 20, height: 20,alignment: .center)
-                        .cornerRadius(1)
+//                    KFImage(URL(string: self.rss.image))
+//
+//                    KFImage(URL(string: itemWrapper.image))
+//                        .placeholder({
+//                            Image("getInfo")
+//                                .renderingMode(.original)
+//                                .resizable()
+//                                .aspectRatio(contentMode: .fit)
+//                                .frame(width: 20, height: 20,alignment: .center)
+//                                .cornerRadius(1)
+//                        })
+//                        .renderingMode(.original)
+//                        .resizable()
+//                        .aspectRatio(contentMode: .fit)
+//                        .frame(width: 20, height: 20,alignment: .center)
+//                        .cornerRadius(1)
                     
                 }.padding(.top)
                     HStack{

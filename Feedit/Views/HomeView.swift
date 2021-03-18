@@ -54,7 +54,7 @@ struct HomeView: View {
     }
     
     private var unreadListView: some View {
-        UnreadListView(unread: Unread(dataSource: DataSourceService.current.rssItem))
+        UnreadListView(unreads: Unread(dataSource: DataSourceService.current.rssItem))
     }
     
     private var archiveButton: some View {
@@ -134,7 +134,7 @@ struct HomeView: View {
                     }
                     .onAppear {
                         self.articles.fecthResults()
-                        self.articles.fetchCount()
+//                        self.articles.fetchCount()
                     }
                 }.listRowBackground(Color("accent"))
                     
@@ -167,7 +167,7 @@ struct HomeView: View {
                     }
                     .onAppear {
                         self.unread.fecthResults()
-                        self.unread.fetchUnreadCount()
+//                        self.unread.fetchUnreadCount()
                     }
                 }.listRowBackground(Color("accent"))
                 

@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct SelectRSSGroupRow: View {
+    @EnvironmentObject private var persistence: Persistence
+    @Environment(\.managedObjectContext) private var context
+    @EnvironmentObject var rssDataSource: RSSDataSource
     @AppStorage("darkMode") var darkMode = false
     var group: RSSGroup
     @Binding var selection: Set<RSSGroup>

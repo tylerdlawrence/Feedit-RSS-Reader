@@ -16,6 +16,8 @@ import KingfisherSwiftUI
 
 struct RSSRow: View {
 //    @AppStorage("darkMode") var darkMode = false
+    @Environment(\.managedObjectContext) private var context
+    @EnvironmentObject var rssDataSource: RSSDataSource
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.openURL) var openURL
     @Environment(\.editMode) var editMode

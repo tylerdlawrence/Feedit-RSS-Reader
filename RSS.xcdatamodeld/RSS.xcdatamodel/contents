@@ -38,7 +38,7 @@
     </entity>
     <elements>
         <element name="RSS" positionX="-544.7466430664062" positionY="45.42822265625" width="128" height="209"/>
-        <element name="RSSItem" positionX="-370.7073974609375" positionY="38.6402587890625" width="128" height="239"/>
         <element name="RSSGroup" positionX="-459" positionY="162" width="128" height="89"/>
+        <element name="RSSItem" positionX="-370.7073974609375" positionY="38.6402587890625" width="128" height="239"/>
     </elements>
 </model>

@@ -16,6 +16,7 @@ struct SelectGroupView: View {
       return request
     }
     @EnvironmentObject private var persistence: Persistence
+    @EnvironmentObject var rssDataSource: RSSDataSource
     @Environment(\.managedObjectContext) private var context
     @FetchRequest(
       fetchRequest: RSSGroupListView.fetchRequest,
@@ -51,7 +52,7 @@ struct SelectGroupView: View {
                 }
             }
         .preferredColorScheme(darkMode ? .dark : .light)
-        }
+        }.environmentObject(Persistence.current)
     }
 
     private func formAction() {

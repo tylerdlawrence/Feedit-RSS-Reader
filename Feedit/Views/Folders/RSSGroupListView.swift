@@ -24,7 +24,6 @@ struct RSSGroupListView: View {
     
 //    @AppStorage("darkMode") var darkMode = false
     @EnvironmentObject var rssDataSource: RSSDataSource
-    
     @ObservedObject var viewModel: RSSListViewModel
     @State var addGroupIsPresented = false
     

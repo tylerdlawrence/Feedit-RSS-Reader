@@ -173,7 +173,7 @@ struct RSSFeedListView: View {
                         onArchiveClosure: {
                             self.rssFeedViewModel.archiveOrCancel(item)
                         }
-                    )
+                    ).environmentObject(DataSourceService.current.rss)
                 }
             })
         }

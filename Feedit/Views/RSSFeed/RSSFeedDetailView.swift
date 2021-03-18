@@ -13,9 +13,13 @@ import MarkdownUI
 import KingfisherSwiftUI
 
 struct RSSFeedDetailView: View {
+    @EnvironmentObject private var persistence: Persistence
+    @Environment(\.managedObjectContext) private var context
+    @EnvironmentObject var rssDataSource: RSSDataSource
+    
     @AppStorage("darkMode") var darkMode = false
     @ObservedObject var rssItem: RSSItem
-    @StateObject var rssFeedViewModel: RSSFeedViewModel
+    @ObservedObject var rssFeedViewModel: RSSFeedViewModel
     
     var rssSource: RSS {
         return self.rssFeedViewModel.rss
@@ -130,7 +134,7 @@ struct RSSFeedDetailView: View {
                 .padding(EdgeInsets(top: 200.0, leading: 16.0, bottom: 0.0, trailing: 16.0))
                 .offset(x: 0, y: -200.0)
             }
-        }
+        }.environmentObject(DataSourceService.current.rss)
         Spacer()
         bottomButtons
     }
