@@ -11,10 +11,11 @@ import WebKit
 class WKWebViewModel: ObservableObject {
     
     private var dataSource: RSSItemDataSource
-    
     private var cancellable: AnyCancellable? = nil
-    
     var isFirst: Bool = true
+    
+    @Published var message = String()
+    @Published var shouldShowAlert = false
     
     @Published var didFinishLoading: Bool = false
     @Published var link: String = ""
@@ -32,6 +33,7 @@ class WKWebViewModel: ObservableObject {
             }
         }
     }
+    
     @Published var progressHide: Bool = true
     
     init (rssItem: RSSItem) {
@@ -60,6 +62,7 @@ class WKWebViewModel: ObservableObject {
 }
 
 struct WKWebViewWrapper: UIViewRepresentable {
+    lazy var progressbar: UIProgressView = UIProgressView()
     
     class Coordinator: NSObject, WKNavigationDelegate, UIScrollViewDelegate {
         private var viewModel: WKWebViewModel

@@ -73,7 +73,7 @@ struct RSSRow: View {
             
     init(rss: RSS, viewModel: RSSListViewModel) {
         self.rss = rss
-        self.imageLoader = ImageLoader(path: rss.image)
+        self.imageLoader = ImageLoader(url: rss.rssURL!)
         self.viewModel = viewModel
 //        self.selection = selection
     }
@@ -253,21 +253,12 @@ struct RSSRow: View {
         self.viewModel.items.removeAll(where: {$0 == rss})
         viewModel.items.removeAll()
         }
-//    private func deleteRow() {
-//        for id in viewModel.items {
-//                if let index = viewModel.items.firstIndex(where: { $0 == id })  {
-//                    viewModel.items.remove(at: index)
-//                }
-//            }
-////            selection = Set<RSS>()
-//        }
 }
     
 #if DEBUG
 struct RSSRow_Previews: PreviewProvider {
     static let rss = DataSourceService.current
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-//    static let selection = Set<RSS>()
     static var previews: some View {
         return RSSRow(rss: DataSourceService.current.rss.simple()!, viewModel: self.viewModel)
             .previewLayout(.fixed(width: 400, height: 30))

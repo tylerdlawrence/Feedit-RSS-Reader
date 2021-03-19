@@ -6,8 +6,11 @@
 //
 
 import Foundation
+import CoreData
 
 class ArchiveListViewModel: NSObject, ObservableObject {
+    
+//    var context:NSManagedObjectContext!
 
     @Published var items: [RSSItem] = []
     @Published var filteredArticles: [RSSItem] = []
@@ -15,18 +18,27 @@ class ArchiveListViewModel: NSObject, ObservableObject {
     @Published var selectedPost: RSSItem?
     @Published var isArchive: Bool = true
     @Published var disabled = true
-    
     @Published var selectedFilterToggle = 0
-    
     func markAllPostsRead(item: RSSItem) {}
+    
+    @Published var message = String()
+    @Published var shouldShowAlert = false
     
     let dataSource: RSSItemDataSource
     var start = 0
     
+//    var archiveViewModel:ArchiveListViewModel!
+    
     init(dataSource: RSSItemDataSource) {
         self.dataSource = dataSource
+//        self.archiveViewModel = archiveViewModel
+//        self.context = context
         super.init()
     }
+//    , context:NSManagedObjectContext = Persistence.shared.context
+//    deinit {
+//        context = nil
+//    }
     
     func loadMore() {
         start = items.count
@@ -69,4 +81,54 @@ class ArchiveListViewModel: NSObject, ObservableObject {
         
         _ = dataSource.saveUpdateObject()
     }
+    
+    private func handleExisitingArticle() {
+        self.shouldShowAlert = true
+        self.message = "You already starred this article"
+    }
+    
+    private func showAlertForAddedStar(success:Bool){
+        self.shouldShowAlert = true
+        self.message = success ? "Added to Starred" : "Error while attempting to star article"
+    }
+    
+    private func showAlertForDeletedStar(success:Bool){
+        self.shouldShowAlert = true
+        self.message = success ? "Removed from Starred" : "Error deleting this article from starred"
+    }
+    
+//    func isArticleExists(with URL:String) -> Bool{
+//        return archiveViewModel.isArticleExists(with: URL)
+//    }
+    
+//    func star(for rssItem:RSSItem, showAlert: Bool = false){
+//        if isArticleExists(with: rssItem.url) {
+//            handleExisitingArticle()
+//            return
+//        }
+//        archiveViewModel.insert(item: rssItem) { [weak self] (success) in
+//            guard let self = self else { return }
+//            self.showAlertForAddedStar(success: success)
+//        }
+//    }
+    
+//    func insert(item: RSSItem, completion:((Bool)->Void)? = nil) {
+//        guard let context = self.context else {
+//            completion?(false)
+//            return
+//        }
+//
+//        do {
+//            if context.hasChanges {
+//                try context.save()
+//                completion?(true)
+//                return
+//            }
+//        }catch let error {
+//            debugPrint(error)
+//        }
+//
+//        completion?(false)
+//    }
+    
 }

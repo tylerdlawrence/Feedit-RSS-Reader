@@ -11,7 +11,6 @@ import Combine
 import Foundation
 
 struct RSSGroupDetailsView: View {
-//    @AppStorage("darkMode") var darkMode = false
     @EnvironmentObject var rssDataSource: RSSDataSource
     @ObservedObject var viewModel: RSSListViewModel
     @EnvironmentObject private var persistence: Persistence

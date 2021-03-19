@@ -18,6 +18,7 @@
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="itemCount" optional="YES" attributeType="Integer 64" derived="YES" derivationExpression="items.@count" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="url" optional="YES" attributeType="String"/>
         <relationship name="items" toMany="YES" deletionRule="Nullify" destinationEntity="RSS" inverseName="groups" inverseEntity="RSS"/>
     </entity>
     <entity name="RSSItem" representedClassName="RSSItem" syncable="YES">
@@ -38,7 +39,7 @@
     </entity>
     <elements>
         <element name="RSS" positionX="-544.7466430664062" positionY="45.42822265625" width="128" height="209"/>
-        <element name="RSSGroup" positionX="-459" positionY="162" width="128" height="89"/>
+        <element name="RSSGroup" positionX="-459" positionY="162" width="128" height="104"/>
         <element name="RSSItem" positionX="-370.7073974609375" positionY="38.6402587890625" width="128" height="239"/>
     </elements>
 </model>

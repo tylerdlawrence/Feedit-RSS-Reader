@@ -53,6 +53,7 @@ struct RSSFeedListView: View {
     var rssSource: RSS {
         return self.rssFeedViewModel.rss
     }
+    
     @ObservedObject var itemWrapper: RSSItem
     @EnvironmentObject var rssDataSource: RSSDataSource
     @ObservedObject var rssFeedViewModel: RSSFeedViewModel
@@ -75,6 +76,17 @@ struct RSSFeedListView: View {
         }.buttonStyle(BorderlessButtonStyle())
     }
     
+    private var thumbnailImage: some View {
+        HStack {
+            Image(systemName: "person.fill")
+                .data(url: URL(string: rssSource.image)!)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 40, height: 40, alignment: .center)
+        }
+    }
+    
+    
     var body: some View {
         
         ZStack {
@@ -93,6 +105,18 @@ struct RSSFeedListView: View {
                         .opacity(0.0)
                         .buttonStyle(PlainButtonStyle())
                         HStack {
+//                            thumbnailImage
+//                            AsyncImage(
+//                                url: URL(string: rssSource.image.description)!,
+//                                placeholder: {
+//                                    ProgressView()
+//                                },
+//                                image: {
+//                                    Image(uiImage: $0)
+//
+//                                }
+//                             )
+//                            .frame(width: 40, height: 40, alignment: .center)
                             RSSItemRow(wrapper: item, menu: self.contextmenuAction(_:), rssFeedViewModel: rssFeedViewModel)
                                 .contentShape(Rectangle())
                                 .onTapGesture {
@@ -207,3 +231,23 @@ struct RSSFeedListView: View {
 //    }
 //}
 //#endif
+
+extension Image {
+
+    func data(url:URL) -> Self {
+
+        if let data = try? Data(contentsOf: url) {
+
+            return Image(uiImage: UIImage(data: data)!)
+
+                .resizable()
+
+        }
+
+        return self
+
+            .resizable()
+
+    }
+
+}

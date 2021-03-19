@@ -13,6 +13,8 @@ import Combine
 class Unread: NSObject, ObservableObject {
     
     @Published var items: [RSSItem] = []
+    @Published var isOn: Bool = false
+    @Published var unreadIsOn: Bool = true
     
     let dataSource: RSSItemDataSource
     var start = 0
@@ -45,5 +47,32 @@ class Unread: NSObject, ObservableObject {
         if let objects = dataSource.fetchedResult.fetchedObjects {
             items.append(contentsOf: objects)
         }
+    }
+    
+    func unarchive(_ item: RSSItem) {
+        let updatedItem = dataSource.readObject(item)
+        updatedItem.isArchive = false
+        updatedItem.updateTime = Date()
+        dataSource.setUpdateObject(updatedItem)
+        
+        let rs = dataSource.saveUpdateObject()
+        switch rs {
+        case .failed:
+            print("----> \(#function) failed")
+        case .saved:
+            items.removeAll { item == $0 }
+        case .unchanged:
+            print("----> \(#function) unchanged")
+        }
+    }
+    
+    func archiveOrCancel(_ item: RSSItem) {
+        let updatedItem = dataSource.readObject(item)
+        updatedItem.isArchive = !item.isArchive
+        updatedItem.updateTime = Date()
+        updatedItem.objectWillChange.send()
+        dataSource.setUpdateObject(updatedItem)
+        
+        _ = dataSource.saveUpdateObject()
     }
 }

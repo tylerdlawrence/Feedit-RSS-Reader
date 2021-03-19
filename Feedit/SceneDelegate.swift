@@ -26,7 +26,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     let rss = RSS()
     let rssItem = RSSItem()
-
+    
     private(set) static var shared: SceneDelegate?
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
 

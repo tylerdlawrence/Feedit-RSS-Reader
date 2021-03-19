@@ -10,13 +10,14 @@ import CoreData
 import Introspect
 
 struct HomeView: View {
+    @ObservedObject var networkReachability = NetworkReachabilty.shared
+    
     enum FeaureItem {
         case add
         case setting
         case star
     }
     @Environment(\.editMode) var editMode
-//    @AppStorage("darkMode") var darkMode = false
     @ObservedObject var articles: AllArticles
     @ObservedObject var unread: Unread
     @ObservedObject var rssItem: RSSItem
@@ -44,9 +45,10 @@ struct HomeView: View {
             return !((self.rssFeedViewModel.isOn && !item.isArchive) || (self.rssFeedViewModel.unreadIsOn && item.isRead))
         })
     }
-    
+        
     private var allArticlesView: some View {
-        AllArticlesView(articles: AllArticles(dataSource: DataSourceService.current.rssItem))
+        let rss = RSS()
+        return AllArticlesView(articles: AllArticles(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
     }
     
     private var archiveListView: some View {
@@ -396,7 +398,6 @@ struct HomeView_Previews: PreviewProvider {
     static let unread = Unread(dataSource: DataSourceService.current.rssItem)
     static let articles = AllArticles(dataSource: DataSourceService.current.rssItem)
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-    
     static var group: RSSGroup = {
       let controller = Persistence.preview
       return controller.makeRandomFolder(context: controller.context)

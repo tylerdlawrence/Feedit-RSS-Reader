@@ -101,6 +101,8 @@
 		61967F0124E2068400AA647C /* AddRSSViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61967EFD24E2068400AA647C /* AddRSSViewModel.swift */; };
 		61967F0324E2068400AA647C /* RSSDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61967EFF24E2068400AA647C /* RSSDisplayView.swift */; };
 		61B46F882580248500BF6C87 /* rssTests.json in Resources */ = {isa = PBXBuildFile; fileRef = 61B46F872580248500BF6C87 /* rssTests.json */; };
+		61B7AF532604017900B07F14 /* HTMLScrapingUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B7AF522604017900B07F14 /* HTMLScrapingUtility.swift */; };
+		61B7AF55260447FC00B07F14 /* AllArticlesRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B7AF54260447FC00B07F14 /* AllArticlesRow.swift */; };
 		61B95D8825CEEAA800829741 /* RSSActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B95D8725CEEAA800829741 /* RSSActions.swift */; };
 		61B95D8C25CEFB5B00829741 /* RSSObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B95D8B25CEFB5B00829741 /* RSSObservable.swift */; };
 		61B95EC125D08E3300829741 /* AppDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B95EC025D08E3300829741 /* AppDefaults.swift */; };
@@ -242,6 +244,8 @@
 		61967EFF24E2068400AA647C /* RSSDisplayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RSSDisplayView.swift; sourceTree = "<group>"; };
 		61967F0624E2096100AA647C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		61B46F872580248500BF6C87 /* rssTests.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rssTests.json; sourceTree = "<group>"; };
+		61B7AF522604017900B07F14 /* HTMLScrapingUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTMLScrapingUtility.swift; sourceTree = "<group>"; };
+		61B7AF54260447FC00B07F14 /* AllArticlesRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllArticlesRow.swift; sourceTree = "<group>"; };
 		61B95D8725CEEAA800829741 /* RSSActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSSActions.swift; sourceTree = "<group>"; };
 		61B95D8B25CEFB5B00829741 /* RSSObservable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSSObservable.swift; sourceTree = "<group>"; };
 		61B95EC025D08E3300829741 /* AppDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDefaults.swift; sourceTree = "<group>"; };
@@ -372,6 +376,7 @@
 				61B95EC825D0B86400829741 /* Image.swift */,
 				61B95ECA25D0B8F800829741 /* ViewExtension.swift */,
 				61B95ECC25D0BA4C00829741 /* Shake.swift */,
+				61B7AF522604017900B07F14 /* HTMLScrapingUtility.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -452,6 +457,7 @@
 				615E983F2533AFAE00891083 /* ContentView.swift */,
 				61B95ED225D1069600829741 /* RSS.xcdatamodeld */,
 				617E4C53255DE8F20010CEE8 /* HomeView.swift */,
+				61B7AF54260447FC00B07F14 /* AllArticlesRow.swift */,
 				617B49E2260264F50016FC3D /* AllArticlesView.swift */,
 				617B49E4260285E10016FC3D /* AllArticles.swift */,
 			);
@@ -791,6 +797,7 @@
 				615E971F25323C1900891083 /* Reachability.swift in Sources */,
 				61967ECB24E204FB00AA647C /* AppEnvironment.swift in Sources */,
 				61CDCF5B24E8461D007654C5 /* RoundRectangleButton.swift in Sources */,
+				61B7AF55260447FC00B07F14 /* AllArticlesRow.swift in Sources */,
 				61B95ED425D1069600829741 /* RSS.xcdatamodeld in Sources */,
 				61B95ECD25D0BA4C00829741 /* Shake.swift in Sources */,
 				61B95D8C25CEFB5B00829741 /* RSSObservable.swift in Sources */,
@@ -806,6 +813,7 @@
 				61967EC724E204BC00AA647C /* UserDefaultWrapper.swift in Sources */,
 				617B49E5260285E20016FC3D /* AllArticles.swift in Sources */,
 				61967EF524E2061100AA647C /* RSSFeedListView.swift in Sources */,
+				61B7AF532604017900B07F14 /* HTMLScrapingUtility.swift in Sources */,
 				6117365924E83C9F00A2DEA5 /* BatchImportView.swift in Sources */,
 				612FB85A2540F04200D9822B /* RSSListView.swift in Sources */,
 				61967ED524E2053D00AA647C /* String+Ext.swift in Sources */,

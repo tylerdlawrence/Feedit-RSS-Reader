@@ -50,10 +50,27 @@ struct WebView: View {
     }
     
     @State var isArchive = false
+    @Environment(\.managedObjectContext) var managedObjectContext
+    
+    @ObservedObject var archiveViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             webViewWrapper
+                .navigationBarItems(trailing: Button(action: {
+//                    self.isArchive ? archiveViewModel.star(for: rssItem, showAlert: true) : archiveViewModel.star(for: rssItem)
+//                    self.isArchive = archiveViewModel.isArticleExists(with: rssItem.url)
+                }, label: {
+                    Image(systemName: "star\(isArchive ? ".fill" : "")").frame(width: 30, height: 50,alignment: .center)
+                }).alert(isPresented: $archiveViewModel.shouldShowAlert) {
+                    Alert(
+                        title: Text(archiveViewModel.message),
+                        dismissButton: .default(Text("OK"))
+                    )
+                })
+//                .onAppear {
+//                    self.isArchive = rssItem.isArticleExists(with: rssItem.url)
+//                }
             HStack(alignment: .top, spacing: 32) {
                 if !self.viewModel.canGoBack {
                     makeFeatureItemView(
@@ -112,6 +129,7 @@ struct WebView: View {
            let activityVC = UIActivityViewController(activityItems: [urlShare], applicationActivities: nil)
            UIApplication.shared.windows.first?.rootViewController?.present(activityVC, animated: true, completion: nil)
        }
+
 }
 
 extension WebView {

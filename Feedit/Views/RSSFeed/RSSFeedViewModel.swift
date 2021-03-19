@@ -11,23 +11,21 @@ import SwiftUI
 import Combine
 import UIKit
 
-class RSSFeedViewModel: NSObject, ObservableObject {
+extension RSSFeedViewModel: Identifiable {
     
+}
+
+class RSSFeedViewModel: NSObject, ObservableObject {
+        
+    private var bag = Set<AnyCancellable>()
+        
     @Published var isOn = false
     @Published var unreadIsOn = false
     @Published var items: [RSSItem] = []
     
-//    @Published var feed: [RSS] = []
-//    @Published var filteredArticles: [RSSItem] = []
-//    @Published var filterType = FilterType.unreadIsOn
     @Published var selectedPost: RSSItem?
-//    @Published var showingDetail = false
     @Published var shouldReload = false
-//    @Published var showFilter = false
-//    @Published var rssFeedViewModel: RSSFeedViewModel
-    static let saveKey = "SavedData"
     
-     
     let dataSource: RSSItemDataSource
     let rss: RSS
     var start = 0
@@ -50,18 +48,6 @@ class RSSFeedViewModel: NSObject, ObservableObject {
         dataSource.setUpdateObject(updatedItem)
 
         _ = dataSource.saveUpdateObject()
-    }
-
-//    func markAllPostsRead(_ item: RSSItem) {}
-        
-    var read: Bool {
-        set {
-            //This function fetches the Object and marks it as read
-            self.selectedPost!.isRead = newValue
-        }
-        get {
-            self.selectedPost!.isRead
-        }
     }
     
     func unreadOrCancel(_ item: RSSItem) {
@@ -142,5 +128,10 @@ class RSSFeedViewModel: NSObject, ObservableObject {
                     print("feed error \(error)")
             }
         }
+    }
+    
+    // Phantom type placeholder for undefined methods
+    func undefined<T>(_ message:String="",file:String=#file,function:String=#function,line: Int=#line) -> T {
+        fatalError("[File: \(file),Line: \(line),Function: \(function),]: Undefined: \(message)")
     }
 }

@@ -27,6 +27,8 @@ POSSIBILITY OF SUCH DAMAGE.
 
 import SystemConfiguration
 import Foundation
+import Reachability
+import Combine
 
 public enum ReachabilityError: Error {
     case failedToCreateWithAddress(sockaddr, Int32)
@@ -232,10 +234,10 @@ public extension Reachability {
     }
 
     // MARK: - *** Connection test methods ***
-    @available(*, deprecated, message: "Please use `connection != .none`")
-    var isReachable: Bool {
-        return connection != .unavailable
-    }
+//    @available(*, deprecated, message: "Please use `connection != .none`")
+//    var isReachable: Bool {
+//        return connection != .unavailable
+//    }
 
     @available(*, deprecated, message: "Please use `connection == .cellular`")
     var isReachableViaWWAN: Bool {
@@ -403,4 +405,44 @@ private class ReachabilityWeakifier {
     init(reachability: Reachability) {
         self.reachability = reachability
     }
+}
+
+extension Reachability {
+    
+    var onReachabilityChanged: AnyPublisher<Reachability, Never> {
+        NotificationCenter.default
+            .publisher(for: .reachabilityChanged, object: self)
+            .compactMap {
+                $0.object as? Reachability
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    
+    var status: AnyPublisher<Connection, Never> {
+        onReachabilityChanged
+            .map(\.connection)
+            .eraseToAnyPublisher()
+    }
+    
+    var isReachable: AnyPublisher<Bool, Never> {
+        onReachabilityChanged
+            .map { $0.connection != .unavailable }
+            .eraseToAnyPublisher()
+    }
+    
+    var isConnected: AnyPublisher<Void, Never> {
+        isReachable
+            .filter { $0 }
+            .map { _ in }
+            .eraseToAnyPublisher()
+    }
+    
+    var isDisconnected: AnyPublisher<Void, Never> {
+        isReachable
+            .filter { !$0 }
+            .map { _ in }
+            .eraseToAnyPublisher()
+    }
+    
 }

@@ -25,7 +25,7 @@ struct UnreadListView: View {
     @State private var selectedItem: RSSItem?
     @State private var footer = "Load More Articles"
     @State private var disabled = true
-    
+        
     init(unreads: Unread) {
         self.unreads = unreads
     }
@@ -49,7 +49,7 @@ struct UnreadListView: View {
                        .buttonStyle(PlainButtonStyle())
                        
                        HStack {
-                           RSSItemRow(wrapper: unread, menu: self.contextmenuAction(_:), rssFeedViewModel: RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem))
+                        RSSItemRow(wrapper: unread, menu: self.contextmenuAction(_:), rssFeedViewModel: RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem))
                                .contentShape(Rectangle())
                                .onTapGesture {
                                    self.selectedItem = unread

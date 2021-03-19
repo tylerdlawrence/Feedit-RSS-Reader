@@ -21,19 +21,26 @@ import Intents
 struct RSSItemRow: View {
     @Environment(\.managedObjectContext) private var context
     @EnvironmentObject var rssDataSource: RSSDataSource
-//    @StateObject var rss: RSS
     let persistence = Persistence.current
     @ObservedObject var rssFeedViewModel: RSSFeedViewModel
     @ObservedObject var itemWrapper: RSSItem
     
+//    @ObservedObject var rssItem: RSSItem
+    
     @State private var selectedItem: RSSItem?
     var contextMenuAction: ((RSSItem) -> Void)?
-        
+    
+    var rssSource: RSS {
+        return self.rssFeedViewModel.rss
+    }
+            
     init(wrapper: RSSItem, menu action: ((RSSItem) -> Void)? = nil, rssFeedViewModel: RSSFeedViewModel) {
         itemWrapper = wrapper
         contextMenuAction = action
         self.rssFeedViewModel = rssFeedViewModel
     }
+    
+    let thumbnail = RSSFeedImage()
     
     var body: some View {
         let toggleStarred = SwipeCellButton(
@@ -92,6 +99,8 @@ struct RSSItemRow: View {
         
         let star = SwipeCellSlot(slots: [toggleStarred], slotStyle: .destructive, buttonWidth: 60)
         let read = SwipeCellSlot(slots: [toggleRead], slotStyle: .destructive, buttonWidth: 60)
+        
+        
 
         ZStack {
             VStack(alignment: .leading) {
@@ -115,23 +124,20 @@ struct RSSItemRow: View {
                             .padding([.top, .leading])
                     }
                 }
-                VStack{
-//                    KFImage(URL(string: self.rss.image))
+                VStack {
+                    
+                    
+//                    AsyncImage(
+//                        url: URL(string: rssFeedViewModel.rss.image.description)!,
+//                        placeholder: {
+//                            ProgressView()
+//                        },
+//                        image: {
+//                            Image(uiImage: $0)
 //
-//                    KFImage(URL(string: itemWrapper.image))
-//                        .placeholder({
-//                            Image("getInfo")
-//                                .renderingMode(.original)
-//                                .resizable()
-//                                .aspectRatio(contentMode: .fit)
-//                                .frame(width: 20, height: 20,alignment: .center)
-//                                .cornerRadius(1)
-//                        })
-//                        .renderingMode(.original)
-//                        .resizable()
-//                        .aspectRatio(contentMode: .fit)
-//                        .frame(width: 20, height: 20,alignment: .center)
-//                        .cornerRadius(1)
+//                        }
+//                     )
+//                    .frame(width: 40, height: 40, alignment: .center)
                     
                 }.padding(.top)
                     HStack{
@@ -171,6 +177,10 @@ struct RSSItemRow: View {
                                 .opacity(0.8)
                                 .foregroundColor(Color.gray)
                                 .lineLimit(1)
+                            
+                            Text(rssSource.title).font(.system(size: 11, weight: .medium, design: .rounded))
+                                .textCase(.uppercase)
+                                .foregroundColor(.gray)
                             
                             Text(itemWrapper.author).font(.system(size: 11, weight: .medium, design: .rounded))
                                 .textCase(.uppercase)
@@ -247,7 +257,6 @@ extension Int {
 #if DEBUG
 struct RSSFeedRow_Previews: PreviewProvider {
     static var rss = RSS()
-
     static var rssFeedViewModel = RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem)
 
     static var previews: some View {

@@ -45,6 +45,7 @@ extension RSS {
     public var rssURL: URL? {
         return URL(string: url)
     }
+
     
     public var createTimeStr: String {
         return "\(self.createTime?.string() ?? "")"

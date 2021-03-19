@@ -27,7 +27,7 @@ struct ArchiveListView: View {
     var rssSource: RSS {
         return self.rssFeedViewModel.rss
     }
-    
+        
     init(viewModel: ArchiveListViewModel, rssFeedViewModel: RSSFeedViewModel) {
         self.archiveListViewModel = viewModel
         self.rssFeedViewModel = rssFeedViewModel
