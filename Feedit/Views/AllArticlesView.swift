@@ -43,24 +43,26 @@ struct AllArticlesView: View {
         return List(filteredArticles) { item in
                NavigationLink(
                    destination: RSSFeedDetailView(rssItem: item, rssFeedViewModel: self.rssFeedViewModel),
-                   label: { RSSItemRow(wrapper: item, menu: self.contextmenuAction(_:), rssFeedViewModel: rssFeedViewModel) }
+                   label: { RSSItemRow(rssItem: item, menu: self.contextmenuAction(_:), rssFeedViewModel: rssFeedViewModel) }
                )
            }
        }
-        
+    
+    @State private var selection = Set<String>()
     private var spinner: some View {
         Spinner(isAnimating: true, style: .medium)
     }
+    
     var filteredArticles: [RSSItem] {
-        return rssFeedViewModel.items.filter({ (item) -> Bool in
-            return !((self.rssFeedViewModel.isOn && !item.isArchive) || (self.rssFeedViewModel.unreadIsOn && item.isRead))
+        return articles.items.filter({ (item) -> Bool in
+            return !((self.articles.isOn && !item.isArchive) || (self.articles.unreadIsOn && item.isRead))
         })
     }
     
     var body: some View {
         ZStack {
             List {
-                ForEach(articles.items, id: \.self) { article in
+                ForEach(articles.items, id: \.id) { article in
 //                    list(of: filteredArticles).eraseToAnyView()
                     ZStack {
                         NavigationLink(destination: WebView(rssItem: article, onCloseClosure: {})) {
@@ -71,7 +73,7 @@ struct AllArticlesView: View {
                        .buttonStyle(PlainButtonStyle())
                        
                        HStack {
-                        RSSItemRow(wrapper: article, menu: self.contextmenuAction(_:), rssFeedViewModel: RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem))
+                            RSSItemRow(rssItem: article, menu: self.contextmenuAction(_:), rssFeedViewModel: RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem))
                                .contentShape(Rectangle())
                                .onTapGesture {
                                    self.selectedItem = article
@@ -86,9 +88,10 @@ struct AllArticlesView: View {
             .listRowBackground(Color("accent"))
             .navigationBarTitle("", displayMode: .inline)
             .navigationBarItems(trailing: refreshButton)
-            
+                        
             .toolbar{
                 ToolbarItem(placement: .principal) {
+//                    NavBarHeader()
                     HStack{
                         Image(systemName: "tray.fill")
                             .resizable()
@@ -137,7 +140,7 @@ struct AllArticlesView: View {
 }
 
 extension AllArticlesView {
-    
+
 }
 
 struct AllArticlesView_Previews: PreviewProvider {

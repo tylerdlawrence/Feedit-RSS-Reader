@@ -15,6 +15,7 @@ import KingfisherSwiftUI
 import SDWebImageSwiftUI
 
 struct RSSFeedListView: View {
+    
     enum FilterType {
         case all, starred, unread
     }
@@ -31,18 +32,18 @@ struct RSSFeedListView: View {
             return "Unread"
         }
     }
-    var filteredArticleList: [RSSItem] {
-        switch filter {
-        case .all:
-            return rssFeedViewModel.items
-        case .starred:
-            return rssFeedViewModel.items.filter { item in
-                (!self.rssFeedViewModel.isOn && !item.isArchive)}
-        case .unread:
-            return rssFeedViewModel.items.filter { item in
-                (!self.rssFeedViewModel.unreadIsOn && item.isRead)}
-        }
-    }
+//    var filteredArticleList: [RSSItem] {
+//        switch filter {
+//        case .all:
+//            return rssFeedViewModel.items
+//        case .starred:
+//            return rssFeedViewModel.items.filter { item in
+//                (!self.rssFeedViewModel.isOn && !item.isArchive)}
+//        case .unread:
+//            return rssFeedViewModel.items.filter { item in
+//                (!self.rssFeedViewModel.unreadIsOn && item.isRead)}
+//        }
+//    }
     
     var filteredArticles: [RSSItem] {
         return rssFeedViewModel.items.filter({ (item) -> Bool in
@@ -54,7 +55,7 @@ struct RSSFeedListView: View {
         return self.rssFeedViewModel.rss
     }
     
-    @ObservedObject var itemWrapper: RSSItem
+    @ObservedObject var rssItem: RSSItem
     @EnvironmentObject var rssDataSource: RSSDataSource
     @ObservedObject var rssFeedViewModel: RSSFeedViewModel
     @ObservedObject var searchBar: SearchBar = SearchBar()
@@ -64,9 +65,9 @@ struct RSSFeedListView: View {
     @State private var footer: String = "Refresh"
     @State var cancellables = Set<AnyCancellable>()
     
-    init(viewModel: RSSFeedViewModel, wrapper: RSSItem, filter: FilterType) {
+    init(viewModel: RSSFeedViewModel, rssItem: RSSItem, filter: FilterType) {
         self.rssFeedViewModel = viewModel
-        itemWrapper = wrapper
+        self.rssItem = rssItem
         self.filter = filter
     }
     
@@ -117,7 +118,7 @@ struct RSSFeedListView: View {
 //                                }
 //                             )
 //                            .frame(width: 40, height: 40, alignment: .center)
-                            RSSItemRow(wrapper: item, menu: self.contextmenuAction(_:), rssFeedViewModel: rssFeedViewModel)
+                            RSSItemRow(rssItem: item, menu: self.contextmenuAction(_:), rssFeedViewModel: rssFeedViewModel)
                                 .contentShape(Rectangle())
                                 .onTapGesture {
                                     self.selectedItem = item

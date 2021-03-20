@@ -11,7 +11,7 @@ import Combine
 import Foundation
 
 struct RSSGroupDetailsView: View {
-    @EnvironmentObject var rssDataSource: RSSDataSource
+//    @EnvironmentObject var rssDataSource: RSSDataSource
     @ObservedObject var viewModel: RSSListViewModel
     @EnvironmentObject private var persistence: Persistence
     let rssGroup: RSSGroup
@@ -33,6 +33,7 @@ struct RSSGroupDetailsView: View {
 //      }
         List {
             ForEach(viewModel.items, id: \.self) { rss in
+                
 //                ZStack {
 //                NavigationLink(destination: self.destinationView(rss: rss)) {
 //                        EmptyView()
@@ -48,11 +49,10 @@ struct RSSGroupDetailsView: View {
             }
         }
         .navigationBarTitle(Text(rssGroup.name ?? "Folders"))
-//        .preferredColorScheme(darkMode ? .dark : .light)
     }
     private func destinationView(rss: RSS) -> some View {
         let item = RSSItem()
-        return RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), wrapper: item, filter: .all).environmentObject(DataSourceService.current.rss)
+        return RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), rssItem: item, filter: .all).environmentObject(DataSourceService.current.rss)
     }
 }
 

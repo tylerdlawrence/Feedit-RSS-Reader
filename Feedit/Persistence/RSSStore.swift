@@ -13,7 +13,8 @@ import CoreData
 import Foundation
 import FaviconFinder
 
-class RSSStore: NSObject {
+class RSSStore: NSObject, ObservableObject {
+    @Published var feeds: [RSSItem] = []
     @Published var shouldSelectFeedURL: String?
     @Published var shouldOpenSettings: Bool = false
     @Published var notificationsEnabled: Bool = false
@@ -23,7 +24,6 @@ class RSSStore: NSObject {
     @Published var totalReadPostsToday: Int = 0
 
     static let instance = RSSStore()
-//    private let persistenceManager = PersistenceManager()
     private let persistence = Persistence.current
     
     private lazy var fetchedResultsController: NSFetchedResultsController<RSS> = {
@@ -38,6 +38,50 @@ class RSSStore: NSObject {
         fetechedResultsController.delegate = self
         return fetechedResultsController
     }()
+    
+//    func markAllPostsRead(start: Int = 0, _ item: RSSItem) {
+//        self.markAllPostsRead(item)
+//        shouldReload = true
+//    }
+    
+    var isRead: Bool {
+        return readDate != nil
+    }
+    
+    var readDate: Date? {
+        didSet {
+            objectWillChange.send()
+        }
+    }
+    
+    func setPostRead(rss: RSS, item: RSSItem) {
+        rss.readDate = Date()
+        item.objectWillChange.send()
+        
+        if let index = self.rssSources.firstIndex(where: {$0.url == rss.url}) {
+            self.feeds.remove(at: index)
+            self.feeds.insert(item, at: index)
+            
+        }
+    }
+    
+//    func setPostRead(rss: RSS, item: RSSItem) {
+//        rss.readDate = Date()
+//        rss.objectWillChange.send()
+//        totalUnreadPosts -= 1
+//        totalReadPostsToday += 1
+//        if let index = feed.posts.firstIndex(where: {$0.url.absoluteString == post.url.absoluteString}) {
+//            feed.posts.remove(at: index)
+//            feed.posts.insert(post, at: index)
+//        }
+//
+//        if let index = self.feeds.firstIndex(where: {$0.url.absoluteString == feed.url.absoluteString}) {
+//            self.feeds.remove(at: index)
+//            self.feeds.insert(feed, at: index)
+//        }
+//
+//        self.updateFeeds()
+//    }
     
     var context: NSManagedObjectContext {
         return persistence.context
@@ -123,10 +167,6 @@ class RSSStore: NSObject {
             print(error)
         }
     }
-}
-
-extension RSSStore: ObservableObject {
-
 }
 
 extension RSSStore: NSFetchedResultsControllerDelegate {

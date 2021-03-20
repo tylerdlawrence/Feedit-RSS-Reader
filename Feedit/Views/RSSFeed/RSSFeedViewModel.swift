@@ -27,6 +27,7 @@ class RSSFeedViewModel: NSObject, ObservableObject {
     @Published var shouldReload = false
     
     let dataSource: RSSItemDataSource
+    
     let rss: RSS
     var start = 0
     
@@ -40,7 +41,7 @@ class RSSFeedViewModel: NSObject, ObservableObject {
         self.markAllPostsRead(item)
         shouldReload = true
     }
-
+    
     func archiveOrCancel(_ item: RSSItem) {
         let updatedItem = dataSource.readObject(item)
         updatedItem.isArchive = !item.isArchive
@@ -119,6 +120,7 @@ class RSSFeedViewModel: NSObject, ObservableObject {
                             items.append(item.asRSSItem(container: uuid, in: self.dataSource.createContext))
                         }
                     }
+//                    self.rss.title = self.rss.title
                     self.rss.lastFetchTime = Date()
                     self.dataSource.saveCreateContext()
 

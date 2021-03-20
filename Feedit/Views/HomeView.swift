@@ -232,24 +232,14 @@ struct HomeView: View {
 //        Section(header: Text("Feeds").font(.system(size: 18, weight: .medium, design: .rounded)).foregroundColor(Color("text")).textCase(nil)) {
             ForEach(viewModel.items, id: \.self) { rss in
                 ZStack {
-                    NavigationLink(destination: NavigationLazyView(self.destinationView(rss: rss))) {
+                    NavigationLink(destination: self.destinationView(rss: rss)) {
                         EmptyView()
                     }
                     .opacity(0.0)
                     .buttonStyle(PlainButtonStyle())
-                    HStack {
-                        RSSRow(rss: rss, viewModel: self.viewModel)
-                        Spacer()
-                        Text("\(viewModel.items.count)")
-                            .font(.caption)
-                            .fontWeight(.bold)
-                            .padding(.horizontal, 7)
-                            .padding(.vertical, 1)
-                            .background(Color.gray.opacity(0.5))
-                            .opacity(0.4)
-                            .foregroundColor(Color("text"))
-                            .cornerRadius(8)
-                    }
+                    
+                    FeedRow(rss: rss, viewModel: viewModel)
+                    
                 }
             }
             .onDelete { indexSet in
@@ -293,6 +283,7 @@ struct HomeView: View {
             VStack {
                 ZStack {
                     List {
+                        
                         feedsView
 //                        Spacer()
                         RSSFoldersDisclosureGroup(persistence: Persistence.current, viewModel: self.viewModel)
@@ -319,11 +310,9 @@ struct HomeView: View {
 //                    .listStyle(SidebarListStyle())
 //                    .listStyle(PlainListStyle())
 //                    .listStyle(InsetGroupedListStyle())
-//                    .introspectTableView { tableView = $0 }
                     .navigationBarTitle("Home", displayMode: .automatic)
                     .add(self.searchBar)
                     .environment(\.editMode, self.editMode)
-//                    .preferredColorScheme(darkMode ? .dark : .light)
                 }
                 .onAppear {
                     startNetworkCall()
@@ -364,16 +353,13 @@ struct HomeView: View {
         }
         .onAppear {
             self.viewModel.fecthResults()
+            self.viewModel.fecthResults(start: 0)
         }
         .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
 extension HomeView {
-    
-//    func delete(_ rss: RSS) {
-//        self.viewModel.items.removeAll(where: {$0 == rss})
-//        }
     
     func onDoneAction() {
         self.viewModel.fecthResults()
@@ -386,8 +372,9 @@ extension HomeView {
     }
     private func destinationView(rss: RSS) -> some View {
         let item = RSSItem()
-        return RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), wrapper: item, filter: .all)
-            .environmentObject(DataSourceService.current.rss)
+        return RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), rssItem: item, filter: .all)
+            .environmentObject(DataSourceService.current.rssItem)
+            .environment(\.managedObjectContext, Persistence.current.context)
     }
 }
 
@@ -413,20 +400,30 @@ struct HomeView_Previews: PreviewProvider {
 }
 #endif
 
-extension Collection {
-    func count(where item: (Element) throws -> Bool) rethrows -> Int {
-        return try self.filter(item).count
+
+struct FeedRow: View {
+    
+    let rss:RSS
+    let viewModel:RSSListViewModel
+    
+    var body: some View {
+        HStack {
+            RSSRow(rss: rss, viewModel: self.viewModel)
+            Spacer()
+            Text("\(viewModel.items.count)")
+                .font(.caption).fontWeight(.bold).padding(.horizontal, 7).padding(.vertical, 1).background(Color.gray.opacity(0.5)).opacity(0.4).foregroundColor(Color("text")).cornerRadius(8)
+        }
     }
 }
 
-struct NavigationLazyView<Content: View>: View {
-    let build: () -> Content
-
-    init(_ build: @autoclosure @escaping () -> Content) {
-        self.build = build
+#if DEBUG
+struct FeedRow_Previews: PreviewProvider {
+    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+    
+    static var previews: some View {
+        FeedRow(rss: RSS.simple(), viewModel: viewModel)
+            .environment(\.managedObjectContext, Persistence.current.context)
+            .preferredColorScheme(.dark)
     }
-
-    var body: Content {
-        build()
-    }
- }
+}
+#endif

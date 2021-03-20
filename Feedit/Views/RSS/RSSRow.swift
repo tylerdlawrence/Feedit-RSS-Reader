@@ -73,7 +73,7 @@ struct RSSRow: View {
             
     init(rss: RSS, viewModel: RSSListViewModel) {
         self.rss = rss
-        self.imageLoader = ImageLoader(url: rss.rssURL!)
+        self.imageLoader = ImageLoader(path: rss.url)
         self.viewModel = viewModel
 //        self.selection = selection
     }

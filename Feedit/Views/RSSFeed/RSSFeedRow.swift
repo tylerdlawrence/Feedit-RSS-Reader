@@ -23,9 +23,8 @@ struct RSSItemRow: View {
     @EnvironmentObject var rssDataSource: RSSDataSource
     let persistence = Persistence.current
     @ObservedObject var rssFeedViewModel: RSSFeedViewModel
-    @ObservedObject var itemWrapper: RSSItem
     
-//    @ObservedObject var rssItem: RSSItem
+    @ObservedObject var rssItem: RSSItem
     
     @State private var selectedItem: RSSItem?
     var contextMenuAction: ((RSSItem) -> Void)?
@@ -34,14 +33,12 @@ struct RSSItemRow: View {
         return self.rssFeedViewModel.rss
     }
             
-    init(wrapper: RSSItem, menu action: ((RSSItem) -> Void)? = nil, rssFeedViewModel: RSSFeedViewModel) {
-        itemWrapper = wrapper
+    init(rssItem: RSSItem, menu action: ((RSSItem) -> Void)? = nil, rssFeedViewModel: RSSFeedViewModel) {
+        self.rssItem = rssItem
         contextMenuAction = action
         self.rssFeedViewModel = rssFeedViewModel
     }
-    
-    let thumbnail = RSSFeedImage()
-    
+        
     var body: some View {
         let toggleStarred = SwipeCellButton(
             buttonStyle: .view,
@@ -50,7 +47,7 @@ struct RSSItemRow: View {
             view: {
                 AnyView(
                     Group {
-                        if itemWrapper.isArchive {
+                        if rssItem.isArchive {
                             Image(systemName: "star")
                                 .foregroundColor(Color("bg"))
                                 .imageScale(.small)
@@ -65,7 +62,7 @@ struct RSSItemRow: View {
             },
             backgroundColor: Color("accent"),
             action: {
-                self.contextMenuAction?(self.itemWrapper)
+                self.contextMenuAction?(self.rssItem)
             },
             feedback: false
         )
@@ -76,7 +73,7 @@ struct RSSItemRow: View {
             view: {
                 AnyView(
                     Group {
-                        if itemWrapper.isRead {
+                        if rssItem.isRead {
                             Image(systemName: "largecircle.fill.circle")
                                 .foregroundColor(Color("bg"))
                                 .imageScale(.small)
@@ -91,8 +88,8 @@ struct RSSItemRow: View {
             },
             backgroundColor: Color("accent"),
             action: {
-                itemWrapper.progress = 1
-                itemWrapper.isRead.toggle()
+                rssItem.progress = 1
+                rssItem.isRead.toggle()
             },
             feedback: false
         )
@@ -106,7 +103,7 @@ struct RSSItemRow: View {
             VStack(alignment: .leading) {
                HStack(alignment: .top) {
                 VStack {
-                    if itemWrapper.isArchive {
+                    if rssItem.isArchive {
                         Image(systemName: "star.fill").font(.system(size: 11, weight: .black, design: .rounded))
                             .foregroundColor(Color.yellow)
                             .multilineTextAlignment(.center)
@@ -119,7 +116,7 @@ struct RSSItemRow: View {
                             .foregroundColor(Color.yellow)
                             .multilineTextAlignment(.center)
                             .aspectRatio(contentMode: .fit)
-                            .opacity(itemWrapper.isArchive ? 1 : 0)
+                            .opacity(rssItem.isArchive ? 1 : 0)
                             .frame(width: 8, height: 8)
                             .padding([.top, .leading])
                     }
@@ -143,7 +140,7 @@ struct RSSItemRow: View {
                     HStack{
                         VStack(alignment: .leading){
                             HStack {
-                                Text("\(itemWrapper.createTime?.string() ?? "")")
+                                Text("\(rssItem.createTime?.string() ?? "")")
                                     .textCase(.uppercase)
                                     .font(.system(size: 11, weight: .medium, design: .rounded))
                                     .foregroundColor(.gray)
@@ -152,37 +149,37 @@ struct RSSItemRow: View {
                                 Spacer()
                             }
                             
-                            if itemWrapper.progress >= 1.0 {
-                                Text(itemWrapper.title)
+                            if rssItem.progress >= 1.0 {
+                                Text(rssItem.title)
                                     .font(.system(size: 17, weight: .medium, design: .rounded))
                                     .foregroundColor(Color("text"))
                                     .opacity(0.6)
                                     .lineLimit(3)
-                            } else if itemWrapper.progress > 0 {
-                                Text(itemWrapper.title)
+                            } else if rssItem.progress > 0 {
+                                Text(rssItem.title)
                                     .font(.system(size: 17, weight: .medium, design: .rounded))
                                     .foregroundColor(Color("text"))
                                     .opacity(0.6)
                                     .lineLimit(3)
                             } else {
-                                Text(itemWrapper.title)
+                                Text(rssItem.title)
                                     .font(.system(size: 17, weight: .medium, design: .rounded))
                                     .foregroundColor(Color("text"))
-                                    .opacity(itemWrapper.isRead ? 0.6 : 1)
+                                    .opacity(rssItem.isRead ? 0.6 : 1)
                                     .lineLimit(3)
                             }
                                 
-                            Text(itemWrapper.desc.trimHTMLTag.trimWhiteAndSpace)
+                            Text(rssItem.desc.trimHTMLTag.trimWhiteAndSpace)
                                 .font(.system(size: 15, weight: .medium, design: .rounded))
                                 .opacity(0.8)
                                 .foregroundColor(Color.gray)
                                 .lineLimit(1)
                             
-                            Text(rssSource.title).font(.system(size: 11, weight: .medium, design: .rounded))
-                                .textCase(.uppercase)
-                                .foregroundColor(.gray)
+//                            Text(self.rssSource.title).font(.system(size: 11, weight: .medium, design: .rounded))
+//                                .textCase(.uppercase)
+//                                .foregroundColor(.gray)
                             
-                            Text(itemWrapper.author).font(.system(size: 11, weight: .medium, design: .rounded))
+                            Text(rssItem.author).font(.system(size: 11, weight: .medium, design: .rounded))
                                 .textCase(.uppercase)
                                 .foregroundColor(.gray)
                         }
@@ -194,11 +191,11 @@ struct RSSItemRow: View {
             .swipeCell(cellPosition: .both, leftSlot: read, rightSlot: star)
             .contextMenu {
                 Section{
-//                    NavigationLink(destination: RSSFeedDetailView(rssItem: itemWrapper, rssFeedViewModel: self.rssFeedViewModel)) {
+//                    NavigationLink(destination: RSSFeedDetailView(rssItem: rssItem, rssFeedViewModel: self.rssFeedViewModel)) {
 //                        Text("Open Article")
 //                        Image(systemName: "doc.richtext")
 //                    }
-                    Link(destination: URL(string: itemWrapper.url)!, label: {
+                    Link(destination: URL(string: rssItem.url)!, label: {
                         HStack {
                             Text("Open Article")
                             Image(systemName: "doc.richtext")
@@ -208,22 +205,22 @@ struct RSSItemRow: View {
                     Divider()
                     
                     ActionContextMenu(
-                        label: itemWrapper.progress > 0 ? "Mark As Unread" : "Mark As Read",
-                        systemName: "circle\(itemWrapper.progress > 0 ? ".fill" : "")",
+                        label: rssItem.progress > 0 ? "Mark As Unread" : "Mark As Read",
+                        systemName: "circle\(rssItem.progress > 0 ? ".fill" : "")",
                         onAction: {
-                            itemWrapper.progress = 1
+                            rssItem.progress = 1
                     })
                     ActionContextMenu(
-                        label: itemWrapper.isArchive ? "Unstar" : "Star",
-                        systemName: "star\(itemWrapper.isArchive ? ".fill" : "")",
+                        label: rssItem.isArchive ? "Unstar" : "Star",
+                        systemName: "star\(rssItem.isArchive ? ".fill" : "")",
                         onAction: {
-                            self.contextMenuAction?(self.itemWrapper)
+                            self.contextMenuAction?(self.rssItem)
                     })
 
                     Divider()
 
                     Button(action: {
-                        UIPasteboard.general.setValue(itemWrapper.url,
+                        UIPasteboard.general.setValue(rssItem.url,
                                                       forPasteboardType: kUTTypePlainText as String)
                     }) {
                         Text("Copy Article Link")
@@ -241,7 +238,7 @@ struct RSSItemRow: View {
     }
     
     func actionSheet() {
-        guard let urlShare = URL(string: itemWrapper.url) else { return }
+        guard let urlShare = URL(string: rssItem.url) else { return }
            let activityVC = UIActivityViewController(activityItems: [urlShare], applicationActivities: nil)
            UIApplication.shared.windows.first?.rootViewController?.present(activityVC, animated: true, completion: nil)
        }
@@ -261,7 +258,7 @@ struct RSSFeedRow_Previews: PreviewProvider {
 
     static var previews: some View {
         let simple = DataSourceService.current.rssItem.simple()
-        return RSSItemRow(wrapper: simple!, rssFeedViewModel: rssFeedViewModel).environmentObject(DataSourceService.current.rssItem)
+        return RSSItemRow(rssItem: simple!, rssFeedViewModel: rssFeedViewModel).environmentObject(DataSourceService.current.rssItem)
             
             .previewLayout(.fixed(width: 375, height: 75))
             .preferredColorScheme(.dark)

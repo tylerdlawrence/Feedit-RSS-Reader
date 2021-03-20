@@ -49,7 +49,7 @@ struct UnreadListView: View {
                        .buttonStyle(PlainButtonStyle())
                        
                        HStack {
-                        RSSItemRow(wrapper: unread, menu: self.contextmenuAction(_:), rssFeedViewModel: RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem))
+                        RSSItemRow(rssItem: unread, menu: self.contextmenuAction(_:), rssFeedViewModel: RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem))
                                .contentShape(Rectangle())
                                .onTapGesture {
                                    self.selectedItem = unread

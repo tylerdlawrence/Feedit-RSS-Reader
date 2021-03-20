@@ -22,7 +22,6 @@ struct RSSGroupListView: View {
       animation: .default)
     private var groups: FetchedResults<RSSGroup>
     
-//    @AppStorage("darkMode") var darkMode = false
     @EnvironmentObject var rssDataSource: RSSDataSource
     @ObservedObject var viewModel: RSSListViewModel
     @State var addGroupIsPresented = false
@@ -66,7 +65,6 @@ struct RSSGroupListView: View {
               Image(systemName: "plus")
             }
           )
-//          .preferredColorScheme(darkMode ? .dark : .light)
         }
     }
         private func deleteObjects(offsets: IndexSet) {

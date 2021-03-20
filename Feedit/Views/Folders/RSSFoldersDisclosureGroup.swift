@@ -24,7 +24,14 @@ struct RSSFoldersDisclosureGroup: View {
     @AppStorage("darkMode") var darkMode = false
     @EnvironmentObject var rssDataSource: RSSDataSource
     @ObservedObject var viewModel: RSSListViewModel
-    let rss: [RSS] = []
+    let rss = RSS()
+    
+//    @Binding var selection: Set<RSS>
+//    var isSelected: Bool {
+//      selection.contains(rss)
+//    }
+//    @State var selectedGroups: Set<RSSGroup>
+//    let onComplete: (Set<RSSGroup>) -> Void
     
     @State var revealFoldersDisclosureGroup = true
     @StateObject private var expansionHandler = ExpansionHandler<ExpandableSection>()
@@ -34,6 +41,7 @@ struct RSSFoldersDisclosureGroup: View {
             isExpanded: $revealFoldersDisclosureGroup, content: {
             ForEach(groups, id: \.id) { group in
                 DisclosureGroup {
+                    //MARK: if viewModel.items is tagged in folder...
                     ForEach(viewModel.items, id: \.self) { rss in
                         ZStack {
                             NavigationLink(destination: self.destinationView(rss: rss)) {
@@ -81,60 +89,38 @@ struct RSSFoldersDisclosureGroup: View {
                             }
                         }
                 }.accentColor(Color.gray.opacity(0.7))
-                
-//                ZStack {
-//                    NavigationLink(destination: RSSGroupDetailsView(viewModel: self.viewModel, rssGroup: group, groups: groups)) {
-//                        EmptyView()
-//                    }
-//                    .opacity(0.0)
-//                    .buttonStyle(PlainButtonStyle())
-//                    HStack {
-//                        Label("\(group.name ?? "Untitled")", systemImage: "folder").accentColor(Color("tab"))
-//                        Spacer()
-//                        Text("\(group.itemCount)")
-//                            .font(.caption)
-//                            .fontWeight(.bold)
-//                            .padding(.horizontal, 7)
-//                            .padding(.vertical, 1)
-//                            .background(Color.gray.opacity(0.5))
-//                            .opacity(0.4)
-//                            .foregroundColor(Color("text"))
-//                            .cornerRadius(8)
-//                        }
-//                    }
-//                    .listRowBackground(Color("accent"))
-            
-                }
-                .onDelete(perform: deleteObjects)
-            .listRowBackground(Color("accent"))
-                },
-                label: {
-                    HStack {
-                        Text("Folders")
-                            .font(.system(size: 20, weight: .semibold, design: .rounded)).listRowBackground(Color("accent"))
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .contentShape(Rectangle())
-                            .onTapGesture {
-                                withAnimation {
-                                    self.revealFoldersDisclosureGroup.toggle()
-                                }
-                            }
-                            .listRowBackground(Color("accent"))
-                    }
-                    
-                })
-            .listRowBackground(Color("darkerAccent"))
-            .accentColor(Color("tab"))
+
             }
-//    }
+            .onDelete(perform: deleteObjects)
+            .listRowBackground(Color("accent"))
+            },
+            label: {
+                HStack {
+                    Text("Folders")
+                        .font(.system(size: 20, weight: .semibold, design: .rounded)).listRowBackground(Color("accent"))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            withAnimation {
+                                self.revealFoldersDisclosureGroup.toggle()
+                            }
+                        }
+                        .listRowBackground(Color("accent"))
+                    }
+                })
+                .listRowBackground(Color("darkerAccent"))
+                .accentColor(Color("tab"))
+        }
+    
     private func deleteObjects(offsets: IndexSet) {
       withAnimation {
         persistence.deleteManagedObjects(offsets.map { groups[$0] })
       }
     }
+    
     private func destinationView(rss: RSS) -> some View {
         let item = RSSItem()
-        return RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), wrapper: item, filter: .all)
+        return RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), rssItem: item, filter: .all)
             .environmentObject(DataSourceService.current.rss)
     }
 }

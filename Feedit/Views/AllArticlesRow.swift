@@ -46,7 +46,7 @@ struct AllArticlesRow: View {
         return List(filteredArticles) { item in
                NavigationLink(
                    destination: RSSFeedDetailView(rssItem: item, rssFeedViewModel: self.rssFeedViewModel),
-                   label: { RSSItemRow(wrapper: item, menu: self.contextmenuAction(_:), rssFeedViewModel: rssFeedViewModel) }
+                   label: { RSSItemRow(rssItem: item, menu: self.contextmenuAction(_:), rssFeedViewModel: rssFeedViewModel) }
                )
            }
        }
