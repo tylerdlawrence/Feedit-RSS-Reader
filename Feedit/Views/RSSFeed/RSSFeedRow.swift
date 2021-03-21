@@ -257,8 +257,7 @@ struct RSSFeedRow_Previews: PreviewProvider {
     static var rssFeedViewModel = RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem)
 
     static var previews: some View {
-        let simple = DataSourceService.current.rssItem.simple()
-        return RSSItemRow(rssItem: simple!, rssFeedViewModel: rssFeedViewModel).environmentObject(DataSourceService.current.rssItem)
+        return RSSItemRow(rssItem: RSSItem(), rssFeedViewModel: rssFeedViewModel).environmentObject(DataSourceService.current.rssItem)
             
             .previewLayout(.fixed(width: 375, height: 75))
             .preferredColorScheme(.dark)

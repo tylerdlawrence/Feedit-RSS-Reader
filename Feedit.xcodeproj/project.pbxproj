@@ -18,6 +18,11 @@
 		6117365B24E83CC500A2DEA5 /* BatchImportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6117365A24E83CC500A2DEA5 /* BatchImportViewModel.swift */; };
 		612FB85A2540F04200D9822B /* RSSListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612FB83D2540F04000D9822B /* RSSListView.swift */; };
 		6134288426050DFC00B9C20C /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6134288326050DFB00B9C20C /* Header.swift */; };
+		613428862606572800B9C20C /* MailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613428852606572800B9C20C /* MailView.swift */; };
+		6134288A2606D21000B9C20C /* feedit@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 613428882606D20D00B9C20C /* feedit@3x.png */; };
+		6134288B2606D21000B9C20C /* feedit@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 613428892606D20E00B9C20C /* feedit@2x.png */; };
+		6134288E2606D25F00B9C20C /* bot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6134288C2606D25F00B9C20C /* bot@2x.png */; };
+		6134288F2606D25F00B9C20C /* bot@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6134288D2606D25F00B9C20C /* bot@3x.png */; };
 		615E971F25323C1900891083 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615E971E25323C1900891083 /* Reachability.swift */; };
 		615E98402533AFAE00891083 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615E983F2533AFAE00891083 /* ContentView.swift */; };
 		616121E42553670B0074F061 /* FeedKit in Frameworks */ = {isa = PBXBuildFile; productRef = 616121E32553670B0074F061 /* FeedKit */; };
@@ -190,6 +195,11 @@
 		6117365A24E83CC500A2DEA5 /* BatchImportViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchImportViewModel.swift; sourceTree = "<group>"; };
 		612FB83D2540F04000D9822B /* RSSListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RSSListView.swift; path = Feedit/Views/RSSListView.swift; sourceTree = SOURCE_ROOT; };
 		6134288326050DFB00B9C20C /* Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
+		613428852606572800B9C20C /* MailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MailView.swift; sourceTree = "<group>"; };
+		613428882606D20D00B9C20C /* feedit@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "feedit@3x.png"; path = "Feedit/Assets.xcassets/AppIcon.appiconset/feedit@3x.png"; sourceTree = SOURCE_ROOT; };
+		613428892606D20E00B9C20C /* feedit@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "feedit@2x.png"; path = "Feedit/Assets.xcassets/AppIcon.appiconset/feedit@2x.png"; sourceTree = SOURCE_ROOT; };
+		6134288C2606D25F00B9C20C /* bot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bot@2x.png"; path = "Feedit/Assets.xcassets/bot.appiconset/bot@2x.png"; sourceTree = SOURCE_ROOT; };
+		6134288D2606D25F00B9C20C /* bot@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bot@3x.png"; path = "Feedit/Assets.xcassets/bot.appiconset/bot@3x.png"; sourceTree = SOURCE_ROOT; };
 		615E971E25323C1900891083 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		615E983F2533AFAE00891083 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContentView.swift; path = Feedit/Views/ContentView.swift; sourceTree = SOURCE_ROOT; };
 		6162F25725B68BA1008E7FA7 /* Searchbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Searchbar.swift; sourceTree = "<group>"; };
@@ -336,6 +346,17 @@
 			path = Folders;
 			sourceTree = "<group>";
 		};
+		613428872606D0DA00B9C20C /* icons */ = {
+			isa = PBXGroup;
+			children = (
+				613428892606D20E00B9C20C /* feedit@2x.png */,
+				613428882606D20D00B9C20C /* feedit@3x.png */,
+				6134288C2606D25F00B9C20C /* bot@2x.png */,
+				6134288D2606D25F00B9C20C /* bot@3x.png */,
+			);
+			path = icons;
+			sourceTree = "<group>";
+		};
 		616CAF6124F7146700690804 /* Dates */ = {
 			isa = PBXGroup;
 			children = (
@@ -418,6 +439,7 @@
 		61C8189424E1F3FB00593939 /* Feedit */ = {
 			isa = PBXGroup;
 			children = (
+				613428872606D0DA00B9C20C /* icons */,
 				61C8189524E1F3FB00593939 /* AppDelegate.swift */,
 				61C8189724E1F3FB00593939 /* SceneDelegate.swift */,
 				61C818A324E1F3FD00593939 /* LaunchScreen.storyboard */,
@@ -555,6 +577,7 @@
 		61C818F024E1FB4F00593939 /* Setting */ = {
 			isa = PBXGroup;
 			children = (
+				613428852606572800B9C20C /* MailView.swift */,
 				61967EF824E2063D00AA647C /* SettingView.swift */,
 				616CAF9124F974AF00690804 /* SettingViewModel.swift */,
 				6117364824E83C0600A2DEA5 /* DataUnitView.swift */,
@@ -729,7 +752,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				61C818A524E1F3FD00593939 /* LaunchScreen.storyboard in Resources */,
+				6134288A2606D21000B9C20C /* feedit@3x.png in Resources */,
 				61C8189F24E1F3FD00593939 /* Assets.xcassets in Resources */,
+				6134288B2606D21000B9C20C /* feedit@2x.png in Resources */,
+				6134288E2606D25F00B9C20C /* bot@2x.png in Resources */,
+				6134288F2606D25F00B9C20C /* bot@3x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -805,6 +832,7 @@
 				61B95ED425D1069600829741 /* RSS.xcdatamodeld in Sources */,
 				61B95ECD25D0BA4C00829741 /* Shake.swift in Sources */,
 				61B95D8C25CEFB5B00829741 /* RSSObservable.swift in Sources */,
+				613428862606572800B9C20C /* MailView.swift in Sources */,
 				61967F0024E2068400AA647C /* AddRSSView.swift in Sources */,
 				61CDCF5F24E8466C007654C5 /* WKWebViewWrapper.swift in Sources */,
 				618F902E250DCD4F00D5A03E /* RSSItem+CoreDataClass.swift in Sources */,

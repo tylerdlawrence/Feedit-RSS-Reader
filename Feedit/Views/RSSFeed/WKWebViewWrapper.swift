@@ -123,8 +123,7 @@ struct WKWebViewWrapper: UIViewRepresentable {
 
 struct WebViewWrapper_Previews: PreviewProvider {
     static var previews: some View {
-        let simple = DataSourceService.current.rssItem.simple()
-        return WKWebViewWrapper(viewModel: WKWebViewModel(rssItem: simple!))
+        return WKWebViewWrapper(viewModel: WKWebViewModel(rssItem: RSSItem()))
     }
 }
 

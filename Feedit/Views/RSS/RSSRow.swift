@@ -260,7 +260,7 @@ struct RSSRow_Previews: PreviewProvider {
     static let rss = DataSourceService.current
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     static var previews: some View {
-        return RSSRow(rss: DataSourceService.current.rss.simple()!, viewModel: self.viewModel)
+        return RSSRow(rss: RSS(), viewModel: self.viewModel)
             .previewLayout(.fixed(width: 400, height: 30))
             .preferredColorScheme(.dark)
     }

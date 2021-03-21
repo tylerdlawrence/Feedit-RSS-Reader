@@ -9,6 +9,8 @@ import Foundation
 import CoreData
 import Combine
 import os.log
+import SwiftUI
+import UIKit
 
 class Persistence: ObservableObject {
     static let shared = Persistence(version: 1)
@@ -106,6 +108,54 @@ extension Persistence {
     }
 }
 
+
+struct PersistenceController {
+    static let shared = PersistenceController()
+
+    static var random: PersistenceController = {
+        let result = PersistenceController()
+        let viewContext = result.container.viewContext
+        for _ in 0..<10 {
+            let newItem = Settings(context: viewContext)
+            newItem.timestamp = Date()
+        }
+        do {
+            try viewContext.save()
+        } catch {
+            // Replace this implementation with code to handle the error appropriately.
+            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            let nsError = error as NSError
+            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+        }
+        return result
+    }()
+
+    let container: NSPersistentCloudKitContainer
+
+    init(inMemory: Bool = false) {
+        container = NSPersistentCloudKitContainer(name: "feeditrssreader")
+        if inMemory {
+            container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
+        }
+        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+            if let error = error as NSError? {
+                // Replace this implementation with code to handle the error appropriately.
+                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+
+                /*
+                Typical reasons for an error here include:
+                * The parent directory does not exist, cannot be created, or disallows writing.
+                * The persistent store is not accessible, due to permissions or data protection when the device is locked.
+                * The device is out of space.
+                * The store could not be migrated to the current model version.
+                Check the error message to determine what the actual problem was.
+                */
+                fatalError("Unresolved error \(error), \(error.userInfo)")
+            }
+        })
+    }
+}
+
 //class Persistence: ObservableObject {
 //    private let persistence = Persistence.current
 //
@@ -130,30 +180,176 @@ extension Persistence {
 //    }
 //}
 
-extension Persistence {
-  static var preview: Persistence = {
-    let controller = Persistence(version: 1)
-    controller.context.perform {
-      for i in 0..<100 {
-        controller.makeRandomFolder(context: controller.context)
-      }
-      for i in 0..<5 {
-        controller.makeRandomFolder(context: controller.context)
-      }
+//extension Persistence {
+//  static var random: Persistence = {
+//    let controller = Persistence(version: 1)
+//    controller.context.perform {
+//      for i in 0..<1 {
+//        controller.makeRandomFolder(context: controller.context)      }
+//      for i in 0..<1 {
+//        controller.makeRandomFolder(context: controller.context)
+//      }
+//    }
+//    return controller
+//  }()
+//
+//    func makeRandomFolder(context: NSManagedObjectContext) -> RSSGroup {
+//        let group = RSSGroup()
+//        group.id = UUID()
+//        group.name = "Default Folder"
+//        group.items = [
+//            makeRandomFolder(context: context),
+//            makeRandomFolder(context: context),
+//            makeRandomFolder(context: context)
+//        ]
+//        return group
+//    }
+//}
+
+public class Settings: NSManagedObject, Identifiable {
+    @NSManaged public var layoutValue: Double
+    @NSManaged public var timestamp: Date
+    @NSManaged public var alternateIconName: String?
+    @NSManaged public var accentColorData: Data?
+    @NSManaged public var textSizeModifier: Double
+
+    convenience init(context: NSManagedObjectContext) {
+        guard let entity = NSEntityDescription.entity(forEntityName: "Settings", in: context) else {
+            fatalError("No entity named Settings")
+        }
+        self.init(entity: entity, insertInto: context)
+        self.layoutValue = Settings.Layout.Default.rawValue
+        self.timestamp = Date()
+        self.alternateIconName = nil
+        self.accentColorData = UIColor.init(red: 158.0/255.0, green: 38.0/255.0, blue: 27.0/255.0, alpha: 1.0).data
+        self.textSizeModifier = 0.0
     }
-    return controller
-  }()
+
+    enum Layout: Double, Equatable, Comparable {
+        static func < (lhs: Settings.Layout, rhs: Settings.Layout) -> Bool {
+            return lhs.rawValue < rhs.rawValue
+        }
+
+        case compact = 0.0
+        case comfortable = 1.0
+        case Default = 2.0
+    }
+
+    var layout: Layout {
+        return Layout(rawValue: self.layoutValue) ?? Layout.Default
+    }
+
+    var defaultAccentColor: UIColor {
+        return UIColor.init(red: 158.0/255.0, green: 38.0/255.0, blue: 27.0/255.0, alpha: 1.0)
+    }
+
+    var accentUIColor: UIColor {
+        get {
+            guard let data = self.accentColorData  else {
+                return defaultAccentColor
+            }
+            guard let color = try? NSKeyedUnarchiver.unarchivedObject(ofClass: UIColor.self, from: data) else {
+                return defaultAccentColor
+            }
+            return color
+        } set {
+            self.accentColorData = newValue.data
+            try? self.managedObjectContext?.save()
+        }
+
+    }
+
+    var accentColor: Color {
+        return Color(accentUIColor)
+    }
+}
+
+extension Settings {
+    // ❇️ The @FetchRequest property wrapper in the ContentView will call this function
+    static func fetchAllRequest() -> NSFetchRequest<Settings> {
+        let request: NSFetchRequest<Settings> = Settings.fetchRequest() as! NSFetchRequest<Settings>
+
+        // ❇️ The @FetchRequest property wrapper in the ContentView requires a sort descriptor
+        request.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
+
+        return request
+    }
+}
+
+//https://stackoverflow.com/a/63003757/193772
+extension UIColor {
+    func mix(with color: UIColor, amount: CGFloat) -> Self {
+        var red1: CGFloat = 0
+        var green1: CGFloat = 0
+        var blue1: CGFloat = 0
+        var alpha1: CGFloat = 0
+
+        var red2: CGFloat = 0
+        var green2: CGFloat = 0
+        var blue2: CGFloat = 0
+        var alpha2: CGFloat = 0
+
+        getRed(&red1, green: &green1, blue: &blue1, alpha: &alpha1)
+        color.getRed(&red2, green: &green2, blue: &blue2, alpha: &alpha2)
+
+        return Self(
+            red: red1 * CGFloat(1.0 - amount) + red2 * amount,
+            green: green1 * CGFloat(1.0 - amount) + green2 * amount,
+            blue: blue1 * CGFloat(1.0 - amount) + blue2 * amount,
+            alpha: alpha1
+        )
+    }
+
+    func lighter(by amount: CGFloat = 0.2) -> Self { mix(with: .white, amount: amount) }
+    func darker(by amount: CGFloat = 0.2) -> Self { mix(with: .black, amount: amount) }
+}
+
+extension UIColor {
+    var data: Data? {
+        return try? NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: false)
+    }
+}
+
+extension UIColor {
     
-    @discardableResult
-    func makeRandomFolder(context: NSManagedObjectContext) -> RSSGroup {
-        let group = RSSGroup(context: context)
-        group.id = UUID()
-        group.name = "Default Folder"
-        group.items = [
-            makeRandomFolder(context: context),
-            makeRandomFolder(context: context),
-            makeRandomFolder(context: context)
-        ]
-      return group
+    static var lobstersRed = UIColor.init(red: 158.0/255.0, green: 38.0/255.0, blue: 27.0/255.0, alpha: 1.0)
+    
+    var name: String? {
+        if #available(iOS 13.0, *) {
+            switch self {
+                case .systemIndigo:
+                    return "System Indigo"
+            default:
+                break
+            }
+        }
+        switch self {
+        case .lobstersRed:
+            return "Lobsters Red"
+        case .systemPurple:
+            return "System Purple"
+        case .systemOrange:
+            return "System Orange"
+        case .systemTeal:
+            return "System Teal"
+        case .systemPink:
+            return "System Pink"
+        case .systemBlue:
+            return "System Blue"
+        case .systemRed:
+            return "System Red"
+        case .systemGray:
+            return "System Gray"
+        case .systemGreen:
+            return "System Green"
+        case .systemYellow:
+            return "System Yellow"
+        case .white:
+            return "White"
+        case .black:
+            return "Black"
+        default:
+            return nil
+        }
     }
 }

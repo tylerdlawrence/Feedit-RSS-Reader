@@ -18,6 +18,7 @@ struct FeeditApp: App {
     
     @AppStorage("darkMode") var darkMode = false
 
+    let persistenceController = PersistenceController.shared
     let persistence = Persistence.current
     let rss = RSS()
     let rssItem = RSSItem()
@@ -25,32 +26,17 @@ struct FeeditApp: App {
     let articles = AllArticles(dataSource: DataSourceService.current.rssItem)
     
     @StateObject private var viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+    
+    @StateObject private var rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
 
   var body: some Scene {
     WindowGroup {
-        if networkReachability.isNetworkConnected {
+        HomeView(articles: articles, unread: unread, rssItem: rssItem, viewModel: viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
             
-            HomeView(articles: articles, unread: unread, rssItem: rssItem, viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
-                .environment(\.managedObjectContext, persistence.context)
-                .environmentObject(persistence)
-            
-        } else {
-            VStack {
-                Image(systemName: "wifi.slash")
-                    .font(.system(size: 50))
-                    .frame(width: 50, height: 50, alignment: .center)
-                    .padding(.bottom, 24)
-                Text("Network not available")
-                    .alert(isPresented: .constant(true)) {
-                        Alert(title: Text("Network not available"), message: Text("Turn on mobile data or use Wi-Fi to access data"), dismissButton: .default(Text("OK")))
-                    }.navigationBarTitle(Text("Home"))
-                }
-            .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(650)) {
-                    isLoaded = true
-                }
-            }
-        }
+//            .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            .environment(\.managedObjectContext, Persistence.current.context)
+            .environmentObject(rssFeedViewModel).environmentObject(viewModel).environmentObject(persistence)
+        
     }
     .onChange(of: scenePhase) { phase in
       switch phase {
@@ -61,4 +47,10 @@ struct FeeditApp: App {
       }
     }
   }
+}
+
+extension String: Identifiable {
+    public var id: String {
+        return self
+    }
 }

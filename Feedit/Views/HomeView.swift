@@ -10,13 +10,34 @@ import CoreData
 import Introspect
 
 struct HomeView: View {
-    @ObservedObject var networkReachability = NetworkReachabilty.shared
+    @Environment(\.managedObjectContext) private var viewContext
+        
+    @FetchRequest(fetchRequest: Settings.fetchAllRequest()) var all_settings: FetchedResults<Settings>
+            
+    var settings: Settings {
+        if let first = self.all_settings.first {
+            if UIApplication.shared.alternateIconName != first.alternateIconName {
+                UIApplication.shared.setAlternateIconName(first.alternateIconName, completionHandler: {error in
+                    if let _ = error {
+                        first.alternateIconName = nil
+                        try? first.managedObjectContext?.save()
+                        return
+                    }
+                })
+            }
+            return first
+        }
+
+        return Settings(context: viewContext)
+    }
     
     enum FeaureItem {
         case add
         case setting
         case star
     }
+    
+    @Environment(\.sizeCategory) var sizeCategory
     @Environment(\.editMode) var editMode
     @ObservedObject var articles: AllArticles
     @ObservedObject var unread: Unread
@@ -347,13 +368,14 @@ struct HomeView: View {
                                             onDoneAction: self.onDoneAction)
                     
                 } else if FeaureItem.setting == self.selectedFeatureItem {
-                    SettingView(fetchContentTime: .constant("minute1"))
+//                    SettingView(fetchContentTime: .constant("minute1"))
+                    SettingView()
+                        .environment(\.managedObjectContext, Persistence.current.context).environmentObject(Settings(context: Persistence.current.context))
                 }
             })
         }
         .onAppear {
             self.viewModel.fecthResults()
-            self.viewModel.fecthResults(start: 0)
         }
         .navigationViewStyle(StackNavigationViewStyle())
     }
@@ -385,17 +407,19 @@ struct HomeView_Previews: PreviewProvider {
     static let unread = Unread(dataSource: DataSourceService.current.rssItem)
     static let articles = AllArticles(dataSource: DataSourceService.current.rssItem)
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-    static var group: RSSGroup = {
-      let controller = Persistence.preview
-      return controller.makeRandomFolder(context: controller.context)
-    }()
+    static var group = RSSGroup()
+//        = {
+//      let controller = Persistence.current
+//      return controller.makeRandomFolder(context: controller.context)
+//    }()
     @State static var selection: Set<RSSGroup> = [group]
 
     static var previews: some View {
         HomeView(articles: articles, unread: unread, rssItem: rssItem, viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
-            .environment(\.managedObjectContext, Persistence.current.context)
+//            .environment(\.managedObjectContext, Persistence.current.context)
             .environmentObject(Persistence.current)
-                .environment(\.colorScheme, .dark)
+            .environmentObject(Settings(context: Persistence.current.context))
+//            .preferredColorScheme(.dark)
     }
 }
 #endif
@@ -416,14 +440,14 @@ struct FeedRow: View {
     }
 }
 
-#if DEBUG
-struct FeedRow_Previews: PreviewProvider {
-    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-    
-    static var previews: some View {
-        FeedRow(rss: RSS.simple(), viewModel: viewModel)
-            .environment(\.managedObjectContext, Persistence.current.context)
-            .preferredColorScheme(.dark)
-    }
-}
-#endif
+//#if DEBUG
+//struct FeedRow_Previews: PreviewProvider {
+//    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+//
+//    static var previews: some View {
+//        FeedRow(rss: RSS.simple(), viewModel: viewModel)
+//            .environment(\.managedObjectContext, Persistence.current.context)
+//            .preferredColorScheme(.dark)
+//    }
+//}
+//#endif

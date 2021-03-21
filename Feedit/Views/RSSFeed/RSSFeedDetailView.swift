@@ -57,7 +57,9 @@ struct RSSFeedDetailView: View {
     var body: some View {
         ZStack {
             ScrollView {
-                VStack(alignment: .leading) {
+//                VStack(alignment: .leading) {
+                LazyVStack(alignment: .leading, spacing: 0) {
+                    Divider().padding(0).padding([.leading])
                     HStack {
                         VStack(alignment: .leading) {
                             Text(rssSource.title)
@@ -151,8 +153,7 @@ struct RSSFeedDetailView_Previews: PreviewProvider {
     static var rssFeedViewModel = RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem)
 
     static var previews: some View {
-        let simple = DataSourceService.current.rssItem.simple()
-        return RSSFeedDetailView(rssItem: simple!, rssFeedViewModel: self.rssFeedViewModel).environmentObject(DataSourceService.current.rssItem)
+        return RSSFeedDetailView(rssItem: RSSItem(), rssFeedViewModel: self.rssFeedViewModel).environmentObject(DataSourceService.current.rssItem)
             .environment(\.colorScheme, .dark)
     }
 }

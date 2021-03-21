@@ -163,8 +163,7 @@ extension WebView {
 struct WebActions_Previews: PreviewProvider {
 
     static var previews: some View {
-        let simple = DataSourceService.current.rssItem.simple()
-        return WebView(rssItem: simple!, onCloseClosure: {
+        return WebView(rssItem: RSSItem(), onCloseClosure: {
 
         }, onArchiveClosure: {
 

@@ -178,23 +178,23 @@ struct AddRSSView: View {
 
 
 
-#if DEBUG
-
-struct AddRSSView_Previews: PreviewProvider {
-
-    static var group: RSSGroup = {
-      let controller = Persistence.preview
-      return controller.makeRandomFolder(context: controller.context)
-    }()
-
-    @State static var selection: Set<RSSGroup> = [group]
-
-    static var previews: some View {
-        AddRSSView(viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss))
-            .environment(\.managedObjectContext, Persistence.preview.context)
-            .environmentObject(Persistence.preview)
-            .preferredColorScheme(.dark)
-    }//, group: group, selection: $selection
-}
-
-#endif
+//#if DEBUG
+//
+//struct AddRSSView_Previews: PreviewProvider {
+//
+//    static var group: RSSGroup = {
+//      let controller = Persistence.current
+//      return controller.makeRandomFolder(context: controller.context)
+//    }()
+//
+//    @State static var selection: Set<RSSGroup> = [group]
+//
+//    static var previews: some View {
+//        AddRSSView(viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss))
+//            .environment(\.managedObjectContext, Persistence.current.context)
+//            .environmentObject(Persistence.current)
+//            .preferredColorScheme(.dark)
+//    }
+//}
+//
+//#endif

@@ -37,9 +37,17 @@
         <attribute name="url" optional="YES" attributeType="String" defaultValueString=""/>
         <attribute name="uuid" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
     </entity>
+    <entity name="Settings" representedClassName=".Settings" syncable="YES">
+        <attribute name="accentColorData" optional="YES" attributeType="Binary"/>
+        <attribute name="alternateIconName" optional="YES" attributeType="String"/>
+        <attribute name="layoutValue" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="textSizeModifier" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+    </entity>
     <elements>
         <element name="RSS" positionX="-544.7466430664062" positionY="45.42822265625" width="128" height="209"/>
         <element name="RSSGroup" positionX="-459" positionY="162" width="128" height="104"/>
         <element name="RSSItem" positionX="-370.7073974609375" positionY="38.6402587890625" width="128" height="239"/>
+        <element name="Settings" positionX="-470.65283203125" positionY="309.8365783691406" width="128" height="118"/>
     </elements>
 </model>

@@ -32,7 +32,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         let homeView = HomeView(articles: self.articles, unread: self.unread, rssItem: self.rssItem, viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: self.rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
             .environmentObject(DataSourceService.current.rssItem)
-            .environment(\.managedObjectContext, Persistence.current.context)
+//            .environment(\.managedObjectContext, Persistence.current.context)
             .environmentObject(Persistence.current)
 //            .environment(\.managedObjectContext, persistence.context)
 //            .environmentObject(persistence)
