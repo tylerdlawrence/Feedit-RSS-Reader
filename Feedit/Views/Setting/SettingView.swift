@@ -6,11 +6,11 @@
 //
 
 import SwiftUI
+import Foundation
 import MessageUI
 import CoreMotion
 import FeedKit
 import CoreData
-import Foundation
 
 struct AppIcon: Codable {
     var alternateIconName: String?
@@ -257,7 +257,7 @@ struct AppIconChooserView: View {
                     self.presentationMode.wrappedValue.dismiss()
                 })
             }, label: {
-                AppIconView(icon: AppIcon(alternateIconName: nil, name: "Default", assetName: "feedit@2x.png", subtitle: "")).environmentObject(settings)
+                AppIconView(icon: AppIcon(alternateIconName: nil, name: "Feedit", assetName: "feedit@2x.png", subtitle: "")).environmentObject(settings)
             })
             Button(action: {
                 UIApplication.shared.setAlternateIconName("bot", completionHandler: { error in
@@ -322,8 +322,59 @@ struct SettingView: View {
              "feedit v" + (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String)
     }
     
+    @AppStorage("darkMode") var darkMode = false
     @EnvironmentObject var settings: Settings
     @Environment(\.sizeCategory) var sizeCategory
+    
+    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
+    @State private var quantity = 1
+    @State private var isSelected: Bool = false
+    var onDoneAction: (() -> Void)?
+    @State private var isSettingsExpanded: Bool = true
+    @State var accounts: String = ""
+    @State var isPrivate: Bool = false
+    @State var notificationsEnabled: Bool = false
+    @State private var previewIndex = 0
+    @Binding var fetchContentTime: String
+    
+    enum ReadMode {
+        case safari
+        case webview
+    }
+
+    enum SettingItem: CaseIterable {
+        case webView
+        case darkMode
+        case batchImport
+
+        var label: String {
+            switch self {
+            case .webView: return "Read Mode"
+            case .darkMode: return "Dark Mode"
+            case .batchImport: return "Import"
+            }
+        }
+    }
+
+    var batchImportView: BatchImportView {
+        let dataSource = DataSourceService.current.rss
+        return BatchImportView(viewModel: BatchImportViewModel(dataSource: dataSource))
+    }
+    
+    var dataNStorage: DataNStorageView {
+        let storage = DataNStorageView()
+        return storage
+    }
+
+    private var doneButton: some View {
+        Button(action: {
+            self.onDoneAction?()
+            self.presentationMode.wrappedValue.dismiss()
+        }) {
+            Image(systemName: "xmark")
+        }
+    }
     
     var body: some View {
         NavigationView {
@@ -339,7 +390,8 @@ struct SettingView: View {
                                 Label(
                                     title: { Text("App Icon").foregroundColor(Color(UIColor.label)) },
                                     icon: { ZStack {
-                                        Image(systemName: "app.fill").resizable().aspectRatio( contentMode: .fit).foregroundColor(.accentColor)
+                                        Image(systemName: "app.fill").resizable().aspectRatio( contentMode: .fit).foregroundColor(settings.accentColor)
+                                        
                                         Image(uiImage: UIImage(contentsOfFile: Bundle.main.resourcePath! + "/" + (settings.alternateIconName ?? "feedit") + "@2x.png")!).resizable().aspectRatio( contentMode: .fit).mask(Image(systemName: "app.fill").resizable().aspectRatio(contentMode: .fit))
                                     } }
                         ).labelStyle(HorizontallyAlignedLabelStyle())
@@ -352,20 +404,73 @@ struct SettingView: View {
                     
                     NavigationLink(destination: AccentColorChooserView().environmentObject(settings), label: {
                         HStack {
-                            ZZLabel(iconBackgroundColor: .accentColor, iconColor: settings.accentUIColor == .white ? .black : .white, systemImage: "paintbrush.fill", text: "Accent Color")
+                            ZZLabel(iconBackgroundColor: settings.accentColor, iconColor: settings.accentUIColor == .white ? .black : .white, systemImage: "paintbrush.fill", text: "Accent Color")
                             Spacer()
-                            Text("\(settings.accentUIColor.name ?? "Unknown")").foregroundColor(.gray)
+                            Text("\(settings.accentUIColor.name ?? "Feedit Blue")").foregroundColor(.gray)
                         }
                     })
                     
                     HStack {
-                        SettingsTextSizeSlider()
+                        SettingsTextSizeSlider().environmentObject(settings)
                     }
                     
                 }
                 Section(header: Text("Layout").font(Font(.footnote, sizeModifier: CGFloat(settings.textSizeModifier)))) {
                     SettingsLayoutSlider().environmentObject(settings)
                 }
+                
+                Section(header: Text("Feeds")) {
+                    Picker(selection: $fetchContentTime, label:
+                            Text("Fetch content time")) {
+                        ForEach(ContentTimeType.allCases, id: \.self.rawValue) { type in
+                            Text(type.rawValue)
+                        }
+                    }
+                    Toggle(isOn: $notificationsEnabled) {
+                        Text("Notifications")
+                    }
+                    .toggleStyle(SwitchToggleStyle(tint: .blue))
+
+                    HStack {
+                        Image(systemName: "safari")
+                            .frame(width: 30, height: 30)
+                            .foregroundColor(.white)
+                            .background(Color("tab"))
+                            .opacity(0.9)
+                            .clipShape(RoundedRectangle(cornerRadius: 5))
+                        ForEach([SettingItem.webView], id: \.self) { _ in
+                                Toggle("Safari Reader", isOn: self.$isSelected)
+                            }
+                        }.toggleStyle(SwitchToggleStyle(tint: .blue))
+                    
+                    HStack {
+                        Image(systemName: "circle.lefthalf.fill")
+                            .frame(width: 30, height: 30)
+                            .foregroundColor(.white)
+                            .background(Color("bg"))
+                            .opacity(0.9)
+                            .clipShape(RoundedRectangle(cornerRadius: 5))
+                        Toggle(isOn: $darkMode) {
+                                     Text("Light/Dark Mode")
+                                }
+                        .toggleStyle(ToggleAppearence())
+                    }
+
+                    HStack {
+                        NavigationLink(destination: self.batchImportView) {
+                                HStack {
+                                Image(systemName: "square.and.arrow.up")
+                                    .frame(width: 30, height: 30)
+                                    .foregroundColor(.white)
+                                    .background(Color("darkShadow"))
+                                    .opacity(0.9)
+                                    .clipShape(RoundedRectangle(cornerRadius: 5))
+                                Text("Import & Export")
+                                }
+                            }
+                        }
+                    }
+                
                 Section {
                     SettingsLinkView(image: "github", text: "GitHub", url: "https://github.com/tylerdlawrence/Feedit-RSS-Reader", iconColor: .black)
                     SettingsLinkView(image: "twitter", text: "Twitter", url: twitterURL.absoluteString, iconColor: .blue)
@@ -386,14 +491,33 @@ struct SettingView: View {
                     }
                     SettingsLinkView(systemImage:  "star.fill", text: "Rate", url: "https://apps.apple.com/us/app/feedit/id1527181959", iconColor: .yellow)
                 }
-                Section(header: Text("Legal").font(Font(.footnote, sizeModifier: CGFloat(settings.textSizeModifier)))) {
-                    SettingsLinkView(systemImage: "doc.text.magnifyingglass", text: "Privacy Policy", url: "https://tylerdlawrence.net", iconColor: .gray)
-                    SettingsLinkView(systemImage: "doc.text", text: "Terms of Use", url: "https://tylerdlawrence.net", iconColor: .gray)
+//                Section(header: Text("Legal").font(Font(.footnote, sizeModifier: CGFloat(settings.textSizeModifier)))) {
+//                    SettingsLinkView(systemImage: "doc.text.magnifyingglass", text: "Privacy Policy", url: "https://tylerdlawrence.net", iconColor: .gray)
+//                    SettingsLinkView(systemImage: "doc.text", text: "Terms of Use", url: "https://tylerdlawrence.net", iconColor: .gray)
+//                }
+                
+                Section(header: Text("Copyright © 2021 Tyler D Lawrence"), footer:  Text("Feedit V" + (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String))) {
+                    Link(destination: URL(string: "https://tylerdlawrence.net")!) {
+                        HStack {
+                            Image("launch").resizable().frame(width: 35, height: 35).cornerRadius(3.0)
+                            Text("Website").foregroundColor(Color("text"))
+                            
+                        }
+                    }
                 }
             }.sheet(isPresented: $isShowingMailView) {
                 MailView(isShowing: self.$isShowingMailView, result: self.$mailResult, subject: emailSubject, toReceipt: ["tyler.lawrence@hey.com"])
-            }.listStyle(GroupedListStyle()
+            }.listStyle(InsetGroupedListStyle()
             ).navigationTitle("Settings")
+            .navigationBarItems(leading: doneButton)
+            .environment(\.horizontalSizeClass, .regular)
+            .preferredColorScheme(darkMode ? .dark : .light)
+        }.environmentObject(settings)
+        .onAppear {
+            self.isSelected = UserEnvironment.current.useSafari
+        }
+        .onDisappear {
+            UserEnvironment.current.useSafari = self.isSelected
         }
     }
 }
@@ -401,7 +525,7 @@ struct SettingView: View {
 struct SettingView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            SettingView()
+            SettingView(fetchContentTime: .constant("minute1"))
                 .environment(\.managedObjectContext, PersistenceController.random.container.viewContext).environmentObject(Settings(context: PersistenceController.random.container.viewContext))
         }.previewLayout(.sizeThatFits)
 
@@ -416,26 +540,24 @@ struct SettingsLayoutSlider: View {
     @EnvironmentObject var rssFeedViewModel: RSSFeedViewModel
     
     @EnvironmentObject private var persistence: Persistence
-    @Environment(\.managedObjectContext) private var context
     @EnvironmentObject var rssDataSource: RSSDataSource
-    
-//    let simple = DataSourceService.current.rssItem.simple()
-    
-//    let settingRowPreview = DataSourceService.current.rssItem.settingRowPreview
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 0) {
                     ForEach(1..<3) { _ in
-//                        RSSItemRow(rssItem: simple, rssFeedViewModel: rssFeedViewModel)
-//                            RSSRow(rss: rss, viewModel: RSSListViewModel(dataSource: DataSourceService.current.rss))
-                            Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultrices sed nulla nec blandit. Suspendisse in facilisis velit. Donec vitae ligula ut purus fermentum sodales a ac urna.")
-//                            .environmentObject(DataSourceService.current.rssItem)
-                                .environmentObject(rssFeedViewModel).environmentObject(settings).environmentObject(persistence).allowsHitTesting(false)
+                        HStack(alignment: .top) {
+                            VStack(alignment: .leading) {
+                                Image("launch")
+                                    .renderingMode(.original).resizable().aspectRatio(contentMode: .fit).frame(width: 25, height: 25, alignment: .center).cornerRadius(3).opacity(0.9)
+                            }
+                            Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultrices sed nulla nec blandit. Suspendisse in facilisis velit.").font(Font(.body, sizeModifier: CGFloat(settings.textSizeModifier)))
+                                .environmentObject(settings).allowsHitTesting(false)
+                        }
                         Divider().padding(0).padding([.leading])
-                    }.environmentObject(rssFeedViewModel)
-                }
+                    }
+                }.environmentObject(settings)
             }.listStyle(PlainListStyle()).frame(height: 175).padding(0).allowsHitTesting(false).overlay(Rectangle().foregroundColor(.clear).opacity(0.0).background(LinearGradient(gradient: Gradient(colors: [Color(UIColor.secondarySystemGroupedBackground.withAlphaComponent(0.0)), Color(UIColor.secondarySystemGroupedBackground.withAlphaComponent(0.0)), Color(UIColor.secondarySystemGroupedBackground)]), startPoint: .top, endPoint: .bottom)))
             Divider().padding([.bottom], 8.0)
             HStack {

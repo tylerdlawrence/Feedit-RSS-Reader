@@ -12,29 +12,11 @@ import CoreData
 
 struct DataNStorageView: View {
     
-    var rssSource: RSS {
-        return self.rssFeedViewModel.rss
-    }
-    
-    @Environment(\.presentationMode) var presentationMode
-    @EnvironmentObject var rssDataSource: RSSDataSource
-    @ObservedObject var rssFeedViewModel: RSSFeedViewModel
-    
-    @State private var selectedItem: RSSItem?
-    @State private var start: Int = 0
-    @State private var footer: String = "Refresh"
-    @State var isRead = false
-    @State var starOnly = false
-    
     @ObservedObject var dataViewModel: DataNStorageViewModel
-    @ObservedObject var viewModel: RSSListViewModel
-    @State private var revealFeedsDisclosureGroup = true
     
-    init(rssFeedViewModel: RSSFeedViewModel, viewModel: RSSListViewModel) {
+    init() {
         let db = DataSourceService.current
         dataViewModel = DataNStorageViewModel(rss: db.rss, rssItem: db.rssItem)
-        self.rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
-        self.viewModel = viewModel
     }
 
     var body: some View {
@@ -66,15 +48,10 @@ struct DataNStorageView: View {
     }
 }
 
-//struct DataNStorageView_Previews: PreviewProvider {
-//    static let rss = RSS()
-//    static let rssFeedViewModel = RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem)
-//
-//    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-//
-//    static var previews: some View {
-//        DataNStorageView(rssFeedViewModel: self.rssFeedViewModel, viewModel: self.viewModel)
-//            .preferredColorScheme(.dark)
-//    }
-//}
+struct DataNStorageView_Previews: PreviewProvider {
+    static var previews: some View {
+        DataNStorageView()
+    }
+}
+
 

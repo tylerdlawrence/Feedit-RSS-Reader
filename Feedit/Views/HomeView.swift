@@ -8,10 +8,88 @@
 import SwiftUI
 import CoreData
 import Introspect
+import Combine
+import WebKit
+
+struct DidReselectKey: EnvironmentKey {
+    static let defaultValue = PassthroughSubject<TabSelection, Never>().eraseToAnyPublisher()
+}
+
+extension EnvironmentValues {
+    var didReselect: AnyPublisher<TabSelection, Never> {
+        get {
+            return self[DidReselectKey.self]
+        }
+        set {
+            self[DidReselectKey.self] = newValue
+        }
+    }
+}
+
+enum OpenerSheetSelection: Identifiable {
+    var id: String {
+        switch self {
+            case .Story(let story_id):
+                return story_id
+            case .User(let user_id):
+                return user_id
+        case .Unknown(let url):
+            return "\(url)"
+        }
+    }
+    
+    case Story(String)
+    case User(String)
+    case Unknown(URL)
+}
+
+enum TabSelection: String {
+    case All, Unread, Starred, Settings
+}
+
+/** https://stackoverflow.com/a/64019877/193772 */
+struct NavigableTabViewItem<Content: View, TabItem: View>: View {
+    @Environment(\.didReselect) var didReselect
+    @EnvironmentObject var settings: Settings
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    
+    let tabSelection: TabSelection
+    let content: Content
+    let tabItem: TabItem
+    
+    init(tabSelection: TabSelection, @ViewBuilder content: () -> Content, @ViewBuilder tabItem: () -> TabItem) {
+        self.tabSelection = tabSelection
+        self.content = content()
+        self.tabItem = tabItem()
+    }
+
+    var body: some View {
+        let didReselectThis = didReselect.filter( {
+            $0 == tabSelection
+        }).eraseToAnyPublisher()
+
+        NavigationView {
+
+                self.content.environmentObject(settings).onReceive(didReselect) { _ in
+                    DispatchQueue.main.async {
+                        self.presentationMode.wrappedValue.dismiss()
+                    }
+                }
+
+            
+        }.tabItem {
+            self.tabItem
+        }
+        .tag(tabSelection)
+        .navigationViewStyle(StackNavigationViewStyle())
+        .environment(\.didReselect, didReselectThis)
+    }
+}
 
 struct HomeView: View {
+    @Environment(\.didReselect) var didReselect
     @Environment(\.managedObjectContext) private var viewContext
-        
+    
     @FetchRequest(fetchRequest: Settings.fetchAllRequest()) var all_settings: FetchedResults<Settings>
             
     var settings: Settings {
@@ -38,7 +116,6 @@ struct HomeView: View {
     }
     
     @Environment(\.sizeCategory) var sizeCategory
-    @Environment(\.editMode) var editMode
     @ObservedObject var articles: AllArticles
     @ObservedObject var unread: Unread
     @ObservedObject var rssItem: RSSItem
@@ -96,7 +173,7 @@ struct HomeView: View {
             self.isSheetPresented = true
             self.selectedFeatureItem = .add
         }) {
-            Image(systemName: "plus").font(.system(size: 20, weight: .medium, design: .rounded)).foregroundColor(Color("tab"))
+            Image(systemName: "plus").font(.system(size: 20, weight: .medium, design: .rounded))//.foregroundColor(Color("tab"))
                 .padding([.top, .leading, .bottom])
         }
     }
@@ -107,7 +184,7 @@ struct HomeView: View {
             self.isSheetPresented = true
             self.selectedFeatureItem = .setting
         }) {
-            Image(systemName: "gear").font(.system(size: 18, weight: .medium, design: .rounded)).foregroundColor(Color("tab"))
+            Image(systemName: "gear").font(.system(size: 18, weight: .medium, design: .rounded))//.foregroundColor(Color("tab"))
                 .padding([.top, .bottom, .trailing])
         }
     }
@@ -268,7 +345,6 @@ struct HomeView: View {
                     self.viewModel.delete(at: index)
                 }
             }
-
             .listRowBackground(Color("accent"))
 //        }
             },
@@ -304,14 +380,13 @@ struct HomeView: View {
             VStack {
                 ZStack {
                     List {
-                        
                         feedsView
 //                        Spacer()
                         RSSFoldersDisclosureGroup(persistence: Persistence.current, viewModel: self.viewModel)
 //                        Spacer()
                         feedsSection
                     }
-                    //.listSeparatorStyle(.none)
+//                    .listSeparatorStyle(.none)
                     .navigationBarItems(trailing:
                                             HStack(spacing: 20) {
                                                 Button(action: {
@@ -333,8 +408,9 @@ struct HomeView: View {
 //                    .listStyle(InsetGroupedListStyle())
                     .navigationBarTitle("Home", displayMode: .automatic)
                     .add(self.searchBar)
-                    .environment(\.editMode, self.editMode)
                 }
+
+                
                 .onAppear {
                     startNetworkCall()
                 }
@@ -368,9 +444,9 @@ struct HomeView: View {
                                             onDoneAction: self.onDoneAction)
                     
                 } else if FeaureItem.setting == self.selectedFeatureItem {
-//                    SettingView(fetchContentTime: .constant("minute1"))
-                    SettingView()
+                    SettingView(fetchContentTime: .constant("minute1"))
                         .environment(\.managedObjectContext, Persistence.current.context).environmentObject(Settings(context: Persistence.current.context))
+                    //.accentColor(settings.accentColor).font(Font(.body, sizeModifier: CGFloat(settings.textSizeModifier)))
                 }
             })
         }

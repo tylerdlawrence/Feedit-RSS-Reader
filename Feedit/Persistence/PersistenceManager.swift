@@ -221,7 +221,8 @@ public class Settings: NSManagedObject, Identifiable {
         self.layoutValue = Settings.Layout.Default.rawValue
         self.timestamp = Date()
         self.alternateIconName = nil
-        self.accentColorData = UIColor.init(red: 158.0/255.0, green: 38.0/255.0, blue: 27.0/255.0, alpha: 1.0).data
+        self.accentColorData = UIColor(Color("tab")).data
+//            UIColor.init(red: 158.0/255.0, green: 38.0/255.0, blue: 27.0/255.0, alpha: 1.0).data
         self.textSizeModifier = 0.0
     }
 
@@ -240,7 +241,8 @@ public class Settings: NSManagedObject, Identifiable {
     }
 
     var defaultAccentColor: UIColor {
-        return UIColor.init(red: 158.0/255.0, green: 38.0/255.0, blue: 27.0/255.0, alpha: 1.0)
+        return UIColor(Color("tab"))
+//            UIColor.init(red: 158.0/255.0, green: 38.0/255.0, blue: 27.0/255.0, alpha: 1.0)
     }
 
     var accentUIColor: UIColor {
@@ -312,7 +314,8 @@ extension UIColor {
 
 extension UIColor {
     
-    static var lobstersRed = UIColor.init(red: 158.0/255.0, green: 38.0/255.0, blue: 27.0/255.0, alpha: 1.0)
+    static var feeditBlue = UIColor(Color("tab"))
+//        UIColor.init(red: 158.0/255.0, green: 38.0/255.0, blue: 27.0/255.0, alpha: 1.0)
     
     var name: String? {
         if #available(iOS 13.0, *) {
@@ -324,8 +327,8 @@ extension UIColor {
             }
         }
         switch self {
-        case .lobstersRed:
-            return "Lobsters Red"
+        case .feeditBlue:
+            return "Feedit Blue"
         case .systemPurple:
             return "System Purple"
         case .systemOrange:
