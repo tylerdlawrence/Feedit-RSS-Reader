@@ -7,7 +7,7 @@
 
 import CoreData
 
-class RSSDataSource: NSObject, DataSource {
+class RSSDataSource: NSObject, DataSource, Identifiable {
     
     var parentContext: NSManagedObjectContext
     

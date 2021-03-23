@@ -13,6 +13,7 @@ struct SelectRSSGroupRow: View {
     @EnvironmentObject var rssDataSource: RSSDataSource
     var group: RSSGroup
     @Binding var selection: Set<RSSGroup>
+    
     var isSelected: Bool {
       selection.contains(group)
     }

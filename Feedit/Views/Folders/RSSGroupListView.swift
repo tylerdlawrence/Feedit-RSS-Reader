@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreData
+import Combine
 import Foundation
 import os.log
 
@@ -20,7 +21,7 @@ struct RSSGroupListView: View {
     @FetchRequest(
       fetchRequest: RSSGroupListView.fetchRequest,
       animation: .default)
-    private var groups: FetchedResults<RSSGroup>
+    var groups: FetchedResults<RSSGroup>
     
     @EnvironmentObject var rssDataSource: RSSDataSource
     @ObservedObject var viewModel: RSSListViewModel
@@ -62,7 +63,7 @@ struct RSSGroupListView: View {
           .navigationBarTitle(Text("Folders"))
           .navigationBarItems(trailing:
             Button(action: { addGroupIsPresented.toggle() }) {
-              Image(systemName: "plus")
+              Image(systemName: "plus").font(.system(size: 20, weight: .medium, design: .rounded))
             }
           )
         }
@@ -85,10 +86,12 @@ struct RSSGroupListView_Previews: PreviewProvider {
     static let rss = RSS()
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     static var previews: some View {
-        RSSGroupListView(persistence: Persistence.current, viewModel: self.viewModel)
-            .environment(\.managedObjectContext, Persistence.current.context)
-            .environmentObject(Persistence.current)
-            .preferredColorScheme(.dark)
+        NavigationView {
+            RSSGroupListView(persistence: Persistence.current, viewModel: self.viewModel)
+                .environment(\.managedObjectContext, Persistence.current.context)
+                .environmentObject(Persistence.current)
+                .preferredColorScheme(.dark)
+        }
     }
 }
 #endif

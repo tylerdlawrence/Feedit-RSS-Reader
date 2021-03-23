@@ -14,6 +14,8 @@ class RSSListViewModel: NSObject, ObservableObject{
 
     @Published var items: [RSS] = []
     @Published var articles: [RSSItem] = []
+    
+
 
     let dataSource: RSSDataSource
     var start = 0

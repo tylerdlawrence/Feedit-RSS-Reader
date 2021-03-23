@@ -111,11 +111,13 @@ struct AddRSSView: View {
                     }
                 }
                 
-//                NavigationLink(destination: SelectGroupView(selectedGroups: []) { _ in }
-//                                .environment(\.managedObjectContext, Persistence.current.context)
-//                                .environmentObject(Persistence.current)) {
-//                    Label("Folders", systemImage: "folder")
-//                }
+                NavigationLink(destination:
+                                //SelectGroupView(selectedGroups: []) { _ in }
+                                RSSGroupListView(persistence: Persistence.current, viewModel: RSSListViewModel(dataSource: DataSourceService.current.rss))
+                                .environment(\.managedObjectContext, Persistence.current.context)
+                                .environmentObject(Persistence.current)) {
+                    Label("Folders", systemImage: "folder")
+                }
                 
                     if !hasFetchResult {
                         //EmptyView()
@@ -148,6 +150,10 @@ struct AddRSSView: View {
             self.viewModel.cancelCreateNewRSS()
         }
     }
+    
+//    private func formAction() {
+//      onComplete(name.isEmpty ? "Untitled Folder" : name)
+//    }
     
     private func setGroups(_ groups: Set<RSSGroup>) {
       rss.groups = groups as NSSet

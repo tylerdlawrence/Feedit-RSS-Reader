@@ -19,13 +19,13 @@ struct RSSGroupDetailsView: View {
     let item = RSSItem()
     static var fetchRequest: NSFetchRequest<RSSGroup> {
       let request: NSFetchRequest<RSSGroup> = RSSGroup.fetchRequest()
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \RSSGroup.name, ascending: true)].compactMap { $0 }
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \RSSGroup.items, ascending: true)].compactMap { $0 }
       return request
     }
     var groups: FetchedResults<RSSGroup>
     
     @State var revealFoldersDisclosureGroup = true
-    
+
     var body: some View {
 //      VStack(alignment: .leading, spacing: 8) {
 //        Text("Feeds: \(rssGroup.itemCount)")
@@ -33,20 +33,11 @@ struct RSSGroupDetailsView: View {
 //      }
         List {
             ForEach(viewModel.items, id: \.self) { rss in
-                
-//                ZStack {
-//                NavigationLink(destination: self.destinationView(rss: rss)) {
-//                        EmptyView()
-//                    }
-//                    .opacity(0.0)
-//                    .buttonStyle(PlainButtonStyle())
-                    HStack {
-                        
-                        RSSRow(rss: rss, viewModel: self.viewModel)
-                        
-//                    }
+                HStack {
+                    RSSRow(rss: rss, viewModel: self.viewModel)
                 }
-            }
+            }.environment(\.managedObjectContext, Persistence.current.context)
+            .environmentObject(Persistence.current)
         }
         .navigationBarTitle(Text(rssGroup.name ?? "Folders"))
     }

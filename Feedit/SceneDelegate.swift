@@ -30,12 +30,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     private(set) static var shared: SceneDelegate?
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
 
-        let homeView = HomeView(articles: self.articles, unread: self.unread, rssItem: self.rssItem, viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: self.rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
-            .environmentObject(DataSourceService.current.rssItem)
-//            .environment(\.managedObjectContext, Persistence.current.context)
-            .environmentObject(Persistence.current)
-//            .environment(\.managedObjectContext, persistence.context)
-//            .environmentObject(persistence)
+        let homeView =
+//            ContentView(rssFeedViewModel: RSSFeedViewModel(rss: self.rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
+            HomeView(articles: self.articles, unread: self.unread, rssItem: self.rssItem, viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: self.rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
+                .environmentObject(DataSourceService.current.rssItem)
+                .environmentObject(Persistence.current)
+
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {

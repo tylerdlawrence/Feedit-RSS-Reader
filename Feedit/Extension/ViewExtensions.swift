@@ -8,6 +8,7 @@
 #if canImport(UIKit) && os(iOS)
 
 import SwiftUI
+import Combine
 import MessageUI
 import CoreMotion
 import FeedKit
@@ -189,3 +190,97 @@ extension Font {
         self = Font.system(size: base.pointSize + sizeModifier, weight: weight, design: design)
     }
 }
+
+extension View {
+  func readSize(onChange: @escaping (CGSize) -> Void) -> some View {
+    background(
+      GeometryReader { geometryProxy in
+        Color.clear
+          .preference(key: SizePreferenceKey.self, value: geometryProxy.size)
+      }
+    )
+    .onPreferenceChange(SizePreferenceKey.self, perform: onChange)
+  }
+}
+
+private struct SizePreferenceKey: PreferenceKey {
+  static var defaultValue: CGSize = .zero
+  static func reduce(value: inout CGSize, nextValue: () -> CGSize) {}
+}
+
+enum Appearance: String, Codable, CaseIterable, Identifiable {
+  case dark
+  case light
+  case system
+
+  var id: String { rawValue }
+}
+
+struct Preferences: Codable {
+  var appearance: Appearance
+
+  static let defaultValue = Preferences(appearance: .system)
+}
+
+// MARK: ContentView
+class ContentViewModel: ObservableObject {
+  @Published("userPreferences") var preferences: Preferences = .defaultValue
+}
+
+struct ContentExtView: View {
+  @StateObject var model = ContentViewModel()
+
+  var body: some View {
+    Picker("Appearance", selection: $model.preferences.appearance) {
+      ForEach(Appearance.allCases, id: \.self) {
+        Text(verbatim: $0.rawValue)
+      }
+    }.pickerStyle(SegmentedPickerStyle())
+  }
+}
+
+// MARK: Published+UserDefaults
+private var cancellableSet: Set<AnyCancellable> = []
+
+extension Published where Value: Codable {
+  init(wrappedValue defaultValue: Value, _ key: String, store: UserDefaults? = nil) {
+    let _store: UserDefaults = store ?? .standard
+
+    if
+      let data = _store.data(forKey: key),
+      let value = try? JSONDecoder().decode(Value.self, from: data) {
+      self.init(initialValue: value)
+    } else {
+      self.init(initialValue: defaultValue)
+    }
+
+    projectedValue
+      .sink { newValue in
+        let data = try? JSONEncoder().encode(newValue)
+        _store.set(data, forKey: key)
+      }
+      .store(in: &cancellableSet)
+  }
+}
+
+// MARK: Published+UISceneSession
+extension Published where Value: Codable {
+  init(wrappedValue defaultValue: Value, _ key: String, session: UISceneSession) {
+    if
+      let data = session.userInfo?[key] as? Data,
+      let value = try? JSONDecoder().decode(Value.self, from: data) {
+      self.init(initialValue: value)
+    } else {
+      self.init(initialValue: defaultValue)
+    }
+
+    projectedValue
+      .sink { newValue in
+        let data = try? JSONEncoder().encode(newValue)
+        session.userInfo?[key] = data
+      }
+      .store(in: &cancellableSet)
+  }
+}
+
+

@@ -7,13 +7,92 @@
 
 import SwiftUI
 import CoreData
+import Combine
 import Foundation
 import os.log
+
+extension Sequence {
+    func sorted<T: Comparable>(by keyPath: KeyPath<Element, T>) -> [Element] {
+        sorted { a, b in
+            a[keyPath: keyPath] < b[keyPath: keyPath]
+        }
+    }
+}
+
+extension Sequence {
+    func sorted<T: Comparable>(
+        by keyPath: KeyPath<Element, T>,
+        using comparator: (T, T) -> Bool = (<)
+    ) -> [Element] {
+        sorted { a, b in
+            comparator(a[keyPath: keyPath], b[keyPath: keyPath])
+        }
+    }
+}
+
+enum SortOrder {
+    case ascending
+    case descending
+}
+
+struct SortDescriptor<Value> {
+    var comparator: (Value, Value) -> ComparisonResult
+}
+
+extension SortDescriptor {
+    static func keyPath<T: Comparable>(_ keyPath: KeyPath<Value, T>) -> Self {
+        Self { rootA, rootB in
+            let valueA = rootA[keyPath: keyPath]
+            let valueB = rootB[keyPath: keyPath]
+
+            guard valueA != valueB else {
+                return .orderedSame
+            }
+
+            return valueA < valueB ? .orderedAscending : .orderedDescending
+        }
+    }
+}
+
+extension Sequence {
+    func sorted(using descriptors: [SortDescriptor<Element>],
+                order: SortOrder) -> [Element] {
+        sorted { valueA, valueB in
+            for descriptor in descriptors {
+                let result = descriptor.comparator(valueA, valueB)
+
+                switch result {
+                case .orderedSame:
+                    // Keep iterating if the two elements are equal,
+                    // since that'll let the next descriptor determine
+                    // the sort order:
+                    break
+                case .orderedAscending:
+                    return order == .ascending
+                case .orderedDescending:
+                    return order == .descending
+                }
+            }
+
+            // If no descriptor was able to determine the sort
+            // order, we'll default to false (similar to when
+            // using the '<' operator with the built-in API):
+            return false
+        }
+    }
+}
+
+extension Sequence {
+    func sorted(using descriptors: SortDescriptor<Element>...) -> [Element] {
+        sorted(using: descriptors, order: .ascending)
+    }
+}
+
 
 struct RSSFoldersDisclosureGroup: View {
     static var fetchRequest: NSFetchRequest<RSSGroup> {
       let request: NSFetchRequest<RSSGroup> = RSSGroup.fetchRequest()
-      request.sortDescriptors = [NSSortDescriptor(keyPath: \RSSGroup.name, ascending: true)]
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \RSSGroup.items, ascending: true)]
       return request
     }
     @ObservedObject var persistence: Persistence
@@ -26,23 +105,16 @@ struct RSSFoldersDisclosureGroup: View {
     @ObservedObject var viewModel: RSSListViewModel
     let rss = RSS()
     
-//    @Binding var selection: Set<RSS>
-//    var isSelected: Bool {
-//      selection.contains(rss)
-//    }
-//    @State var selectedGroups: Set<RSSGroup>
-//    let onComplete: (Set<RSSGroup>) -> Void
-    
-    @State var revealFoldersDisclosureGroup = true
+    @State var revealFoldersDisclosureGroup = false
     @StateObject private var expansionHandler = ExpansionHandler<ExpandableSection>()
     
     var body: some View {
+
         DisclosureGroup(
             isExpanded: $revealFoldersDisclosureGroup, content: {
-            ForEach(groups, id: \.id) { group in
-                DisclosureGroup {
-                    //MARK: if viewModel.items is tagged in folder...
-                    ForEach(viewModel.items, id: \.self) { rss in
+                ForEach(groups, id: \.id) { group in
+                    DisclosureGroup {
+                    ForEach(viewModel.items) { rss in
                         ZStack {
                             NavigationLink(destination: self.destinationView(rss: rss)) {
                                 EmptyView()
@@ -50,7 +122,7 @@ struct RSSFoldersDisclosureGroup: View {
                             .opacity(0.0)
                             .buttonStyle(PlainButtonStyle())
                             HStack {
-                                RSSRow(rss: rss, viewModel: self.viewModel)
+                                RSSRow(rss: rss, viewModel: viewModel)
                                 Spacer()
                                 Text("\(viewModel.items.count)")
                                     .font(.caption)
@@ -63,7 +135,8 @@ struct RSSFoldersDisclosureGroup: View {
                                     .cornerRadius(8)
                             }
                         }
-                    }.listRowBackground(Color("accent"))
+                    }
+                    .listRowBackground(Color("accent"))
                 } label: {
                     HStack {
                         Image(systemName: "folder")
@@ -107,8 +180,9 @@ struct RSSFoldersDisclosureGroup: View {
                         }
                         .listRowBackground(Color("accent"))
                     }
-                })
+            })
                 .listRowBackground(Color("darkerAccent"))
+//            }
                 .accentColor(Color("tab"))
         }
     
@@ -125,15 +199,16 @@ struct RSSFoldersDisclosureGroup: View {
     }
 }
 
-#if DEBUG
-struct RSSFoldersDisclosureGroup_Previews: PreviewProvider {
-    static let rss = RSS()
-    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-    static var previews: some View {
-        RSSFoldersDisclosureGroup(persistence: Persistence.current, viewModel: self.viewModel)
-          .environment(\.managedObjectContext, Persistence.current.context)
-          .environmentObject(Persistence.current)
-            .preferredColorScheme(.dark)
-    }
-}
-#endif
+//#if DEBUG
+//struct RSSFoldersDisclosureGroup_Previews: PreviewProvider {
+//    static let rss = RSS()
+//    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+//    static var previews: some View {
+//        RSSFoldersDisclosureGroup(persistence: Persistence.current, viewModel: self.viewModel)
+//          .environment(\.managedObjectContext, Persistence.current.context)
+//          .environmentObject(Persistence.current)
+//            .preferredColorScheme(.dark)
+//    }
+//}
+//#endif
+

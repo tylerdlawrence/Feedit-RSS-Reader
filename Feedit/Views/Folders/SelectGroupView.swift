@@ -51,7 +51,6 @@ struct SelectGroupView: View {
                     }
                 }
             }
-        .preferredColorScheme(darkMode ? .dark : .light)
         }.environmentObject(Persistence.current)
     }
 

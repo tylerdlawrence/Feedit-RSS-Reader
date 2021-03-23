@@ -142,6 +142,31 @@ struct FSDisclosureGroup2<Label, Content>: View where Label: View, Content: View
   }
 }
 
+private struct RecursiveView2<Data, RowContent>: View where Data: RandomAccessCollection, Data.Element: Identifiable, RowContent: View {
+  let data: Data
+  let children: KeyPath<Data.Element, Data?>
+  let rowContent: (Data.Element) -> RowContent
+
+  var body: some View {
+    ForEach(data) { child in
+      if self.containsSub(child)  {
+        FSDisclosureGroup(content: {
+          RecursiveView(data: child[keyPath: self.children]!, children: self.children, rowContent: self.rowContent)
+          .padding(.leading)
+        }, label: {
+          self.rowContent(child)
+        })
+      } else {
+        self.rowContent(child)
+      }
+    }
+  }
+
+  func containsSub(_ element: Data.Element) -> Bool {
+    element[keyPath: children] != nil
+  }
+}
+
 #if DEBUG
 struct TestListView_Previews: PreviewProvider {
     static var previews: some View {

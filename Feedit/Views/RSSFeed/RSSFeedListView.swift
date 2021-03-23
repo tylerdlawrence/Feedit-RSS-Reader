@@ -90,10 +90,11 @@ struct RSSFeedListView: View {
     
     var body: some View {
         
-        ZStack {
-            Color("accent")
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .edgesIgnoringSafeArea(.all)
+//        ZStack {
+//            Color("accent")
+//                .frame(maxWidth: .infinity, maxHeight: .infinity)
+//                .edgesIgnoringSafeArea(.all)
+        ScrollViewReader { scrollViewProxy in
             List {
                 ForEach(filteredArticles) { item in
                     ZStack {

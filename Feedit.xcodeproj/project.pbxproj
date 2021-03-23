@@ -24,6 +24,11 @@
 		61342892260795E100B9C20C /* feedit@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 61342890260795E000B9C20C /* feedit@2x.png */; };
 		61342893260795E100B9C20C /* feedit@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 61342891260795E000B9C20C /* feedit@3x.png */; };
 		613428952608360800B9C20C /* TrackableScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613428942608360300B9C20C /* TrackableScrollView.swift */; };
+		6134289B260A4BF500B9C20C /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61DEBE3225152CB20025B1B3 /* WidgetKit.framework */; };
+		6134289C260A4BF500B9C20C /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61DEBE3E25152CB90025B1B3 /* SwiftUI.framework */; };
+		6134289F260A4BF500B9C20C /* FeedWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6134289E260A4BF500B9C20C /* FeedWidget.swift */; };
+		613428A1260A4BFF00B9C20C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 613428A0260A4BFF00B9C20C /* Assets.xcassets */; };
+		613428A5260A4C0500B9C20C /* FeedWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 6134289A260A4BF400B9C20C /* FeedWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		615E971F25323C1900891083 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615E971E25323C1900891083 /* Reachability.swift */; };
 		615E98402533AFAE00891083 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615E983F2533AFAE00891083 /* ContentView.swift */; };
 		616121E42553670B0074F061 /* FeedKit in Frameworks */ = {isa = PBXBuildFile; productRef = 616121E32553670B0074F061 /* FeedKit */; };
@@ -152,6 +157,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		613428A3260A4C0500B9C20C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 61C8188A24E1F3FB00593939 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 61342899260A4BF400B9C20C;
+			remoteInfo = FeedWidgetExtension;
+		};
 		6182212F25053FEE005636B2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 61C8188A24E1F3FB00593939 /* Project object */;
@@ -178,6 +190,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				613428A5260A4C0500B9C20C /* FeedWidgetExtension.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -202,6 +215,10 @@
 		61342890260795E000B9C20C /* feedit@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "feedit@2x.png"; path = "Feedit/Assets.xcassets/AppIcon.appiconset/feedit@2x.png"; sourceTree = SOURCE_ROOT; };
 		61342891260795E000B9C20C /* feedit@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "feedit@3x.png"; path = "Feedit/Assets.xcassets/AppIcon.appiconset/feedit@3x.png"; sourceTree = SOURCE_ROOT; };
 		613428942608360300B9C20C /* TrackableScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackableScrollView.swift; sourceTree = "<group>"; };
+		6134289A260A4BF400B9C20C /* FeedWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FeedWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		6134289E260A4BF500B9C20C /* FeedWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedWidget.swift; sourceTree = "<group>"; };
+		613428A0260A4BFF00B9C20C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		613428A2260A4BFF00B9C20C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		615E971E25323C1900891083 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		615E983F2533AFAE00891083 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContentView.swift; path = Feedit/Views/ContentView.swift; sourceTree = SOURCE_ROOT; };
 		6162F25725B68BA1008E7FA7 /* Searchbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Searchbar.swift; sourceTree = "<group>"; };
@@ -301,6 +318,15 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		61342897260A4BF400B9C20C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6134289C260A4BF500B9C20C /* SwiftUI.framework in Frameworks */,
+				6134289B260A4BF500B9C20C /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6182212725053FEE005636B2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -357,6 +383,16 @@
 				6134288D2606D25F00B9C20C /* bot@3x.png */,
 			);
 			path = icons;
+			sourceTree = "<group>";
+		};
+		6134289D260A4BF500B9C20C /* FeedWidget */ = {
+			isa = PBXGroup;
+			children = (
+				6134289E260A4BF500B9C20C /* FeedWidget.swift */,
+				613428A0260A4BFF00B9C20C /* Assets.xcassets */,
+				613428A2260A4BFF00B9C20C /* Info.plist */,
+			);
+			path = FeedWidget;
 			sourceTree = "<group>";
 		};
 		616CAF6124F7146700690804 /* Dates */ = {
@@ -424,6 +460,7 @@
 			children = (
 				61C8189424E1F3FB00593939 /* Feedit */,
 				6182212B25053FEE005636B2 /* rssTests */,
+				6134289D260A4BF500B9C20C /* FeedWidget */,
 				61C8189324E1F3FB00593939 /* Products */,
 				61C818CD24E1F4A900593939 /* Frameworks */,
 			);
@@ -434,6 +471,7 @@
 			children = (
 				61C8189224E1F3FB00593939 /* Feedit.app */,
 				6182212A25053FEE005636B2 /* rssTests.xctest */,
+				6134289A260A4BF400B9C20C /* FeedWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -456,6 +494,7 @@
 				61C818EF24E1FB2600593939 /* CommonViews */,
 				618F9025250DCD4F00D5A03E /* Models */,
 				61C818D124E1F65D00593939 /* Views */,
+				61E99318260A56E000679853 /* Shared */,
 				61C8189E24E1F3FD00593939 /* Assets.xcassets */,
 				617B49D7260054090016FC3D /* FeeditApp.swift */,
 			);
@@ -610,6 +649,13 @@
 			path = RSSFeed;
 			sourceTree = "<group>";
 		};
+		61E99318260A56E000679853 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
 		61F9D6C1256A3E41005776C6 /* DataSource */ = {
 			isa = PBXGroup;
 			children = (
@@ -623,6 +669,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		61342899260A4BF400B9C20C /* FeedWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 613428A6260A4C0600B9C20C /* Build configuration list for PBXNativeTarget "FeedWidgetExtension" */;
+			buildPhases = (
+				61342896260A4BF400B9C20C /* Sources */,
+				61342897260A4BF400B9C20C /* Frameworks */,
+				61342898260A4BF400B9C20C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FeedWidgetExtension;
+			productName = FeedWidgetExtension;
+			productReference = 6134289A260A4BF400B9C20C /* FeedWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		6182212925053FEE005636B2 /* rssTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6182213125053FEE005636B2 /* Build configuration list for PBXNativeTarget "rssTests" */;
@@ -666,6 +729,7 @@
 				616121FB255376F90074F061 /* PBXTargetDependency */,
 				6193AEF82536481A00EF8460 /* PBXTargetDependency */,
 				615E989F2534046A00891083 /* PBXTargetDependency */,
+				613428A4260A4C0500B9C20C /* PBXTargetDependency */,
 			);
 			name = Feedit;
 			packageProductDependencies = (
@@ -693,9 +757,12 @@
 		61C8188A24E1F3FB00593939 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1220;
+				LastSwiftUpdateCheck = 1250;
 				LastUpgradeCheck = 1220;
 				TargetAttributes = {
+					61342899260A4BF400B9C20C = {
+						CreatedOnToolsVersion = 12.5;
+					};
 					6182212925053FEE005636B2 = {
 						CreatedOnToolsVersion = 12.0;
 						TestTargetID = 61C8189124E1F3FB00593939;
@@ -735,11 +802,20 @@
 			targets = (
 				61C8189124E1F3FB00593939 /* Feedit */,
 				6182212925053FEE005636B2 /* rssTests */,
+				61342899260A4BF400B9C20C /* FeedWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		61342898260A4BF400B9C20C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				613428A1260A4BFF00B9C20C /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6182212825053FEE005636B2 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -766,6 +842,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		61342896260A4BF400B9C20C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6134289F260A4BF500B9C20C /* FeedWidget.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6182212625053FEE005636B2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -901,6 +985,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		613428A4260A4C0500B9C20C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 61342899260A4BF400B9C20C /* FeedWidgetExtension */;
+			targetProxy = 613428A3260A4C0500B9C20C /* PBXContainerItemProxy */;
+		};
 		615E989F2534046A00891083 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = 615E989E2534046A00891083 /* OAuthSwift */;
@@ -968,6 +1057,52 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		613428A7260A4C0600B9C20C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7Z3Z6D3TH7;
+				INFOPLIST_FILE = FeedWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.tylerdlawrence.feeditrssreader.FeedWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		613428A8260A4C0600B9C20C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7Z3Z6D3TH7;
+				INFOPLIST_FILE = FeedWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.tylerdlawrence.feeditrssreader.FeedWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		6182213225053FEE005636B2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1131,6 +1266,7 @@
 		61C818AA24E1F3FD00593939 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Feedit/Feedit.entitlements;
@@ -1162,6 +1298,7 @@
 		61C818AB24E1F3FD00593939 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Feedit/Feedit.entitlements;
@@ -1193,6 +1330,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		613428A6260A4C0600B9C20C /* Build configuration list for PBXNativeTarget "FeedWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				613428A7260A4C0600B9C20C /* Debug */,
+				613428A8260A4C0600B9C20C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		6182213125053FEE005636B2 /* Build configuration list for PBXNativeTarget "rssTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

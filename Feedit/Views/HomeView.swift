@@ -11,81 +11,6 @@ import Introspect
 import Combine
 import WebKit
 
-struct DidReselectKey: EnvironmentKey {
-    static let defaultValue = PassthroughSubject<TabSelection, Never>().eraseToAnyPublisher()
-}
-
-extension EnvironmentValues {
-    var didReselect: AnyPublisher<TabSelection, Never> {
-        get {
-            return self[DidReselectKey.self]
-        }
-        set {
-            self[DidReselectKey.self] = newValue
-        }
-    }
-}
-
-enum OpenerSheetSelection: Identifiable {
-    var id: String {
-        switch self {
-            case .Story(let story_id):
-                return story_id
-            case .User(let user_id):
-                return user_id
-        case .Unknown(let url):
-            return "\(url)"
-        }
-    }
-    
-    case Story(String)
-    case User(String)
-    case Unknown(URL)
-}
-
-enum TabSelection: String {
-    case All, Unread, Starred, Settings
-}
-
-/** https://stackoverflow.com/a/64019877/193772 */
-struct NavigableTabViewItem<Content: View, TabItem: View>: View {
-    @Environment(\.didReselect) var didReselect
-    @EnvironmentObject var settings: Settings
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    
-    let tabSelection: TabSelection
-    let content: Content
-    let tabItem: TabItem
-    
-    init(tabSelection: TabSelection, @ViewBuilder content: () -> Content, @ViewBuilder tabItem: () -> TabItem) {
-        self.tabSelection = tabSelection
-        self.content = content()
-        self.tabItem = tabItem()
-    }
-
-    var body: some View {
-        let didReselectThis = didReselect.filter( {
-            $0 == tabSelection
-        }).eraseToAnyPublisher()
-
-        NavigationView {
-
-                self.content.environmentObject(settings).onReceive(didReselect) { _ in
-                    DispatchQueue.main.async {
-                        self.presentationMode.wrappedValue.dismiss()
-                    }
-                }
-
-            
-        }.tabItem {
-            self.tabItem
-        }
-        .tag(tabSelection)
-        .navigationViewStyle(StackNavigationViewStyle())
-        .environment(\.didReselect, didReselectThis)
-    }
-}
-
 struct HomeView: View {
     @Environment(\.didReselect) var didReselect
     @Environment(\.managedObjectContext) private var viewContext
@@ -131,7 +56,7 @@ struct HomeView: View {
     @State private var isSettingPresented = false
     @State private var isAddFormPresented = false
     @State private var selectedFeatureItem = FeaureItem.add
-    @State private var revealFeedsDisclosureGroup = true
+    @State private var revealFeedsDisclosureGroup = false
     @State private var revealSmartFilters = true
     @State private var isRead = false
     @State private var isLoading = false
@@ -188,7 +113,7 @@ struct HomeView: View {
                 .padding([.top, .bottom, .trailing])
         }
     }
-    
+    @StateObject var model = ContentViewModel()
     private var navButtons: some View {
         HStack(alignment: .top, spacing: 24) {
 //            FilterPicker(isOn: 2, rssFeedViewModel: rssFeedViewModel)
@@ -204,8 +129,7 @@ struct HomeView: View {
         DisclosureGroup(
             isExpanded: $revealSmartFilters,
             content: {
-//        Section(header: Text("All Items").font(.system(size: 18, weight: .medium, design: .rounded)).foregroundColor(Color("text")).textCase(nil)) {
-//            VStack{
+//        Section(header: Text("All Items").font(.system(size: 20, weight: .medium, design: .rounded)).foregroundColor(Color("text")).textCase(nil)) {
                 HStack {
                     ZStack{
                         NavigationLink(destination: allArticlesView) {
@@ -271,7 +195,6 @@ struct HomeView: View {
                     }
                 }.listRowBackground(Color("accent"))
                 
-                
 //            }.listRowBackground(Color("accent"))
                 HStack {
                     ZStack{
@@ -281,7 +204,7 @@ struct HomeView: View {
                     .opacity(0.0)
                     .buttonStyle(PlainButtonStyle())
                     HStack{
-                        Image(systemName: "star")
+                        Image(systemName: "star.fill")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 21, height: 21,alignment: .center)
@@ -303,8 +226,8 @@ struct HomeView: View {
                 .onAppear {
                     self.archiveListViewModel.fecthResults()
                 }
-    //        }
-                }.listRowBackground(Color("accent"))
+            }
+            .listRowBackground(Color("accent"))
             },
             label: {
                 HStack {
@@ -318,9 +241,11 @@ struct HomeView: View {
                             }
                         }
                 }
-            }).listRowBackground(Color("darkerAccent"))
+            })
+//        }
+            .listRowBackground(Color("darkerAccent"))
             .accentColor(Color("tab"))
-        }
+    }
     
     let selection = Set<RSS>()
     private var feedsSection: some View {
@@ -367,7 +292,7 @@ struct HomeView: View {
     
     private var folderButton: some View {
         NavigationLink(destination: RSSGroupListView(persistence: Persistence.current, viewModel: self.viewModel)) {
-            Image(systemName: "folder").font(.system(size: 18, weight: .medium, design: .rounded)).foregroundColor(Color("tab"))
+            Image(systemName: "folder").font(.system(size: 18, weight: .medium, design: .rounded))//.foregroundColor(Color("tab"))
                 .padding([.top, .bottom, .trailing])
         }
     }
@@ -377,15 +302,15 @@ struct HomeView: View {
     
     var body: some View {
         NavigationView{
-            VStack {
+//            VStack {
+            ScrollViewReader { scrollViewProxy in
                 ZStack {
                     List {
                         feedsView
-//                        Spacer()
                         RSSFoldersDisclosureGroup(persistence: Persistence.current, viewModel: self.viewModel)
-//                        Spacer()
                         feedsSection
-                    }
+//                        feeds
+                    }.frame(maxWidth: .infinity)
 //                    .listSeparatorStyle(.none)
                     .navigationBarItems(trailing:
                                             HStack(spacing: 20) {
@@ -407,7 +332,7 @@ struct HomeView: View {
 //                    .listStyle(PlainListStyle())
 //                    .listStyle(InsetGroupedListStyle())
                     .navigationBarTitle("Home", displayMode: .automatic)
-                    .add(self.searchBar)
+//                    .add(self.searchBar)
                 }
 
                 
@@ -427,7 +352,8 @@ struct HomeView: View {
                 selection: $action) {
                 EmptyView()
                 }
-            }.redacted(reason: isLoading ? .placeholder : [])
+            }
+            .redacted(reason: isLoading ? .placeholder : [])
             .onReceive(addRSSPublisher, perform: { output in
                 guard
                     let userInfo = output.userInfo,
@@ -446,7 +372,6 @@ struct HomeView: View {
                 } else if FeaureItem.setting == self.selectedFeatureItem {
                     SettingView(fetchContentTime: .constant("minute1"))
                         .environment(\.managedObjectContext, Persistence.current.context).environmentObject(Settings(context: Persistence.current.context))
-                    //.accentColor(settings.accentColor).font(Font(.body, sizeModifier: CGFloat(settings.textSizeModifier)))
                 }
             })
         }
@@ -454,6 +379,32 @@ struct HomeView: View {
             self.viewModel.fecthResults()
         }
         .navigationViewStyle(StackNavigationViewStyle())
+    }
+    
+    private var feeds: some View {
+        Section(header: Text("Feeds").font(.system(size: 20, weight: .medium, design: .rounded)).foregroundColor(Color("text")).textCase(nil)) {
+            
+            ForEach(viewModel.items, id: \.self) { rss in
+                ZStack {
+                    NavigationLink(destination: self.destinationView(rss: rss)) {
+                        EmptyView()
+                    }
+                    .opacity(0.0)
+                    .buttonStyle(PlainButtonStyle())
+                    
+                    FeedRow(rss: rss, viewModel: viewModel)
+                    
+                }
+            }
+            .onDelete { indexSet in
+                if let index = indexSet.first {
+                    self.viewModel.delete(at: index)
+                }
+            }
+            .listRowBackground(Color("accent"))
+        }
+//        .listRowBackground(Color("darkerAccent"))
+        .accentColor(Color("tab"))
     }
 }
 
@@ -495,7 +446,7 @@ struct HomeView_Previews: PreviewProvider {
 //            .environment(\.managedObjectContext, Persistence.current.context)
             .environmentObject(Persistence.current)
             .environmentObject(Settings(context: Persistence.current.context))
-//            .preferredColorScheme(.dark)
+            .preferredColorScheme(.dark)
     }
 }
 #endif
@@ -509,21 +460,9 @@ struct FeedRow: View {
     var body: some View {
         HStack {
             RSSRow(rss: rss, viewModel: self.viewModel)
-            Spacer()
-            Text("\(viewModel.items.count)")
-                .font(.caption).fontWeight(.bold).padding(.horizontal, 7).padding(.vertical, 1).background(Color.gray.opacity(0.5)).opacity(0.4).foregroundColor(Color("text")).cornerRadius(8)
-        }
+//            Spacer()
+//            Text("\(viewModel.items.count)")
+//                .font(.caption).fontWeight(.bold).padding(.horizontal, 7).padding(.vertical, 1).background(Color.gray.opacity(0.5)).opacity(0.4).foregroundColor(Color("text")).cornerRadius(8)
+        }.frame(maxWidth: .infinity)
     }
 }
-
-//#if DEBUG
-//struct FeedRow_Previews: PreviewProvider {
-//    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-//
-//    static var previews: some View {
-//        FeedRow(rss: RSS.simple(), viewModel: viewModel)
-//            .environment(\.managedObjectContext, Persistence.current.context)
-//            .preferredColorScheme(.dark)
-//    }
-//}
-//#endif

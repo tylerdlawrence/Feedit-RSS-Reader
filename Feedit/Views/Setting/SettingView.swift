@@ -469,6 +469,19 @@ struct SettingView: View {
                                 }
                             }
                         }
+                    HStack {
+                        NavigationLink(destination: self.dataNStorage) {
+                            HStack {
+                                Image(systemName: "tray.full")
+                                    .frame(width: 30, height: 30)
+                                    .foregroundColor(.white)
+                                    .background(Color("tab"))
+                                    .opacity(0.9)
+                                    .clipShape(RoundedRectangle(cornerRadius: 5))
+                                Text("Data Storage")
+                            }
+                        }
+                    }
                     }
                 
                 Section {
