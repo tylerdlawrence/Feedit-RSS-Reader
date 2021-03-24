@@ -1,6 +1,7 @@
 {
-  "colors" : [
+  "images" : [
     {
+      "filename" : "launch.png",
       "idiom" : "universal"
     }
   ],

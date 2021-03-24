@@ -8,8 +8,8 @@
 import Foundation
 import CoreData
 import SwiftUI
-import FeedKit
-import FaviconFinder
+//import FeedKit
+//import FaviconFinder
 import Combine
 import BackgroundTasks
 

@@ -12,9 +12,21 @@ import os.log
 import SwiftUI
 import UIKit
 
+public extension URL {
+
+    /// Returns a URL for the given app group and database pointing to the sqlite database.
+    static func storeURL(for appGroup: String, databaseName: String) -> URL {
+        guard let fileContainer = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroup) else {
+            fatalError("Shared file container could not be created.")
+        }
+
+        return fileContainer.appendingPathComponent("\(databaseName).sqlite")
+    }
+}
+
 class Persistence: ObservableObject {
+
     static let shared = Persistence(version: 1)
-    
     static private(set) var current = Persistence(version: 1)
     
     private static let authorName = "Author"
@@ -31,10 +43,9 @@ class Persistence: ObservableObject {
 //        let c = container.viewContext
 //        c.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
 //        return c
-//    }
-//    var container: NSPersistentContainer
-    
+//    }    
     private let isStoreLoaded = CurrentValueSubject<Bool, Error>(false)
+    
     
     init(directory: FileManager.SearchPathDirectory = .documentDirectory,
          domainMask: FileManager.SearchPathDomainMask = .userDomainMask,

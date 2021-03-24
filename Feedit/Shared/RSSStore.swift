@@ -26,6 +26,8 @@ class RSSStore: NSObject, ObservableObject {
     static let instance = RSSStore()
     private let persistence = Persistence.current
     
+    var userDefaults = UserDefaults(suiteName: "group.com.tylerdlawrence.feedit.shared");
+    
     private lazy var fetchedResultsController: NSFetchedResultsController<RSS> = {
         let fetchRequest: NSFetchRequest<RSS> = RSS.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "createTime", ascending: false)]
@@ -39,10 +41,10 @@ class RSSStore: NSObject, ObservableObject {
         return fetechedResultsController
     }()
     
-//    func markAllPostsRead(start: Int = 0, _ item: RSSItem) {
-//        self.markAllPostsRead(item)
-//        shouldReload = true
-//    }
+    lazy var applicationDocumentsDirectory: URL = {
+        let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.tylerdlawrence.feedit.shared")!
+        return containerURL
+    }()
     
     var isRead: Bool {
         return readDate != nil
@@ -64,25 +66,7 @@ class RSSStore: NSObject, ObservableObject {
             
         }
     }
-    
-//    func setPostRead(rss: RSS, item: RSSItem) {
-//        rss.readDate = Date()
-//        rss.objectWillChange.send()
-//        totalUnreadPosts -= 1
-//        totalReadPostsToday += 1
-//        if let index = feed.posts.firstIndex(where: {$0.url.absoluteString == post.url.absoluteString}) {
-//            feed.posts.remove(at: index)
-//            feed.posts.insert(post, at: index)
-//        }
-//
-//        if let index = self.feeds.firstIndex(where: {$0.url.absoluteString == feed.url.absoluteString}) {
-//            self.feeds.remove(at: index)
-//            self.feeds.insert(feed, at: index)
-//        }
-//
-//        self.updateFeeds()
-//    }
-    
+
     var context: NSManagedObjectContext {
         return persistence.context
     }

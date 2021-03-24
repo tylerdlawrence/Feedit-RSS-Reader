@@ -8,12 +8,12 @@
 import SwiftUI
 import CoreData
 import Introspect
+import WidgetKit
 
 @main
 struct FeeditApp: App {
     @Environment(\.managedObjectContext) var managedObjectContext
     @Environment(\.scenePhase) private var scenePhase
-    @ObservedObject var networkReachability = NetworkReachabilty.shared
     @State var isLoaded = false
     
     @AppStorage("darkMode") var darkMode = false

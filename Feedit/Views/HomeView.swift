@@ -12,7 +12,7 @@ import Combine
 import WebKit
 
 struct HomeView: View {
-    @Environment(\.didReselect) var didReselect
+//    @Environment(\.didReselect) var didReselect
     @Environment(\.managedObjectContext) private var viewContext
     
     @FetchRequest(fetchRequest: Settings.fetchAllRequest()) var all_settings: FetchedResults<Settings>

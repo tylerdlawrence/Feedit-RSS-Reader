@@ -67,11 +67,6 @@
 			<key>orderHint</key>
 			<integer>14</integer>
 		</dict>
-		<key>FeedWidgetExtension.xcscheme_^#shared#^_</key>
-		<dict>
-			<key>orderHint</key>
-			<integer>2</integer>
-		</dict>
 		<key>Feedit.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
@@ -81,6 +76,11 @@
 		<dict>
 			<key>orderHint</key>
 			<integer>8</integer>
+		</dict>
+		<key>FeedsWidgetExtension.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>34</integer>
 		</dict>
 		<key>FileKit (Playground) 1.xcscheme</key>
 		<dict>
@@ -300,6 +300,11 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>61342899260A4BF400B9C20C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>61453A1C255C4CAE0060EBB6</key>
 		<dict>
 			<key>primary</key>

@@ -20,30 +20,12 @@
         }
       },
       {
-        "package": "BetterSafariView",
-        "repositoryURL": "https://github.com/stleamist/BetterSafariView.git",
-        "state": {
-          "branch": null,
-          "revision": "561919b490eddf8f999b0f855cbf237001cbfccd",
-          "version": "2.3.1"
-        }
-      },
-      {
         "package": "combine-schedulers",
         "repositoryURL": "https://github.com/pointfreeco/combine-schedulers",
         "state": {
           "branch": null,
           "revision": "ae2f434e81017bb7de02c168fb0bde83cd8370c1",
           "version": "0.3.1"
-        }
-      },
-      {
-        "package": "EasySwiftUI",
-        "repositoryURL": "https://github.com/onmyway133/EasySwiftUI.git",
-        "state": {
-          "branch": null,
-          "revision": "22b4e8e759fc2c0059d3b1439940a4d3fc161cbe",
-          "version": "0.2.11"
         }
       },
       {
