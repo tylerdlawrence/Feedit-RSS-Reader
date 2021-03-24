@@ -160,6 +160,7 @@ struct RSSRow: View {
                         .lineLimit(1)
                         .foregroundColor(Color("text"))
                     Spacer()
+                    
 //                    Text("\(rss.title.count)")
 //                        .font(.caption)
 //                        .fontWeight(.bold)
@@ -239,10 +240,9 @@ struct RSSRow: View {
                     Divider()
 
                     Button(action: {
-//                        deleteRow()
-                        dismissDestructiveDelayButton()
                         showSheet.toggle()
-                        self.delete(rss)
+                        context.delete(rss)
+                        try! context.save()
                     }, label: {
                         Label("Unsubscribe from \(rss.title)?", systemImage: "xmark")
                     })
@@ -251,7 +251,7 @@ struct RSSRow: View {
     }
     func delete(_ rss: RSS) {
         self.viewModel.items.removeAll(where: {$0 == rss})
-        viewModel.items.removeAll()
+        viewModel.items.remove(at: 0)
         }
 }
     

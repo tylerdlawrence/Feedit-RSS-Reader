@@ -65,6 +65,8 @@ class Persistence: ObservableObject {
         }
     }
     
+    
+    
     func saveChanges() {
       guard context.hasChanges else { return }
 
@@ -123,7 +125,7 @@ extension Persistence {
 struct PersistenceController {
     static let shared = PersistenceController()
 
-    static var random: PersistenceController = {
+    static var preview: PersistenceController = {
         let result = PersistenceController()
         let viewContext = result.container.viewContext
         for _ in 0..<10 {
@@ -191,31 +193,31 @@ struct PersistenceController {
 //    }
 //}
 
-//extension Persistence {
-//  static var random: Persistence = {
-//    let controller = Persistence(version: 1)
-//    controller.context.perform {
-//      for i in 0..<1 {
-//        controller.makeRandomFolder(context: controller.context)      }
-//      for i in 0..<1 {
-//        controller.makeRandomFolder(context: controller.context)
-//      }
-//    }
-//    return controller
-//  }()
-//
-//    func makeRandomFolder(context: NSManagedObjectContext) -> RSSGroup {
-//        let group = RSSGroup()
-//        group.id = UUID()
-//        group.name = "Default Folder"
-//        group.items = [
-//            makeRandomFolder(context: context),
-//            makeRandomFolder(context: context),
-//            makeRandomFolder(context: context)
-//        ]
-//        return group
-//    }
-//}
+extension Persistence {
+  static var random: Persistence = {
+    let controller = Persistence(version: 1)
+    controller.context.perform {
+      for i in 0..<1 {
+        controller.makeRandomFolder(context: controller.context)      }
+      for i in 0..<1 {
+        controller.makeRandomFolder(context: controller.context)
+      }
+    }
+    return controller
+  }()
+
+    func makeRandomFolder(context: NSManagedObjectContext) -> RSSGroup {
+        let group = RSSGroup()
+        group.id = UUID()
+        group.name = "Default Folder"
+        group.items = [
+            makeRandomFolder(context: context),
+            makeRandomFolder(context: context),
+            makeRandomFolder(context: context)
+        ]
+        return group
+    }
+}
 
 public class Settings: NSManagedObject, Identifiable {
     @NSManaged public var layoutValue: Double

@@ -34,6 +34,8 @@ struct FeeditApp: App {
 //        ContentView(rssFeedViewModel: RSSFeedViewModel(rss: self.rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
         
         HomeView(articles: articles, unread: unread, rssItem: rssItem, viewModel: viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
+            
+            
             .environment(\.managedObjectContext, Persistence.current.context)
             .environmentObject(rssFeedViewModel).environmentObject(viewModel).environmentObject(persistence)
         

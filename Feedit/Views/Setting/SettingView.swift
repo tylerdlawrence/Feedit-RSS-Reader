@@ -539,7 +539,7 @@ struct SettingView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             SettingView(fetchContentTime: .constant("minute1"))
-                .environment(\.managedObjectContext, PersistenceController.random.container.viewContext).environmentObject(Settings(context: PersistenceController.random.container.viewContext))
+                .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext).environmentObject(Settings(context: PersistenceController.preview.container.viewContext))
         }.previewLayout(.sizeThatFits)
 
     }

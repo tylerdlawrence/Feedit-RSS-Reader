@@ -57,10 +57,10 @@ struct HomeView: View {
     @State private var isAddFormPresented = false
     @State private var selectedFeatureItem = FeaureItem.add
     @State private var revealFeedsDisclosureGroup = false
-    @State private var revealSmartFilters = true
+    @State private var revealSmartFilters = false
     @State private var isRead = false
     @State private var isLoading = false
-    @State var isExpanded = true
+    @State var isExpanded = false
     @State var sources: [RSS] = []
     
     var filteredArticles: [RSSItem] {
@@ -260,10 +260,15 @@ struct HomeView: View {
                     }
                     .opacity(0.0)
                     .buttonStyle(PlainButtonStyle())
-                    
-                    FeedRow(rss: rss, viewModel: viewModel)
-                    
+                    HStack {
+                        FeedRow(rss: rss, viewModel: viewModel, unread: self.unread)
+//                        Spacer()
+//                        Text("\(filteredArticles.count)")
+                    }
                 }
+//                .onAppear {
+//                    self.unread.fetchUnreadCount()
+//                }
             }
             .onDelete { indexSet in
                 if let index = indexSet.first {
@@ -392,7 +397,7 @@ struct HomeView: View {
                     .opacity(0.0)
                     .buttonStyle(PlainButtonStyle())
                     
-                    FeedRow(rss: rss, viewModel: viewModel)
+                    FeedRow(rss: rss, viewModel: viewModel, unread: self.unread)
                     
                 }
             }
@@ -443,9 +448,13 @@ struct HomeView_Previews: PreviewProvider {
 
     static var previews: some View {
         HomeView(articles: articles, unread: unread, rssItem: rssItem, viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
-//            .environment(\.managedObjectContext, Persistence.current.context)
-            .environmentObject(Persistence.current)
-            .environmentObject(Settings(context: Persistence.current.context))
+            
+            .environmentObject(DataSourceService.current.rssItem)
+            .environment(\.managedObjectContext, Persistence.current.context)
+            
+//            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+//            .environmentObject(Persistence.current)
+//            .environmentObject(Settings(context: Persistence.current.context))
             .preferredColorScheme(.dark)
     }
 }
@@ -455,14 +464,17 @@ struct HomeView_Previews: PreviewProvider {
 struct FeedRow: View {
     
     let rss:RSS
-    let viewModel:RSSListViewModel
+    let viewModel: RSSListViewModel
+    let unread: Unread
+    
+//    let unreadCount = unread.items.filter { !$0.isRead }.count
     
     var body: some View {
         HStack {
             RSSRow(rss: rss, viewModel: self.viewModel)
-//            Spacer()
-//            Text("\(viewModel.items.count)")
-//                .font(.caption).fontWeight(.bold).padding(.horizontal, 7).padding(.vertical, 1).background(Color.gray.opacity(0.5)).opacity(0.4).foregroundColor(Color("text")).cornerRadius(8)
+            Spacer()
+            Text("\(unread.items.count)")
+                .font(.caption).fontWeight(.bold).padding(.horizontal, 7).padding(.vertical, 1).background(Color.gray.opacity(0.5)).opacity(0.4).foregroundColor(Color("text")).cornerRadius(8)
         }.frame(maxWidth: .infinity)
     }
 }

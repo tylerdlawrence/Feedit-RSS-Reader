@@ -103,23 +103,31 @@ struct RSSItemRow: View {
             VStack(alignment: .leading) {
                HStack(alignment: .top) {
                 VStack {
-                    if rssItem.isArchive {
-                        Image(systemName: "star.fill").font(.system(size: 11, weight: .black, design: .rounded))
-                            .foregroundColor(Color.yellow)
-                            .multilineTextAlignment(.center)
-                            .aspectRatio(contentMode: .fit)
+//                    if !rssItem.isRead {
+                        Text("")
                             .frame(width: 8, height: 8)
-                            .opacity(0.8)
-                            .padding([.top, .leading])
-                    } else {
-                        Image(systemName: "star.fill").font(.system(size: 11, weight: .black, design: .rounded))
-                            .foregroundColor(Color.yellow)
-                            .multilineTextAlignment(.center)
-                            .aspectRatio(contentMode: .fit)
-                            .opacity(rssItem.isArchive ? 1 : 0)
-                            .frame(width: 8, height: 8)
-                            .padding([.top, .leading])
-                    }
+                            .background(Color.blue)
+                            .opacity(rssItem.isRead ? 0 : 1)
+                            .clipShape(Circle())
+                            .padding([.top, .trailing])
+//                    }
+//                    if rssItem.isArchive {
+//                        Image(systemName: "star.fill").font(.system(size: 11, weight: .black, design: .rounded))
+//                            .foregroundColor(Color.yellow)
+//                            .multilineTextAlignment(.center)
+//                            .aspectRatio(contentMode: .fit)
+//                            .frame(width: 8, height: 8)
+//                            .opacity(0.8)
+//                            .padding([.top, .leading])
+//                    } else {
+//                        Image(systemName: "star.fill").font(.system(size: 11, weight: .black, design: .rounded))
+//                            .foregroundColor(Color.yellow)
+//                            .multilineTextAlignment(.center)
+//                            .aspectRatio(contentMode: .fit)
+//                            .opacity(rssItem.isArchive ? 1 : 0)
+//                            .frame(width: 8, height: 8)
+//                            .padding([.top, .leading])
+//                    }
                 }
                 VStack {
                     
@@ -145,7 +153,22 @@ struct RSSItemRow: View {
                                     .font(.system(size: 11, weight: .medium, design: .rounded))
                                     .foregroundColor(.gray)
                                     .opacity(0.8)
-                                                                
+//                                Spacer()
+                                if rssItem.isArchive {
+                                    Image(systemName: "star.fill").font(.system(size: 8, design: .rounded))
+                                        .foregroundColor(Color.gray)
+//                                        .multilineTextAlignment(.center)
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 8, height: 8)
+                                        .opacity(0.8)
+                                } else {
+                                    Image(systemName: "star.fill").font(.system(size: 8, design: .rounded))
+                                        .foregroundColor(Color.gray)
+//                                        .multilineTextAlignment(.center)
+                                        .aspectRatio(contentMode: .fit)
+                                        .opacity(rssItem.isArchive ? 1 : 0)
+                                        .frame(width: 8, height: 8)
+                                }
                                 Spacer()
                             }
                             

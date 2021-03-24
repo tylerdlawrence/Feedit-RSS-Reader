@@ -109,7 +109,6 @@ struct RSSFoldersDisclosureGroup: View {
     @StateObject private var expansionHandler = ExpansionHandler<ExpandableSection>()
     
     var body: some View {
-
         DisclosureGroup(
             isExpanded: $revealFoldersDisclosureGroup, content: {
                 ForEach(groups, id: \.id) { group in
@@ -137,7 +136,8 @@ struct RSSFoldersDisclosureGroup: View {
                         }
                     }
                     .listRowBackground(Color("accent"))
-                } label: {
+                }
+                    label: {
                     HStack {
                         Image(systemName: "folder")
                             .resizable()
@@ -146,7 +146,7 @@ struct RSSFoldersDisclosureGroup: View {
                             .foregroundColor(Color("tab").opacity(0.9))
                         Text("\(group.name ?? "Untitled")")
                         Spacer()
-                            
+
                         Text("\(group.itemCount)")
                             .font(.caption)
                             .fontWeight(.bold)
@@ -161,7 +161,7 @@ struct RSSFoldersDisclosureGroup: View {
                                 withAnimation { self.expansionHandler.toggleExpanded(for: .section) }
                             }
                         }
-                }.accentColor(Color.gray.opacity(0.7))
+                    }.accentColor(Color.gray.opacity(0.8))
 
             }
             .onDelete(perform: deleteObjects)
@@ -197,18 +197,29 @@ struct RSSFoldersDisclosureGroup: View {
         return RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), rssItem: item, filter: .all)
             .environmentObject(DataSourceService.current.rss)
     }
+    private var dropdownView: some View {
+        ForEach(groups) { group in
+            Section(header: Text(group.name ?? "No Feeds")) {
+                ForEach(viewModel.items) { rss in
+                    NavigationLink(destination: self.destinationView(rss: rss)) {
+                        RSSRow(rss: rss, viewModel: viewModel)
+                    }
+                }
+            }
+        }
+    }
 }
 
-//#if DEBUG
-//struct RSSFoldersDisclosureGroup_Previews: PreviewProvider {
-//    static let rss = RSS()
-//    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-//    static var previews: some View {
-//        RSSFoldersDisclosureGroup(persistence: Persistence.current, viewModel: self.viewModel)
-//          .environment(\.managedObjectContext, Persistence.current.context)
-//          .environmentObject(Persistence.current)
-//            .preferredColorScheme(.dark)
-//    }
-//}
-//#endif
+#if DEBUG
+struct RSSFoldersDisclosureGroup_Previews: PreviewProvider {
+    static let rss = RSS()
+    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+    static var previews: some View {
+        RSSFoldersDisclosureGroup(persistence: Persistence.current, viewModel: self.viewModel)
+          .environment(\.managedObjectContext, Persistence.current.context)
+          .environmentObject(Persistence.current)
+            .preferredColorScheme(.dark)
+    }
+}
+#endif
 
