@@ -30,3 +30,41 @@ public extension View {
         }
     }
 }
+
+struct HiddenItem: View {
+    @State private var hideRemove = false
+    @State private var hideKeep = false
+    
+    var body: some View {
+        VStack() {
+            HStack {
+                Text("Text that needs to be hidden")
+                    .modifier(IsHidden(isHidden: hideRemove, remove: hideRemove))
+            }
+        }
+    }
+}
+
+struct IsHidden: ViewModifier {
+    private let isHidden: Bool
+    private let remove: Bool
+    
+    init(isHidden: Bool, remove: Bool) {
+        self.isHidden = isHidden
+        self.remove = remove
+    }
+    
+    func body(content: Content) -> some View {
+        Group {
+            if isHidden {
+                if remove {
+                    EmptyView()
+                } else {
+                    content.hidden()
+                }
+            } else {
+                content
+            }
+        }
+    }
+}

@@ -40,6 +40,7 @@ extension RSSItem {
     @NSManaged public var thumbnailURL: URL
     @NSManaged public var unread: Bool
     @NSManaged public var itemCount: Int64
+    @NSManaged public var urlToImage: String?
     
     public override func awakeFromInsert() {
         super.awakeFromInsert()

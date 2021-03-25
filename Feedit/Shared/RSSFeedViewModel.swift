@@ -15,16 +15,46 @@ extension RSSFeedViewModel: Identifiable {
     
 }
 
+
+class RSSFeedListItem: Identifiable, Codable {
+    var uuid = UUID()
+    
+    var author: String?
+    var title: String
+    var urlToImage: String?
+    var url: String
+    
+    enum CodingKeys: String, CodingKey {
+        case author, title, urlToImage, url
+    }
+}
+
 class RSSFeedViewModel: NSObject, ObservableObject {
+    typealias Element = RSSItem
+    private(set) lazy var rssFeedViewModel = RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem)
         
+    var changeReadFilterSubject = PassthroughSubject<Bool, Never>()
+    var selectNextUnreadSubject = PassthroughSubject<Bool, Never>()
+    var readFilterAndFeedsPublisher: AnyPublisher<([RSS], Bool?), Never>?
+    @Published var nameForDisplay = ""
+    @Published var selectedTimelineItemIDs = Set<String>()  // Don't use directly.  Use selectedTimelineItemsPublisher
+    @Published var selectedTimelineItemID: String? = nil    // Don't use directly.  Use selectedTimelineItemsPublisher
+    @Published var listID = ""
+    
     private var bag = Set<AnyCancellable>()
         
     @Published var isOn = false
     @Published var unreadIsOn = false
-    @Published var items: [RSSItem] = []
+    @Published var items = [RSSItem]()// = []
     
     @Published var selectedPost: RSSItem?
     @Published var shouldReload = false
+    
+    var startIndex: Int { items.startIndex }
+    var endIndex: Int { items.endIndex }
+    subscript(position: Int) -> RSSItem {
+            return items[position]
+        }
     
     let dataSource: RSSItemDataSource
     
@@ -37,10 +67,14 @@ class RSSFeedViewModel: NSObject, ObservableObject {
         super.init()
     }
     
-    func markAllPostsRead(start: Int = 0, _ item: RSSItem) {
-        self.markAllPostsRead(item)
-        shouldReload = true
+    func markAllAsRead() {
+        rssFeedViewModel.markAllAsRead()
     }
+    
+//    func markAllPostsRead(start: Int = 0, _ item: RSSItem) {
+//        self.markAllPostsRead(item)
+//        shouldReload = true
+//    }
     
     func archiveOrCancel(_ item: RSSItem) {
         let updatedItem = dataSource.readObject(item)

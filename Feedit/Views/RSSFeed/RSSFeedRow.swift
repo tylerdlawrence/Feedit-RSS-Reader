@@ -32,6 +32,9 @@ struct RSSItemRow: View {
     var rssSource: RSS {
         return self.rssFeedViewModel.rss
     }
+    
+    @State private var hideRemove = false
+    @State private var hideKeep = false
             
     init(rssItem: RSSItem, menu action: ((RSSItem) -> Void)? = nil, rssFeedViewModel: RSSFeedViewModel) {
         self.rssItem = rssItem
@@ -101,15 +104,15 @@ struct RSSItemRow: View {
 
         ZStack {
             VStack(alignment: .leading) {
-               HStack(alignment: .top) {
-                VStack {
+                HStack {//}(alignment: .top) {
+                VStack(alignment: .center) {
 //                    if !rssItem.isRead {
                         Text("")
                             .frame(width: 8, height: 8)
                             .background(Color.blue)
                             .opacity(rssItem.isRead ? 0 : 1)
                             .clipShape(Circle())
-                            .padding([.top, .trailing])
+                            .padding([.bottom])
 //                    }
 //                    if rssItem.isArchive {
 //                        Image(systemName: "star.fill").font(.system(size: 11, weight: .black, design: .rounded))
@@ -129,22 +132,6 @@ struct RSSItemRow: View {
 //                            .padding([.top, .leading])
 //                    }
                 }
-                VStack {
-                    
-                    
-//                    AsyncImage(
-//                        url: URL(string: rssFeedViewModel.rss.image.description)!,
-//                        placeholder: {
-//                            ProgressView()
-//                        },
-//                        image: {
-//                            Image(uiImage: $0)
-//
-//                        }
-//                     )
-//                    .frame(width: 40, height: 40, alignment: .center)
-                    
-                }.padding(.top)
                     HStack{
                         VStack(alignment: .leading){
                             HStack {
@@ -158,14 +145,14 @@ struct RSSItemRow: View {
                                     Image(systemName: "star.fill").font(.system(size: 8, design: .rounded))
                                         .foregroundColor(Color.gray)
 //                                        .multilineTextAlignment(.center)
-                                        .aspectRatio(contentMode: .fit)
+//                                        .aspectRatio(contentMode: .fit)
                                         .frame(width: 8, height: 8)
                                         .opacity(0.8)
                                 } else {
                                     Image(systemName: "star.fill").font(.system(size: 8, design: .rounded))
                                         .foregroundColor(Color.gray)
 //                                        .multilineTextAlignment(.center)
-                                        .aspectRatio(contentMode: .fit)
+//                                        .aspectRatio(contentMode: .fit)
                                         .opacity(rssItem.isArchive ? 1 : 0)
                                         .frame(width: 8, height: 8)
                                 }
@@ -239,7 +226,14 @@ struct RSSItemRow: View {
                         onAction: {
                             self.contextMenuAction?(self.rssItem)
                     })
-
+                    
+                    ActionContextMenu(
+                        label: "Hide Article",
+                        systemName: "eye.slash",
+                        onAction: {
+                            self.hideRemove.toggle()
+                    })
+                    
                     Divider()
 
                     Button(action: {

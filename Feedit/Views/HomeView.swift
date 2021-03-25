@@ -13,6 +13,7 @@ import WebKit
 
 struct HomeView: View {
 //    @Environment(\.didReselect) var didReselect
+    @State var sheetSelection: SheetType?
     @Environment(\.managedObjectContext) private var viewContext
     
     @FetchRequest(fetchRequest: Settings.fetchAllRequest()) var all_settings: FetchedResults<Settings>
@@ -40,6 +41,8 @@ struct HomeView: View {
         case star
     }
     
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    
     @Environment(\.sizeCategory) var sizeCategory
     @ObservedObject var articles: AllArticles
     @ObservedObject var unread: Unread
@@ -57,7 +60,7 @@ struct HomeView: View {
     @State private var isAddFormPresented = false
     @State private var selectedFeatureItem = FeaureItem.add
     @State private var revealFeedsDisclosureGroup = false
-    @State private var revealSmartFilters = false
+    @State private var revealSmartFilters = true
     @State private var isRead = false
     @State private var isLoading = false
     @State var isExpanded = false
@@ -126,10 +129,12 @@ struct HomeView: View {
     }
     
     private var feedsView: some View {
-        DisclosureGroup(
-            isExpanded: $revealSmartFilters,
-            content: {
-//        Section(header: Text("All Items").font(.system(size: 20, weight: .medium, design: .rounded)).foregroundColor(Color("text")).textCase(nil)) {
+//        DisclosureGroup(
+//            isExpanded: $revealSmartFilters,
+//            content: {
+        
+        //.font(.system(size: 20, weight: .medium, design: .rounded)).foregroundColor(Color("text")).textCase(nil)
+        Section(header: Text("All Items").font(.system(size: 20, weight: .medium, design: .rounded)).textCase(nil).foregroundColor(Color("text"))) {
                 HStack {
                     ZStack{
                         NavigationLink(destination: allArticlesView) {
@@ -160,7 +165,7 @@ struct HomeView: View {
                         self.articles.fecthResults()
 //                        self.articles.fetchCount()
                     }
-                }.listRowBackground(Color("accent"))
+                }//.listRowBackground(Color("accent"))
                     
                 HStack {
                     ZStack{
@@ -193,9 +198,8 @@ struct HomeView: View {
                         self.unread.fecthResults()
 //                        self.unread.fetchUnreadCount()
                     }
-                }.listRowBackground(Color("accent"))
+                }//.listRowBackground(Color("accent"))
                 
-//            }.listRowBackground(Color("accent"))
                 HStack {
                     ZStack{
                     NavigationLink(destination: archiveListView) {
@@ -221,29 +225,29 @@ struct HomeView: View {
                             .opacity(0.4)
                             .cornerRadius(8)
                     }
-                }.listRowBackground(Color("accent"))
+                }//.listRowBackground(Color("accent"))
                     .accentColor(Color("tab").opacity(0.9))
                 .onAppear {
                     self.archiveListViewModel.fecthResults()
                 }
             }
-            .listRowBackground(Color("accent"))
-            },
-            label: {
-                HStack {
-                    Text("All Items")
-                        .font(.system(size: 20, weight: .semibold, design: .rounded))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            withAnimation {
-                                self.revealSmartFilters.toggle()
-                            }
-                        }
-                }
-            })
-//        }
-            .listRowBackground(Color("darkerAccent"))
+//            .listRowBackground(Color("accent"))
+//            },
+//            label: {
+//                HStack {
+//                    Text("All Items")
+//                        .font(.system(size: 14, weight: .regular, design: .rounded)).textCase(.uppercase)
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                        .contentShape(Rectangle())
+//                        .onTapGesture {
+//                            withAnimation {
+//                                self.revealSmartFilters.toggle()
+//                            }
+//                        }
+//                }
+//            })
+        }
+//            .listRowBackground(Color("darkerAccent"))
             .accentColor(Color("tab"))
     }
     
@@ -252,7 +256,7 @@ struct HomeView: View {
         DisclosureGroup(
             isExpanded: $revealFeedsDisclosureGroup,
             content: {
-//        Section(header: Text("Feeds").font(.system(size: 18, weight: .medium, design: .rounded)).foregroundColor(Color("text")).textCase(nil)) {
+//        Section(header: Text("Feeds")) {
             ForEach(viewModel.items, id: \.self) { rss in
                 ZStack {
                     NavigationLink(destination: self.destinationView(rss: rss)) {
@@ -281,7 +285,8 @@ struct HomeView: View {
             label: {
                 HStack {
                     Text("Feeds")
-                        .font(.system(size: 20, weight: .semibold, design: .rounded))
+                        .font(.system(size: 14, weight: .regular, design: .rounded)).textCase(.uppercase)
+//                        .font(.system(size: 20, weight: .semibold, design: .rounded))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .contentShape(Rectangle())
                         .onTapGesture {
@@ -291,7 +296,7 @@ struct HomeView: View {
                         }
                 }.frame(maxWidth: .infinity)
             })
-            .listRowBackground(Color("darkerAccent"))
+//            .listRowBackground(Color("darkerAccent"))
             .accentColor(Color("tab"))
     }
     
@@ -306,31 +311,35 @@ struct HomeView: View {
     private let rssRefreshPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("rssListNeedRefresh"))
     
     var body: some View {
-        NavigationView{
+        NavigationView {
 //            VStack {
             ScrollViewReader { scrollViewProxy in
                 ZStack {
-                    List {
+                    List() {
                         feedsView
-                        RSSFoldersDisclosureGroup(persistence: Persistence.current, viewModel: self.viewModel)
-                        feedsSection
+                        RSSFoldersDisclosureGroup(persistence: Persistence.current, viewModel: self.viewModel, unread: self.unread)
+//                        feedsSection
 //                        feeds
                     }.frame(maxWidth: .infinity)
+                    //.listSeparatorStyle(.none)
+//                    .introspectScrollView { scrollView in
+//                        scrollView.refreshControl = UIRefreshControl()
+//                    }
 //                    .listSeparatorStyle(.none)
-                    .navigationBarItems(trailing:
-                                            HStack(spacing: 20) {
-                                                Button(action: {
-                                                    startNetworkCall()
-                                                }) {
-                                                    if isLoading {
-                                                        ProgressView()
-                                                            .progressViewStyle(CircularProgressViewStyle(tint: Color("tab")))
-                                                            .scaleEffect(1)
-                                                        } else {
-                                                            Image(systemName: "arrow.clockwise").font(.system(size: 16, weight: .bold)).foregroundColor(Color("tab"))
-                                                    }
-                                                }
-                                            })
+//                    .navigationBarItems(trailing:
+//                                            HStack(spacing: 20) {
+//                                                Button(action: {
+//                                                    startNetworkCall()
+//                                                }) {
+//                                                    if isLoading {
+//                                                        ProgressView()
+//                                                            .progressViewStyle(CircularProgressViewStyle(tint: Color("tab")))
+//                                                            .scaleEffect(1)
+//                                                        } else {
+//                                                            Image(systemName: "arrow.clockwise").font(.system(size: 16, weight: .bold)).foregroundColor(Color("tab"))
+//                                                    }
+//                                                }
+//                                            })
                 
 //                    .listStyle(GroupedListStyle())
 //                    .listStyle(SidebarListStyle())
@@ -358,6 +367,7 @@ struct HomeView: View {
                 EmptyView()
                 }
             }
+            
             .redacted(reason: isLoading ? .placeholder : [])
             .onReceive(addRSSPublisher, perform: { output in
                 guard
@@ -373,7 +383,7 @@ struct HomeView: View {
                     AddRSSView(
                         viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss),
                                             onDoneAction: self.onDoneAction)
-                    
+
                 } else if FeaureItem.setting == self.selectedFeatureItem {
                     SettingView(fetchContentTime: .constant("minute1"))
                         .environment(\.managedObjectContext, Persistence.current.context).environmentObject(Settings(context: Persistence.current.context))
@@ -383,7 +393,7 @@ struct HomeView: View {
         .onAppear {
             self.viewModel.fecthResults()
         }
-        .navigationViewStyle(StackNavigationViewStyle())
+//        .navigationViewStyle(StackNavigationViewStyle())
     }
     
     private var feeds: some View {
@@ -407,7 +417,7 @@ struct HomeView: View {
                 }
             }
             .listRowBackground(Color("accent"))
-        }
+        }.listSeparatorStyle(.none)
 //        .listRowBackground(Color("darkerAccent"))
         .accentColor(Color("tab"))
     }
@@ -426,7 +436,7 @@ extension HomeView {
     }
     private func destinationView(rss: RSS) -> some View {
         let item = RSSItem()
-        return RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), rssItem: item, filter: .all)
+        return RSSFeedListView(rss: rss, viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), rssItem: item, filter: .all)
             .environmentObject(DataSourceService.current.rssItem)
             .environment(\.managedObjectContext, Persistence.current.context)
     }
@@ -472,9 +482,15 @@ struct FeedRow: View {
     var body: some View {
         HStack {
             RSSRow(rss: rss, viewModel: self.viewModel)
-            Spacer()
-            Text("\(unread.items.count)")
-                .font(.caption).fontWeight(.bold).padding(.horizontal, 7).padding(.vertical, 1).background(Color.gray.opacity(0.5)).opacity(0.4).foregroundColor(Color("text")).cornerRadius(8)
+//            Spacer()
+//            Text("\(unread.items.count)")
+//                .font(.caption).fontWeight(.bold).padding(.horizontal, 7).padding(.vertical, 1).background(Color.gray.opacity(0.5)).opacity(0.4).foregroundColor(Color("text")).cornerRadius(8)
         }.frame(maxWidth: .infinity)
     }
+}
+
+enum SheetType: String, Identifiable {
+    var id: String { self.rawValue}
+    case addFeedForm
+    case settings
 }

@@ -108,11 +108,15 @@ struct RSSFoldersDisclosureGroup: View {
     @State var revealFoldersDisclosureGroup = false
     @StateObject private var expansionHandler = ExpansionHandler<ExpandableSection>()
     
+    @ObservedObject var unread: Unread
+    
     var body: some View {
-        DisclosureGroup(
-            isExpanded: $revealFoldersDisclosureGroup, content: {
+//        DisclosureGroup(
+//            isExpanded: $revealFoldersDisclosureGroup, content: {
+        Section(header: Text("Folders").font(.system(size: 20, weight: .medium, design: .rounded)).textCase(nil).foregroundColor(Color("text"))) {
                 ForEach(groups, id: \.id) { group in
                     DisclosureGroup {
+//                    Section(header: Text("\(group.name ?? "Untitled")")){
                     ForEach(viewModel.items) { rss in
                         ZStack {
                             NavigationLink(destination: self.destinationView(rss: rss)) {
@@ -121,9 +125,9 @@ struct RSSFoldersDisclosureGroup: View {
                             .opacity(0.0)
                             .buttonStyle(PlainButtonStyle())
                             HStack {
-                                RSSRow(rss: rss, viewModel: viewModel)
+                                FeedRow(rss: rss, viewModel: viewModel, unread: unread)
                                 Spacer()
-                                Text("\(viewModel.items.count)")
+                                Text("\(unread.items.count)")
                                     .font(.caption)
                                     .fontWeight(.bold)
                                     .padding(.horizontal, 7)
@@ -135,7 +139,7 @@ struct RSSFoldersDisclosureGroup: View {
                             }
                         }
                     }
-                    .listRowBackground(Color("accent"))
+//                    .listRowBackground(Color("accent"))
                 }
                     label: {
                     HStack {
@@ -165,24 +169,25 @@ struct RSSFoldersDisclosureGroup: View {
 
             }
             .onDelete(perform: deleteObjects)
-            .listRowBackground(Color("accent"))
-            },
-            label: {
-                HStack {
-                    Text("Folders")
-                        .font(.system(size: 20, weight: .semibold, design: .rounded)).listRowBackground(Color("accent"))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            withAnimation {
-                                self.revealFoldersDisclosureGroup.toggle()
-                            }
-                        }
-                        .listRowBackground(Color("accent"))
-                    }
-            })
-                .listRowBackground(Color("darkerAccent"))
-//            }
+//            .listRowBackground(Color("accent"))
+//            },
+//            label: {
+//                HStack {
+//                    Text("Folders")
+//                        .font(.system(size: 14, weight: .regular, design: .rounded)).textCase(.uppercase)
+////                        .font(.system(size: 20, weight: .semibold, design: .rounded)).listRowBackground(Color("accent"))
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                        .contentShape(Rectangle())
+//                        .onTapGesture {
+//                            withAnimation {
+//                                self.revealFoldersDisclosureGroup.toggle()
+//                            }
+//                        }
+//                        .listRowBackground(Color("accent"))
+//                    }.listRowBackground(Color("accent"))
+//            })
+//                .listRowBackground(Color("darkerAccent"))
+            }
                 .accentColor(Color("tab"))
         }
     
@@ -194,7 +199,7 @@ struct RSSFoldersDisclosureGroup: View {
     
     private func destinationView(rss: RSS) -> some View {
         let item = RSSItem()
-        return RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), rssItem: item, filter: .all)
+        return RSSFeedListView(rss: rss, viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), rssItem: item, filter: .all)
             .environmentObject(DataSourceService.current.rss)
     }
     private var dropdownView: some View {
@@ -214,12 +219,12 @@ struct RSSFoldersDisclosureGroup: View {
 struct RSSFoldersDisclosureGroup_Previews: PreviewProvider {
     static let rss = RSS()
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+    static let unread = Unread(dataSource: DataSourceService.current.rssItem)
     static var previews: some View {
-        RSSFoldersDisclosureGroup(persistence: Persistence.current, viewModel: self.viewModel)
+        RSSFoldersDisclosureGroup(persistence: Persistence.current, viewModel: self.viewModel, unread: unread)
           .environment(\.managedObjectContext, Persistence.current.context)
           .environmentObject(Persistence.current)
             .preferredColorScheme(.dark)
     }
 }
 #endif
-

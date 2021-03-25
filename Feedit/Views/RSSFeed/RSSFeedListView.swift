@@ -45,6 +45,8 @@ struct RSSFeedListView: View {
 //        }
 //    }
     
+//    let urlToImage: [RSSItem] = ""
+    
     var filteredArticles: [RSSItem] {
         return rssFeedViewModel.items.filter({ (item) -> Bool in
             return !((self.rssFeedViewModel.isOn && !item.isArchive) || (self.rssFeedViewModel.unreadIsOn && item.isRead))
@@ -65,7 +67,10 @@ struct RSSFeedListView: View {
     @State private var footer: String = "Refresh"
     @State var cancellables = Set<AnyCancellable>()
     
-    init(viewModel: RSSFeedViewModel, rssItem: RSSItem, filter: FilterType) {
+    
+    let rss:RSS
+    init(rss: RSS, viewModel: RSSFeedViewModel, rssItem: RSSItem, filter: FilterType) {
+        self.rss = rss
         self.rssFeedViewModel = viewModel
         self.rssItem = rssItem
         self.filter = filter
@@ -75,16 +80,6 @@ struct RSSFeedListView: View {
         Button(action: self.rssFeedViewModel.loadMore) {
             Image(systemName: "arrow.clockwise").font(.system(size: 16, weight: .bold)).foregroundColor(Color("tab")).padding()
         }.buttonStyle(BorderlessButtonStyle())
-    }
-    
-    private var thumbnailImage: some View {
-        HStack {
-            Image(systemName: "person.fill")
-                .data(url: URL(string: rssSource.image)!)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 40, height: 40, alignment: .center)
-        }
     }
     
     
@@ -107,18 +102,7 @@ struct RSSFeedListView: View {
                         .opacity(0.0)
                         .buttonStyle(PlainButtonStyle())
                         HStack {
-//                            thumbnailImage
-//                            AsyncImage(
-//                                url: URL(string: rssSource.image.description)!,
-//                                placeholder: {
-//                                    ProgressView()
-//                                },
-//                                image: {
-//                                    Image(uiImage: $0)
-//
-//                                }
-//                             )
-//                            .frame(width: 40, height: 40, alignment: .center)
+//                            UrlImageView(urlString: items.urlToImage)
                             RSSItemRow(rssItem: item, menu: self.contextmenuAction(_:), rssFeedViewModel: rssFeedViewModel)
                                 .contentShape(Rectangle())
                                 .onTapGesture {
@@ -156,10 +140,10 @@ struct RSSFeedListView: View {
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 20, height: 20,alignment: .center)
                             .cornerRadius(2)
-                        
+
                         Text(rssSource.title)
                             .font(.system(size: 20, weight: .medium, design: .rounded))
-                        
+
                         Text("\(filteredArticles.count)")
                             .font(.caption)
                             .fontWeight(.bold)
@@ -171,12 +155,12 @@ struct RSSFeedListView: View {
                             .cornerRadius(8)
                     }
                 }
-                
+
                 ToolbarItem(placement: .bottomBar) {
                     Toggle(isOn: $rssFeedViewModel.unreadIsOn) { Text("") }
                         .toggleStyle(CheckboxStyle())
-                        
-                    
+
+
                 }
                 ToolbarItem(placement: .bottomBar) {
                     Spacer()
@@ -184,9 +168,10 @@ struct RSSFeedListView: View {
                 ToolbarItem(placement: .bottomBar) {
                     Toggle(isOn: $rssFeedViewModel.isOn) { Text("") }
                         .toggleStyle(StarStyle())
-                        
+
                 }
             }
+//            .modifier(ToolbarModifier(rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem)))
             .sheet(item: $selectedItem, content: { item in
                 if UserEnvironment.current.useSafari {
                     SafariView(url: URL(string: item.url)!)
