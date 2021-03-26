@@ -16,6 +16,7 @@
     </entity>
     <entity name="RSSGroup" representedClassName="RSSGroup" syncable="YES" codeGenerationType="class">
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isActive" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="itemCount" optional="YES" attributeType="Integer 64" derived="YES" derivationExpression="items.@count" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="url" optional="YES" attributeType="String"/>
@@ -46,7 +47,7 @@
     </entity>
     <elements>
         <element name="RSS" positionX="-544.7466430664062" positionY="45.42822265625" width="128" height="209"/>
-        <element name="RSSGroup" positionX="-459" positionY="162" width="128" height="104"/>
+        <element name="RSSGroup" positionX="-459" positionY="162" width="128" height="119"/>
         <element name="RSSItem" positionX="-370.7073974609375" positionY="38.6402587890625" width="128" height="239"/>
         <element name="Settings" positionX="-470.65283203125" positionY="309.8365783691406" width="128" height="118"/>
     </elements>

@@ -16,6 +16,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor(Color("tab"))]
 //        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor(Color("tab"))]
 //    }
+    @EnvironmentObject var iconSettings: IconNames
 
     @Environment(\.scenePhase) private var scenePhase
     @EnvironmentObject private var persistence: Persistence
@@ -43,7 +44,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //            self.scene(scene, openURLContexts: connectionOptions.urlContexts)
         let homeView =
 //            ContentView(rssFeedViewModel: RSSFeedViewModel(rss: self.rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
-            HomeView(articles: self.articles, unread: self.unread, rssItem: self.rssItem, viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: self.rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
+            HomeView(articles: self.articles, unread: self.unread, rssItem: self.rssItem, viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: self.rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), persistence: Persistence.current)
+            
+            .environmentObject(iconSettings)
                 .environmentObject(DataSourceService.current.rssItem)
                 .environmentObject(Persistence.current)
 
@@ -51,7 +54,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
-            window.rootViewController = UIHostingController(rootView: homeView)
+            window.rootViewController = UIHostingController(rootView: homeView) //.environmentObject(IconNames()))
             self.window = window
             window.makeKeyAndVisible()
         }
@@ -88,6 +91,34 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //        // Save changes in the application's managed object context when the application transitions to the background.
 //        (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
 //    }
+}
+
+class IconNames: ObservableObject {
+    var iconNames: [String?] = [nil]
+    @Published var currentIndex = 0
+    
+    init() {
+        getAlternateIcons()
+        
+        if let currentIcon = UIApplication.shared.alternateIconName {
+            self.currentIndex = iconNames.firstIndex(of: currentIcon) ?? 0
+        }
+    }
+    
+    func getAlternateIcons() {
+        if let icons = Bundle.main.object(forInfoDictionaryKey: "CFBundleIcons") as? [String: Any],
+           let alternateIcons = icons["CFBundleAlternativeIcons"] as? [String: Any] {
+            
+            for(_, value) in alternateIcons {
+                guard let iconList = value as? Dictionary<String, Any> else { return }
+                guard let iconFiles = iconList["CFBundleIconFiles"] as? [String] else { return }
+                
+                guard let icon = iconFiles.first else { return }
+                
+                iconNames.append(icon)
+            }
+        }
+    }
 }
 
 struct ToggleModel {

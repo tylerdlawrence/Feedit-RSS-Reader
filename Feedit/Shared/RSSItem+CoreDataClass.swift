@@ -16,6 +16,6 @@ import BackgroundTasks
 
 @objc(RSSItem)
 public class RSSItem: NSManagedObject {
-
+    
 }
 

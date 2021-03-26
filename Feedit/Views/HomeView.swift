@@ -12,7 +12,7 @@ import Combine
 import WebKit
 
 struct HomeView: View {
-//    @Environment(\.didReselect) var didReselect
+    @Environment(\.presentationMode) var presentationMode
     @State var sheetSelection: SheetType?
     @Environment(\.managedObjectContext) private var viewContext
     
@@ -38,6 +38,7 @@ struct HomeView: View {
     enum FeaureItem {
         case add
         case setting
+        case folder
         case star
     }
     
@@ -63,7 +64,7 @@ struct HomeView: View {
     @State private var revealSmartFilters = true
     @State private var isRead = false
     @State private var isLoading = false
-    @State var isExpanded = false
+    @State private var isExpanded = false
     @State var sources: [RSS] = []
     
     var filteredArticles: [RSSItem] {
@@ -101,9 +102,18 @@ struct HomeView: View {
             self.isSheetPresented = true
             self.selectedFeatureItem = .add
         }) {
-            Image(systemName: "plus").font(.system(size: 20, weight: .medium, design: .rounded))//.foregroundColor(Color("tab"))
+            Image(systemName: "plus").font(.system(size: 20, weight: .medium, design: .rounded))
                 .padding([.top, .leading, .bottom])
+                
         }
+    }
+    
+    private var folderButtonPopUp: some View {
+        Button("Add Folder", action: {
+            self.action = 4
+            self.isSheetPresented = true
+            self.selectedFeatureItem = .folder
+        })
     }
     
     private var settingButton: some View {
@@ -112,7 +122,7 @@ struct HomeView: View {
             self.isSheetPresented = true
             self.selectedFeatureItem = .setting
         }) {
-            Image(systemName: "gear").font(.system(size: 18, weight: .medium, design: .rounded))//.foregroundColor(Color("tab"))
+            Image(systemName: "gear").font(.system(size: 18, weight: .medium, design: .rounded))
                 .padding([.top, .bottom, .trailing])
         }
     }
@@ -123,8 +133,28 @@ struct HomeView: View {
             settingButton
             Spacer()
 //            archiveButton
-            folderButton
-            addSourceButton
+//            folderButton
+//            addSourceButton
+            Menu {
+                Button(action: {self.action = 4
+                        self.isSheetPresented = true
+                        self.selectedFeatureItem = .folder}, label: {
+                    Label(
+                        title: { Text("Add Folder") },
+                        icon: {Image(systemName: "folder.badge.plus") }
+                    )
+                })
+                Button(action: {self.action = 2
+                        self.isSheetPresented = true
+                        self.selectedFeatureItem = .add}, label: {
+                    Label(
+                        title: { Text("Add Feed") },
+                        icon: {Image(systemName: "plus.circle") }
+                    )
+                })
+            } label: {
+               Image(systemName: "plus").font(.system(size: 18, weight: .medium, design: .rounded)).padding([.top, .bottom])
+            }
         }.padding(24)
     }
     
@@ -251,7 +281,6 @@ struct HomeView: View {
             .accentColor(Color("tab"))
     }
     
-    let selection = Set<RSS>()
     private var feedsSection: some View {
         DisclosureGroup(
             isExpanded: $revealFeedsDisclosureGroup,
@@ -265,14 +294,12 @@ struct HomeView: View {
                     .opacity(0.0)
                     .buttonStyle(PlainButtonStyle())
                     HStack {
+                        
                         FeedRow(rss: rss, viewModel: viewModel, unread: self.unread)
 //                        Spacer()
 //                        Text("\(filteredArticles.count)")
                     }
                 }
-//                .onAppear {
-//                    self.unread.fetchUnreadCount()
-//                }
             }
             .onDelete { indexSet in
                 if let index = indexSet.first {
@@ -310,14 +337,25 @@ struct HomeView: View {
     private let addRSSPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("addNewRSSPublisher"))
     private let rssRefreshPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("rssListNeedRefresh"))
     
+    
+    
+    @State var name = ""
+    @ObservedObject var persistence: Persistence
+    @State var addGroupIsPresented = false
+    @State private var selectedCells: Set<RSS> = []
+    var rss = RSS()
+    @State var onComplete: (Set<RSSGroup>) = []
+    
     var body: some View {
         NavigationView {
-//            VStack {
             ScrollViewReader { scrollViewProxy in
                 ZStack {
-                    List() {
+                    List {
                         feedsView
-                        RSSFoldersDisclosureGroup(persistence: Persistence.current, viewModel: self.viewModel, unread: self.unread)
+//                        RSSFoldersDisclosureGroup(persistence: Persistence.current, unread: self.unread, viewModel: self.viewModel)
+                        ContentCell(persistence: Persistence.current, unread: unread, viewModel: self.viewModel, isExpanded: selectedCells.contains(rss))
+                            .onTapGesture { self.selectDeselect(rss) }
+                        
 //                        feedsSection
 //                        feeds
                     }.frame(maxWidth: .infinity)
@@ -383,10 +421,16 @@ struct HomeView: View {
                     AddRSSView(
                         viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss),
                                             onDoneAction: self.onDoneAction)
-
+                    
                 } else if FeaureItem.setting == self.selectedFeatureItem {
-                    SettingView(fetchContentTime: .constant("minute1"))
+                    SettingView(fetchContentTime: .constant("minute1"), iconSettings: IconNames())
                         .environment(\.managedObjectContext, Persistence.current.context).environmentObject(Settings(context: Persistence.current.context))
+                }
+                else if FeaureItem.folder == self.selectedFeatureItem {
+                    AddGroup { name in
+                      addNewGroup(name: name)
+                      addGroupIsPresented = false
+                    }
                 }
             })
         }
@@ -395,36 +439,22 @@ struct HomeView: View {
         }
 //        .navigationViewStyle(StackNavigationViewStyle())
     }
-    
-    private var feeds: some View {
-        Section(header: Text("Feeds").font(.system(size: 20, weight: .medium, design: .rounded)).foregroundColor(Color("text")).textCase(nil)) {
-            
-            ForEach(viewModel.items, id: \.self) { rss in
-                ZStack {
-                    NavigationLink(destination: self.destinationView(rss: rss)) {
-                        EmptyView()
-                    }
-                    .opacity(0.0)
-                    .buttonStyle(PlainButtonStyle())
-                    
-                    FeedRow(rss: rss, viewModel: viewModel, unread: self.unread)
-                    
-                }
-            }
-            .onDelete { indexSet in
-                if let index = indexSet.first {
-                    self.viewModel.delete(at: index)
-                }
-            }
-            .listRowBackground(Color("accent"))
-        }.listSeparatorStyle(.none)
-//        .listRowBackground(Color("darkerAccent"))
-        .accentColor(Color("tab"))
+    private func selectDeselect(_ rss: RSS) {
+        if selectedCells.contains(rss) {
+            selectedCells.remove(rss)
+        } else {
+            selectedCells.insert(rss)
+        }
+    }
+    private func addNewGroup(name: String) {
+      withAnimation {
+        persistence.addNewGroup(name: name)
+        }
     }
 }
 
 extension HomeView {
-    
+
     func onDoneAction() {
         self.viewModel.fecthResults()
     }
@@ -440,6 +470,10 @@ extension HomeView {
             .environmentObject(DataSourceService.current.rssItem)
             .environment(\.managedObjectContext, Persistence.current.context)
     }
+    
+    func selectDeselect(_ group: RSSGroup) {
+        print("Selected \(String(describing: group.id))")
+    }
 }
 
 #if DEBUG
@@ -449,15 +483,16 @@ struct HomeView_Previews: PreviewProvider {
     static let unread = Unread(dataSource: DataSourceService.current.rssItem)
     static let articles = AllArticles(dataSource: DataSourceService.current.rssItem)
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-    static var group = RSSGroup()
-//        = {
-//      let controller = Persistence.current
-//      return controller.makeRandomFolder(context: controller.context)
-//    }()
+    static var group: RSSGroup
+        = {
+      let controller = Persistence.current
+      return controller.makeRandomFolder(context: controller.context)
+    }()
     @State static var selection: Set<RSSGroup> = [group]
-
+    @State static var onComplete: (Set<RSSGroup>) = []
+    
     static var previews: some View {
-        HomeView(articles: articles, unread: unread, rssItem: rssItem, viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
+        HomeView(articles: articles, unread: unread, rssItem: rssItem, viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), persistence: Persistence.current)
             
             .environmentObject(DataSourceService.current.rssItem)
             .environment(\.managedObjectContext, Persistence.current.context)
@@ -494,3 +529,5 @@ enum SheetType: String, Identifiable {
     case addFeedForm
     case settings
 }
+
+

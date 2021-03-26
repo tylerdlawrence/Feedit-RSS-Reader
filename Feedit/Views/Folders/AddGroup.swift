@@ -8,9 +8,19 @@
 import SwiftUI
 
 struct AddGroup: View {
+    @Environment(\.presentationMode) var presentationMode
     @AppStorage("darkMode") var darkMode = false
     @State var name = ""
     let onComplete: (String) -> Void
+    
+    private var doneButton: some View {
+        Button(action: {
+            onComplete(name.isEmpty ? "Untitled Folder" : name)
+            self.presentationMode.wrappedValue.dismiss()
+        }) {
+            Image(systemName: "checkmark.circle")
+        }
+    }
 
     var body: some View {
       NavigationView {
@@ -25,6 +35,7 @@ struct AddGroup: View {
           }
         }
         .navigationBarTitle(Text("New Folder"))
+//        .navigationBarItems(trailing: doneButton)
         .preferredColorScheme(darkMode ? .dark : .light)
       }
     }

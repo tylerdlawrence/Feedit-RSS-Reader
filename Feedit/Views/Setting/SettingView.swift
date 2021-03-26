@@ -19,189 +19,56 @@ struct AppIcon: Codable {
     var subtitle: String?
 }
 
-//struct SettingView: View {
-//    var icon: AppIcon
-//
-//    @EnvironmentObject var settings: Settings
-//
-//    @AppStorage("darkMode") var darkMode = false
-//    @Environment(\.presentationMode) var presentationMode
-//    @Environment(\.colorScheme) var colorScheme: ColorScheme
-//    @State private var quantity = 1
-//    @State private var isSelected: Bool = false
-//    var onDoneAction: (() -> Void)?
-//    @State private var isDarkModeOn = true
-//    @State private var isSettingsExpanded: Bool = true
-//    @State var accounts: String = ""
-//    @State var isPrivate: Bool = false
-//    @State var notificationsEnabled: Bool = false
-//    @State private var previewIndex = 0
-//    @Binding var fetchContentTime: String
-//
-//    @State var model = ToggleModel()
-//
-//    enum ReadMode {
-//        case safari
-//        case webview
-//    }
-//
-//    enum SettingItem: CaseIterable {
-//        case webView
-//        case darkMode
-//        case batchImport
-//
-//        var label: String {
-//            switch self {
-//            case .webView: return "Read Mode"
-//            case .darkMode: return "Dark Mode"
-//            case .batchImport: return "Import"
-//            }
-//        }
-//    }
-//
-//    var batchImportView: BatchImportView {
-//        let dataSource = DataSourceService.current.rss
-//        return BatchImportView(viewModel: BatchImportViewModel(dataSource: dataSource))
-//    }
-//
-////    var dataNStorage: DataNStorageView {
-////        let storage = DataNStorageView()
-////        return storage
-////    }
-//
-//    private var doneButton: some View {
-//        Button(action: {
-//            self.onDoneAction?()
-//            self.presentationMode.wrappedValue.dismiss()
-//        }) {
-//            Image(systemName: "xmark")
-//        }
-//    }
-//
-//    var body: some View {
-//        VStack {
-//            NavigationView {
-//                Form {
-//                    Section(header: Text("")) {
-//                        Picker(selection: $fetchContentTime, label:
-//                                Text("Fetch content time")) {
-//                            ForEach(ContentTimeType.allCases, id: \.self.rawValue) { type in
-//                                Text(type.rawValue)
-//                            }
-//                        }
-//                        Toggle(isOn: $notificationsEnabled) {
-//                            Text("Notifications")
-//                        }
-//                    }.toggleStyle(SwitchToggleStyle(tint: .blue))
-//
-//                    Section(header: Text("Feeds")) {
-//                        Group {
-//                            HStack {
-//                                Image(systemName: "circle.lefthalf.fill")
-//                                    .frame(width: 25, height: 25)
-//                                    .foregroundColor(.white)
-//                                    .background(Color("bg"))
-//                                    .opacity(0.9)
-//                                    .clipShape(RoundedRectangle(cornerRadius: 5))
-//                                Toggle(isOn: $darkMode) {
-//                                             Text("Appearence")
-//                                        }
-//                                .toggleStyle(ToggleAppearence())
-//                            }
-//
-//                            HStack {
-//                                Image(systemName: "safari")
-//                                    .frame(width: 25, height: 25)
-//                                    .foregroundColor(.white)
-//                                    .background(Color("tab"))
-//                                    .opacity(0.9)
-//                                    .clipShape(RoundedRectangle(cornerRadius: 5))
-//                                ForEach([SettingItem.webView], id: \.self) { _ in
-//                                        Toggle("Safari Reader", isOn: self.$isSelected)
-//                                    }
-//                                }.toggleStyle(SwitchToggleStyle(tint: .blue))
-//
-//                            HStack {
-//                                NavigationLink(destination: self.batchImportView) {
-//                                        HStack {
-//                                        Image(systemName: "square.and.arrow.up")
-//                                            .frame(width: 25, height: 25)
-//                                            .foregroundColor(.white)
-//                                            .background(Color("darkShadow"))
-//                                            .opacity(0.9)
-//                                            .clipShape(RoundedRectangle(cornerRadius: 5))
-//                                        Text("Import & Export")
-//                                        }
-//                                    }
-//                                }
-//                            }
-//                        }
-//
-//                    Section(header: Text("About")) {
-//                        Group {
-//                            HStack {
-//                                Link(destination: URL(string: "https://github.com/tylerdlawrence/Feedit-RSS-Reader")!) {
-//                                        HStack {
-//                                            Image("github")
-//                                                .resizable()
-//                                                .aspectRatio(contentMode: .fit)
-//                                                .frame(width: 25, height: 25)
-//                                                .cornerRadius(3.0)
-//                                        Text("GitHub")
-//                                            .foregroundColor(Color("text"))
-//                                        }
-//                                    }
-//                                }
-//                            HStack {
-//                                Link(destination: URL(string: "https://twitter.com/FeeditRSSReader")!) {
-//                                        HStack {
-//                                            Image("twitter")
-//                                                .resizable()
-//                                                .aspectRatio(contentMode: .fit)
-//                                                .frame(width: 25, height: 25)
-//                                                .cornerRadius(3.0)
-//                                        Text("Twitter")
-//                                            .foregroundColor(Color("text"))
-//                                        }
-//                                    }
-//                                }
-//                        }
-//                    }
-//                    Section(header: Text("Copyright © 2021 Tyler D Lawrence"), footer: Text("Feedit version 1.04 build 0.0027")) {
-//                        Link(destination: URL(string: "https://tylerdlawrence.net")!) {
-//                            HStack {
-//                                Image("launch")
-//                                    .resizable()
-//                                    .frame(width: 35, height: 35)
-//                                    .cornerRadius(3.0)
-//                                Text("Website")
-//                                    .foregroundColor(Color("text"))
-//                            }
-//                        }
-//                    }
-//                }
-//                .listStyle(GroupedListStyle())
-//                .navigationBarTitle("Settings", displayMode: .automatic)
-//                .navigationBarItems(leading: doneButton)
-//                .environment(\.horizontalSizeClass, .regular)
-//                .preferredColorScheme(darkMode ? .dark : .light)
-//            }
-//            .onAppear {
-//                self.isSelected = UserEnvironment.current.useSafari
-//            }
-//            .onDisappear {
-//                UserEnvironment.current.useSafari = self.isSelected
-//            }
-//        }
-//    }
-//}
+struct ColorPaletteContainerView: View {
+    private let colorPalettes = UserInterfaceColorPalette.allCases
+    @EnvironmentObject private var appSettings: AppDefaults
+    @Environment(\.presentationMode) var presentationMode
 
-//struct SettingView_Preview: PreviewProvider {
-//    static var previews: some View {
-//        SettingView(icon: icon, fetchContentTime: .constant("minute1"))
-//    }
-//}
+    var body: some View {
+        List {
+            ForEach.init(0 ..< colorPalettes.count) { index in
+                Button(action: {
+                    onTapColorPalette(at:index)
+                }) {
+                    ColorPaletteView(colorPalette: colorPalettes[index])
+                }
+            }
+        }
+        .listStyle(InsetGroupedListStyle())
+        .navigationBarTitle("Color Palette", displayMode: .inline)
+    }
 
+    func onTapColorPalette(at index: Int) {
+        if let colorPalette = UserInterfaceColorPalette(rawValue: index) {
+            appSettings.userInterfaceColorPalette = colorPalette
+        }
+        self.presentationMode.wrappedValue.dismiss()
+    }
+}
+
+struct ColorPaletteView: View {
+    var colorPalette: UserInterfaceColorPalette
+    @EnvironmentObject private var appSettings: AppDefaults
+
+    var body: some View {
+        HStack {
+            Text(colorPalette.description).foregroundColor(.primary)
+            Spacer()
+            if colorPalette == appSettings.userInterfaceColorPalette {
+                Image(systemName: "checkmark")
+                    .foregroundColor(.blue)
+            }
+        }
+    }
+}
+
+struct ColorPaletteContainerView_Previews: PreviewProvider {
+    static var previews: some View {
+        NavigationView {
+            ColorPaletteContainerView()
+        }
+    }
+}
 struct AccentColorChooserView: View {
     @EnvironmentObject var settings: Settings
     
@@ -242,6 +109,8 @@ struct AppIconView: View {
 struct AppIconChooserView: View {
     @EnvironmentObject var settings: Settings
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    
+    
     
     @State var showAlert = false
     var body: some View {
@@ -338,6 +207,8 @@ struct SettingView: View {
     @State private var previewIndex = 0
     @Binding var fetchContentTime: String
     
+    @ObservedObject var iconSettings: IconNames
+    
     enum ReadMode {
         case safari
         case webview
@@ -379,11 +250,60 @@ struct SettingView: View {
     var body: some View {
         NavigationView {
             List {
-                Section(header: Text("Appearance")
+                
+//                HStack {
+//                    Picker(selection: $iconSettings.currentIndex, label: Text("Icons")) {
+//                        ForEach(0 ..< iconSettings.iconNames.count) { i in
+//                            HStack {
+//                                Text(self.iconSettings.iconNames[i] ?? "AppIcon")
+//                                Image(uiImage: UIImage(named: self.iconSettings.iconNames[i] ?? "AppIcon") ?? UIImage()).resizable().renderingMode(.original).frame(width: 50, height: 50, alignment: .leading)
+//                            }
+//                        }.onReceive([self.iconSettings.currentIndex].publisher.first()) {
+//                            value in
+//                            let i = self.iconSettings.iconNames.firstIndex(of: UIApplication.shared.alternateIconName) ?? 0
+//                            
+//                            if value != i {
+//                                UIApplication.shared.setAlternateIconName(self.iconSettings.iconNames[value], completionHandler: {
+//                                    error in
+//                                    if error != nil {
+//                                        print("error")
+//                                    } else {
+//                                        print("finished")
+//                                    }
+//                                })
+//                            }
+//                        }.environmentObject(iconSettings)
+//                    }.environmentObject(iconSettings)
+//                }
+                
+                
+                
+                Section(header: Text("Notifications, Badge, Data, & More"), content: {
+                    Button(action: {
+                        UIApplication.shared.open(URL(string: "\(UIApplication.openSettingsURLString)")!)
+                    }, label: {
+                        Text("Open System Settings").foregroundColor(.primary)
+                    })
+                })
+                
+//                Section(header: Text("Appearance"), content: {
+//                    NavigationLink(
+//                        destination: ColorPaletteContainerView().environmentObject(settings),
+//                        label: {
+//                            HStack {
+//                                Text("Color Palette")
+//                                Spacer()
+//                                Text("Automatic")
+////                                Text(settings.userInterfaceColorPalette.description)
+//                                    .foregroundColor(.secondary)
+//                            }
+//                        })
+//                })
+                Section(header: Text("")
                             .font(Font(.footnote))) {
                     
                     if UIApplication.shared.supportsAlternateIcons {
-                        
+
                         NavigationLink(destination: AppIconChooserView().environmentObject(settings)
                                        , label: {
                             HStack {
@@ -391,11 +311,11 @@ struct SettingView: View {
                                     title: { Text("App Icon").foregroundColor(Color(UIColor.label)) },
                                     icon: { ZStack {
                                         Image(systemName: "app.fill").resizable().aspectRatio( contentMode: .fit).foregroundColor(settings.accentColor)
-                                        
+
                                         Image(uiImage: UIImage(contentsOfFile: Bundle.main.resourcePath! + "/" + (settings.alternateIconName ?? "feedit") + "@2x.png")!).resizable().aspectRatio( contentMode: .fit).mask(Image(systemName: "app.fill").resizable().aspectRatio(contentMode: .fit))
                                     } }
                         ).labelStyle(HorizontallyAlignedLabelStyle())
-                                
+
                                 Spacer()
                                 Text("\(settings.alternateIconName ?? "Default")").foregroundColor(.gray)
                             }
@@ -443,18 +363,18 @@ struct SettingView: View {
                             }
                         }.toggleStyle(SwitchToggleStyle(tint: .blue))
                     
-                    HStack {
-                        Image(systemName: "circle.lefthalf.fill")
-                            .frame(width: 30, height: 30)
-                            .foregroundColor(.white)
-                            .background(Color("bg"))
-                            .opacity(0.9)
-                            .clipShape(RoundedRectangle(cornerRadius: 5))
-                        Toggle(isOn: $darkMode) {
-                                     Text("Light/Dark Mode")
-                                }
-                        .toggleStyle(ToggleAppearence())
-                    }
+//                    HStack {
+//                        Image(systemName: "circle.lefthalf.fill")
+//                            .frame(width: 30, height: 30)
+//                            .foregroundColor(.white)
+//                            .background(Color("bg"))
+//                            .opacity(0.9)
+//                            .clipShape(RoundedRectangle(cornerRadius: 5))
+//                        Toggle(isOn: $darkMode) {
+//                                     Text("Light/Dark Mode")
+//                                }
+//                        .toggleStyle(ToggleAppearence())
+//                    }
 
                     HStack {
                         NavigationLink(destination: self.batchImportView) {
@@ -538,7 +458,7 @@ struct SettingView: View {
 struct SettingView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            SettingView(fetchContentTime: .constant("minute1"))
+            SettingView(fetchContentTime: .constant("minute1"), iconSettings: IconNames())
                 .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext).environmentObject(Settings(context: PersistenceController.preview.container.viewContext))
         }.previewLayout(.sizeThatFits)
 
@@ -687,3 +607,4 @@ struct SettingsTextSizeSlider: View {
         }
     }
 }
+

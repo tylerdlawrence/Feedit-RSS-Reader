@@ -28,12 +28,21 @@ struct FeeditApp: App {
     @StateObject private var viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     
     @StateObject private var rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
+    
+//    @StateObject private var refreshProgress = RefreshProgressModel()
+    
+//    @StateObject private var defaults = AppDefaults.shared
 
   var body: some Scene {
     WindowGroup {
 //        ContentView(rssFeedViewModel: RSSFeedViewModel(rss: self.rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
         
-        HomeView(articles: articles, unread: unread, rssItem: rssItem, viewModel: viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
+        HomeView(articles: articles, unread: unread, rssItem: rssItem, viewModel: viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), persistence: Persistence.current)
+            
+//            .onAppear { refreshProgress.startup() }
+//            .environmentObject(refreshProgress)
+//            .environmentObject(defaults)
+//            .preferredColorScheme(AppDefaults.userInterfaceColorScheme)
             
             
             .environment(\.managedObjectContext, Persistence.current.context)

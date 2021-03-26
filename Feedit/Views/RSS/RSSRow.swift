@@ -181,22 +181,22 @@ struct RSSRow: View {
                 .actionSheet(isPresented: $showAlert, content: {
                             self.actionSheet })
 //                .sheet(isPresented: $showSheet, content: { Text("Hello world")})
-                .alert(isPresented: $showSheet) {
-                    Alert(
-                        title: Text("Unsubscribe from \(rss.title)?"),
-                        message: nil,
-                        primaryButton: .destructive(
-                            Text("Unsubscribe"),
-                            action: {
-//                                deleteRow()
-                                dismissDestructiveDelayButton()
-                                showSheet.toggle()
-                                self.delete(rss)
-                            }
-                        ),
-                        secondaryButton: .cancel({ dismissDestructiveDelayButton() })
-                    )
-                }
+//                .alert(isPresented: $showSheet) {
+//                    Alert(
+//                        title: Text("Unsubscribe from \(rss.title)?"),
+//                        message: nil,
+//                        primaryButton: .destructive(
+//                            Text("Unsubscribe"),
+//                            action: {
+////                                deleteRow()
+//                                dismissDestructiveDelayButton()
+//                                showSheet.toggle()
+//                                self.delete(rss)
+//                            }
+//                        ),
+//                        secondaryButton: .cancel({ dismissDestructiveDelayButton() })
+//                    )
+//                }
                 .contextMenu {
                     Button(action: {
                         infoHaptic.toggle()

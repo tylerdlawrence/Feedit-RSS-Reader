@@ -10,7 +10,6 @@ import Foundation
 import CoreData
 
 extension RSSItem: Identifiable {
-
 }
 
 extension RSSItem {
@@ -41,7 +40,7 @@ extension RSSItem {
     @NSManaged public var unread: Bool
     @NSManaged public var itemCount: Int64
     @NSManaged public var urlToImage: String?
-    
+        
     public override func awakeFromInsert() {
         super.awakeFromInsert()
         uuid = UUID()
@@ -63,7 +62,7 @@ extension RSSItem {
         return item
     }
     
-    static func requestObjects(rssUUID: UUID, start: Int = 0, limit: Int = 1000) -> NSFetchRequest<RSSItem> {
+    static func requestObjects(rssUUID: UUID, start: Int = 0, limit: Int = 10000) -> NSFetchRequest<RSSItem> {
         let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
         let predicate = NSPredicate(format: "rssUUID = %@", argumentArray: [rssUUID])
         request.predicate = predicate
@@ -73,7 +72,7 @@ extension RSSItem {
         request.fetchLimit = limit
         return request
     }
-    static func requestCountObjects(start: Int = 0, limit: Int = 500) -> NSFetchRequest<RSSItem> {
+    static func requestCountObjects(start: Int = 0, limit: Int = 5000) -> NSFetchRequest<RSSItem> {
         let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
         let predicate = NSPredicate(format: "rssUUID = %@")
         request.predicate = predicate
@@ -87,7 +86,7 @@ extension RSSItem {
     }
     
     //MARK: STARRED
-    static func requestArchiveObjects(start: Int = 0, limit: Int = 1000) -> NSFetchRequest<RSSItem> {
+    static func requestArchiveObjects(start: Int = 0, limit: Int = 10000) -> NSFetchRequest<RSSItem> {
         let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
         let predicate = NSPredicate(format: "isArchive = true")
         request.predicate = predicate
@@ -104,7 +103,7 @@ extension RSSItem {
     }
     
     //MARK: ALL ARTICLES
-    static func requestAllObjects(start: Int = 0, limit: Int = 1000) -> NSFetchRequest<RSSItem> {
+    static func requestAllObjects(start: Int = 0, limit: Int = 10000) -> NSFetchRequest<RSSItem> {
         let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
         request.sortDescriptors = [.init(key: #keyPath(RSSItem.createTime), ascending: false)]
         request.fetchOffset = start
@@ -118,7 +117,7 @@ extension RSSItem {
     }
     
     //MARK: UNREAD
-    static func requestUnreadObjects(start: Int = 0, limit: Int = 1000) -> NSFetchRequest<RSSItem> {
+    static func requestUnreadObjects(start: Int = 0, limit: Int = 10000) -> NSFetchRequest<RSSItem> {
         let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
         let predicate = NSPredicate(format: "isRead = false")
         request.predicate = predicate

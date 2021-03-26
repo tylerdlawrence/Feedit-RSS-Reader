@@ -35,7 +35,7 @@ final class AppDefaults: ObservableObject {
 	#if os(iOS)
 	static let store: UserDefaults = {
 		let appIdentifierPrefix = Bundle.main.object(forInfoDictionaryKey: "AppIdentifierPrefix") as! String
-		let suiteName = "\(appIdentifierPrefix)group.\(Bundle.main.bundleIdentifier!)"
+        let suiteName = "\(appIdentifierPrefix)group.\(String(describing: Bundle.main.bundleIdentifier))"
 		return UserDefaults.init(suiteName: suiteName)!
 	}()
 	#endif
@@ -100,35 +100,35 @@ final class AppDefaults: ObservableObject {
 	}()
 	
 	// MARK: First Run Details
-	var firstRunDate: Date? {
-		set {
-			AppDefaults.store.setValue(newValue, forKey: Key.firstRunDate)
-			objectWillChange.send()
-		}
-		get {
-			AppDefaults.store.object(forKey: Key.firstRunDate) as? Date
-		}
-	}
+//	var firstRunDate: Date? {
+//		set {
+//			AppDefaults.store.setValue(newValue, forKey: Key.firstRunDate)
+//			objectWillChange.send()
+//		}
+//		get {
+//			AppDefaults.store.object(forKey: Key.firstRunDate) as? Date
+//		}
+//	}
 	
 	// MARK: Refresh Interval
-	@AppStorage(wrappedValue: 4, Key.refreshInterval, store: store) var interval: Int {
-		didSet {
-			objectWillChange.send()
-		}
-	}
-	
-	var refreshInterval: RefreshInterval {
-		RefreshInterval(rawValue: interval) ?? RefreshInterval.everyHour
-	}
+//	@AppStorage(wrappedValue: 4, Key.refreshInterval, store: store) var interval: Int {
+//		didSet {
+//			objectWillChange.send()
+//		}
+//	}
+//
+//	var refreshInterval: RefreshInterval {
+//		RefreshInterval(rawValue: interval) ?? RefreshInterval.everyHour
+//	}
 	
 	// MARK: Dock Badge
-	@AppStorage(wrappedValue: false, Key.hideDockUnreadCount, store: store) var hideDockUnreadCount {
-		didSet {
-			objectWillChange.send()
-		}
-	}
-	
-	// MARK: Color Palette
+//	@AppStorage(wrappedValue: false, Key.hideDockUnreadCount, store: store) var hideDockUnreadCount {
+//		didSet {
+//			objectWillChange.send()
+//		}
+//	}
+//
+//	// MARK: Color Palette
 	var userInterfaceColorPalette: UserInterfaceColorPalette {
 		get {
 			if let palette = UserInterfaceColorPalette(rawValue: AppDefaults.store.integer(forKey: Key.userInterfaceColorPalette)) {
@@ -335,13 +335,13 @@ final class AppDefaults: ObservableObject {
 
 extension AppDefaults {
 	
-	func isFirstRun() -> Bool {
-		if let _ = AppDefaults.store.object(forKey: Key.firstRunDate) as? Date {
-			return false
-		}
-		firstRunDate = Date()
-		return true
-	}
+//	func isFirstRun() -> Bool {
+//		if let _ = AppDefaults.store.object(forKey: Key.firstRunDate) as? Date {
+//			return false
+//		}
+//		firstRunDate = Date()
+//		return true
+//	}
 	
 }
 

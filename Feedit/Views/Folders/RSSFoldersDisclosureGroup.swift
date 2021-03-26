@@ -90,6 +90,8 @@ extension Sequence {
 
 
 struct RSSFoldersDisclosureGroup: View {
+    @AppStorage("darkMode") var darkMode = false
+    
     static var fetchRequest: NSFetchRequest<RSSGroup> {
       let request: NSFetchRequest<RSSGroup> = RSSGroup.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(keyPath: \RSSGroup.items, ascending: true)]
@@ -100,7 +102,8 @@ struct RSSFoldersDisclosureGroup: View {
       fetchRequest: RSSGroupListView.fetchRequest,
       animation: .default)
     var groups: FetchedResults<RSSGroup>
-    @AppStorage("darkMode") var darkMode = false
+    @ObservedObject var unread: Unread
+    
     @EnvironmentObject var rssDataSource: RSSDataSource
     @ObservedObject var viewModel: RSSListViewModel
     let rss = RSS()
@@ -108,7 +111,7 @@ struct RSSFoldersDisclosureGroup: View {
     @State var revealFoldersDisclosureGroup = false
     @StateObject private var expansionHandler = ExpansionHandler<ExpandableSection>()
     
-    @ObservedObject var unread: Unread
+    
     
     var body: some View {
 //        DisclosureGroup(
@@ -215,16 +218,167 @@ struct RSSFoldersDisclosureGroup: View {
     }
 }
 
+//#if DEBUG
+//struct RSSFoldersDisclosureGroup_Previews: PreviewProvider {
+//    static let rss = RSS()
+//    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+//    static let unread = Unread(dataSource: DataSourceService.current.rssItem)
+//    static var previews: some View {
+//        RSSFoldersDisclosureGroup(persistence: Persistence.current, unread: unread, viewModel: self.viewModel)
+//          .environment(\.managedObjectContext, Persistence.current.context)
+//          .environmentObject(Persistence.current)
+//            .preferredColorScheme(.dark)
+//    }
+//}
+//#endif
+
+
+struct ContentCell: View {
+    static var fetchRequest: NSFetchRequest<RSSGroup> {
+      let request: NSFetchRequest<RSSGroup> = RSSGroup.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \RSSGroup.items, ascending: true)]
+      return request
+    }
+    @ObservedObject var persistence: Persistence
+    @FetchRequest(
+      fetchRequest: RSSGroupListView.fetchRequest,
+      animation: .default)
+    var groups: FetchedResults<RSSGroup>
+    @ObservedObject var unread: Unread
+    
+    @EnvironmentObject var rssDataSource: RSSDataSource
+    @ObservedObject var viewModel: RSSListViewModel
+    let rss = RSS()
+    
+//    let isExpanded: Bool
+    @State var isExpanded = false
+    
+    
+    var body: some View {
+        
+        Section(header: Text("Folders").font(.system(size: 20, weight: .medium, design: .rounded)).textCase(nil).foregroundColor(Color("text"))) {
+//            ForEach(groups.indexed(), id: \.1.id) { index, group in
+            ForEach(groups, id: \.id) { group in
+                HStack {
+                    VStack{
+                        Image(systemName: isExpanded == true ? "chevron.down" : "chevron.right").font(.system(size: 16, weight: .semibold, design: .rounded))
+                            .foregroundColor(Color.gray).opacity(0.9)
+                    }
+                    .animation(.easeOut(duration: 0.40))
+                    .onTapGesture {
+                        self.isExpanded.toggle()
+                    }
+                    .onReceive([self.isExpanded].publisher.first()) { (value) in
+                            print("New value is: \(value)")
+                       }
+                    
+                    Text("\(group.name ?? "Untitled")")
+                    Spacer()
+                    Text("\(group.itemCount)")
+                        .font(.caption)
+                        .fontWeight(.bold)
+                        .padding(.horizontal, 7)
+                        .padding(.vertical, 1)
+                        .background(Color.gray.opacity(0.5))
+                        .opacity(0.4)
+                        .foregroundColor(Color("text"))
+                        .cornerRadius(8)
+                        .contentShape(Rectangle())
+                    }
+                
+//                if isExpanded {
+                if isExpanded == true {
+                    ForEach(viewModel.items, id: \.self) { rss in
+                        ZStack {
+                            NavigationLink(destination: self.destinationView(rss: rss)) {
+                                EmptyView()
+                            }
+                            .opacity(0.0)
+                            .buttonStyle(PlainButtonStyle())
+                            HStack {
+                                FeedRow(rss: rss, viewModel: viewModel, unread: unread)
+                                Spacer()
+                                Text("\(unread.items.count)")
+                                    .font(.caption)
+                                    .fontWeight(.bold)
+                                    .padding(.horizontal, 7)
+                                    .padding(.vertical, 1)
+                                    .background(Color.gray.opacity(0.5))
+                                    .opacity(0.4)
+                                    .foregroundColor(Color("text"))
+                                    .cornerRadius(8)
+                            }
+                        }
+                    }
+                }
+            }.onDelete(perform: deleteObjects)
+        }
+    }
+    private func deleteObjects(offsets: IndexSet) {
+      withAnimation {
+        persistence.deleteManagedObjects(offsets.map { groups[$0] })
+        }
+    }
+    private func destinationView(rss: RSS) -> some View {
+        let item = RSSItem()
+        return RSSFeedListView(rss: rss, viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), rssItem: item, filter: .all)
+            .environmentObject(DataSourceService.current.rss)
+    }
+}
+
 #if DEBUG
-struct RSSFoldersDisclosureGroup_Previews: PreviewProvider {
+struct ContentCell_Previews: PreviewProvider {
     static let rss = RSS()
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     static let unread = Unread(dataSource: DataSourceService.current.rssItem)
     static var previews: some View {
-        RSSFoldersDisclosureGroup(persistence: Persistence.current, viewModel: self.viewModel, unread: unread)
-          .environment(\.managedObjectContext, Persistence.current.context)
-          .environmentObject(Persistence.current)
-            .preferredColorScheme(.dark)
+        NavigationView {
+            List {
+                ContentCell(persistence: Persistence.current, unread: unread, viewModel: self.viewModel, isExpanded: false)
+                    .environment(\.managedObjectContext, Persistence.current.context)
+                    .environmentObject(Persistence.current)
+                    .preferredColorScheme(.dark)
+            }.listStyle(SidebarListStyle())
+        }
     }
 }
 #endif
+
+extension ForEach where Data.Element: Hashable, ID == Data.Element, Content: View {
+    init(values: Data, content: @escaping (Data.Element) -> Content) {
+        self.init(values, id: \.self, content: content)
+    }
+}
+
+struct IndexedCollection<Base: RandomAccessCollection>: RandomAccessCollection {
+    typealias Index = Base.Index
+    typealias Element = (index: Index, element: Base.Element)
+
+    let base: Base
+
+    var startIndex: Index { base.startIndex }
+
+    var endIndex: Index { base.endIndex }
+
+    func index(after i: Index) -> Index {
+        base.index(after: i)
+    }
+
+    func index(before i: Index) -> Index {
+        base.index(before: i)
+    }
+
+    func index(_ i: Index, offsetBy distance: Int) -> Index {
+        base.index(i, offsetBy: distance)
+    }
+
+    subscript(position: Index) -> Element {
+        (index: position, element: base[position])
+    }
+}
+
+extension RandomAccessCollection {
+    func indexed() -> IndexedCollection<Self> {
+        IndexedCollection(base: self)
+    }
+}

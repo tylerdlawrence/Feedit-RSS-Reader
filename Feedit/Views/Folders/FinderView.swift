@@ -31,9 +31,10 @@ struct searchBar: View {
 struct categorySection: View {
     @State var label: String
     
-    @State var isExpanded = true
+    @State var isExpanded = false
     
     @State var tagRow: Bool = false
+    
     var body: some View {
         VStack (spacing: 14) {
             HStack {
@@ -44,7 +45,7 @@ struct categorySection: View {
                             .foregroundColor(.blue)
                     }
                     .rotationEffect(self.isExpanded ? Angle(degrees: 90):  Angle(degrees: 0))
-                    .animation(.easeOut(duration: 0.40))
+//                    .animation(.easeOut(duration: 0.40))
                     .onTapGesture {
                         self.isExpanded.toggle()
                     }
@@ -95,20 +96,56 @@ struct listItemRow: View {
     @Binding var tagRow: Bool
     @State var label: String
     @State var tagColor: Color
+    let rss = RSS()
+    let rssItem = RSSItem()
+    let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+    static var fetchRequest: NSFetchRequest<RSSGroup> {
+      let request: NSFetchRequest<RSSGroup> = RSSGroup.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \RSSGroup.items, ascending: true)]
+      return request
+    }
+//    @ObservedObject var persistence: Persistence
+    @FetchRequest(
+      fetchRequest: RSSGroupListView.fetchRequest,
+      animation: .default)
+    var groups: FetchedResults<RSSGroup>
+//    @ObservedObject var unread: Unread
+    
+    @EnvironmentObject var rssDataSource: RSSDataSource
+    
     var body: some View {
         VStack (alignment: .leading, spacing: 0) {
-            HStack (alignment: .center, spacing: 12) {
+            List(groups, id: \.id) { group in
+//            HStack (alignment: .center, spacing: 12) {
                 if tagRow {
-                    Circle()
-                        .fill(tagColor)
-                        .frame(width: 14, height: 14)
-                } else {
-                    Image(systemName: "chevron.right")
+//                    Circle()
+//                        .fill(tagColor)
+//                        .frame(width: 14, height: 14)
+                    ForEach(viewModel.items, id: \.self) { rss in
+                        HStack {
+                            Text("\(group.name ?? "Untitled")")
+                            Spacer()
+                            Text("\(group.itemCount)")
+                                .font(.caption)
+                                .fontWeight(.bold)
+                                .padding(.horizontal, 7)
+                                .padding(.vertical, 1)
+                                .background(Color.gray.opacity(0.5))
+                                .opacity(0.4)
+                                .foregroundColor(Color("text"))
+                                .cornerRadius(8)
+                                .contentShape(Rectangle())
+                            }
+                    }
+                    FeedRow(rss: rss, viewModel: viewModel, unread: Unread(dataSource: DataSourceService.current.rssItem))
+                
+//                } else {
+//                    Image(systemName: "chevron.right")
                 }
-                Text(label)
+//                Text(label)
             }
-            .padding()
-            Divider()
+//            .padding()
+//            Divider()
         }
     }
 }
@@ -123,8 +160,9 @@ struct FinderView: View {
     var body: some View {
         ZStack {
             NavigationView {
-                List{
-//                    ScrollView(showsIndicators: false) {
+                List {
+//                    ForEach(viewModel.items) { rss in
+                    
                         VStack (alignment: .leading, spacing: 24) {
                             categorySection(
                                 label: "Locations",

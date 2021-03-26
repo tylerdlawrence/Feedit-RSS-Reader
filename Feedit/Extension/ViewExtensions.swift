@@ -37,6 +37,15 @@ public struct ActivityIndicator: UIViewRepresentable {
 
 #endif
 
+struct ScrollCell: ViewModifier {
+    func body(content: Content) -> some View {
+        Group {
+            content
+            Divider()
+        }
+    }
+}
+
 extension View {
     func phoneOnlyStackNavigationView() -> some View {
         if UIDevice.current.userInterfaceIdiom == .phone {

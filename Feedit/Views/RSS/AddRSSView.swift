@@ -112,11 +112,10 @@ struct AddRSSView: View {
                 }
                 
                 NavigationLink(destination:
-                                //SelectGroupView(selectedGroups: []) { _ in }
                                 RSSGroupListView(persistence: Persistence.current, viewModel: RSSListViewModel(dataSource: DataSourceService.current.rss))
                                 .environment(\.managedObjectContext, Persistence.current.context)
                                 .environmentObject(Persistence.current)) {
-                    Label("Folders", systemImage: "folder")
+                    Label("Manage Folders", systemImage: "folder.badge.plus")
                 }
                 
                     if !hasFetchResult {
@@ -141,7 +140,7 @@ struct AddRSSView: View {
             .navigationBarTitle("Add Feed")
             .navigationBarBackButtonHidden(true)
             .navigationBarItems(leading: cancelButton, trailing: doneButton)
-            .preferredColorScheme(darkMode ? .dark : .light)
+//            .preferredColorScheme(darkMode ? .dark : .light)
             .animation(Animation.easeIn(duration: 0.1))
             .animation(Animation.easeIn(duration: 0.5))
             

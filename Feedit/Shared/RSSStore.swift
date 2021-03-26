@@ -22,6 +22,8 @@ class RSSStore: NSObject, ObservableObject {
     @Published var fetchContentType: ContentTimeType = .minute60
     @Published var totalUnreadPosts: Int = 0
     @Published var totalReadPostsToday: Int = 0
+    
+    
 
     static let instance = RSSStore()
     private let persistence = Persistence.current
