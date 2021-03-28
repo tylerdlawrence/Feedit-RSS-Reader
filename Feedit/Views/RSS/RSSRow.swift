@@ -63,22 +63,32 @@ struct RSSRow: View {
 //                    deleteRow()
                     dismissDestructiveDelayButton()
                     showSheet.toggle()
-                    self.delete(rss)
+//                    self.delete(rss)
                     
                 }),
                 .cancel(),
             ]
         )
     }
-            
     init(rss: RSS, viewModel: RSSListViewModel) {
         self.rss = rss
-        self.imageLoader = ImageLoader(path: rss.url)
+        imageLoader = ImageLoader(urlString: rss.url)
+//        self.imageLoader = ImageLoader(path: rss.url)
         self.viewModel = viewModel
 //        self.selection = selection
     }
     
+    
+    @ObservedObject var unread = Unread(dataSource: DataSourceService.current.rssItem)
+    @ObservedObject var rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
+    
+    var rssSource: RSS {
+        return self.rssFeedViewModel.rss
+    }
+    
     var body: some View {
+        
+//        let unreadCount = unread.items.filter { !$0.isRead }.count
         
         let infoButton = SwipeCellButton(
             buttonStyle: .image,
@@ -161,6 +171,7 @@ struct RSSRow: View {
                         .foregroundColor(Color("text"))
                     Spacer()
                     
+//                    Text("\(unread.items.count)")
 //                    Text("\(rss.title.count)")
 //                        .font(.caption)
 //                        .fontWeight(.bold)
@@ -171,6 +182,9 @@ struct RSSRow: View {
 //                        .foregroundColor(Color("text"))
 //                        .cornerRadius(8)
                 }
+//                .onAppear {
+//                    self.viewModel.fetchUnreadCount()
+//                }
                 .frame(height: 40)
                 .onTapGesture {
                 }
@@ -249,16 +263,16 @@ struct RSSRow: View {
                 }
                 
     }
-    func delete(_ rss: RSS) {
-        self.viewModel.items.removeAll(where: {$0 == rss})
-        viewModel.items.remove(at: 0)
-        }
+//    func delete(_ rss: RSS) {
+//        self.viewModel.items.removeAll(where: {$0 == rss})
+//        viewModel.items.remove(at: 0)
+//    }
 }
     
 #if DEBUG
 struct RSSRow_Previews: PreviewProvider {
     static let rss = DataSourceService.current
-    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss, unreadCount: 10)
     static var previews: some View {
         return RSSRow(rss: RSS(), viewModel: self.viewModel)
             .previewLayout(.fixed(width: 400, height: 30))

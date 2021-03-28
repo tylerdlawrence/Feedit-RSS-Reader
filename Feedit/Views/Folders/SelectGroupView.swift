@@ -33,7 +33,7 @@ struct SelectGroupView: View {
         
         NavigationView {
             List(groups, id: \.id, selection: $selectedGroups) { group in
-              SelectRSSGroupRow(group: group, selection: $selectedGroups)
+                SelectRSSGroupRow(group: group, selection: $selectedGroups.projectedValue)
             }
             .navigationBarTitle("Add To Folder")
 //            .navigationBarItems(trailing: Button("Done") {

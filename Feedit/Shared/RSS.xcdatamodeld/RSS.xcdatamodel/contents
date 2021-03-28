@@ -6,6 +6,11 @@
         <attribute name="image" optional="YES" attributeType="String" defaultValueString=""/>
         <attribute name="imageURL" optional="YES" attributeType="String"/>
         <attribute name="isFetched" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="itemCount" optional="YES" attributeType="Integer 64" usesScalarValueType="YES">
+            <userInfo>
+                <entry key="isRead" value="value"/>
+            </userInfo>
+        </attribute>
         <attribute name="lastFetchTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="order" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="title" optional="YES" attributeType="String" defaultValueString=""/>
@@ -27,13 +32,14 @@
         <attribute name="createTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="desc" optional="YES" attributeType="String" defaultValueString=""/>
         <attribute name="image" optional="YES" attributeType="String"/>
+        <attribute name="imageURL" optional="YES" attributeType="String"/>
         <attribute name="isArchive" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="isRead" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="order" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="progress" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="rssUUID" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="title" optional="YES" attributeType="String" defaultValueString=""/>
-        <attribute name="unread" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="unread" optional="YES" attributeType="Integer 64" usesScalarValueType="YES"/>
         <attribute name="updateTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="url" optional="YES" attributeType="String" defaultValueString=""/>
         <attribute name="uuid" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
@@ -46,9 +52,9 @@
         <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
     </entity>
     <elements>
-        <element name="RSS" positionX="-544.7466430664062" positionY="45.42822265625" width="128" height="209"/>
+        <element name="RSS" positionX="-544.7466430664062" positionY="45.42822265625" width="128" height="224"/>
         <element name="RSSGroup" positionX="-459" positionY="162" width="128" height="119"/>
-        <element name="RSSItem" positionX="-370.7073974609375" positionY="38.6402587890625" width="128" height="239"/>
+        <element name="RSSItem" positionX="-370.7073974609375" positionY="38.6402587890625" width="128" height="254"/>
         <element name="Settings" positionX="-470.65283203125" positionY="309.8365783691406" width="128" height="118"/>
     </elements>
 </model>

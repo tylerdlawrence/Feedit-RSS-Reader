@@ -118,7 +118,6 @@ struct UnreadListView: View {
             })
             .onAppear {
                 self.unreads.fecthResults()
-    //            self.unread.fetchRemoteRSSItems()
             }
         }
     }

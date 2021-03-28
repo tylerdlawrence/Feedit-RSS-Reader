@@ -12,19 +12,22 @@ import UIKit
 
 class RSSListViewModel: NSObject, ObservableObject{
 
-    @Published var items: [RSS] = []
-    @Published var articles: [RSSItem] = []
+    @Published private(set) var items: [RSS] = []
     
+    @Published var isLoading: Bool = false
+    private var subscriptions: Set<AnyCancellable> = []
     
-
     let dataSource: RSSDataSource
+//    let itemDataSource: RSSItemDataSource
     var start = 0
     
-    
+    var children: [RSS] = [RSS]()
+    var unreadCount: Int
 
-    init(dataSource: RSSDataSource) {
-        
+    init(dataSource: RSSDataSource, unreadCount: Int) {
+//        self.itemDataSource = itemDataSource
         self.dataSource = dataSource
+        self.unreadCount = unreadCount
         super.init()
     }
 
@@ -42,6 +45,17 @@ class RSSListViewModel: NSObject, ObservableObject{
             items.append(contentsOf: objects)
         }
     }
+    
+    func fetchUnreadCount(start: Int = 0) {
+        self.start = items.count
+        fecthResults(start: start)
+        
+        dataSource.performFetch(RSS.requestUnreadObjects(start: start))
+        if let objects = dataSource.fetchedResult.fetchedObjects {
+            items.append(contentsOf: objects)
+        }
+    }
+    
 
     //MARK: context menu action for delete
     private func delete(rss: RSS) {

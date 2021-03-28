@@ -41,6 +41,7 @@ struct RSSItemRow: View {
         contextMenuAction = action
         self.rssFeedViewModel = rssFeedViewModel
     }
+//    @State var imgURL: String = "https://..."
         
     var body: some View {
         let toggleStarred = SwipeCellButton(
@@ -104,16 +105,27 @@ struct RSSItemRow: View {
 
         ZStack {
             VStack(alignment: .leading) {
-                HStack {//}(alignment: .top) {
+                HStack(alignment: .top) {
                 VStack(alignment: .center) {
-//                    if !rssItem.isRead {
+//                    ImageView(withURL: rssSource.image)
+//                        .frame(width:25, height:25)
+//                        .cornerRadius(3.0)
+                    
+                    if !rssItem.isRead {
                         Text("")
                             .frame(width: 8, height: 8)
                             .background(Color.blue)
                             .opacity(rssItem.isRead ? 0 : 1)
                             .clipShape(Circle())
                             .padding([.bottom])
-//                    }
+                    } else {
+                        Text("")
+                            .frame(width: 8, height: 8)
+                            .background(Color.blue)
+                            .opacity(0)
+                            .clipShape(Circle())
+                            .padding([.bottom])
+                    }
 //                    if rssItem.isArchive {
 //                        Image(systemName: "star.fill").font(.system(size: 11, weight: .black, design: .rounded))
 //                            .foregroundColor(Color.yellow)
@@ -194,6 +206,7 @@ struct RSSItemRow: View {
                                 .foregroundColor(.gray)
                         }
                         Spacer()
+                        
                         
                     }
                }

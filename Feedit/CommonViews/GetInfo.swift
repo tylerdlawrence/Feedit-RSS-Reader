@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftUIX
 import Introspect
 import UIKit
 import MobileCoreServices
@@ -16,7 +17,7 @@ import SDWebImageSwiftUI
 import KingfisherSwiftUI
 
 struct InfoView: View {
-    @AppStorage("darkMode") var darkMode = false
+    @Environment(\.openURL) var openURL
     @EnvironmentObject var rssDataSource: RSSDataSource
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.managedObjectContext) var managedObjectContext
@@ -109,7 +110,9 @@ struct InfoView: View {
                 }
                 Section(header: Text("Home Page").padding(.leading).textCase(nil)){
                     HStack{
-                        Text(rssSource.url).textCase(.lowercase)
+//                        Text(rssSource.url).textCase(.lowercase)
+                        LinkPresentationView(url: URL(string: rssSource.url)!)
+                            .frame(width: 320, height: 70)
                             .contextMenu {
                                 Button(action: {
                                     self.actionSheetShown = true
@@ -129,11 +132,12 @@ struct InfoView: View {
                                 })
                             }
                         Spacer()
-                        Link(destination: URL(string: rssSource.url)!, label: {
-                            HStack {
-                                Image(systemName: "safari")
-                            }
-                        })
+//                        Link(destination: URL(string: rss.rssURL!.relativeString)!, label: {
+//                            HStack {
+//                                Image(systemName: "safari")
+//                            }
+//                        })
+                        
                     }
                 }
             }
@@ -159,7 +163,6 @@ struct InfoView: View {
                 groupPickerIsPresented = false
             }
         }
-            .preferredColorScheme(darkMode ? .dark : .light)
             
         }
         .navigationViewStyle(StackNavigationViewStyle())
@@ -230,7 +233,7 @@ extension Collection where Element == URLQueryItem {
 }
 
 struct GetInfo_Previews: PreviewProvider {
-    static let rss = RSSListViewModel(dataSource: DataSourceService.current.rss)
+    static let rss = RSSListViewModel(dataSource: DataSourceService.current.rss, unreadCount: 10)
     static let rssGroup = RSSGroup()
     
     static var previews: some View {

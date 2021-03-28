@@ -12,7 +12,6 @@ import UIKit
 import SwipeCell
 import FeedKit
 import KingfisherSwiftUI
-//import SDWebImageSwiftUI
 
 struct RSSFeedListView: View {
     
@@ -32,20 +31,6 @@ struct RSSFeedListView: View {
             return "Unread"
         }
     }
-//    var filteredArticleList: [RSSItem] {
-//        switch filter {
-//        case .all:
-//            return rssFeedViewModel.items
-//        case .starred:
-//            return rssFeedViewModel.items.filter { item in
-//                (!self.rssFeedViewModel.isOn && !item.isArchive)}
-//        case .unread:
-//            return rssFeedViewModel.items.filter { item in
-//                (!self.rssFeedViewModel.unreadIsOn && item.isRead)}
-//        }
-//    }
-    
-//    let urlToImage: [RSSItem] = ""
     
     var filteredArticles: [RSSItem] {
         return rssFeedViewModel.items.filter({ (item) -> Bool in
@@ -67,7 +52,6 @@ struct RSSFeedListView: View {
     @State private var footer: String = "Refresh"
     @State var cancellables = Set<AnyCancellable>()
     
-    
     let rss:RSS
     init(rss: RSS, viewModel: RSSFeedViewModel, rssItem: RSSItem, filter: FilterType) {
         self.rss = rss
@@ -82,85 +66,61 @@ struct RSSFeedListView: View {
         }.buttonStyle(BorderlessButtonStyle())
     }
     
-    
     var body: some View {
-        
-//        ZStack {
-//            Color("accent")
-//                .frame(maxWidth: .infinity, maxHeight: .infinity)
-//                .edgesIgnoringSafeArea(.all)
         ScrollViewReader { scrollViewProxy in
             List {
+//            ScrollViewExt(progressTint: Color("tab"), arrowTint: Color("tab")) {
                 ForEach(filteredArticles) { item in
                     ZStack {
-//                        NavigationLink(destination: WebView(rssItem: item, onCloseClosure: {})) {
-//                            EmptyView()
-//                        }
                         NavigationLink(destination: RSSFeedDetailView(rssItem: item, rssFeedViewModel: self.rssFeedViewModel)) {
                             EmptyView()
                         }
                         .opacity(0.0)
                         .buttonStyle(PlainButtonStyle())
+                        
                         HStack {
-//                            UrlImageView(urlString: items.urlToImage)
                             RSSItemRow(rssItem: item, menu: self.contextmenuAction(_:), rssFeedViewModel: rssFeedViewModel)
                                 .contentShape(Rectangle())
                                 .onTapGesture {
                                     self.selectedItem = item
-                                }
                             }
                         }
                     }
-
+                }
+                .environmentObject(DataSourceService.current.rss)
+                .environmentObject(DataSourceService.current.rssItem)
+                .environment(\.managedObjectContext, Persistence.current.context)
 
             }
-            .animation(.default)
+//            onUpdate: { }
+            .animation(.easeInOut)
             .add(self.searchBar)
             .accentColor(Color("tab"))
             .listRowBackground(Color("accent"))
             .navigationBarTitle("", displayMode: .inline)
             .navigationBarItems(trailing: refreshButton)
-            .onAppear {
-                
-            }
+            .onAppear { }
             .toolbar{
                 ToolbarItem(placement: .principal) {
                     HStack{
                         KFImage(URL(string: rssSource.image))
                             .placeholder({
                                 Image("getInfo")
-                                    .renderingMode(.original)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 20, height: 20,alignment: .center)
-                                    .cornerRadius(2)
+                                    .renderingMode(.original).resizable().aspectRatio(contentMode: .fit).frame(width: 20, height: 20,alignment: .center).cornerRadius(2)
                             })
-                            .renderingMode(.original)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 20, height: 20,alignment: .center)
-                            .cornerRadius(2)
+                            .renderingMode(.original).resizable().aspectRatio(contentMode: .fit).frame(width: 20, height: 20,alignment: .center).cornerRadius(2)
 
                         Text(rssSource.title)
                             .font(.system(size: 20, weight: .medium, design: .rounded))
 
-                        Text("\(filteredArticles.count)")
-                            .font(.caption)
-                            .fontWeight(.bold)
-                            .padding(.horizontal, 7)
-                            .padding(.vertical, 1)
-                            .background(Color.gray.opacity(0.5))
-                            .opacity(0.4)
-                            .foregroundColor(Color("text"))
-                            .cornerRadius(8)
+                        UnreadCountView(count: filteredArticles.count)
+
                     }
                 }
 
                 ToolbarItem(placement: .bottomBar) {
                     Toggle(isOn: $rssFeedViewModel.unreadIsOn) { Text("") }
                         .toggleStyle(CheckboxStyle())
-
-
                 }
                 ToolbarItem(placement: .bottomBar) {
                     Spacer()
@@ -168,7 +128,6 @@ struct RSSFeedListView: View {
                 ToolbarItem(placement: .bottomBar) {
                     Toggle(isOn: $rssFeedViewModel.isOn) { Text("") }
                         .toggleStyle(StarStyle())
-
                 }
             }
 //            .modifier(ToolbarModifier(rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem)))
@@ -196,45 +155,4 @@ struct RSSFeedListView: View {
     func contextmenuAction(_ item: RSSItem) {
         rssFeedViewModel.archiveOrCancel(item)
     }
-}
-
-//#if DEBUG
-//struct RSSFeedListView_Previews: PreviewProvider {
-//    static let rss = RSS()
-//    static let rssItem = RSSItem()
-//    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-//    
-//    static var group: RSSGroup = {
-//      let controller = Persistence.preview
-//      return controller.makeRandomFolder(context: controller.context)
-//    }()
-//    @State static var selection: Set<RSSGroup> = [group]
-//
-//    static var previews: some View {
-//        HomeView(rssItem: rssItem, viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
-//            .environment(\.managedObjectContext, Persistence.current.context)
-//            .environmentObject(Persistence.current)
-//                .environment(\.colorScheme, .dark)
-//    }
-//}
-//#endif
-
-extension Image {
-
-    func data(url:URL) -> Self {
-
-        if let data = try? Data(contentsOf: url) {
-
-            return Image(uiImage: UIImage(data: data)!)
-
-                .resizable()
-
-        }
-
-        return self
-
-            .resizable()
-
-    }
-
 }

@@ -112,7 +112,7 @@ struct AddRSSView: View {
                 }
                 
                 NavigationLink(destination:
-                                RSSGroupListView(persistence: Persistence.current, viewModel: RSSListViewModel(dataSource: DataSourceService.current.rss))
+                                RSSGroupListView(persistence: Persistence.current, viewModel: RSSListViewModel(dataSource: DataSourceService.current.rss, unreadCount: 0))
                                 .environment(\.managedObjectContext, Persistence.current.context)
                                 .environmentObject(Persistence.current)) {
                     Label("Manage Folders", systemImage: "folder.badge.plus")

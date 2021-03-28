@@ -24,28 +24,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     let unread = Unread(dataSource: DataSourceService.current.rssItem)
     let articles = AllArticles(dataSource: DataSourceService.current.rssItem)
-    let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+    let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss, unreadCount: Int())
     let rss = RSS()
     let rssItem = RSSItem()
     
     private(set) static var shared: SceneDelegate?
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-//        func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions, openURLContexts URLContexts: Set<UIOpenURLContext>) {
-//
-//            if let url = URLContexts.first?.url {
-//                let urlStr = url.absoluteString
-//                if let productID = urlStr.replacingOccurences(of: "feeditrssreader://", with: "") as String? {
-//                    self.pushToDetailScreen(detail: productID)
-//                }
-//            }
-//            
-//            guard let _ = (scene as? UIWindowScene) else { return }
-//            self.scene(scene, openURLContexts: connectionOptions.urlContexts)
         let homeView =
-//            ContentView(rssFeedViewModel: RSSFeedViewModel(rss: self.rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
             HomeView(articles: self.articles, unread: self.unread, rssItem: self.rssItem, viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: self.rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), persistence: Persistence.current)
-            
             .environmentObject(iconSettings)
                 .environmentObject(DataSourceService.current.rssItem)
                 .environmentObject(Persistence.current)

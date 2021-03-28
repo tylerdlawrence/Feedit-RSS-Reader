@@ -155,7 +155,7 @@ struct FilterPicker: View {
 
 struct FilterPicker_Previews: PreviewProvider {
     static let rss = RSS()
-    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss, unreadCount: 10)
     
     static var previews: some View {
 

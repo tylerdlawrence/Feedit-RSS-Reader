@@ -12,6 +12,7 @@ import WidgetKit
 
 @main
 struct FeeditApp: App {
+    
     @Environment(\.managedObjectContext) var managedObjectContext
     @Environment(\.scenePhase) private var scenePhase
     @State var isLoaded = false
@@ -25,7 +26,7 @@ struct FeeditApp: App {
     let unread = Unread(dataSource: DataSourceService.current.rssItem)
     let articles = AllArticles(dataSource: DataSourceService.current.rssItem)
     
-    @StateObject private var viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+    @StateObject private var viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss, unreadCount: Int())
     
     @StateObject private var rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
     
@@ -39,11 +40,7 @@ struct FeeditApp: App {
         
         HomeView(articles: articles, unread: unread, rssItem: rssItem, viewModel: viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), persistence: Persistence.current)
             
-//            .onAppear { refreshProgress.startup() }
-//            .environmentObject(refreshProgress)
-//            .environmentObject(defaults)
-//            .preferredColorScheme(AppDefaults.userInterfaceColorScheme)
-            
+//            .environment(\.managedObjectContext, persistenceController.container.viewContext)
             
             .environment(\.managedObjectContext, Persistence.current.context)
             .environmentObject(rssFeedViewModel).environmentObject(viewModel).environmentObject(persistence)

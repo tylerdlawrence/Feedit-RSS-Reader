@@ -17,9 +17,12 @@ struct RSSGroupDetailsView: View {
     let rssGroup: RSSGroup
     let rss = RSS()
     let item = RSSItem()
+    
     static var fetchRequest: NSFetchRequest<RSSGroup> {
       let request: NSFetchRequest<RSSGroup> = RSSGroup.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(keyPath: \RSSGroup.items, ascending: true)].compactMap { $0 }
+        let predicate = NSPredicate(format: "rssUUID = %@")
+        request.predicate = predicate
       return request
     }
     var groups: FetchedResults<RSSGroup>
@@ -32,9 +35,17 @@ struct RSSGroupDetailsView: View {
 //          .padding()
 //      }
         List {
-            ForEach(viewModel.items, id: \.self) { rss in
+            ForEach(groups) { rss in
+                HStack {
+                    Text("\(rssGroup.name ?? "Untitled")")
+                    Spacer()
+                    Text("\(rssGroup.itemCount)")
+                }
+            }
+            ForEach(viewModel.items) { rss in
                 HStack {
                     RSSRow(rss: rss, viewModel: self.viewModel)
+
                 }
             }.environment(\.managedObjectContext, Persistence.current.context)
             .environmentObject(Persistence.current)
@@ -50,7 +61,7 @@ struct RSSGroupDetailsView: View {
 #if DEBUG
 struct RSSGroupDetailsView_Previews: PreviewProvider {
     static let rss = RSS()
-    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss, unreadCount: 10)
     static var previews: some View {
         NavigationView {
             RSSGroupListView(persistence: Persistence.current, viewModel: self.viewModel)

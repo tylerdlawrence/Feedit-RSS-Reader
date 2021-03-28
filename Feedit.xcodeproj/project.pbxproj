@@ -35,6 +35,10 @@
 		6162F2A625B71AF3008E7FA7 /* FilterBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6162F2A525B71AF3008E7FA7 /* FilterBar.swift */; };
 		6165A54B25F42C5600672EE1 /* SwipeCellKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6165A54A25F42C5600672EE1 /* SwipeCellKit */; };
 		6168A2E7260C4635002F70EC /* ToolbarModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6168A2E6260C4634002F70EC /* ToolbarModifier.swift */; };
+		6168A2F1260F7792002F70EC /* UnreadCountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6168A2F0260F778D002F70EC /* UnreadCountView.swift */; };
+		6168A2F4260F9B77002F70EC /* SwiftUIX in Frameworks */ = {isa = PBXBuildFile; productRef = 6168A2F3260F9B77002F70EC /* SwiftUIX */; };
+		6168A2F82610355E002F70EC /* ScrollViewExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6168A2F72610355A002F70EC /* ScrollViewExt.swift */; };
+		6168A2FA26104B5D002F70EC /* SmartFeedsHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6168A2F926104B5D002F70EC /* SmartFeedsHomeView.swift */; };
 		616CAF6024F7131000690804 /* OPMLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616CAF5F24F7131000690804 /* OPMLParser.swift */; };
 		616CAF6324F7154600690804 /* DateSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616CAF6224F7154600690804 /* DateSpec.swift */; };
 		616CAF6524F7158200690804 /* RFC3339DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616CAF6424F7158200690804 /* RFC3339DateFormatter.swift */; };
@@ -44,7 +48,6 @@
 		617B49D8260054090016FC3D /* FeeditApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617B49D7260054090016FC3D /* FeeditApp.swift */; };
 		617B49DA260073520016FC3D /* ListSeperator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617B49D9260073520016FC3D /* ListSeperator.swift */; };
 		617B49DD26010F770016FC3D /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 617B49DC26010F770016FC3D /* MarkdownUI */; };
-		617B49E1260117350016FC3D /* FinderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617B49E0260117350016FC3D /* FinderView.swift */; };
 		617B49E3260264F70016FC3D /* AllArticlesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617B49E2260264F50016FC3D /* AllArticlesView.swift */; };
 		617B49E5260285E20016FC3D /* AllArticles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617B49E4260285E10016FC3D /* AllArticles.swift */; };
 		617B49E82602981C0016FC3D /* UnreadListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617B49E72602981C0016FC3D /* UnreadListView.swift */; };
@@ -252,6 +255,9 @@
 		6162F25725B68BA1008E7FA7 /* Searchbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Searchbar.swift; sourceTree = "<group>"; };
 		6162F2A525B71AF3008E7FA7 /* FilterBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterBar.swift; sourceTree = "<group>"; };
 		6168A2E6260C4634002F70EC /* ToolbarModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarModifier.swift; sourceTree = "<group>"; };
+		6168A2F0260F778D002F70EC /* UnreadCountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnreadCountView.swift; sourceTree = "<group>"; };
+		6168A2F72610355A002F70EC /* ScrollViewExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViewExt.swift; sourceTree = "<group>"; };
+		6168A2F926104B5D002F70EC /* SmartFeedsHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartFeedsHomeView.swift; sourceTree = "<group>"; };
 		616CAF5F24F7131000690804 /* OPMLParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OPMLParser.swift; sourceTree = "<group>"; };
 		616CAF6224F7154600690804 /* DateSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateSpec.swift; sourceTree = "<group>"; };
 		616CAF6424F7158200690804 /* RFC3339DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RFC3339DateFormatter.swift; sourceTree = "<group>"; };
@@ -260,7 +266,6 @@
 		616CAF9124F974AF00690804 /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
 		617B49D7260054090016FC3D /* FeeditApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeeditApp.swift; sourceTree = "<group>"; };
 		617B49D9260073520016FC3D /* ListSeperator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListSeperator.swift; sourceTree = "<group>"; };
-		617B49E0260117350016FC3D /* FinderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinderView.swift; sourceTree = "<group>"; };
 		617B49E2260264F50016FC3D /* AllArticlesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllArticlesView.swift; sourceTree = "<group>"; };
 		617B49E4260285E10016FC3D /* AllArticles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllArticles.swift; sourceTree = "<group>"; };
 		617B49E72602981C0016FC3D /* UnreadListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnreadListView.swift; sourceTree = "<group>"; };
@@ -383,6 +388,7 @@
 				618610B3256ED5BE0083A96D /* KingfisherSwiftUI in Frameworks */,
 				6165A54B25F42C5600672EE1 /* SwipeCellKit in Frameworks */,
 				616121F0255367B60074F061 /* SDWebImageSwiftUI in Frameworks */,
+				6168A2F4260F9B77002F70EC /* SwiftUIX in Frameworks */,
 				618610D5256EF7A00083A96D /* SwiftSoup in Frameworks */,
 				617B49DD26010F770016FC3D /* MarkdownUI in Frameworks */,
 				61DEBE3F25152CB90025B1B3 /* SwiftUI.framework in Frameworks */,
@@ -410,7 +416,6 @@
 			children = (
 				610A854025FF11460027FF48 /* RSSFoldersDisclosureGroup.swift */,
 				610A854225FFFF990027FF48 /* ExpansionHandler.swift */,
-				617B49E0260117350016FC3D /* FinderView.swift */,
 				61BED57725FDE27A008F6EA3 /* AddGroup.swift */,
 				61BED57925FDEAA1008F6EA3 /* RSSGroupListView.swift */,
 				61BED57B25FDEBD9008F6EA3 /* RSSGroupDetailsView.swift */,
@@ -586,6 +591,8 @@
 				618E641025E57BFB00F46B4D /* RSSActionSheet.swift */,
 				61967EFF24E2068400AA647C /* RSSDisplayView.swift */,
 				612FB83D2540F04000D9822B /* RSSListView.swift */,
+				6168A2F0260F778D002F70EC /* UnreadCountView.swift */,
+				6168A2F926104B5D002F70EC /* SmartFeedsHomeView.swift */,
 			);
 			path = RSS;
 			sourceTree = "<group>";
@@ -668,6 +675,7 @@
 				61967EF024E2061100AA647C /* WebView.swift */,
 				61967EE724E205DD00AA647C /* SafariView.swift */,
 				61BED57325FC6618008F6EA3 /* RSSFeedDetailView.swift */,
+				6168A2F72610355A002F70EC /* ScrollViewExt.swift */,
 			);
 			path = RSSFeed;
 			sourceTree = "<group>";
@@ -777,6 +785,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				6168A2F6260F9C65002F70EC /* PBXTargetDependency */,
 				617B49DF26010F8D0016FC3D /* PBXTargetDependency */,
 				6165A54D25F42C6A00672EE1 /* PBXTargetDependency */,
 				61FD0CE925EC531600084A20 /* PBXTargetDependency */,
@@ -803,6 +812,7 @@
 				61FD0CE625EC530500084A20 /* Valet */,
 				6165A54A25F42C5600672EE1 /* SwipeCellKit */,
 				617B49DC26010F770016FC3D /* MarkdownUI */,
+				6168A2F3260F9B77002F70EC /* SwiftUIX */,
 			);
 			productName = Feedit;
 			productReference = 61C8189224E1F3FB00593939 /* Feedit.app */;
@@ -870,6 +880,7 @@
 				61FD0CE525EC530400084A20 /* XCRemoteSwiftPackageReference "Valet" */,
 				6165A54925F42C5600672EE1 /* XCRemoteSwiftPackageReference "SwipeCellKit" */,
 				617B49DB26010F760016FC3D /* XCRemoteSwiftPackageReference "MarkdownUI" */,
+				6168A2F2260F9B77002F70EC /* XCRemoteSwiftPackageReference "SwiftUIX" */,
 			);
 			productRefGroup = 61C8189324E1F3FB00593939 /* Products */;
 			projectDirPath = "";
@@ -944,7 +955,6 @@
 				61BED57E25FE54E9008F6EA3 /* SelectGroupView.swift in Sources */,
 				61967EF424E2061100AA647C /* WebView.swift in Sources */,
 				61CDCF5924E845DE007654C5 /* DocumentPicker.swift in Sources */,
-				617B49E1260117350016FC3D /* FinderView.swift in Sources */,
 				61B95EC725D0B68200829741 /* Color.swift in Sources */,
 				61C818EB24E1FAB000593939 /* DataSource.swift in Sources */,
 				61967EEC24E205DD00AA647C /* SafariView.swift in Sources */,
@@ -968,6 +978,7 @@
 				61967EE924E205DD00AA647C /* ActionContextMenu.swift in Sources */,
 				61C818E724E1F9BA00593939 /* PersistenceManager.swift in Sources */,
 				616CAF6024F7131000690804 /* OPMLParser.swift in Sources */,
+				6168A2F1260F7792002F70EC /* UnreadCountView.swift in Sources */,
 				617E4C54255DE8F20010CEE8 /* HomeView.swift in Sources */,
 				615E971F25323C1900891083 /* Reachability.swift in Sources */,
 				61967ECB24E204FB00AA647C /* AppEnvironment.swift in Sources */,
@@ -1015,6 +1026,7 @@
 				6103807625490A1300222019 /* ViewExtensions.swift in Sources */,
 				616CAF9224F974AF00690804 /* SettingViewModel.swift in Sources */,
 				61967EED24E205DD00AA647C /* SectionView.swift in Sources */,
+				6168A2FA26104B5D002F70EC /* SmartFeedsHomeView.swift in Sources */,
 				61967F0124E2068400AA647C /* AddRSSViewModel.swift in Sources */,
 				61E9939C260AF1E500679853 /* ArticleItemView.swift in Sources */,
 				61C818D624E1F70900593939 /* DataSourceService.swift in Sources */,
@@ -1026,6 +1038,7 @@
 				617B49EA260298510016FC3D /* Unread.swift in Sources */,
 				61DE7AC325CD1E18008F8DDE /* CheckboxToggle.swift in Sources */,
 				61B95EC525D0B51300829741 /* Binding.swift in Sources */,
+				6168A2F82610355E002F70EC /* ScrollViewExt.swift in Sources */,
 				61C8189824E1F3FB00593939 /* SceneDelegate.swift in Sources */,
 				61BED57825FDE27A008F6EA3 /* AddGroup.swift in Sources */,
 				61967ED324E2053D00AA647C /* ManagedObjectContext.swift in Sources */,
@@ -1116,6 +1129,10 @@
 		6165A54D25F42C6A00672EE1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = 6165A54C25F42C6A00672EE1 /* SwipeCellKit */;
+		};
+		6168A2F6260F9C65002F70EC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 6168A2F5260F9C65002F70EC /* SwiftUIX */;
 		};
 		617B49DF26010F8D0016FC3D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1538,6 +1555,14 @@
 				minimumVersion = 2.7.1;
 			};
 		};
+		6168A2F2260F9B77002F70EC /* XCRemoteSwiftPackageReference "SwiftUIX" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftUIX/SwiftUIX.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.0.5;
+			};
+		};
 		617B49DB26010F760016FC3D /* XCRemoteSwiftPackageReference "MarkdownUI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/gonzalezreal/MarkdownUI";
@@ -1648,6 +1673,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6165A54925F42C5600672EE1 /* XCRemoteSwiftPackageReference "SwipeCellKit" */;
 			productName = SwipeCellKit;
+		};
+		6168A2F3260F9B77002F70EC /* SwiftUIX */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6168A2F2260F9B77002F70EC /* XCRemoteSwiftPackageReference "SwiftUIX" */;
+			productName = SwiftUIX;
+		};
+		6168A2F5260F9C65002F70EC /* SwiftUIX */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6168A2F2260F9B77002F70EC /* XCRemoteSwiftPackageReference "SwiftUIX" */;
+			productName = SwiftUIX;
 		};
 		617B49DC26010F770016FC3D /* MarkdownUI */ = {
 			isa = XCSwiftPackageProductDependency;

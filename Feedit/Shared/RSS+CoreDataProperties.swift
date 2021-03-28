@@ -36,8 +36,7 @@ extension RSS {
     @NSManaged public var isArchive: Bool
     @NSManaged public var isRead: Bool
     @NSManaged public var readDate : Date?
-//    @NSManaged public var order: Int32
-//    @NSManaged public var unread: Bool
+    
     @NSManaged public var item: RSSItem
     @NSManaged public var groups: NSSet?
     @NSManaged public var itemCount: Int64
@@ -75,6 +74,13 @@ extension RSS {
         rss.url = "http://images.apple.com/main/rss/hotnews/hotnews.rss"
         return rss
     }
+    
+    static func requestFolderObjects() -> NSFetchRequest<RSS> {
+        let request = RSS.fetchRequest() as NSFetchRequest<RSS>
+        request.predicate = .init(value: true)
+        request.sortDescriptors = [.init(key: #keyPath(RSS.groups), ascending: true)]
+        return request
+    }
 
     static func requestObjects() -> NSFetchRequest<RSS> {
         let request = RSS.fetchRequest() as NSFetchRequest<RSS>
@@ -87,6 +93,13 @@ extension RSS {
         let request = RSS.fetchRequest() as NSFetchRequest<RSS>
         request.predicate = .init(value: true)
         request.sortDescriptors = [.init(key: #keyPath(RSS.isArchive), ascending: true)]
+        return request
+    }
+    
+    static func requestUnreadObjects(start: Int = 0) -> NSFetchRequest<RSS> {
+        let request = RSS.fetchRequest() as NSFetchRequest<RSS>
+        request.predicate = .init(value: true)
+        request.sortDescriptors = [.init(key: #keyPath(RSS.isRead), ascending: true)]
         return request
     }
 

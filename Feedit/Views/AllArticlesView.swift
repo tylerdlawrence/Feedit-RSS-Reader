@@ -38,7 +38,6 @@ struct AllArticlesView: View {
         }.buttonStyle(BorderlessButtonStyle())
     }
     
-//    @Environment(\.imageCache) var cache: ImageCache
     private func list(of articles: [RSSItem]) -> some View {
         return List(filteredArticles) { item in
                NavigationLink(
@@ -62,7 +61,7 @@ struct AllArticlesView: View {
     var body: some View {
         ZStack {
             List {
-                ForEach(articles.items, id: \.id) { article in
+                ForEach(articles.items, id: \.self) { article in
 //                    list(of: filteredArticles).eraseToAnyView()
                     ZStack {
                         NavigationLink(destination: WebView(rssItem: article, onCloseClosure: {})) {
@@ -72,7 +71,7 @@ struct AllArticlesView: View {
                        .opacity(0.0)
                        .buttonStyle(PlainButtonStyle())
                        
-                       HStack {
+                        HStack(alignment: .top) {
                             RSSItemRow(rssItem: article, menu: self.contextmenuAction(_:), rssFeedViewModel: RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem))
                                .contentShape(Rectangle())
                                .onTapGesture {
@@ -80,7 +79,8 @@ struct AllArticlesView: View {
                                }
                            }
                        }
-                }
+                }.environment(\.managedObjectContext, Persistence.current.context)
+                .environmentObject(rssFeedViewModel).environmentObject(persistence)
             }
             .animation(.default)
             .add(self.searchBar)
@@ -91,7 +91,6 @@ struct AllArticlesView: View {
                         
             .toolbar{
                 ToolbarItem(placement: .principal) {
-//                    NavBarHeader()
                     HStack{
                         Image(systemName: "tray.fill")
                             .resizable()
@@ -113,7 +112,7 @@ struct AllArticlesView: View {
                 }
 
                 ToolbarItem(placement: .bottomBar) {
-                    Toggle(isOn: $articles.unreadIsOn) { Text("") }
+                    Toggle(isOn: $rssFeedViewModel.unreadIsOn) { Text("") }
                         .toggleStyle(CheckboxStyle())
 //                    MarkAsReadButton(isSet: $rssItem.isRead)
                     
@@ -124,7 +123,7 @@ struct AllArticlesView: View {
                 }
                 ToolbarItem(placement: .bottomBar) {
 //                    MarkAsStarredButton(isSet: $rssItem.isArchive)
-                    Toggle(isOn: $articles.isOn) { Text("") }
+                    Toggle(isOn: $rssFeedViewModel.isOn) { Text("") }
                         .toggleStyle(StarStyle())
                 }
             }

@@ -93,20 +93,6 @@ struct RSSFeedDetailView: View {
                     
                     Divider()
                     
-//                    Markdown(self.body as! Document)
-//                        #"""
-//                        ## Inline code
-//                        If you have inline code blocks, wrap them in backticks: `var example = true`.
-//                        """#
-//                    )
-//                    .markdownStyle(
-//                        DefaultMarkdownStyle(
-//                            font: .system(.body, design: .serif),
-//                            codeFontName: "Menlo",
-//                            codeFontSizeMultiple: 0.88
-//                        )
-//                    )
-                                        
                     Text(verbatim: rssItem.title)
                         .font(.system(size: 26, weight: .medium, design: .rounded))
                         .padding(.top)
@@ -119,6 +105,8 @@ struct RSSFeedDetailView: View {
                             .padding(.bottom)
                         Spacer()
                     }.padding(.top, 3)
+                    
+                    
                     
                     Text(rssItem.desc.trimHTMLTag.trimWhiteAndSpace)
                         .font(.system(size: 17, weight: .medium, design: .rounded)).foregroundColor(.gray)
