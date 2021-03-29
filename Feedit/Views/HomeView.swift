@@ -140,7 +140,9 @@ struct HomeView: View {
             ScrollViewReader { scrollViewProxy in
                 ZStack {
                     List {
-                        SmartFeedsHomeView(rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), articles: AllArticles(dataSource: DataSourceService.current.rssItem), unread: Unread(dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
+                        SmartFeedsHomeView(rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), articles: AllArticles(dataSource: DataSourceService.current.rssItem), unread: Unread(dataSource: DataSourceService.current.rssItem))
+                            
+
                         
                         RSSFoldersDisclosureGroup(persistence: Persistence.current, unread: unread, viewModel: self.viewModel, isExpanded: selectedCells.contains(rss))
                             .onTapGesture { self.selectDeselect(rss) }
@@ -189,9 +191,9 @@ struct HomeView: View {
                 }
             })
         }
-//        .onAppear {
-//            self.viewModel.fecthResults()
-//            }
+        .onAppear {
+            self.viewModel.fecthResults()
+            }
 //        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
