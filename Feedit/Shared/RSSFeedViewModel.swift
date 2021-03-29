@@ -10,6 +10,9 @@ import CoreData
 import SwiftUI
 import Combine
 import UIKit
+import FeedKit
+import FaviconFinder
+import BackgroundTasks
 
 extension RSSFeedViewModel: Identifiable {
     
@@ -18,7 +21,6 @@ extension RSSFeedViewModel: Identifiable {
 
 class RSSFeedListItem: Identifiable, Codable {
     var uuid = UUID()
-    
     var author: String?
     var title: String
     var urlToImage: String?
@@ -29,26 +31,33 @@ class RSSFeedListItem: Identifiable, Codable {
     }
 }
 
+
+
 class RSSFeedViewModel: NSObject, ObservableObject {
     typealias Element = RSSItem
-    private(set) lazy var rssFeedViewModel = RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem)
-        
-    var changeReadFilterSubject = PassthroughSubject<Bool, Never>()
-    var selectNextUnreadSubject = PassthroughSubject<Bool, Never>()
-    var readFilterAndFeedsPublisher: AnyPublisher<([RSS], Bool?), Never>?
-    @Published var nameForDisplay = ""
-    @Published var selectedTimelineItemIDs = Set<String>()  // Don't use directly.  Use selectedTimelineItemsPublisher
-    @Published var selectedTimelineItemID: String? = nil    // Don't use directly.  Use selectedTimelineItemsPublisher
-    @Published var listID = ""
-    
-    private var bag = Set<AnyCancellable>()
+    private(set) lazy var rssFeedViewModel = RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem) //, feed: feed)
+//    var changeReadFilterSubject = PassthroughSubject<Bool, Never>()
+//    var selectNextUnreadSubject = PassthroughSubject<Bool, Never>()
+//    var readFilterAndFeedsPublisher: AnyPublisher<([RSS], Bool?), Never>?
+//    @Published var nameForDisplay = ""
+//    @Published var selectedTimelineItemIDs = Set<String>()  // Don't use directly.  Use selectedTimelineItemsPublisher
+//    @Published var selectedTimelineItemID: String? = nil    // Don't use directly.  Use selectedTimelineItemsPublisher
+//    @Published var listID = ""
+//    private var bag = Set<AnyCancellable>()
         
     @Published var isOn = false
     @Published var unreadIsOn = false
-    @Published var items = [RSSItem]()// = []
+    @Published var items = [RSSItem]()
+    @Published var filteredArticles: [RSSItem] = []
+//    @Published var feeds: [FeedObject] = []
     
     @Published var selectedPost: RSSItem?
     @Published var shouldReload = false
+//    @ObservedObject var store = RSSStore.instance
+//    @Published var filterType = FilterType.unreadIsOn
+//    private var cancellable: AnyCancellable? = nil
+//    private var cancellable2: AnyCancellable? = nil
+    
     
     var startIndex: Int { items.startIndex }
     var endIndex: Int { items.endIndex }
@@ -57,24 +66,27 @@ class RSSFeedViewModel: NSObject, ObservableObject {
         }
     
     let dataSource: RSSItemDataSource
-    
     let rss: RSS
     var start = 0
     
-    init(rss: RSS, dataSource: RSSItemDataSource) {
+//    init(rss: RSS, dataSource: RSSItemDataSource, feed: FeedObject) {
+//        self.feed = feed
+//        self.filteredArticles = feed.posts.filter { self.filterType == .unreadIsOn ? !$0.isRead : true }
+//
+//        cancellable = Publishers.CombineLatest3(self.$feed, self.$filterType, self.$shouldReload)
+//            .receive(on: DispatchQueue.main)
+//            .sink(receiveValue: { (newValue) in
+//                self.filteredArticles = newValue.0.posts.filter { newValue.1 == .unreadIsOn ? !$0.isRead : true }
+//            })
+//
+    init(rss: RSS, dataSource: RSSItemDataSource) { //, feed: FeedObject
+//        self.feed = feed
         self.dataSource = dataSource
         self.rss = rss
         super.init()
     }
+
     
-    func markAllAsRead() {
-        rssFeedViewModel.markAllAsRead()
-    }
-    
-//    func markAllPostsRead(start: Int = 0, _ item: RSSItem) {
-//        self.markAllPostsRead(item)
-//        shouldReload = true
-//    }
     
     func archiveOrCancel(_ item: RSSItem) {
         let updatedItem = dataSource.readObject(item)
@@ -154,7 +166,6 @@ class RSSFeedViewModel: NSObject, ObservableObject {
                             items.append(item.asRSSItem(container: uuid, in: self.dataSource.createContext))
                         }
                     }
-//                    self.rss.title = self.rss.title
                     self.rss.lastFetchTime = Date()
                     self.dataSource.saveCreateContext()
 
@@ -165,9 +176,110 @@ class RSSFeedViewModel: NSObject, ObservableObject {
             }
         }
     }
-    
-    // Phantom type placeholder for undefined methods
-    func undefined<T>(_ message:String="",file:String=#file,function:String=#function,line: Int=#line) -> T {
-        fatalError("[File: \(file),Line: \(line),Function: \(function),]: Undefined: \(message)")
+}
+
+//class FeedObject: Identifiable, ObservableObject {
+//    var id = UUID()
+//    var url: URL
+//    var posts: [Post] {
+//        didSet {
+//            objectWillChange.send()
+//        }
+//    }
+//
+//    let feed = ""
+//    var imageURL: URL?
+//
+//    var lastUpdateDate: Date
+//
+//    init?(url: URL, posts: [Post]) {
+////        self.feed = feed
+//        self.url = url
+//        lastUpdateDate = Date()
+//        self.posts = posts
+//    }
+//}
+
+extension RSS {
+    func totalUnreadCount() -> Int {
+        return self.children.reduce(0) { count, rss in
+            // Reduce closures get passed the previous value, as well
+            // as the next element within the sequence that's being
+            // reduced, and then returns a new value.
+            count + self.children.count
+        }
     }
 }
+
+//class Post: Codable, Identifiable, ObservableObject {
+//    var id = UUID()
+//    var title: String
+//    var description: String
+//    var url: URL
+//    var date: Date
+//    var isToday: Bool
+//    var isStarred: Bool
+//
+//
+//    var isRead: Bool
+//    {
+//        return readDate != nil
+//    }
+//
+//    var readDate: Date? {
+//        didSet {
+//            objectWillChange.send()
+//        }
+//    }
+//
+//    var lastUpdateDate: Date
+//
+//    init?(feedItem: RSSFeedItem) {
+//        self.title =  feedItem.title ?? ""
+//        self.description = feedItem.description ?? ""
+//        self.isStarred = false
+//        self.isToday = false
+//
+//        if let link = feedItem.link, let url = URL(string: link) {
+//            self.url = url
+//        } else {
+//            return nil
+//        }
+//        self.date = feedItem.pubDate ?? Date()
+//        lastUpdateDate = Date()
+//    }
+//
+//    init?(atomFeed: AtomFeedEntry) {
+//        self.title =  atomFeed.title ?? ""
+//        self.isStarred = false
+//        self.isToday = false
+//        let description = atomFeed.content?.value ?? ""
+//
+//        let attributed = try? NSAttributedString(data: description.data(using: .unicode)!, options: [.documentType: NSAttributedString.DocumentType.html], documentAttributes: nil)
+//        self.description = attributed?.string ?? ""
+//
+//        if let link = atomFeed.links?.first?.attributes?.href, let url = URL(string: link) {
+//            self.url = url
+//        } else {
+//            return nil
+//        }
+//        self.date = atomFeed.updated ?? Date()
+//        lastUpdateDate = Date()
+//    }
+//
+//    init(title: String, description: String, url: URL) {
+//        self.title = title
+//        self.description = description
+//        self.url = url
+//        self.date = Date()
+//        lastUpdateDate = Date()
+//        self.isStarred = false
+//        self.isToday = false
+//    }
+//
+//    static var testObject: Post {
+//        return Post(title: "This Is A Test Post Title",
+//        description: "This is a test post description",
+//        url: URL(string: "https://www.google.com")!)
+//    }
+//}

@@ -86,7 +86,18 @@ struct RSSRow: View {
         return self.rssFeedViewModel.rss
     }
     
+//    private var urlButton: some View{
+//        Button("") {
+//            openURL(URL(string: (rssSource.rssURL?.host!)!)!)
+//        }
+//    }
+    
     var body: some View {
+//        let _:String = rssSource.rssURL!.absoluteString
+//        let _:String = (rssSource.rssURL?.absoluteStringWithoutScheme!)!
+//
+//        let stringToURL = URL(string: (rssSource.rssURL?.host!)!)
+//        let urlToString = stringToURL?.baseURL
         
 //        let unreadCount = unread.items.filter { !$0.isRead }.count
         
@@ -272,7 +283,7 @@ struct RSSRow: View {
 #if DEBUG
 struct RSSRow_Previews: PreviewProvider {
     static let rss = DataSourceService.current
-    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss, unreadCount: 10)
+    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     static var previews: some View {
         return RSSRow(rss: RSS(), viewModel: self.viewModel)
             .previewLayout(.fixed(width: 400, height: 30))

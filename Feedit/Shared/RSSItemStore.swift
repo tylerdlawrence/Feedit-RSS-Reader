@@ -31,26 +31,19 @@ class RSSItemStore: NSObject {
         return persistence.context
     }
     
-//    func setPostRead(rss: RSS, item: RSSItem) {
-//        rss.readDate = Date()
-//        item.objectWillChange.send()
-//        rss.item.url = rss.url
-//
-//        context.insert(item)
-//    }
+    func markAllPostsRead(item: RSSItem) {
+        item.title.forEach { (item) in
+            setPostRead(rss: RSS(), item: RSSItem())
+        }
+    }
     
-//    private var readItems: [RSSItem] {
-//        return fetchedResultsController.fetchedObjects ?? []
-//    }
-//    private var undoneUnread: [RSSItem] {
-//        return readItems.filter { !$0.isRead }
-//    }
-//    private var doneFavorites: [RSSItem] {
-//        return readItems.filter { $0.isRead }
-//    }
-//    public var unreadList: [RSSItem] = []
-//    public var readList: [RSSItem] = []
+    func setPostRead(rss: RSS, item: RSSItem) {
+        rss.readDate = Date()
+        item.objectWillChange.send()
+        rss.item.url = rss.url
 
+        context.insert(item)
+    }
     
     var didChange = PassthroughSubject<RSSItemStore, Never>()
 

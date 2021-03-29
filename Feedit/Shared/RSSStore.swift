@@ -14,7 +14,7 @@ import Foundation
 import FaviconFinder
 
 class RSSStore: NSObject, ObservableObject {
-    @Published var feeds: [RSSItem] = []
+
     @Published var shouldSelectFeedURL: String?
     @Published var shouldOpenSettings: Bool = false
     @Published var notificationsEnabled: Bool = false
@@ -58,16 +58,13 @@ class RSSStore: NSObject, ObservableObject {
         }
     }
     
-    func setPostRead(rss: RSS, item: RSSItem) {
-        rss.readDate = Date()
-        item.objectWillChange.send()
-        
-        if let index = self.rssSources.firstIndex(where: {$0.url == rss.url}) {
-            self.feeds.remove(at: index)
-            self.feeds.insert(item, at: index)
-            
-        }
-    }
+//    func setPostRead(_ rss: RSS, item: FeedObject) {
+//        rss.readDate = Date()
+//        item.objectWillChange.send()
+//        
+//        if self.rssSources.firstIndex(where: {$0.url == rss.url}) != nil {
+//        }
+//    }
 
     var context: NSManagedObjectContext {
         return persistence.context
@@ -80,6 +77,7 @@ class RSSStore: NSObject, ObservableObject {
     }
     
     public var rssSources: [RSS] = []
+    var cancellables = Set<AnyCancellable>()
     
     override init() {
         super.init()
@@ -127,6 +125,7 @@ class RSSStore: NSObject, ObservableObject {
                 rss.lastFetchTime = item.lastFetchTime
                 rss.createTime = item.createTime
                 rss.updateTime = Date()
+                rss.itemCount = Int64()
                 saveChanges()
             } else {
                 // TODO: throw Error
@@ -153,6 +152,23 @@ class RSSStore: NSObject, ObservableObject {
             print(error)
         }
     }
+    func fetchContents(feedURL: URL, handler: @escaping (_ feed: Feed?) -> Void) {
+        let parser = FeedParser(URL: feedURL)
+        
+        parser.parseAsync(queue: DispatchQueue.global(qos: .userInitiated)) { (result) in
+            
+            switch result {
+                
+            case .success(let feed):
+                DispatchQueue.main.async {
+                    handler(feed)
+                }
+            case .failure(let error):
+                handler(nil)
+                print(error)
+            }
+        }
+    }
 }
 
 extension RSSStore: NSFetchedResultsControllerDelegate {
@@ -160,6 +176,42 @@ extension RSSStore: NSFetchedResultsControllerDelegate {
         didChange.send(self)
     }
 }
+
+//extension RSSStore {
+//    func reloadFeedPosts(feed: FeedObject, handler: ((_ success: Bool) -> Void)? = nil) {
+//        
+//        fetchContents(feedURL: feed.url) { (feedObject) in
+//            
+//            guard let feedObject = feedObject,
+//                  let newFeed = FeedObject(feed: feedObject, url: feed.url, posts: [RSSItem]()) else { return }
+//            let recentFeedPosts = newFeed.posts.filter { newPost in
+//                return !feed.posts.contains { (post) -> Bool in
+//                    return post.title == newPost.title
+//                }
+//            }
+//            
+//            guard !recentFeedPosts.isEmpty else {
+//                handler?(true)
+//                return
+//            }
+//            
+//            feed.posts.insert(contentsOf: recentFeedPosts, at: 0)
+//            handler?(true)
+//        }
+//    }
+//    func update(feedURL: URL, handler: @escaping (_ success: Bool) -> Void) {
+//        
+//        fetchContents(feedURL: feedURL) { (feedObject) in
+//            
+//            guard let feedObject = feedObject,
+//                  let _ = FeedObject(feed: feedObject, url: feedURL, posts: [RSSItem]()) else {
+//                    handler(false)
+//                    return
+//                }
+//            handler(true)
+//        }
+//    }
+//}
 
 enum ContentTimeType: String, CaseIterable {
     case minute60 = "1 hour"

@@ -233,7 +233,7 @@ extension Collection where Element == URLQueryItem {
 }
 
 struct GetInfo_Previews: PreviewProvider {
-    static let rss = RSSListViewModel(dataSource: DataSourceService.current.rss, unreadCount: 10)
+    static let rss = RSSListViewModel(dataSource: DataSourceService.current.rss)
     static let rssGroup = RSSGroup()
     
     static var previews: some View {

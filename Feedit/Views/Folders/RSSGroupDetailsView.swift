@@ -61,7 +61,7 @@ struct RSSGroupDetailsView: View {
 #if DEBUG
 struct RSSGroupDetailsView_Previews: PreviewProvider {
     static let rss = RSS()
-    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss, unreadCount: 10)
+    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     static var previews: some View {
         NavigationView {
             RSSGroupListView(persistence: Persistence.current, viewModel: self.viewModel)

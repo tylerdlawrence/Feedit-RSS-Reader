@@ -59,6 +59,7 @@ struct RSSFeedListView: View {
         self.rssItem = rssItem
         self.filter = filter
     }
+//    var markAllPostsRead: (() -> Void)?
     
     private var refreshButton: some View {
         Button(action: self.rssFeedViewModel.loadMore) {
@@ -92,7 +93,6 @@ struct RSSFeedListView: View {
                 .environment(\.managedObjectContext, Persistence.current.context)
 
             }
-//            onUpdate: { }
             .animation(.easeInOut)
             .add(self.searchBar)
             .accentColor(Color("tab"))

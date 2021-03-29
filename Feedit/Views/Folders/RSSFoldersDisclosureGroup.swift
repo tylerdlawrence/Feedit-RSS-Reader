@@ -12,20 +12,21 @@ import Foundation
 import os.log
 
 struct RSSFoldersDisclosureGroup: View {
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     static var fetchRequest: NSFetchRequest<RSSGroup> {
       let request: NSFetchRequest<RSSGroup> = RSSGroup.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(keyPath: \RSSGroup.items, ascending: true)]
       return request
     }
-    @ObservedObject var persistence: Persistence
+    
     @FetchRequest(
       fetchRequest: RSSGroupListView.fetchRequest,
       animation: .default)
     var groups: FetchedResults<RSSGroup>
-    @ObservedObject var unread: Unread
     
+    @ObservedObject var persistence: Persistence
+    @ObservedObject var unread: Unread
     @EnvironmentObject var rssDataSource: RSSDataSource
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @ObservedObject var viewModel: RSSListViewModel
     let rss = RSS()
     
@@ -40,7 +41,13 @@ struct RSSFoldersDisclosureGroup: View {
     var rssSource: RSS {
         return self.rssFeedViewModel.rss
     }
-
+    
+//    init(unreads: Unread, persistence: Persistence, viewModel: RSSListViewModel) {
+//        self.unreads = unreads
+//        self.persistence = persistence
+//        self.viewModel = viewModel
+//    }
+    
     var body: some View {
         Section(header: Text("Folders").font(.system(size: 20, weight: .medium, design: .rounded)).textCase(nil).foregroundColor(Color("text"))) {
             ForEach(groups, id: \.id) { group in
@@ -75,9 +82,15 @@ struct RSSFoldersDisclosureGroup: View {
                             HStack {
                                 RSSRow(rss: rss, viewModel: viewModel)
                                 Spacer()
-                                if viewModel.unreadCount > 0 {
-                                    UnreadCountView(count: viewModel.unreadCount)
-                                }
+//                                if viewModel.items.filter { !$0.isRead }.count == 0 {
+//                                    Text("")
+//                                } else {
+//                                Text("\(filteredArticles.filter { !$0.isRead }.count)")
+//                                }
+                                UnreadCountView(count: filteredArticles.count)
+//                                if viewModel.unreadCount > 0 {
+//                                    UnreadCountView(count: viewModel.unreadCount)
+//                                }
                             }
                         }
                     }.onDelete { indexSet in
@@ -124,12 +137,14 @@ struct RSSFoldersDisclosureGroup: View {
 #if DEBUG
 struct RSSFoldersDisclosureGroup_Previews: PreviewProvider {
     static let rss = RSS()
-    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss, unreadCount: 10)
+    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     static let unread = Unread(dataSource: DataSourceService.current.rssItem)
+
     static var previews: some View {
         NavigationView {
             List {
                 RSSFoldersDisclosureGroup(persistence: Persistence.current, unread: unread, viewModel: self.viewModel, isExpanded: false)
+                    
                     .environment(\.managedObjectContext, Persistence.current.context)
                     .environmentObject(Persistence.current)
                     .preferredColorScheme(.dark)

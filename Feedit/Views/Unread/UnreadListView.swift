@@ -18,7 +18,7 @@ struct UnreadListView: View {
     @EnvironmentObject private var persistence: Persistence
     @Environment(\.managedObjectContext) private var context
     @EnvironmentObject var rssDataSource: RSSDataSource
-    
+    @EnvironmentObject var rss: RSS
     @ObservedObject var unreads: Unread
     @ObservedObject var searchBar: SearchBar = SearchBar()
     

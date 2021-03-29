@@ -18,16 +18,13 @@ class RSSListViewModel: NSObject, ObservableObject{
     private var subscriptions: Set<AnyCancellable> = []
     
     let dataSource: RSSDataSource
-//    let itemDataSource: RSSItemDataSource
     var start = 0
     
     var children: [RSS] = [RSS]()
-    var unreadCount: Int
+    var unreadCount = Int()
 
-    init(dataSource: RSSDataSource, unreadCount: Int) {
-//        self.itemDataSource = itemDataSource
+    init(dataSource: RSSDataSource) {
         self.dataSource = dataSource
-        self.unreadCount = unreadCount
         super.init()
     }
 

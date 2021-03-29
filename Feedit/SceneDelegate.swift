@@ -9,22 +9,19 @@ import SwiftUI
 import BackgroundTasks
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-
     var window: UIWindow?
-
 //    override init() {
 //        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor(Color("tab"))]
 //        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor(Color("tab"))]
 //    }
     @EnvironmentObject var iconSettings: IconNames
-
     @Environment(\.scenePhase) private var scenePhase
     @EnvironmentObject private var persistence: Persistence
     @Environment(\.managedObjectContext) private var context
 
     let unread = Unread(dataSource: DataSourceService.current.rssItem)
     let articles = AllArticles(dataSource: DataSourceService.current.rssItem)
-    let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss, unreadCount: Int())
+    let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     let rss = RSS()
     let rssItem = RSSItem()
     
@@ -32,11 +29,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         let homeView =
-            HomeView(articles: self.articles, unread: self.unread, rssItem: self.rssItem, viewModel: self.viewModel, rssFeedViewModel: RSSFeedViewModel(rss: self.rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), persistence: Persistence.current)
-            .environmentObject(iconSettings)
+            HomeView(persistence: persistence, articles: articles, unread: unread, rssItem: rssItem, viewModel: viewModel)
+                .environmentObject(iconSettings)
                 .environmentObject(DataSourceService.current.rssItem)
                 .environmentObject(Persistence.current)
-
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {

@@ -16,6 +16,7 @@
 		6117365724E83C7B00A2DEA5 /* DataNStorageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6117365624E83C7B00A2DEA5 /* DataNStorageViewModel.swift */; };
 		6117365924E83C9F00A2DEA5 /* BatchImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6117365824E83C9F00A2DEA5 /* BatchImportView.swift */; };
 		6117365B24E83CC500A2DEA5 /* BatchImportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6117365A24E83CC500A2DEA5 /* BatchImportViewModel.swift */; };
+		611F177A261134E500D11687 /* NSURLSessionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F1779261134E500D11687 /* NSURLSessionExtension.swift */; };
 		612FB85A2540F04200D9822B /* RSSListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612FB83D2540F04000D9822B /* RSSListView.swift */; };
 		6134288426050DFC00B9C20C /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6134288326050DFB00B9C20C /* Header.swift */; };
 		613428862606572800B9C20C /* MailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613428852606572800B9C20C /* MailView.swift */; };
@@ -242,6 +243,7 @@
 		6117365624E83C7B00A2DEA5 /* DataNStorageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataNStorageViewModel.swift; sourceTree = "<group>"; };
 		6117365824E83C9F00A2DEA5 /* BatchImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchImportView.swift; sourceTree = "<group>"; };
 		6117365A24E83CC500A2DEA5 /* BatchImportViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchImportViewModel.swift; sourceTree = "<group>"; };
+		611F1779261134E500D11687 /* NSURLSessionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSURLSessionExtension.swift; sourceTree = "<group>"; };
 		612FB83D2540F04000D9822B /* RSSListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RSSListView.swift; path = Feedit/Views/RSSListView.swift; sourceTree = SOURCE_ROOT; };
 		6134288326050DFB00B9C20C /* Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
 		613428852606572800B9C20C /* MailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MailView.swift; sourceTree = "<group>"; };
@@ -629,6 +631,7 @@
 				61DE7AC225CD1E18008F8DDE /* CheckboxToggle.swift */,
 				617B49D9260073520016FC3D /* ListSeperator.swift */,
 				613428942608360300B9C20C /* TrackableScrollView.swift */,
+				611F1779261134E500D11687 /* NSURLSessionExtension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -949,6 +952,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				611F177A261134E500D11687 /* NSURLSessionExtension.swift in Sources */,
 				61BED57C25FDEBD9008F6EA3 /* RSSGroupDetailsView.swift in Sources */,
 				61BED57425FC6618008F6EA3 /* RSSFeedDetailView.swift in Sources */,
 				610A854325FFFF990027FF48 /* ExpansionHandler.swift in Sources */,

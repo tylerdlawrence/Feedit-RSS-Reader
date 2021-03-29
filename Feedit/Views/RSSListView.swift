@@ -10,7 +10,7 @@ import SwiftUI
 
 struct RSSListView: View {
 
-    var viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss, unreadCount: Int())
+    var viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     @State private var revealFeedsDisclosureGroup = false
     
     var body: some View {

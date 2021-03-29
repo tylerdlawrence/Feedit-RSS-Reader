@@ -115,27 +115,7 @@ struct FilterBar: View {
 //    }
 //}
 
-class FeedObject: Identifiable, ObservableObject {
-    var id = UUID()
-    var url: URL
-    var posts: [RSSItem] {
-        didSet {
-            objectWillChange.send()
-        }
-    }
-    
-    var imageURL: URL?
-    
-    var lastUpdateDate: Date
-    
-    init?(feed: Feed, url: URL, posts: [RSSItem]) {
-        self.url = url
-        lastUpdateDate = Date()
-        self.posts = posts
 
-    }
-
-}
 
 struct FilterPicker: View {
     @State var isOn = 1
@@ -153,15 +133,15 @@ struct FilterPicker: View {
     }
 }
 
-struct FilterPicker_Previews: PreviewProvider {
-    static let rss = RSS()
-    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss, unreadCount: 10)
-    
-    static var previews: some View {
-
-        FilterPicker(isOn: 1, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
-            .previewLayout(.fixed(width: 250, height: 70))
-                .preferredColorScheme(.dark)
-        
-    }
-}
+//struct FilterPicker_Previews: PreviewProvider {
+//    static let rss = RSS()
+//    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+//    
+//    static var previews: some View {
+//
+//        FilterPicker(isOn: 1, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
+//            .previewLayout(.fixed(width: 250, height: 70))
+//                .preferredColorScheme(.dark)
+//        
+//    }
+//}

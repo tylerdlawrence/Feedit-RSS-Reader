@@ -22,29 +22,22 @@ struct FeeditApp: App {
     let persistenceController = PersistenceController.shared
     let persistence = Persistence.current
     let rss = RSS()
-    let rssItem = RSSItem()
-    let unread = Unread(dataSource: DataSourceService.current.rssItem)
-    let articles = AllArticles(dataSource: DataSourceService.current.rssItem)
+
+    @StateObject var articles = AllArticles(dataSource: DataSourceService.current.rssItem)
     
-    @StateObject private var viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss, unreadCount: Int())
+    @StateObject var unread = Unread(dataSource: DataSourceService.current.rssItem)
+    
+    @StateObject var rssItem = RSSItem()
+    
+    @StateObject private var viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     
     @StateObject private var rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
-    
-//    @StateObject private var refreshProgress = RefreshProgressModel()
-    
-//    @StateObject private var defaults = AppDefaults.shared
 
   var body: some Scene {
     WindowGroup {
-//        ContentView(rssFeedViewModel: RSSFeedViewModel(rss: self.rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem))
-        
-        HomeView(articles: articles, unread: unread, rssItem: rssItem, viewModel: viewModel, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), persistence: Persistence.current)
-            
-//            .environment(\.managedObjectContext, persistenceController.container.viewContext)
-            
+        HomeView(persistence: persistence, articles: articles, unread: unread, rssItem: rssItem, viewModel: viewModel)
             .environment(\.managedObjectContext, Persistence.current.context)
             .environmentObject(rssFeedViewModel).environmentObject(viewModel).environmentObject(persistence)
-        
     }
     .onChange(of: scenePhase) { phase in
       switch phase {
