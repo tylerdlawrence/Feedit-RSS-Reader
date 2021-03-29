@@ -27,7 +27,7 @@ struct RSSFoldersDisclosureGroup: View {
     @ObservedObject var unread: Unread
     @EnvironmentObject var rssDataSource: RSSDataSource
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    @ObservedObject var viewModel: RSSListViewModel
+    @StateObject var viewModel: RSSListViewModel
     let rss = RSS()
     
     @State var isExpanded = false
@@ -37,7 +37,7 @@ struct RSSFoldersDisclosureGroup: View {
             return !((self.rssFeedViewModel.isOn && !item.isArchive) || (self.rssFeedViewModel.unreadIsOn && item.isRead))
         })
     }
-    @ObservedObject var rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
+    @StateObject var rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
     var rssSource: RSS {
         return self.rssFeedViewModel.rss
     }
@@ -82,15 +82,17 @@ struct RSSFoldersDisclosureGroup: View {
                             HStack {
                                 RSSRow(rss: rss, viewModel: viewModel)
                                 Spacer()
-//                                if viewModel.items.filter { !$0.isRead }.count == 0 {
-//                                    Text("")
-//                                } else {
-//                                Text("\(filteredArticles.filter { !$0.isRead }.count)")
-//                                }
-                                UnreadCountView(count: filteredArticles.count)
+                                if rssFeedViewModel.items.filter { !$0.isRead }.count == 0 {
+                                    Text("")
+                                } else {
+                                    Text("\(rssFeedViewModel.items.filter { !$0.isRead }.count)")
+                                }
+//                                UnreadCountView(count: filteredArticles.count)
 //                                if viewModel.unreadCount > 0 {
 //                                    UnreadCountView(count: viewModel.unreadCount)
 //                                }
+                            }.onAppear {
+                                self.viewModel.fetchUnreadCount()
                             }
                         }
                     }.onDelete { indexSet in
