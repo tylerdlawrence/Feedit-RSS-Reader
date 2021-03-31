@@ -30,7 +30,6 @@ struct ActionContextMenu: View {
                     Text(self.label)
                     Image(systemName: self.systemName)
                         .imageScale(.small)
-//                        .foregroundColor(.primary)
                 }
             }
         }
@@ -39,7 +38,14 @@ struct ActionContextMenu: View {
 
 struct ActionContextMenu_Previews: PreviewProvider {
     static var previews: some View {
-        ActionContextMenu(label: "Archive", systemName: "tray.and.arrow.down")
-        ActionContextMenu(label: "Star", systemName: "star.fill")
+        VStack {
+            Text("Test Conext Menu")
+                .contextMenu {
+                    ActionContextMenu(label: "Archive", systemName: "archivebox")
+                    Divider()
+                    ActionContextMenu(label: "Mark As Read", systemName: "circle")
+                    ActionContextMenu(label: "Star", systemName: "star.fill")
+                }
+        }
     }
 }

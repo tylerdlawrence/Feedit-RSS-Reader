@@ -49,8 +49,6 @@ class RSSFeedViewModel: NSObject, ObservableObject {
     @Published var unreadIsOn = false
     @Published var items = [RSSItem]()
     @Published var filteredArticles: [RSSItem] = []
-//    @Published var feeds: [FeedObject] = []
-//    @Published var ids: [UUID] = []
     @Published var selectedPost: RSSItem?
     @Published var shouldReload = false
 //    @ObservedObject var store = RSSStore.instance
@@ -63,7 +61,7 @@ class RSSFeedViewModel: NSObject, ObservableObject {
     var endIndex: Int { items.endIndex }
     subscript(position: Int) -> RSSItem {
             return items[position]
-        }
+    }
     
     let dataSource: RSSItemDataSource
     let rss: RSS
@@ -79,8 +77,7 @@ class RSSFeedViewModel: NSObject, ObservableObject {
 //                self.filteredArticles = newValue.0.posts.filter { newValue.1 == .unreadIsOn ? !$0.isRead : true }
 //            })
 //
-    init(rss: RSS, dataSource: RSSItemDataSource) { //, feed: FeedObject
-//        self.feed = feed
+    init(rss: RSS, dataSource: RSSItemDataSource) {
         self.dataSource = dataSource
         self.rss = rss
         super.init()
@@ -178,27 +175,27 @@ class RSSFeedViewModel: NSObject, ObservableObject {
     }
 }
 
-//class FeedObject: Identifiable, ObservableObject {
-//    var id = UUID()
-//    var url: URL
-//    var posts: [Post] {
-//        didSet {
-//            objectWillChange.send()
-//        }
-//    }
-//
+class FeedObject: Identifiable, ObservableObject {
+    var id = UUID()
+    var url: URL
+    var posts: [Post] {
+        didSet {
+            objectWillChange.send()
+        }
+    }
+
 //    let feed = ""
-//    var imageURL: URL?
-//
-//    var lastUpdateDate: Date
-//
-//    init?(url: URL, posts: [Post]) {
-////        self.feed = feed
-//        self.url = url
-//        lastUpdateDate = Date()
-//        self.posts = posts
-//    }
-//}
+    var imageURL: URL?
+
+    var lastUpdateDate: Date
+
+    init?(url: URL, posts: [Post]) {
+//        self.feed = feed
+        self.url = url
+        lastUpdateDate = Date()
+        self.posts = posts
+    }
+}
 
 extension RSS {
     func totalUnreadCount() -> Int {
@@ -211,75 +208,75 @@ extension RSS {
     }
 }
 
-//class Post: Codable, Identifiable, ObservableObject {
-//    var id = UUID()
-//    var title: String
-//    var description: String
-//    var url: URL
-//    var date: Date
-//    var isToday: Bool
-//    var isStarred: Bool
-//
-//
-//    var isRead: Bool
-//    {
-//        return readDate != nil
-//    }
-//
-//    var readDate: Date? {
-//        didSet {
-//            objectWillChange.send()
-//        }
-//    }
-//
-//    var lastUpdateDate: Date
-//
-//    init?(feedItem: RSSFeedItem) {
-//        self.title =  feedItem.title ?? ""
-//        self.description = feedItem.description ?? ""
-//        self.isStarred = false
-//        self.isToday = false
-//
-//        if let link = feedItem.link, let url = URL(string: link) {
-//            self.url = url
-//        } else {
-//            return nil
-//        }
-//        self.date = feedItem.pubDate ?? Date()
-//        lastUpdateDate = Date()
-//    }
-//
-//    init?(atomFeed: AtomFeedEntry) {
-//        self.title =  atomFeed.title ?? ""
-//        self.isStarred = false
-//        self.isToday = false
-//        let description = atomFeed.content?.value ?? ""
-//
-//        let attributed = try? NSAttributedString(data: description.data(using: .unicode)!, options: [.documentType: NSAttributedString.DocumentType.html], documentAttributes: nil)
-//        self.description = attributed?.string ?? ""
-//
-//        if let link = atomFeed.links?.first?.attributes?.href, let url = URL(string: link) {
-//            self.url = url
-//        } else {
-//            return nil
-//        }
-//        self.date = atomFeed.updated ?? Date()
-//        lastUpdateDate = Date()
-//    }
-//
-//    init(title: String, description: String, url: URL) {
-//        self.title = title
-//        self.description = description
-//        self.url = url
-//        self.date = Date()
-//        lastUpdateDate = Date()
-//        self.isStarred = false
-//        self.isToday = false
-//    }
-//
-//    static var testObject: Post {
-//        return Post(title: "This Is A Test Post Title",
-//        description: "This is a test post description",
-//        url: URL(string: "https://www.google.com")!)
-//    }
-//}
+class Post: Codable, Identifiable, ObservableObject {
+    var id = UUID()
+    var title: String
+    var description: String
+    var url: URL
+    var date: Date
+    var isToday: Bool
+    var isStarred: Bool
+
+
+    var isRead: Bool
+    {
+        return readDate != nil
+    }
+
+    var readDate: Date? {
+        didSet {
+            objectWillChange.send()
+        }
+    }
+
+    var lastUpdateDate: Date
+
+    init?(feedItem: RSSFeedItem) {
+        self.title =  feedItem.title ?? ""
+        self.description = feedItem.description ?? ""
+        self.isStarred = false
+        self.isToday = false
+
+        if let link = feedItem.link, let url = URL(string: link) {
+            self.url = url
+        } else {
+            return nil
+        }
+        self.date = feedItem.pubDate ?? Date()
+        lastUpdateDate = Date()
+    }
+
+    init?(atomFeed: AtomFeedEntry) {
+        self.title =  atomFeed.title ?? ""
+        self.isStarred = false
+        self.isToday = false
+        let description = atomFeed.content?.value ?? ""
+
+        let attributed = try? NSAttributedString(data: description.data(using: .unicode)!, options: [.documentType: NSAttributedString.DocumentType.html], documentAttributes: nil)
+        self.description = attributed?.string ?? ""
+
+        if let link = atomFeed.links?.first?.attributes?.href, let url = URL(string: link) {
+            self.url = url
+        } else {
+            return nil
+        }
+        self.date = atomFeed.updated ?? Date()
+        lastUpdateDate = Date()
+    }
+
+    init(title: String, description: String, url: URL) {
+        self.title = title
+        self.description = description
+        self.url = url
+        self.date = Date()
+        lastUpdateDate = Date()
+        self.isStarred = false
+        self.isToday = false
+    }
+
+    static var testObject: Post {
+        return Post(title: "This Is A Test Post Title",
+        description: "This is a test post description",
+        url: URL(string: "https://www.google.com")!)
+    }
+}

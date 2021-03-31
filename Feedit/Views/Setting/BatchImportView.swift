@@ -31,105 +31,35 @@ struct BatchImportView: View {
     }
 
     var body: some View {
-        GroupBox {
-            HStack {
-                Spacer()
-                Button(action: {
-                    isImporting = false
-
-                    //fix broken picker sheet
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        isImporting = true
+        VStack(spacing: 12) {
+            if isJSONHintPresented {
+                Image("BatchImportImage")
+                    .resizable()
+                    .frame(width: UIScreen.main.bounds.width - 40, height: (UIScreen.main.bounds.width - 40)/1.6)
+                    .cornerRadius(8)
+            }
+            TextView(text: $JSONText, textStyle: .constant(.body))
+                .frame(height: 300)
+                .border(Color.gray, width: 1.0)
+                .padding(.leading, 20)
+                .padding(.trailing, 20)
+            Spacer()
+            RoundRectangeButton(status: $buttonStatus) { status in
+                switch status {
+                case .error:
+                    print("import error !!!")
+                case .normal:
+                    print("normal")
+                    self.isSheetPresented = true
+                case .ok:
+                    self.viewModel.batchInsert(JSONText: self.JSONText)
+                    self.buttonStatus = .normal("Import Successfully !!!")
+                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.0) {
+                        self.buttonStatus = .normal("Select File ...")
                     }
-                }, label: {
-                    Text("Import File")
-                })
-
-                Spacer()
-
-                Button(action: {
-                    isExporting = false
-
-                    //fix broken picker sheet
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        isExporting = true
-                    }
-
-                }, label: {
-                    Text("Export File")
-                })
-
-                Spacer()
+                }
             }
         }
-        GroupBox(label: Text("")) {
-            TextEditor(text: $document.message)
-        }
-//    .padding()
-    .fileImporter(
-        isPresented: $isImporting,
-        allowedContentTypes: [UTType.json],
-        allowsMultipleSelection: false
-    ) { result in
-        do {
-            guard let selectedFile: URL = try result.get().first else { return }
-
-            //trying to get access to url contents
-            if (CFURLStartAccessingSecurityScopedResource(selectedFile as CFURL)) {
-
-                guard let message = String(data: try Data(contentsOf: selectedFile), encoding: .utf8) else { return }
-
-                document.message = message
-
-                //done accessing the url
-                CFURLStopAccessingSecurityScopedResource(selectedFile as CFURL)
-            }
-            else {
-                print("Permission error!")
-            }
-        } catch {
-            // Handle failure.
-            print(error.localizedDescription)
-        }
-    }
-    .fileExporter(
-        isPresented: $isExporting,
-        document: document,
-        contentType: UTType.plainText,
-        defaultFilename: "feedit-file"
-    ) { result in
-        if case .success = result {
-            // Handle success.
-        } else {
-            // Handle failure.
-        }
-    }
-
-//        VStack {
-//            TextEditor(text: $JSONText) //, textStyle: .constant(.body))
-//                .frame(height: 250)
-//                .border(Color.gray, width: 1.0)
-//                .padding(.leading, 20)
-//                .padding(.trailing, 20)
-            //Spacer()
-//            RoundRectangeButton(status: $buttonStatus) { status in
-//                switch status {
-//                case .error:
-//                    print("import error !!!")
-//                case .normal:
-//                    print("normal")
-//                    self.isSheetPresented = true
-//                case .ok:
-//                    self.viewModel.batchInsert(JSONText: self.JSONText)
-//                    self.buttonStatus = .normal("Import Successful")
-//                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.0) {
-//                        self.buttonStatus = .normal("Select File")
-//                    }
-//                }
-//            }
-//        }
-
-
         .sheet(isPresented: $isSheetPresented, content: {
             DocumentPicker(viewModel: self.pickerViewModel)
         })
@@ -146,8 +76,96 @@ struct BatchImportView: View {
         .onDisappear {
             self.viewModel.discardCreateContext()
         }
-
     }
+//        GroupBox {
+//            HStack {
+//                Spacer()
+//                Button(action: {
+//                    isImporting = false
+//
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+//                        isImporting = true
+//                    }
+//                }, label: {
+//                    Text("Import File")
+//                })
+//
+//                Spacer()
+//
+//                Button(action: {
+//                    isExporting = false
+//
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+//                        isExporting = true
+//                    }
+//
+//                }, label: {
+//                    Text("Export File")
+//                })
+//
+//                Spacer()
+//            }
+//        }
+//        GroupBox(label: Text("")) {
+//            TextEditor(text: $document.message)
+//        }
+//    .fileImporter(
+//        isPresented: $isImporting,
+//        allowedContentTypes: [UTType.json],
+//        allowsMultipleSelection: false
+//    ) { result in
+//        do {
+//            guard let selectedFile: URL = try result.get().first else { return }
+//
+//            //trying to get access to url contents
+//            if (CFURLStartAccessingSecurityScopedResource(selectedFile as CFURL)) {
+//
+//                guard let message = String(data: try Data(contentsOf: selectedFile), encoding: .utf8) else { return }
+//
+//                document.message = message
+//
+//                //done accessing the url
+//                CFURLStopAccessingSecurityScopedResource(selectedFile as CFURL)
+//            }
+//            else {
+//                print("Permission error!")
+//            }
+//        } catch {
+//            // Handle failure.
+//            print(error.localizedDescription)
+//        }
+//    }
+//    .fileExporter(
+//        isPresented: $isExporting,
+//        document: document,
+//        contentType: UTType.plainText,
+//        defaultFilename: "feedit-file"
+//    ) { result in
+//        if case .success = result {
+//            // Handle success.
+//        } else {
+//            // Handle failure.
+//        }
+//    }
+//
+//        .sheet(isPresented: $isSheetPresented, content: {
+//            DocumentPicker(viewModel: self.pickerViewModel)
+//        })
+//        .onReceive(self.pickerViewModel.$jsonURL, perform: { output in
+//            guard let jsonURL = output else { return }
+//            guard let jsonStr = try? String(contentsOf: jsonURL, encoding: .utf8) else {
+//                return
+//            }
+//            self.JSONText = jsonStr
+//            self.buttonStatus = .ok("Import")
+//        })
+//        .padding(.top, 20)
+//        .padding(.bottom, 20)
+//        .onDisappear {
+//            self.viewModel.discardCreateContext()
+//        }
+//
+//    }
 }
 
 struct BatchImportView_Previews: PreviewProvider {

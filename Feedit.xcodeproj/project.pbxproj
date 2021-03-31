@@ -26,6 +26,8 @@
 		611F178C2612279A00D11687 /* NSURLSessionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F178B2612279900D11687 /* NSURLSessionExtension.swift */; };
 		611F17902612299C00D11687 /* SmartFeedsHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F178F2612299C00D11687 /* SmartFeedsHomeView.swift */; };
 		611F17B12613FB0E00D11687 /* DataSourceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C818D524E1F70900593939 /* DataSourceService.swift */; };
+		611F17B926143D1100D11687 /* Nuke in Frameworks */ = {isa = PBXBuildFile; productRef = 611F17B826143D1100D11687 /* Nuke */; };
+		611F17BD26143DCE00D11687 /* FetchImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F17BC26143DCE00D11687 /* FetchImage.swift */; };
 		612FB85A2540F04200D9822B /* RSSListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612FB83D2540F04000D9822B /* RSSListView.swift */; };
 		613428862606572800B9C20C /* MailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613428852606572800B9C20C /* MailView.swift */; };
 		6134288E2606D25F00B9C20C /* bot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6134288C2606D25F00B9C20C /* bot@2x.png */; };
@@ -252,6 +254,7 @@
 		611F17822612278100D11687 /* SwiftLinkPreview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftLinkPreview.swift; sourceTree = "<group>"; };
 		611F178B2612279900D11687 /* NSURLSessionExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSURLSessionExtension.swift; sourceTree = "<group>"; };
 		611F178F2612299C00D11687 /* SmartFeedsHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartFeedsHomeView.swift; sourceTree = "<group>"; };
+		611F17BC26143DCE00D11687 /* FetchImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchImage.swift; sourceTree = "<group>"; };
 		612FB83D2540F04000D9822B /* RSSListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RSSListView.swift; path = Feedit/Views/RSSListView.swift; sourceTree = SOURCE_ROOT; };
 		613428852606572800B9C20C /* MailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MailView.swift; sourceTree = "<group>"; };
 		6134288C2606D25F00B9C20C /* bot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bot@2x.png"; path = "Feedit/Assets.xcassets/bot.appiconset/bot@2x.png"; sourceTree = SOURCE_ROOT; };
@@ -389,6 +392,7 @@
 				618610DC256EF8420083A96D /* Reachability in Frameworks */,
 				6162F28025B69071008E7FA7 /* FaviconFinder in Frameworks */,
 				616121EC2553678B0074F061 /* AFNetworking in Frameworks */,
+				611F17B926143D1100D11687 /* Nuke in Frameworks */,
 				616121E42553670B0074F061 /* FeedKit in Frameworks */,
 				618610B3256ED5BE0083A96D /* KingfisherSwiftUI in Frameworks */,
 				616121F0255367B60074F061 /* SDWebImageSwiftUI in Frameworks */,
@@ -651,6 +655,7 @@
 				616CAF5F24F7131000690804 /* OPMLParser.swift */,
 				61967EC824E204FB00AA647C /* AppEnvironment.swift */,
 				61967ECA24E204FB00AA647C /* ImageServices.swift */,
+				611F17BC26143DCE00D11687 /* FetchImage.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -831,6 +836,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				611F17BB26143D5F00D11687 /* PBXTargetDependency */,
 				6168A2F6260F9C65002F70EC /* PBXTargetDependency */,
 				616121F9255376F30074F061 /* PBXTargetDependency */,
 				6162F28325B6907B008E7FA7 /* PBXTargetDependency */,
@@ -853,6 +859,7 @@
 				6162F24F25B68865008E7FA7 /* SwipeCell */,
 				6162F27F25B69071008E7FA7 /* FaviconFinder */,
 				6168A2F3260F9B77002F70EC /* SwiftUIX */,
+				611F17B826143D1100D11687 /* Nuke */,
 			);
 			productName = Feedit;
 			productReference = 61C8189224E1F3FB00593939 /* Feedit.app */;
@@ -918,6 +925,7 @@
 				6162F24E25B68865008E7FA7 /* XCRemoteSwiftPackageReference "SwipeCell" */,
 				6162F27E25B69071008E7FA7 /* XCRemoteSwiftPackageReference "FaviconFinder" */,
 				6168A2F2260F9B77002F70EC /* XCRemoteSwiftPackageReference "SwiftUIX" */,
+				611F17B726143D0F00D11687 /* XCRemoteSwiftPackageReference "Nuke" */,
 			);
 			productRefGroup = 61C8189324E1F3FB00593939 /* Products */;
 			projectDirPath = "";
@@ -1067,6 +1075,7 @@
 				6103807625490A1300222019 /* ViewExtensions.swift in Sources */,
 				616CAF9224F974AF00690804 /* SettingViewModel.swift in Sources */,
 				61967EED24E205DD00AA647C /* SectionView.swift in Sources */,
+				611F17BD26143DCE00D11687 /* FetchImage.swift in Sources */,
 				61967F0124E2068400AA647C /* AddRSSViewModel.swift in Sources */,
 				61E9939C260AF1E500679853 /* ArticleItemView.swift in Sources */,
 				61C818D624E1F70900593939 /* DataSourceService.swift in Sources */,
@@ -1147,6 +1156,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		611F17BB26143D5F00D11687 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 611F17BA26143D5F00D11687 /* Nuke */;
+		};
 		615E989F2534046A00891083 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = 615E989E2534046A00891083 /* OAuthSwift */;
@@ -1528,6 +1541,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		611F17B726143D0F00D11687 /* XCRemoteSwiftPackageReference "Nuke" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kean/Nuke.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.4.1;
+			};
+		};
 		615E989A253403D600891083 /* XCRemoteSwiftPackageReference "OAuthSwift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Ranchero-Software/OAuthSwift.git";
@@ -1619,6 +1640,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		611F17B826143D1100D11687 /* Nuke */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 611F17B726143D0F00D11687 /* XCRemoteSwiftPackageReference "Nuke" */;
+			productName = Nuke;
+		};
+		611F17BA26143D5F00D11687 /* Nuke */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 611F17B726143D0F00D11687 /* XCRemoteSwiftPackageReference "Nuke" */;
+			productName = Nuke;
+		};
 		615E989E2534046A00891083 /* OAuthSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 615E989A253403D600891083 /* XCRemoteSwiftPackageReference "OAuthSwift" */;

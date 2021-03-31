@@ -67,7 +67,7 @@ struct RSSFeedListView: View {
             Image(systemName: "arrow.clockwise").font(.system(size: 16, weight: .bold)).foregroundColor(Color("tab")).padding()
         }.buttonStyle(BorderlessButtonStyle())
     }
-    
+    @StateObject private var image = FetchImage()
     var body: some View {
         ScrollViewReader { scrollViewProxy in
             List {
@@ -86,6 +86,7 @@ struct RSSFeedListView: View {
                                 .onTapGesture {
                                     self.selectedItem = item
                             }
+                            
                         }
                     }
                 }

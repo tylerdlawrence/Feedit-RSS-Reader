@@ -27,11 +27,7 @@ struct ProgressBar: View {
                 .stroke(style: StrokeStyle(lineWidth: boardWidth, lineCap: .round, lineJoin: .round))
                 .rotationEffect(Angle(degrees: 270.0))
                 .foregroundColor(color)
-//            if content {
-//                Text(String(format: "%.1lf", min(self.progress, 1.0)))
-//                    .font(font)
-//                    .bold()
-//            }
+
         }
     }
 }

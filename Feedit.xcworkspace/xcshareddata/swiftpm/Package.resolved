@@ -38,6 +38,15 @@
         }
       },
       {
+        "package": "Nuke",
+        "repositoryURL": "https://github.com/kean/Nuke.git",
+        "state": {
+          "branch": null,
+          "revision": "6e6c6b5f8acaaac1ac4f7024dcf40f2facabc0a3",
+          "version": "9.4.1"
+        }
+      },
+      {
         "package": "Reachability",
         "repositoryURL": "https://github.com/ashleymills/Reachability.swift.git",
         "state": {

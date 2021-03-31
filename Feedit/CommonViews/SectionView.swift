@@ -39,7 +39,7 @@ struct SectionView<Content: View>: View {
                     Text(title).font(.title3).bold()
                 }
                 content()
-                Text(description).font(.body)//.foregroundColor(.secondary)
+                Text(description).font(.body)
                 Divider()
             }
             #endif
@@ -49,7 +49,9 @@ struct SectionView<Content: View>: View {
 
 struct SectionView_Previews: PreviewProvider {
     static var previews: some View {
-        SectionView(title: "Section", description: "Description", content: { Text("Content") })
-            .previewLayout(.sizeThatFits)
+        VStack {
+            SectionView(title: "Section", description: "Description", content: { Text("Content") })
+                .previewLayout(.sizeThatFits)
+        }
     }
 }

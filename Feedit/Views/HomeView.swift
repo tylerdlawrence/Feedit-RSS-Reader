@@ -143,10 +143,10 @@ struct HomeView: View {
         })
     }
     
-//    func filterFeeds(url: String?) -> RSS? {
-//            guard let url = url else { return nil }
-//        return viewModel.items.first(where: { $0.rssURL?.absoluteString == url })
-//    }
+    func filterFeeds(url: String?) -> RSS? {
+            guard let url = url else { return nil }
+        return viewModel.items.first(where: { $0.url.id == url })
+        }
     
     @State var selectedFilter: FilterType
     
@@ -157,6 +157,8 @@ struct HomeView: View {
                     List {
 //                        SelectedFilterView(selectedFilter: selectedFilter)
                         SmartFeedsHomeView(rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), articles: AllArticles(dataSource: DataSourceService.current.rssItem), unread: Unread(dataSource: DataSourceService.current.rssItem))
+                        
+//                        RSSFoldersDisclosureGroup(persistence: Persistence.current, unread: unread, viewModel: self.viewModel, feed: FeedObject(url: URL(string: "https://www.google.com")!, posts: [Post(title: "Test post title", description: "Test post description", url: URL(string: "https://www.google.com")!)])!, isExpanded: false)
                         
                         RSSFoldersDisclosureGroup(persistence: Persistence.current, unread: unread, viewModel: self.viewModel, isExpanded: selectedCells.contains(rss))
                             .onTapGesture { self.selectDeselect(rss) }

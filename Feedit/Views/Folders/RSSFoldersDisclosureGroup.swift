@@ -28,6 +28,7 @@ struct RSSFoldersDisclosureGroup: View {
     @EnvironmentObject var rssDataSource: RSSDataSource
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @StateObject var viewModel: RSSListViewModel
+//    @ObservedObject var feed: FeedObject
 //    let rss = RSS()
     
     @State var isExpanded = false
@@ -75,6 +76,7 @@ struct RSSFoldersDisclosureGroup: View {
                     ForEach(viewModel.items, id: \.self) { rss in
                         ZStack {
                             NavigationLink(destination: self.destinationView(rss: rss)
+//                          self.destinationView(rss: self.viewModel.items[index])
                             ) {
                                 EmptyView()
                             }
@@ -82,13 +84,14 @@ struct RSSFoldersDisclosureGroup: View {
                             .buttonStyle(PlainButtonStyle())
                             HStack {
                                 RSSRow(rss: rss, viewModel: viewModel)
-                                    
+//                                        self.viewModel.items[index], viewModel: viewModel)
                                 Spacer()
-                                if filteredArticles.filter { !$0.isRead }.count == 0 {
-                                    Text("")
-                                } else {
-                                    UnreadCountView(count: filteredArticles.filter { !$0.isRead }.count)
-                                }
+//                                Text("\(feed.posts.filter { !$0.isRead }.count)")
+//                                if filteredArticles.filter { !$0.isRead }.count == 0 {
+//                                    Text("")
+//                                } else {
+//                                    UnreadCountView(count: filteredArticles.filter { !$0.isRead }.count)
+//                                }
 //                                if viewModel.unreadCount > 0 {
 //                                    UnreadCountView(count: viewModel.unreadCount)
 //                                }
