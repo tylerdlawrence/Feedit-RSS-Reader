@@ -5,7 +5,7 @@
 //  Created by Tyler D Lawrence on 10/27/20.
 //
 
-#if canImport(UIKit) && os(iOS)
+//#if canImport(UIKit) && os(iOS)
 
 import SwiftUI
 import Combine
@@ -14,28 +14,6 @@ import CoreMotion
 import FeedKit
 import CoreData
 import Foundation
-
-@available(iOS 13.0, tvOS 13.0, *)
-public struct ActivityIndicator: UIViewRepresentable {
-    @Binding
-    var isAnimating: Bool
-    let style: UIActivityIndicatorView.Style
-
-    public init(isAnimating: Binding<Bool>, style: UIActivityIndicatorView.Style) {
-        self._isAnimating = isAnimating
-        self.style = style
-    }
-
-    public func makeUIView(context: UIViewRepresentableContext<ActivityIndicator>) -> UIActivityIndicatorView {
-        return UIActivityIndicatorView(style: style)
-    }
-
-    public func updateUIView(_ uiView: UIActivityIndicatorView, context: UIViewRepresentableContext<ActivityIndicator>) {
-        isAnimating ? uiView.startAnimating() : uiView.stopAnimating()
-    }
-}
-
-#endif
 
 struct ScrollCell: ViewModifier {
     func body(content: Content) -> some View {
