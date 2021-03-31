@@ -27,7 +27,27 @@ public extension URL {
 class Persistence: ObservableObject {
 
     static let shared = Persistence(version: 1)
+    
+    let container: NSPersistentContainer
+    
     static private(set) var current = Persistence(version: 1)
+    
+    lazy var managedObjectContext: NSManagedObjectContext = {
+        let context = self.persistentContainer.viewContext
+        context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        return context
+    }()
+
+    lazy var persistentContainer: NSPersistentContainer  = {
+        let container = NSPersistentContainer(name: "RSS")
+        container.loadPersistentStores { (persistentStoreDescription, error) in
+            if let error = error {
+                fatalError(error.localizedDescription)
+            }
+        }
+        return container
+    }()
+
     
     private static let authorName = "Author"
     private static let remoteDataImportAuthorName = "Data Import"
@@ -36,7 +56,8 @@ class Persistence: ObservableObject {
       return container.viewContext
     }
 
-    private let container: NSPersistentContainer
+//    private let container: NSPersistentContainer
+    
     private var subscriptions: Set<AnyCancellable> = []
         
 //    var context: NSManagedObjectContext {
@@ -144,7 +165,6 @@ struct PersistenceController {
     }()
 
     let container: NSPersistentCloudKitContainer
-
     init(inMemory: Bool = false) {
         container = NSPersistentCloudKitContainer(name: "feeditrssreader")
         if inMemory {
