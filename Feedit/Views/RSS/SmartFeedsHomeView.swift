@@ -16,6 +16,8 @@ struct SmartFeedsHomeView: View {
     @StateObject var articles: AllArticles
     @StateObject var unread: Unread
     
+    @State private var revealSmartFilters = true
+    
     private var allArticlesView: some View {
         let rss = RSS()
         return AllArticlesView(articles: AllArticles(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
@@ -34,7 +36,7 @@ struct SmartFeedsHomeView: View {
 //            isExpanded: $revealSmartFilters,
 //            content: {
 
-        Section(header: Text("Smart Feeds").font(.system(size: 20, weight: .medium, design: .rounded)).textCase(nil).foregroundColor(Color("text"))) {
+        Section(header: Text("Smart Feeds").font(.system(size: 18, weight: .medium, design: .rounded)).textCase(nil).foregroundColor(Color("text"))) {
                 HStack {
                     ZStack{
                         NavigationLink(destination: allArticlesView) {
@@ -47,7 +49,7 @@ struct SmartFeedsHomeView: View {
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 21, height: 21,alignment: .center)
-                            .foregroundColor(Color.gray.opacity(0.8))
+                            .foregroundColor(Color.red.opacity(0.8))
 //                            .foregroundColor(Color("tab").opacity(0.9))
                         Text("All Articles")
                         Spacer()
@@ -125,19 +127,19 @@ struct SmartFeedsHomeView: View {
                             .opacity(0.4)
                             .cornerRadius(8)
                     }
-                }//.listRowBackground(Color("accent"))
+                }
                     .accentColor(Color("tab").opacity(0.9))
                     .environment(\.managedObjectContext, Persistence.current.context)
                 .onAppear {
                     self.archiveListViewModel.fecthResults()
                 }
             }
-//            .listRowBackground(Color("accent"))
+            //.listRowBackground(Color("accent"))
 //            },
 //            label: {
 //                HStack {
-//                    Text("All Items")
-//                        .font(.system(size: 14, weight: .regular, design: .rounded)).textCase(.uppercase)
+//                    Text("Smart Feeds")
+//                        .font(.system(size: 18, weight: .regular, design: .rounded)).textCase(nil)
 //                        .frame(maxWidth: .infinity, alignment: .leading)
 //                        .contentShape(Rectangle())
 //                        .onTapGesture {
@@ -148,6 +150,7 @@ struct SmartFeedsHomeView: View {
 //                }
 //            })
         }
+//            .listRowBackground(Color("accent"))
 //            .listRowBackground(Color("darkerAccent"))
             .accentColor(Color("tab"))
     }
@@ -156,10 +159,15 @@ struct SmartFeedsHomeView: View {
 struct SmartFeedsHomeView_Previews: PreviewProvider {
     static let rss = RSS()
     static var previews: some View {
-        SmartFeedsHomeView(rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), articles: AllArticles(dataSource: DataSourceService.current.rssItem), unread: Unread(dataSource: DataSourceService.current.rssItem))
+        NavigationView {
+            List {
+            SmartFeedsHomeView(rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), articles: AllArticles(dataSource: DataSourceService.current.rssItem), unread: Unread(dataSource: DataSourceService.current.rssItem))
         
-            .environmentObject(DataSourceService.current.rss)
-            .environmentObject(DataSourceService.current.rssItem)
-            .environment(\.managedObjectContext, Persistence.current.context)
+                    .environmentObject(DataSourceService.current.rss)
+                    .environmentObject(DataSourceService.current.rssItem)
+                    .environment(\.managedObjectContext, Persistence.current.context)
+                .preferredColorScheme(.dark)
+            }
+        }
     }
 }

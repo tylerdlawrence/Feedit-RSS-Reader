@@ -191,7 +191,7 @@ struct SettingView: View {
              "feedit v" + (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String)
     }
     
-    @AppStorage("darkMode") var darkMode = false
+//    @AppStorage("darkMode") var darkMode = false
     @EnvironmentObject var settings: Settings
     @Environment(\.sizeCategory) var sizeCategory
     
@@ -444,7 +444,7 @@ struct SettingView: View {
             ).navigationTitle("Settings")
             .navigationBarItems(leading: doneButton)
             .environment(\.horizontalSizeClass, .regular)
-            .preferredColorScheme(darkMode ? .dark : .light)
+//            .preferredColorScheme(darkMode ? .dark : .light)
         }.environmentObject(settings)
         .onAppear {
             self.isSelected = UserEnvironment.current.useSafari

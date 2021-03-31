@@ -15,9 +15,9 @@ struct FeeditApp: App {
     
     @Environment(\.managedObjectContext) var managedObjectContext
     @Environment(\.scenePhase) private var scenePhase
-    @State var isLoaded = false
+//    @State var isLoaded = false
     
-    @AppStorage("darkMode") var darkMode = false
+//    @AppStorage("darkMode") var darkMode = false
 
     let persistenceController = PersistenceController.shared
     let persistence = Persistence.current
@@ -32,21 +32,26 @@ struct FeeditApp: App {
     @StateObject private var viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     
     @StateObject private var rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
-
+    
+    @State private var selectedCells: Set<RSS> = []
+    
   var body: some Scene {
     WindowGroup {
-        HomeView(persistence: persistence, articles: articles, unread: unread, rssItem: rssItem, viewModel: viewModel)
+//        NavigationView {
+        HomeView(articles: articles, unread: unread, rssItem: rssItem, viewModel: viewModel, selectedFilter: FilterType.all)
             .environment(\.managedObjectContext, Persistence.current.context)
-            .environmentObject(rssFeedViewModel).environmentObject(viewModel).environmentObject(persistence)
+            .environmentObject(rssFeedViewModel).environmentObject(viewModel)
+            .environmentObject(persistence)
+//        }
     }
-    .onChange(of: scenePhase) { phase in
-      switch phase {
-      case .background:
-        persistence.saveChanges()
-      default:
-        break
-      }
-    }
+//    .onChange(of: scenePhase) { phase in
+//      switch phase {
+//      case .background:
+//        persistence.saveChanges()
+//      default:
+//        break
+//      }
+//    }
   }
 }
 

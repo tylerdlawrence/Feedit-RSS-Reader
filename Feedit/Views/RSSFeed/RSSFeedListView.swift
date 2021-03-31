@@ -16,7 +16,7 @@ import KingfisherSwiftUI
 struct RSSFeedListView: View {
     
     enum FilterType {
-        case all, starred, unread
+        case all, unreadIsOn, isArchive
     }
 
     let filter: FilterType
@@ -25,13 +25,14 @@ struct RSSFeedListView: View {
         switch filter {
         case .all:
             return "All"
-        case .starred:
+        case .isArchive:
             return "Starred"
-        case .unread:
+        case .unreadIsOn:
             return "Unread"
         }
     }
     
+//    @State var selectedFilter: FilterType
     var filteredArticles: [RSSItem] {
         return rssFeedViewModel.items.filter({ (item) -> Bool in
             return !((self.rssFeedViewModel.isOn && !item.isArchive) || (self.rssFeedViewModel.unreadIsOn && item.isRead))
@@ -70,7 +71,7 @@ struct RSSFeedListView: View {
     var body: some View {
         ScrollViewReader { scrollViewProxy in
             List {
-//            ScrollViewExt(progressTint: Color("tab"), arrowTint: Color("tab")) {
+                
                 ForEach(filteredArticles) { item in
                     ZStack {
                         NavigationLink(destination: RSSFeedDetailView(rssItem: item, rssFeedViewModel: self.rssFeedViewModel)) {

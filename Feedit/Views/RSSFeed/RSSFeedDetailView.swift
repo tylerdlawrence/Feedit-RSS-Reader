@@ -9,7 +9,6 @@ import SwiftUI
 import Foundation
 import Combine
 import CoreMotion
-import MarkdownUI
 import KingfisherSwiftUI
 
 struct RSSFeedDetailView: View {

@@ -7,7 +7,6 @@
 
 import SwiftUI
 import FeedKit
-import Valet
 import CryptoKit
 import CoreData
 import Combine

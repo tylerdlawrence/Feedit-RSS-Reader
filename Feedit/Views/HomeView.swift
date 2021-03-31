@@ -42,7 +42,7 @@ struct HomeView: View {
     @ObservedObject var rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
     @StateObject var archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
     
-    @ObservedObject var persistence: Persistence
+    @EnvironmentObject private var persistence: Persistence
     @ObservedObject var articles: AllArticles
     @ObservedObject var unread: Unread
     @ObservedObject var rssItem: RSSItem
@@ -77,7 +77,7 @@ struct HomeView: View {
             self.selectedFeatureItem = .add
         }) {
             Image(systemName: "plus").font(.system(size: 20, weight: .medium, design: .rounded))
-                .padding([.top, .leading, .bottom])
+                .padding([.top, .bottom])
         }
     }
 
@@ -88,7 +88,7 @@ struct HomeView: View {
             self.selectedFeatureItem = .setting
         }) {
             Image(systemName: "gear").font(.system(size: 18, weight: .medium, design: .rounded))
-                .padding([.top, .bottom, .trailing])
+                .padding([.top, .bottom])
         }
     }
     
@@ -101,8 +101,15 @@ struct HomeView: View {
     }
     
     private var navButtons: some View {
-        HStack(alignment: .top, spacing: 24) {
+        HStack(alignment: .center, spacing: 24) {
             settingButton
+            Spacer()
+            Picker("Home", selection: $selectedFilter, content: {
+                ForEach(FilterType.allCases, id: \.self) {
+                    Text($0.rawValue)
+                }
+//                SelectedFilterView(selectedFilter: selectedFilter)
+            }).pickerStyle(SegmentedPickerStyle()).frame(width: 180, height: 20).listRowBackground(Color("accent"))
             Spacer()
             Menu {
                 Button(action: {self.sheetAction = 4
@@ -130,19 +137,26 @@ struct HomeView: View {
     private let addRSSPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("addNewRSSPublisher"))
     private let rssRefreshPublisher = NotificationCenter.default.publisher(for: Notification.Name.init("rssListNeedRefresh"))
     
-    func filterFeeds(url: String?) -> RSS? {
-            guard let url = url else { return nil }
-        return viewModel.items.first(where: { $0.rssURL?.absoluteString == url })
-        }
+    var filteredFeeds: [RSS] {
+        return viewModel.items.filter({ (rss) -> Bool in
+            return !((self.viewModel.isOn && !rss.isArchive) || (self.viewModel.unreadIsOn && rss.isRead))
+        })
+    }
+    
+//    func filterFeeds(url: String?) -> RSS? {
+//            guard let url = url else { return nil }
+//        return viewModel.items.first(where: { $0.rssURL?.absoluteString == url })
+//    }
+    
+    @State var selectedFilter: FilterType
     
     var body: some View {
         NavigationView {
             ScrollViewReader { scrollViewProxy in
                 ZStack {
                     List {
+//                        SelectedFilterView(selectedFilter: selectedFilter)
                         SmartFeedsHomeView(rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), articles: AllArticles(dataSource: DataSourceService.current.rssItem), unread: Unread(dataSource: DataSourceService.current.rssItem))
-                            
-
                         
                         RSSFoldersDisclosureGroup(persistence: Persistence.current, unread: unread, viewModel: self.viewModel, isExpanded: selectedCells.contains(rss))
                             .onTapGesture { self.selectDeselect(rss) }
@@ -150,9 +164,10 @@ struct HomeView: View {
                     .environmentObject(DataSourceService.current.rss)
                     .environmentObject(DataSourceService.current.rssItem)
                     .environment(\.managedObjectContext, Persistence.current.context)
+//                    .listStyle(GroupedListStyle())
                     .listStyle(SidebarListStyle())
                     .navigationBarTitle("Home", displayMode: .automatic)
-                    .add(self.searchBar)
+//                    .add(self.searchBar)
                 }
                 Spacer()
                 if addRSSProgressValue > 0 && addRSSProgressValue < 1.0 {
@@ -161,8 +176,8 @@ struct HomeView: View {
                 }
                 navButtons
                     .frame(width: UIScreen.main.bounds.width, height: 49, alignment: .leading)
-                }
-            
+                    EmptyView()
+            }
             .onReceive(addRSSPublisher, perform: { output in
                 guard
                     let userInfo = output.userInfo,
@@ -191,30 +206,34 @@ struct HomeView: View {
                 }
             })
         }
-        .onAppear {
-            self.viewModel.fecthResults()
-            }
+//        .onAppear {
+//            self.viewModel.fecthResults()
+//        }
 //        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
 extension HomeView {
-    func onDoneAction() {
-        self.viewModel.fecthResults()
+    private func onDoneAction() {
+        withAnimation {
+            self.viewModel.fecthResults()
+        }
     }
-    func selectDeselect(_ group: RSSGroup) {
+    private func selectDeselect(_ group: RSSGroup) {
         print("Selected \(String(describing: group.id))")
     }
     private func selectDeselect(_ rss: RSS) {
-        if selectedCells.contains(rss) {
-            selectedCells.remove(rss)
-        } else {
-            selectedCells.insert(rss)
+        withAnimation {
+            if selectedCells.contains(rss) {
+                selectedCells.remove(rss)
+            } else {
+                selectedCells.insert(rss)
+            }
         }
     }
     private func addNewGroup(name: String) {
-      withAnimation {
-        persistence.addNewGroup(name: name)
+        withAnimation {
+            persistence.addNewGroup(name: name)
         }
     }
 }
@@ -229,7 +248,7 @@ struct HomeView_Previews: PreviewProvider {
     static let persistence = Persistence.current
     
     static var previews: some View {
-        HomeView(persistence: persistence, articles: articles, unread: unread, rssItem: rssItem, viewModel: viewModel)
+        HomeView(articles: articles, unread: unread, rssItem: rssItem, viewModel: viewModel, selectedFilter: FilterType.all)
             .environmentObject(DataSourceService.current.rssItem)
             .environment(\.managedObjectContext, Persistence.current.context)
             .preferredColorScheme(.dark)

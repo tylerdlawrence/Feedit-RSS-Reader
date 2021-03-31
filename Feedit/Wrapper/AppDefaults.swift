@@ -27,11 +27,11 @@ enum UserInterfaceColorPalette: Int, CustomStringConvertible, CaseIterable {
 }
 
 final class AppDefaults: ObservableObject {
-	
+
 	#if os(macOS)
 	static let store: UserDefaults = UserDefaults.standard
 	#endif
-	
+
 	#if os(iOS)
 	static let store: UserDefaults = {
 		let appIdentifierPrefix = Bundle.main.object(forInfoDictionaryKey: "AppIdentifierPrefix") as! String
@@ -39,12 +39,12 @@ final class AppDefaults: ObservableObject {
 		return UserDefaults.init(suiteName: suiteName)!
 	}()
 	#endif
-	
+
 	public static let shared = AppDefaults()
 	private init() {}
-	
+    
 	struct Key {
-		
+
 		// Shared Defaults
 		static let refreshInterval = "refreshInterval"
 		static let hideDockUnreadCount = "JustinMillerHideDockUnreadCount"
@@ -55,22 +55,22 @@ final class AppDefaults: ObservableObject {
 		static let addWebFeedAccountID = "addWebFeedAccountID"
 		static let addWebFeedFolderName = "addWebFeedFolderName"
 		static let addFolderAccountID = "addFolderAccountID"
-				
+
 		static let userInterfaceColorPalette = "userInterfaceColorPalette"
 		static let timelineSortDirection = "timelineSortDirection"
 		static let timelineGroupByFeed = "timelineGroupByFeed"
 		static let timelineIconDimensions = "timelineIconDimensions"
 		static let timelineNumberOfLines = "timelineNumberOfLines"
-		
+
 		// Sidebar Defaults
 		static let sidebarConfirmDelete = "sidebarConfirmDelete"
 
 		// iOS Defaults
 		static let refreshClearsReadArticles = "refreshClearsReadArticles"
 		static let articleFullscreenAvailable = "articleFullscreenAvailable"
-		static let articleFullscreenEnabled = "articleFullscreenEnabled" 
-		static let confirmMarkAllAsRead = "confirmMarkAllAsRead" 
-		
+		static let articleFullscreenEnabled = "articleFullscreenEnabled"
+		static let confirmMarkAllAsRead = "confirmMarkAllAsRead"
+
 		// macOS Defaults
 		static let articleTextSize = "articleTextSize"
 		static let openInBrowserInBackground = "openInBrowserInBackground"
@@ -78,19 +78,19 @@ final class AppDefaults: ObservableObject {
 		static let checkForUpdatesAutomatically = "checkForUpdatesAutomatically"
 		static let downloadTestBuilds = "downloadTestBuild"
 		static let sendCrashLogs = "sendCrashLogs"
-		
+
 		// Hidden macOS Defaults
 		static let showDebugMenu = "ShowDebugMenu"
 		static let timelineShowsSeparators = "CorreiaSeparators"
 		static let showTitleOnMainWindow = "KafasisTitleMode"
-		
+
 		#if !MAC_APP_STORE
 			static let webInspectorEnabled = "WebInspectorEnabled"
 			static let webInspectorStartsAttached = "__WebInspectorPageGroupLevel1__.WebKit2InspectorStartsAttached"
 		#endif
-		
+
 	}
-	
+
 	// MARK:  Development Builds
 	let isDeveloperBuild: Bool = {
 		if let dev = Bundle.main.object(forInfoDictionaryKey: "DeveloperEntitlements") as? String, dev == "-dev" {
@@ -98,7 +98,7 @@ final class AppDefaults: ObservableObject {
 		}
 		return false
 	}()
-	
+
 	// MARK: First Run Details
 //	var firstRunDate: Date? {
 //		set {
@@ -109,7 +109,7 @@ final class AppDefaults: ObservableObject {
 //			AppDefaults.store.object(forKey: Key.firstRunDate) as? Date
 //		}
 //	}
-	
+
 	// MARK: Refresh Interval
 //	@AppStorage(wrappedValue: 4, Key.refreshInterval, store: store) var interval: Int {
 //		didSet {
@@ -120,7 +120,7 @@ final class AppDefaults: ObservableObject {
 //	var refreshInterval: RefreshInterval {
 //		RefreshInterval(rawValue: interval) ?? RefreshInterval.everyHour
 //	}
-	
+
 	// MARK: Dock Badge
 //	@AppStorage(wrappedValue: false, Key.hideDockUnreadCount, store: store) var hideDockUnreadCount {
 //		didSet {
@@ -147,7 +147,7 @@ final class AppDefaults: ObservableObject {
 			#endif
 		}
 	}
-	
+
 	static var userInterfaceColorScheme: ColorScheme? {
 		switch AppDefaults.shared.userInterfaceColorPalette {
 		case .light:
@@ -158,16 +158,16 @@ final class AppDefaults: ObservableObject {
 			return nil
 		}
 	}
-	
+
 	// MARK: Feeds & Folders
 	@AppStorage(Key.addWebFeedAccountID, store: store) var addWebFeedAccountID: String?
-	
-	@AppStorage(Key.addWebFeedFolderName, store: store) var addWebFeedFolderName: String? 
-	
+
+	@AppStorage(Key.addWebFeedFolderName, store: store) var addWebFeedFolderName: String?
+
 	@AppStorage(Key.addFolderAccountID, store: store) var addFolderAccountID: String?
-	
+
 	@AppStorage(wrappedValue: false, Key.confirmMarkAllAsRead, store: store) var confirmMarkAllAsRead: Bool
-	
+
 	// MARK: Extension Points
 	var activeExtensionPointIDs: [[AnyHashable : AnyHashable]]? {
 		get {
@@ -178,7 +178,7 @@ final class AppDefaults: ObservableObject {
 			objectWillChange.send()
 		}
 	}
-	
+
 	// MARK: Image Cache
 	var lastImageCacheFlushDate: Date? {
 		set {
@@ -189,14 +189,14 @@ final class AppDefaults: ObservableObject {
 			AppDefaults.store.object(forKey: Key.lastImageCacheFlushDate) as? Date
 		}
 	}
-	
+
 	// MARK: Timeline
 	@AppStorage(wrappedValue: false, Key.timelineGroupByFeed, store: store) var timelineGroupByFeed: Bool {
 		didSet {
 			objectWillChange.send()
 		}
 	}
-	
+
 	@AppStorage(wrappedValue: 2.0, Key.timelineNumberOfLines, store: store) var timelineNumberOfLines: Double {
 		didSet {
 			objectWillChange.send()
@@ -208,36 +208,36 @@ final class AppDefaults: ObservableObject {
 			objectWillChange.send()
 		}
 	}
-	
+
 	/// Set to `true` to sort oldest to newest, `false` for newest to oldest. Default is `false`.
 	@AppStorage(wrappedValue: false, Key.timelineSortDirection, store: store) var timelineSortDirection: Bool {
 		didSet {
 			objectWillChange.send()
 		}
 	}
-	
+
 	// MARK: Sidebar
 	@AppStorage(wrappedValue: true, Key.sidebarConfirmDelete, store: store) var sidebarConfirmDelete: Bool {
 		didSet {
 			objectWillChange.send()
 		}
 	}
-	
-	
+
+
 	// MARK: Refresh
 	@AppStorage(wrappedValue: false, Key.refreshClearsReadArticles, store: store) var refreshClearsReadArticles: Bool
-	
+
 	// MARK: Articles
 	@AppStorage(wrappedValue: false, Key.articleFullscreenAvailable, store: store) var articleFullscreenAvailable: Bool
-	
+
 	@AppStorage(wrappedValue: false, Key.articleFullscreenEnabled, store: store) var articleFullscreenEnabled: Bool
-	
+
 	@AppStorage(wrappedValue: 3, Key.articleTextSize, store: store) var articleTextSizeTag: Int {
 		didSet {
 			objectWillChange.send()
 		}
 	}
-	
+
 	var articleTextSize: ArticleTextSize {
 		ArticleTextSize(rawValue: articleTextSizeTag) ?? ArticleTextSize.large
 	}
@@ -252,64 +252,64 @@ final class AppDefaults: ObservableObject {
 			AppDefaults.store.object(forKey: Key.lastRefresh) as? Date
 		}
 	}
-	
+
 	// MARK: Window State
 	@AppStorage(wrappedValue: false, Key.openInBrowserInBackground, store: store) var openInBrowserInBackground: Bool {
 		didSet {
 			objectWillChange.send()
 		}
 	}
-	
+
 	@AppStorage(Key.defaultBrowserID, store: store) var defaultBrowserID: String? {
 		didSet {
 			objectWillChange.send()
 		}
 	}
-	
+
 	@AppStorage(Key.showTitleOnMainWindow, store: store) var showTitleOnMainWindow: Bool? {
 		didSet {
 			objectWillChange.send()
 		}
 	}
-	
+
 	@AppStorage(wrappedValue: false, Key.showDebugMenu, store: store) var showDebugMenu: Bool {
 		didSet {
 			objectWillChange.send()
 		}
 	}
-	
+
 	@AppStorage(wrappedValue: false, Key.timelineShowsSeparators, store: store) var timelineShowsSeparators: Bool {
 		didSet {
 			objectWillChange.send()
 		}
 	}
-	
+
 	#if !MAC_APP_STORE
 	@AppStorage(wrappedValue: false, Key.webInspectorEnabled, store: store) var webInspectorEnabled: Bool {
 		didSet {
 			objectWillChange.send()
 		}
 	}
-	
+
 	@AppStorage(wrappedValue: false, Key.webInspectorStartsAttached, store: store) var webInspectorStartsAttached: Bool {
 		didSet {
 			objectWillChange.send()
 		}
 	}
 	#endif
-	
+
 	@AppStorage(wrappedValue: true, Key.checkForUpdatesAutomatically, store: store) var checkForUpdatesAutomatically: Bool {
 		didSet {
 			objectWillChange.send()
 		}
 	}
-	
+
 	@AppStorage(wrappedValue: false, Key.downloadTestBuilds, store: store) var downloadTestBuilds: Bool {
 		didSet {
 			objectWillChange.send()
 		}
 	}
-	
+
 	@AppStorage(wrappedValue: true, Key.sendCrashLogs, store: store) var sendCrashLogs: Bool {
 		didSet {
 			objectWillChange.send()
@@ -330,11 +330,11 @@ final class AppDefaults: ObservableObject {
 										Key.refreshInterval: RefreshInterval.everyHour.rawValue]
 		AppDefaults.store.register(defaults: defaults)
 	}
-	
+
 }
 
 extension AppDefaults {
-	
+
 //	func isFirstRun() -> Bool {
 //		if let _ = AppDefaults.store.object(forKey: Key.firstRunDate) as? Date {
 //			return false
@@ -342,7 +342,7 @@ extension AppDefaults {
 //		firstRunDate = Date()
 //		return true
 //	}
-	
+
 }
 
 enum RefreshInterval: Int, CaseIterable, Identifiable {
@@ -353,7 +353,7 @@ enum RefreshInterval: Int, CaseIterable, Identifiable {
     case every2Hours = 5
     case every4Hours = 6
     case every8Hours = 7
-    
+
     func inSeconds() -> TimeInterval {
         switch self {
         case .manually:
@@ -372,9 +372,9 @@ enum RefreshInterval: Int, CaseIterable, Identifiable {
             return 8 * 60 * 60
         }
     }
-    
+
     var id: String { description() }
-    
+
     func description() -> String {
         switch self {
         case .manually:
@@ -393,7 +393,7 @@ enum RefreshInterval: Int, CaseIterable, Identifiable {
             return NSLocalizedString("Every 8 Hours", comment: "Every 8 Hours")
         }
     }
-    
+
 }
 enum ArticleTextSize: Int, CaseIterable, Identifiable {
     case small = 1
@@ -401,9 +401,9 @@ enum ArticleTextSize: Int, CaseIterable, Identifiable {
     case large = 3
     case xlarge = 4
     case xxlarge = 5
-    
+
     var id: String { description() }
-    
+
     var cssClass: String {
         switch self {
         case .small:
@@ -418,7 +418,7 @@ enum ArticleTextSize: Int, CaseIterable, Identifiable {
             return "xxLargeText"
         }
     }
-    
+
     func description() -> String {
         switch self {
         case .small:
@@ -433,5 +433,5 @@ enum ArticleTextSize: Int, CaseIterable, Identifiable {
             return NSLocalizedString("Extra Extra Large", comment: "XX-Large")
         }
     }
-    
+
 }

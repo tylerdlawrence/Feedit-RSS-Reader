@@ -50,7 +50,7 @@ class RSSFeedViewModel: NSObject, ObservableObject {
     @Published var items = [RSSItem]()
     @Published var filteredArticles: [RSSItem] = []
 //    @Published var feeds: [FeedObject] = []
-    
+//    @Published var ids: [UUID] = []
     @Published var selectedPost: RSSItem?
     @Published var shouldReload = false
 //    @ObservedObject var store = RSSStore.instance

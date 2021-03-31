@@ -28,28 +28,28 @@ struct RSSFoldersDisclosureGroup: View {
     @EnvironmentObject var rssDataSource: RSSDataSource
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @StateObject var viewModel: RSSListViewModel
-    let rss = RSS()
+//    let rss = RSS()
     
     @State var isExpanded = false
-
+    @State private var expandFolders = false
     var filteredArticles: [RSSItem] {
         return rssFeedViewModel.items.filter({ (item) -> Bool in
             return !((self.rssFeedViewModel.isOn && !item.isArchive) || (self.rssFeedViewModel.unreadIsOn && item.isRead))
         })
     }
-    @StateObject var rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
+    @ObservedObject var rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
     var rssSource: RSS {
         return self.rssFeedViewModel.rss
     }
     
-//    init(unreads: Unread, persistence: Persistence, viewModel: RSSListViewModel) {
-//        self.unreads = unreads
-//        self.persistence = persistence
-//        self.viewModel = viewModel
-//    }
+    @FetchRequest(sortDescriptors: [])
+    private var rss: FetchedResults<RSS>
     
     var body: some View {
-        Section(header: Text("Folders").font(.system(size: 20, weight: .medium, design: .rounded)).textCase(nil).foregroundColor(Color("text"))) {
+        Section(header: Text("Folders").font(.system(size: 18, weight: .regular, design: .rounded)).textCase(nil).foregroundColor(Color("text"))) {
+//        DisclosureGroup(
+//            isExpanded: $expandFolders,
+//            content: {
             ForEach(groups, id: \.id) { group in
                 DisclosureGroup {
 //                HStack {
@@ -74,32 +74,34 @@ struct RSSFoldersDisclosureGroup: View {
 //                if isExpanded == true {
                     ForEach(viewModel.items, id: \.self) { rss in
                         ZStack {
-                            NavigationLink(destination: self.destinationView(rss: rss)) {
+                            NavigationLink(destination: self.destinationView(rss: rss)
+                            ) {
                                 EmptyView()
                             }
                             .opacity(0.0)
                             .buttonStyle(PlainButtonStyle())
                             HStack {
                                 RSSRow(rss: rss, viewModel: viewModel)
+                                    
                                 Spacer()
-                                if rssFeedViewModel.items.filter { !$0.isRead }.count == 0 {
+                                if filteredArticles.filter { !$0.isRead }.count == 0 {
                                     Text("")
                                 } else {
-                                    Text("\(rssFeedViewModel.items.filter { !$0.isRead }.count)")
+                                    UnreadCountView(count: filteredArticles.filter { !$0.isRead }.count)
                                 }
-//                                UnreadCountView(count: filteredArticles.count)
 //                                if viewModel.unreadCount > 0 {
 //                                    UnreadCountView(count: viewModel.unreadCount)
 //                                }
-                            }.onAppear {
-                                self.viewModel.fetchUnreadCount()
                             }
-                        }
-                    }.onDelete { indexSet in
-                        if let index = indexSet.first {
-                            self.viewModel.delete(at: index)
-                        }
-                    }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .contentShape(Rectangle())
+                        }//.listRowBackground(Color("accent"))
+                    }.onDelete(perform: delete)
+                    //.onDelete { indexSet in
+//                        if let index = indexSet.first {
+//                            self.viewModel.delete(at: index)
+//                        }
+//                    }
                 } label: {
                     HStack {
                         if group.itemCount > 0 {
@@ -107,7 +109,6 @@ struct RSSFoldersDisclosureGroup: View {
                                 .contentShape(Rectangle())
                         }
                         Text("\(group.name ?? "Untitled")")
-                        Spacer()
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .contentShape(Rectangle())
                             .onTapGesture {
@@ -116,17 +117,56 @@ struct RSSFoldersDisclosureGroup: View {
                                 }
                             }
                         
-                    }.frame(maxWidth: .infinity)
-                }.accentColor(Color.gray.opacity(0.7))
+                    }
+                }.accentColor(Color.gray.opacity(0.7))//.listRowBackground(Color("accent"))
             }.onDelete(perform: deleteObjects)
         }.accentColor(Color("tab"))
+//        },
+//            label: {
+//                HStack {
+//                    Text("Folders")
+//                        .font(.system(size: 18, weight: .regular, design: .rounded)).textCase(nil)
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                        .contentShape(Rectangle())
+//                        .onTapGesture {
+//                            withAnimation {
+//                                self.expandFolders.toggle()
+//                            }
+//                        }
+//                }
+//            })
+//            .listRowBackground(Color("accent")) // MARK: - CLEAR BACKGROUND
+//            .listRowBackground(Color("darkerAccent")) // MARK: - DARK SHADE
+//        .accentColor(Color("tab"))
         .onAppear {
             self.viewModel.fecthResults()
         }
     }
+    
+
     private func deleteObjects(offsets: IndexSet) {
         withAnimation {
             persistence.deleteManagedObjects(offsets.map { groups[$0] })
+        }
+    }
+    private func delete(offsets: IndexSet) {
+        withAnimation {
+            offsets.map { viewModel.items[$0] }.forEach(Persistence.current.context.delete)
+            saveContext()
+        }
+    }
+    private func updateRSS(_ rss: FetchedResults<RSS>.Element) {
+        withAnimation {
+            rss.itemCount = Int64(rssFeedViewModel.items.count)
+            saveContext()
+        }
+    }
+    private func saveContext() {
+        do {
+            try Persistence.current.context.save()
+        } catch {
+            let error = error as NSError
+            fatalError("Unresolved Error: \(error)")
         }
     }
     private func destinationView(rss: RSS) -> some View {

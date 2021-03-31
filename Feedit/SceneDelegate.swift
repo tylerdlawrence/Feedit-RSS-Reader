@@ -16,7 +16,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //    }
     @EnvironmentObject var iconSettings: IconNames
     @Environment(\.scenePhase) private var scenePhase
-    @EnvironmentObject private var persistence: Persistence
+//    @EnvironmentObject private var persistence: Persistence
     @Environment(\.managedObjectContext) private var context
 
     let unread = Unread(dataSource: DataSourceService.current.rssItem)
@@ -29,7 +29,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         let homeView =
-            HomeView(persistence: persistence, articles: articles, unread: unread, rssItem: rssItem, viewModel: viewModel)
+            HomeView(articles: articles, unread: unread, rssItem: rssItem, viewModel: viewModel, selectedFilter: FilterType.all)
                 .environmentObject(iconSettings)
                 .environmentObject(DataSourceService.current.rssItem)
                 .environmentObject(Persistence.current)

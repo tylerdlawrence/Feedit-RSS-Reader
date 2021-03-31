@@ -7,7 +7,6 @@
 
 import SwiftUI
 import UIKit
-import SwipeCellKit
 import CoreData
 import Introspect
 import MobileCoreServices

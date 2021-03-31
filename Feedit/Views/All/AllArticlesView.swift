@@ -48,9 +48,6 @@ struct AllArticlesView: View {
        }
     
     @State private var selection = Set<String>()
-    private var spinner: some View {
-        Spinner(isAnimating: true, style: .medium)
-    }
     
     var filteredArticles: [RSSItem] {
         return articles.items.filter({ (item) -> Bool in
@@ -80,7 +77,8 @@ struct AllArticlesView: View {
                            }
                        }
                 }.environment(\.managedObjectContext, Persistence.current.context)
-                .environmentObject(rssFeedViewModel).environmentObject(persistence)
+                .environmentObject(rssFeedViewModel)
+//                .environmentObject(persistence)
             }
             .animation(.default)
             .add(self.searchBar)

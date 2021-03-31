@@ -14,7 +14,7 @@ class ArchiveListViewModel: NSObject, ObservableObject {
 
     @Published var items: [RSSItem] = []
     @Published var filteredArticles: [RSSItem] = []
-    @Published var filterType = FilterType.isArchive
+//    @Published var filterType = FilterType.isArchive
     @Published var selectedPost: RSSItem?
     @Published var isArchive: Bool = true
     @Published var disabled = true
