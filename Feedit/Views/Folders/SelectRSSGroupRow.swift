@@ -36,15 +36,15 @@ struct SelectRSSGroupRow: View {
     }
   }
 
-//struct SelectRSSGroupRow_Previews: PreviewProvider {
+struct SelectRSSGroupRow_Previews: PreviewProvider {
 //    static var group: RSSGroup = {
 //        let controller = Persistence.current
 //      return controller.makeRandomFolder(context: controller.context)
 //    }()
-//
-//    @State static var selection: Set<RSSGroup> = [group]
-//
-//    static var previews: some View {
-//        SelectRSSGroupRow(group: group, selection: $selection)
-//    }
-//}
+    static var group = RSSGroup()
+    @State static var selection: Set<RSSGroup> = [group]
+
+    static var previews: some View {
+        SelectRSSGroupRow(group: group, selection: $selection)
+    }
+}

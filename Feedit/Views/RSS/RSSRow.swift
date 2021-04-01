@@ -14,7 +14,6 @@ import SwipeCell
 import KingfisherSwiftUI
 
 struct RSSRow: View {
-//    @AppStorage("darkMode") var darkMode = false
     @Environment(\.managedObjectContext) private var context
     @EnvironmentObject var rssDataSource: RSSDataSource
     @Environment(\.presentationMode) var presentationMode
@@ -27,7 +26,7 @@ struct RSSRow: View {
     }
     
     @ObservedObject var rss: RSS
-    @ObservedObject var imageLoader: ImageLoader
+//    @ObservedObject var imageLoader: ImageLoader
     @State private var actionSheetShown = false
     @State private var showAlert = false
     @State private var showSheet = false
@@ -69,13 +68,11 @@ struct RSSRow: View {
             ]
         )
     }
-    init(rss: RSS, viewModel: RSSListViewModel) {
-        self.rss = rss
-        imageLoader = ImageLoader(urlString: rss.url)
-//        self.imageLoader = ImageLoader(path: rss.url)
-        self.viewModel = viewModel
-//        self.selection = selection
-    }
+//    init(rss: RSS, viewModel: RSSListViewModel) {
+//        self.rss = rss
+//        imageLoader = ImageLoader(urlString: rss.url)
+//        self.viewModel = viewModel
+//    }
     
     
     @ObservedObject var unread = Unread(dataSource: DataSourceService.current.rssItem)
@@ -85,6 +82,8 @@ struct RSSRow: View {
         return self.rssFeedViewModel.rss
     }
     
+    @State private var count: Int = 0
+   
 //    private var urlButton: some View{
 //        Button("") {
 //            openURL(URL(string: (rssSource.rssURL?.host!)!)!)
@@ -181,6 +180,7 @@ struct RSSRow: View {
                         .foregroundColor(Color("text"))
                     Spacer()
                     
+//                    UnreadCountView(count: count)
 //                    Text("\(unread.items.count)")
 //                    Text("\(rss.title.count)")
 //                        .font(.caption)
@@ -279,14 +279,15 @@ struct RSSRow: View {
 //    }
 }
     
-#if DEBUG
-struct RSSRow_Previews: PreviewProvider {
-    static let rss = DataSourceService.current
-    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-    static var previews: some View {
-        return RSSRow(rss: RSS(), viewModel: self.viewModel)
-            .previewLayout(.fixed(width: 400, height: 30))
-            .preferredColorScheme(.dark)
-    }
-}
-#endif
+//#if DEBUG
+//struct RSSRow_Previews: PreviewProvider {
+//    static let rss = DataSourceService.current
+//    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+//    
+//    static var previews: some View {
+//        return RSSRow(viewModel: self.viewModel, rss: RSS())
+//            .previewLayout(.fixed(width: 400, height: 30))
+//            .preferredColorScheme(.dark)
+//    }
+//}
+//#endif

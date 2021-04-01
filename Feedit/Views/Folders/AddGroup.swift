@@ -9,7 +9,6 @@ import SwiftUI
 
 struct AddGroup: View {
     @Environment(\.presentationMode) var presentationMode
-//    @AppStorage("darkMode") var darkMode = false
     @State var name = ""
     let onComplete: (String) -> Void
     
@@ -36,7 +35,6 @@ struct AddGroup: View {
         }
         .navigationBarTitle(Text("New Folder"))
 //        .navigationBarItems(trailing: doneButton)
-//        .preferredColorScheme(darkMode ? .dark : .light)
       }
     }
 

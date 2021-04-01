@@ -28,7 +28,8 @@ struct RSSGroupDetailsView: View {
     var groups: FetchedResults<RSSGroup>
     
     @State var revealFoldersDisclosureGroup = true
-
+//    @Binding var count: Int
+    
     var body: some View {
 //      VStack(alignment: .leading, spacing: 8) {
 //        Text("Feeds: \(rssGroup.itemCount)")
@@ -44,7 +45,7 @@ struct RSSGroupDetailsView: View {
             }
             ForEach(viewModel.items) { rss in
                 HStack {
-                    RSSRow(rss: rss, viewModel: self.viewModel)
+                    RSSRow(viewModel: self.viewModel, rss: rss)
 
                 }
             }.environment(\.managedObjectContext, Persistence.current.context)
@@ -54,7 +55,7 @@ struct RSSGroupDetailsView: View {
     }
     private func destinationView(rss: RSS) -> some View {
         let item = RSSItem()
-        return RSSFeedListView(rss: rss, viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), rssItem: item, filter: .all).environmentObject(DataSourceService.current.rss)
+        return RSSFeedListView(rss: rss, viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), rssItem: item, selectedFilter: .all).environmentObject(DataSourceService.current.rss)
     }
 }
 

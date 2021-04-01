@@ -245,7 +245,7 @@ struct GetInfo_Previews: PreviewProvider {
         return
             InfoView(rssGroup: rssGroup, rss: rss)
             .environment(\.managedObjectContext, Persistence.current.context)
-            .environmentObject(Persistence.shared)
+            
             .preferredColorScheme(.dark)
     }
 }

@@ -46,6 +46,16 @@ extension RSSDataSource {
         guard newObject == nil else { return }
         newObject = RSS.create(in: createContext)
     }
+    
+    func performFetchCount(_ request: NSFetchRequest<RSS>) -> Int {
+        do {
+            let count = try parentContext.count(for: request)
+            return count
+        } catch {
+            print(error)
+            return 0
+        }
+    }
 }
 
 //extension RSSDataSource {

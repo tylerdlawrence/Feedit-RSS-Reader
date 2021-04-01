@@ -16,6 +16,7 @@ class RSSListViewModel: NSObject, ObservableObject{
     @Published var isOn = false
     @Published var unreadIsOn = false
     @Published private(set) var items: [RSS] = []
+//    @Published var count = Int()
     
     @Published var feeds: [FeedObject] = []
     @Published var shouldSelectFeedObject: FeedObject?
@@ -35,7 +36,6 @@ class RSSListViewModel: NSObject, ObservableObject{
     var start = 0
     
     var children: [RSS] = [RSS]()
-    var unreadCount = Int()
 
     init(dataSource: RSSDataSource) {
         self.dataSource = dataSource

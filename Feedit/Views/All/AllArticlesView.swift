@@ -27,9 +27,10 @@ struct AllArticlesView: View {
     
     @ObservedObject var rssFeedViewModel: RSSFeedViewModel
     
-    init(articles: AllArticles, rssFeedViewModel: RSSFeedViewModel) {
+    init(articles: AllArticles, rssFeedViewModel: RSSFeedViewModel, selectedFilter: FilterType) {
         self.articles = articles
         self.rssFeedViewModel = rssFeedViewModel
+        self.selectedFilter = selectedFilter
     }
         
     private var refreshButton: some View {
@@ -55,80 +56,103 @@ struct AllArticlesView: View {
         })
     }
     
+    @State var selectedFilter: FilterType
+    private var navButtons: some View {
+        HStack(alignment: .center, spacing: 24) {
+            Toggle(isOn: $rssFeedViewModel.unreadIsOn) { Text("") }
+                .toggleStyle(CheckboxStyle())
+//            Spacer()
+            
+            Picker("", selection: $selectedFilter, content: {
+                ForEach(FilterType.allCases, id: \.self) {
+                    Text($0.rawValue)
+                }
+//                SelectedFilterView(selectedFilter: selectedFilter)
+            }).pickerStyle(SegmentedPickerStyle()).frame(width: 180, height: 20).listRowBackground(Color("accent"))
+//            Spacer()
+            
+            Toggle(isOn: $rssFeedViewModel.isOn) { Text("") }
+                .toggleStyle(StarStyle())
+        }.padding(24)
+    }
+    
     var body: some View {
-        ZStack {
-            List {
-                ForEach(articles.items, id: \.self) { article in
-//                    list(of: filteredArticles).eraseToAnyView()
-                    ZStack {
-                        NavigationLink(destination: WebView(rssItem: article, onCloseClosure: {})) {
-//                        NavigationLink(destination: RSSFeedDetailView(rssItem: unread, rssFeedViewModel: RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)).environmentObject(DataSourceService.current.rss)) {
-                           EmptyView()
-                       }
-                       .opacity(0.0)
-                       .buttonStyle(PlainButtonStyle())
-                       
-                        HStack(alignment: .top) {
-                            RSSItemRow(rssItem: article, menu: self.contextmenuAction(_:), rssFeedViewModel: RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem))
-                               .contentShape(Rectangle())
-                               .onTapGesture {
-                                   self.selectedItem = article
+        ScrollViewReader { scrollViewProxy in
+            ZStack {
+                List {
+                    ForEach(articles.items, id: \.self) { article in
+    //                    list(of: filteredArticles).eraseToAnyView()
+                        ZStack {
+                            NavigationLink(destination: WebView(rssItem: article, onCloseClosure: {})) {
+    //                        NavigationLink(destination: RSSFeedDetailView(rssItem: unread, rssFeedViewModel: RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)).environmentObject(DataSourceService.current.rss)) {
+                               EmptyView()
+                           }
+                           .opacity(0.0)
+                           .buttonStyle(PlainButtonStyle())
+                           
+                            HStack(alignment: .top) {
+                                RSSItemRow(rssItem: article, menu: self.contextmenuAction(_:), rssFeedViewModel: RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem))
+                                   .contentShape(Rectangle())
+                                   .onTapGesture {
+                                       self.selectedItem = article
+                                   }
                                }
                            }
-                       }
-                }.environment(\.managedObjectContext, Persistence.current.context)
-                .environmentObject(rssFeedViewModel)
-//                .environmentObject(persistence)
-            }
-            .animation(.default)
-            .add(self.searchBar)
-            .accentColor(Color("tab"))
-            .listRowBackground(Color("accent"))
-            .navigationBarTitle("", displayMode: .inline)
-            .navigationBarItems(trailing: refreshButton)
-                        
-            .toolbar{
-                ToolbarItem(placement: .principal) {
-                    HStack{
-                        Image(systemName: "tray.fill")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 21, height: 21,alignment: .center)
-                            .foregroundColor(Color("tab").opacity(0.9))
-                        Text("All Articles")
-                            .font(.system(size: 20, weight: .medium, design: .rounded))
-                        Text("\(articles.items.count)")
-                            .font(.caption)
-                            .fontWeight(.bold)
-                            .padding(.horizontal, 7)
-                            .padding(.vertical, 1)
-                            .background(Color.gray.opacity(0.5))
-                            .opacity(0.4)
-                            .foregroundColor(Color("text"))
-                            .cornerRadius(8)
+                    }.environment(\.managedObjectContext, Persistence.current.context)
+                    .environmentObject(rssFeedViewModel)
+    //                .environmentObject(persistence)
+                }
+                .animation(.default)
+                .add(self.searchBar)
+                .accentColor(Color("tab"))
+                .listRowBackground(Color("accent"))
+                .navigationBarTitle("", displayMode: .inline)
+                .navigationBarItems(trailing: refreshButton)
+                            
+                .toolbar{
+                    ToolbarItem(placement: .principal) {
+                        HStack{
+                            Image(systemName: "archivebox")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 21, height: 21,alignment: .center)
+                                .foregroundColor(Color("tab").opacity(0.9))
+                            Text("All Articles")
+                                .font(.system(size: 20, weight: .medium, design: .rounded))
+                            Text("\(articles.items.count)")
+                                .font(.caption)
+                                .fontWeight(.bold)
+                                .padding(.horizontal, 7)
+                                .padding(.vertical, 1)
+                                .background(Color.gray.opacity(0.5))
+                                .opacity(0.4)
+                                .foregroundColor(Color("text"))
+                                .cornerRadius(8)
+                        }
+                    }
+
+//                    ToolbarItem(placement: .bottomBar) {
+//                        Toggle(isOn: $rssFeedViewModel.unreadIsOn) { Text("") }
+//                            .toggleStyle(CheckboxStyle())
+//    //                    MarkAsReadButton(isSet: $rssItem.isRead)
+//
+//
+//                    }
+//                    ToolbarItem(placement: .bottomBar) {
+//                        Spacer()
+//                    }
+//                    ToolbarItem(placement: .bottomBar) {
+//    //                    MarkAsStarredButton(isSet: $rssItem.isArchive)
+//                        Toggle(isOn: $rssFeedViewModel.isOn) { Text("") }
+//                            .toggleStyle(StarStyle())
                     }
                 }
-
-                ToolbarItem(placement: .bottomBar) {
-                    Toggle(isOn: $rssFeedViewModel.unreadIsOn) { Text("") }
-                        .toggleStyle(CheckboxStyle())
-//                    MarkAsReadButton(isSet: $rssItem.isRead)
-                    
-                    
-                }
-                ToolbarItem(placement: .bottomBar) {
-                    Spacer()
-                }
-                ToolbarItem(placement: .bottomBar) {
-//                    MarkAsStarredButton(isSet: $rssItem.isArchive)
-                    Toggle(isOn: $rssFeedViewModel.isOn) { Text("") }
-                        .toggleStyle(StarStyle())
-                }
+            Spacer()
+            navButtons
+                .frame(width: UIScreen.main.bounds.width, height: 49, alignment: .leading)
             }
-            
-            .onAppear {
-                self.articles.fecthResults()
-            }
+        .onAppear {
+            self.articles.fecthResults()
         }
     }
     func contextmenuAction(_ item: RSSItem) {
@@ -140,9 +164,9 @@ extension AllArticlesView {
 
 }
 
-struct AllArticlesView_Previews: PreviewProvider {
-    static let rss = RSS()
-    static var previews: some View {
-        AllArticlesView(articles: AllArticles(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
-    }
-}
+//struct AllArticlesView_Previews: PreviewProvider {
+//    static let rss = RSS()
+//    static var previews: some View {
+//        AllArticlesView(articles: AllArticles(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
+//    }
+//}

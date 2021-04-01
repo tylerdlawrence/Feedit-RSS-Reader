@@ -26,6 +26,7 @@ struct RSSGroupListView: View {
     @EnvironmentObject var rssDataSource: RSSDataSource
     @ObservedObject var viewModel: RSSListViewModel
     @State var addGroupIsPresented = false
+//    @Binding var count: Int
     
     var body: some View {
         VStack {

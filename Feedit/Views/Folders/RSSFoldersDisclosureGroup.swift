@@ -38,6 +38,7 @@ struct RSSFoldersDisclosureGroup: View {
             return !((self.rssFeedViewModel.isOn && !item.isArchive) || (self.rssFeedViewModel.unreadIsOn && item.isRead))
         })
     }
+    
     @ObservedObject var rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
     var rssSource: RSS {
         return self.rssFeedViewModel.rss
@@ -46,7 +47,13 @@ struct RSSFoldersDisclosureGroup: View {
     @FetchRequest(sortDescriptors: [])
     private var rss: FetchedResults<RSS>
     
+//    @State private var count: UnreadCount?
+//    @State private var unreadItemCount: Int = 0
+//    @Binding var unreadItemCount: Int
+        
     var body: some View {
+       
+        
         Section(header: Text("Folders").font(.system(size: 18, weight: .regular, design: .rounded)).textCase(nil).foregroundColor(Color("text"))) {
 //        DisclosureGroup(
 //            isExpanded: $expandFolders,
@@ -75,16 +82,14 @@ struct RSSFoldersDisclosureGroup: View {
 //                if isExpanded == true {
                     ForEach(viewModel.items, id: \.self) { rss in
                         ZStack {
-                            NavigationLink(destination: self.destinationView(rss: rss)
-//                          self.destinationView(rss: self.viewModel.items[index])
-                            ) {
+                            NavigationLink(destination: NavigationLazyView(self.destinationView(rss: rss)).environmentObject(DataSourceService.current.rss)) {
                                 EmptyView()
                             }
                             .opacity(0.0)
                             .buttonStyle(PlainButtonStyle())
+                            
                             HStack {
-                                RSSRow(rss: rss, viewModel: viewModel)
-//                                        self.viewModel.items[index], viewModel: viewModel)
+                                RSSRow(viewModel: viewModel, rss: rss)
                                 Spacer()
 //                                Text("\(feed.posts.filter { !$0.isRead }.count)")
 //                                if filteredArticles.filter { !$0.isRead }.count == 0 {
@@ -95,7 +100,10 @@ struct RSSFoldersDisclosureGroup: View {
 //                                if viewModel.unreadCount > 0 {
 //                                    UnreadCountView(count: viewModel.unreadCount)
 //                                }
+                                
                             }
+                            
+                                                
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .contentShape(Rectangle())
                         }//.listRowBackground(Color("accent"))
@@ -146,7 +154,6 @@ struct RSSFoldersDisclosureGroup: View {
         }
     }
     
-
     private func deleteObjects(offsets: IndexSet) {
         withAnimation {
             persistence.deleteManagedObjects(offsets.map { groups[$0] })
@@ -174,7 +181,7 @@ struct RSSFoldersDisclosureGroup: View {
     }
     private func destinationView(rss: RSS) -> some View {
         let item = RSSItem()
-        return RSSFeedListView(rss: rss, viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), rssItem: item, filter: .all)
+        return RSSFeedListView(rss: rss, viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), rssItem: item, selectedFilter: .all)
             .environmentObject(DataSourceService.current.rss)
     }
 }

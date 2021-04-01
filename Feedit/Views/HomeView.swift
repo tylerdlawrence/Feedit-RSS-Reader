@@ -104,13 +104,13 @@ struct HomeView: View {
         HStack(alignment: .center, spacing: 24) {
             settingButton
             Spacer()
-            Picker("Home", selection: $selectedFilter, content: {
-                ForEach(FilterType.allCases, id: \.self) {
-                    Text($0.rawValue)
-                }
+//            Picker("Home", selection: $selectedFilter, content: {
+//                ForEach(FilterType.allCases, id: \.self) {
+//                    Text($0.rawValue)
+//                }
 //                SelectedFilterView(selectedFilter: selectedFilter)
-            }).pickerStyle(SegmentedPickerStyle()).frame(width: 180, height: 20).listRowBackground(Color("accent"))
-            Spacer()
+//            }).pickerStyle(SegmentedPickerStyle()).frame(width: 180, height: 20).listRowBackground(Color("accent"))
+//            Spacer()
             Menu {
                 Button(action: {self.sheetAction = 4
                         self.isSheetPresented = true
@@ -155,10 +155,7 @@ struct HomeView: View {
             ScrollViewReader { scrollViewProxy in
                 ZStack {
                     List {
-//                        SelectedFilterView(selectedFilter: selectedFilter)
                         SmartFeedsHomeView(rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), articles: AllArticles(dataSource: DataSourceService.current.rssItem), unread: Unread(dataSource: DataSourceService.current.rssItem))
-                        
-//                        RSSFoldersDisclosureGroup(persistence: Persistence.current, unread: unread, viewModel: self.viewModel, feed: FeedObject(url: URL(string: "https://www.google.com")!, posts: [Post(title: "Test post title", description: "Test post description", url: URL(string: "https://www.google.com")!)])!, isExpanded: false)
                         
                         RSSFoldersDisclosureGroup(persistence: Persistence.current, unread: unread, viewModel: self.viewModel, isExpanded: selectedCells.contains(rss))
                             .onTapGesture { self.selectDeselect(rss) }

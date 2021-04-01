@@ -28,9 +28,10 @@ struct ArchiveListView: View {
         return self.rssFeedViewModel.rss
     }
         
-    init(viewModel: ArchiveListViewModel, rssFeedViewModel: RSSFeedViewModel) {
+    init(viewModel: ArchiveListViewModel, rssFeedViewModel: RSSFeedViewModel, selectedFilter: FilterType) {
         self.archiveListViewModel = viewModel
         self.rssFeedViewModel = rssFeedViewModel
+        self.selectedFilter = selectedFilter
     }
     
     private var refreshButton: some View {
@@ -39,92 +40,117 @@ struct ArchiveListView: View {
         }.buttonStyle(BorderlessButtonStyle())
     }
     
+    @State var selectedFilter: FilterType
+    private var navButtons: some View {
+        HStack(alignment: .center, spacing: 24) {
+            Toggle(isOn: $rssFeedViewModel.unreadIsOn) { Text("") }
+                .toggleStyle(CheckboxStyle())
+//            Spacer()
+            
+            Picker("", selection: $selectedFilter, content: {
+                ForEach(FilterType.allCases, id: \.self) {
+                    Text($0.rawValue)
+                }
+//                SelectedFilterView(selectedFilter: selectedFilter)
+            }).pickerStyle(SegmentedPickerStyle()).frame(width: 180, height: 20).listRowBackground(Color("accent"))
+//            Spacer()
+            
+            Toggle(isOn: $rssFeedViewModel.isOn) { Text("") }
+                .toggleStyle(StarStyle())
+        }.padding(24)
+    }
+    
     var body: some View {
-        ZStack {
-            Color("accent")
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .edgesIgnoringSafeArea(.all)
-            List {
-                ForEach(self.archiveListViewModel.items, id: \.self) { item in
-                    ZStack{
-                        NavigationLink(destination: WebView(rssItem: item, onCloseClosure: {})) {
-//                        NavigationLink(destination: RSSFeedDetailView(rssItem: item, rssFeedViewModel: self.rssFeedViewModel)) {
-                            EmptyView()
-                        }
-                        .opacity(0.0)
-                        .buttonStyle(PlainButtonStyle())
-                        
-                        HStack{
+        ScrollViewReader { scrollViewProxy in
+            ZStack {
+                Color("accent")
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .edgesIgnoringSafeArea(.all)
+                List {
+                    ForEach(self.archiveListViewModel.items, id: \.self) { item in
+                        ZStack{
+                            NavigationLink(destination: WebView(rssItem: item, onCloseClosure: {})) {
+    //                        NavigationLink(destination: RSSFeedDetailView(rssItem: item, rssFeedViewModel: self.rssFeedViewModel)) {
+                                EmptyView()
+                            }
+                            .opacity(0.0)
+                            .buttonStyle(PlainButtonStyle())
+                            
+                            HStack{
 
-                            RSSItemRow(rssItem: item, rssFeedViewModel: rssFeedViewModel)
-                                .onTapGesture {
-                                    self.selectedItem = item
+                                RSSItemRow(rssItem: item, rssFeedViewModel: rssFeedViewModel)
+                                    .onTapGesture {
+                                        self.selectedItem = item
+                                    }
                                 }
                             }
                         }
-                    }
-                
-                .onDelete { indexSet in
-                    if let index = indexSet.first {
-                        let item = self.archiveListViewModel.items[index]
-                        self.archiveListViewModel.unarchive(item)
-                    }
-                }
-            }
-            .listStyle(PlainListStyle())
-            .navigationBarTitle("", displayMode: .inline)
-            .navigationBarItems(trailing: refreshButton)
-            .add(self.searchBar)
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    VStack{
-                        HStack{
-                            Text("Starred")
-                                .font(.system(.body))
-                                .fontWeight(.bold)
-                            Text("\(archiveListViewModel.items.count)")
-                                .font(.caption)
-                                .fontWeight(.bold)
-                                .padding(.horizontal, 7)
-                                .padding(.vertical, 1)
-                                .background(Color.gray.opacity(0.5))
-                                .opacity(0.4)
-                                .foregroundColor(Color("text"))
-                                .cornerRadius(8)
+                    
+                    .onDelete { indexSet in
+                        if let index = indexSet.first {
+                            let item = self.archiveListViewModel.items[index]
+                            self.archiveListViewModel.unarchive(item)
                         }
                     }
                 }
-                    ToolbarItem(placement: .bottomBar) {
-                        Toggle("", isOn: $isRead)
-                            .toggleStyle(CheckboxStyle())
+                .listStyle(PlainListStyle())
+                .navigationBarTitle("", displayMode: .inline)
+                .navigationBarItems(trailing: refreshButton)
+                .add(self.searchBar)
+                .toolbar {
+                    ToolbarItem(placement: .principal) {
+                        VStack{
+                            HStack{
+                                Text("Starred")
+                                    .font(.system(.body))
+                                    .fontWeight(.bold)
+                                Text("\(archiveListViewModel.items.count)")
+                                    .font(.caption)
+                                    .fontWeight(.bold)
+                                    .padding(.horizontal, 7)
+                                    .padding(.vertical, 1)
+                                    .background(Color.gray.opacity(0.5))
+                                    .opacity(0.4)
+                                    .foregroundColor(Color("text"))
+                                    .cornerRadius(8)
+                            }
+                        }
                     }
-                    ToolbarItem(placement: .bottomBar) {
-                        Spacer()
+    //                    ToolbarItem(placement: .bottomBar) {
+    //                        Toggle("", isOn: $isRead)
+    //                            .toggleStyle(CheckboxStyle())
+    //                    }
+    //                    ToolbarItem(placement: .bottomBar) {
+    //                        Spacer()
+    //                    }
+    //                    ToolbarItem(placement: .bottomBar) {
+    //                        Toggle(isOn: $archiveListViewModel.isArchive) { Text("") }
+    //                            .toggleStyle(StarStyle())
+    //                            .disabled(self.disabled)
+    //                    }
                     }
-                    ToolbarItem(placement: .bottomBar) {
-                        Toggle(isOn: $archiveListViewModel.isArchive) { Text("") }
-                            .toggleStyle(StarStyle())
-                            .disabled(self.disabled)
-                    }
-                }
-        
-            .sheet(item: $selectedItem, content: { item in
-                if UserEnvironment.current.useSafari {
-                    SafariView(url: URL(string: item.url)!)
-                } else {
-                    WebView(
-                        rssItem: item,
-                        onCloseClosure: {
+            
+                .sheet(item: $selectedItem, content: { item in
+                    if UserEnvironment.current.useSafari {
+                        SafariView(url: URL(string: item.url)!)
+                    } else {
+                        WebView(
+                            rssItem: item,
+                            onCloseClosure: {
 
-                        },
-                        onArchiveClosure: {
-                            self.archiveListViewModel.archiveOrCancel(item)
-                    })
-                }
-            })
-        }.animation(.default)
-            .onAppear {
-                self.archiveListViewModel.fecthResults()
+                            },
+                            onArchiveClosure: {
+                                self.archiveListViewModel.archiveOrCancel(item)
+                        })
+                    }
+                })
+            }.animation(.default)
+            Spacer()
+            navButtons
+                .frame(width: UIScreen.main.bounds.width, height: 49, alignment: .leading)
+        }
+        .onAppear {
+            self.archiveListViewModel.fecthResults()
         }
     }
 }

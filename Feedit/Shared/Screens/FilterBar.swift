@@ -17,43 +17,17 @@ enum FilterType: String, CaseIterable {
 }
 
 struct FilterPicker: View {
-    @State var selectedFilter: FilterType //= .all
+    @State var selectedFilter: FilterType = .all
     @ObservedObject var rssFeedViewModel: RSSFeedViewModel
     
     var body: some View {
         NavigationView {
-            Picker("Home", selection: $selectedFilter, content: {
+            Picker("", selection: $selectedFilter, content: {
                 ForEach(FilterType.allCases, id: \.self) {
                     Text($0.rawValue)
                 }
                 SelectedFilterView(selectedFilter: selectedFilter)
             }).pickerStyle(SegmentedPickerStyle()).frame(width: 180, height: 20).listRowBackground(Color("accent"))
-//                ForEach(enumerating: FilterType.allCases, id: \.self) {_,_ in
-//                    HStack {
-//                    if selectedFilter == .isArchive {
-//                    Image(systemName: "star.fill")
-//                        .font(.system(size: 10, weight: .black)).tag(0)
-//                    } else {
-//                        Image(systemName: "star.fill").font(.system(size: 10, weight: .black)).padding()
-//                    }
-//
-//                    if selectedFilter == .unreadIsOn {
-//                    Image(systemName: "circle.fill").font(.system(size: 10, weight: .black)).tag(1)
-//                    } else {
-//                        Image(systemName: "circle.fill").font(.system(size: 10, weight: .black)).padding()
-//                    }
-//
-//                    if selectedFilter == .all {
-//                    Image(systemName: "text.justifyleft").font(.system(size: 10, weight: .black)).tag(2)
-//                    } else {
-//                        Image(systemName: "text.justifyleft").font(.system(size: 10, weight: .black)).padding()
-//                    }
-////                    Text($0.rawValue)
-//                    }
-//                }
-//            }).pickerStyle(SegmentedPickerStyle()).frame(width: 180, height: 20).listRowBackground(Color("accent"))
-                
-
         }
     }
 }
@@ -64,40 +38,56 @@ struct SelectedFilterView: View {
     @StateObject var archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
     @ObservedObject var articles = AllArticles(dataSource: DataSourceService.current.rssItem)
     @ObservedObject var unread = Unread(dataSource: DataSourceService.current.rssItem)
+    @StateObject var viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     
     private var allArticlesView: some View {
         let rss = RSS()
-        return AllArticlesView(articles: AllArticles(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
+        return AllArticlesView(articles: AllArticles(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), selectedFilter: .all)
     }
     private var archiveListView: some View {
-        ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: self.rssFeedViewModel)
+        ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: self.rssFeedViewModel, selectedFilter: .isArchive)
     }
     private var unreadListView: some View {
-        UnreadListView(unreads: Unread(dataSource: DataSourceService.current.rssItem))
+        UnreadListView(unreads: Unread(dataSource: DataSourceService.current.rssItem), selectedFilter: .unreadIsOn)
     }
+    
+    var filteredFeeds: [RSS] {
+        return viewModel.items.filter({ (rss) -> Bool in
+            return !((self.viewModel.isOn && !rss.isArchive) || (self.viewModel.unreadIsOn && rss.isRead))
+        })
+    }
+    
+    func filterFeeds(url: String?) -> RSS? {
+            guard let url = url else { return nil }
+        return viewModel.items.first(where: { $0.url.id == url })
+        }
+    
+    var filteredArticles: [RSSItem] {
+        return rssFeedViewModel.items.filter({ (item) -> Bool in
+            return !((self.rssFeedViewModel.isOn && !item.isArchive) || (self.rssFeedViewModel.unreadIsOn && item.isRead))
+        })
+    }
+    
+    let item = RSSItem()
+    let rss = RSS()
     
     var body: some View {
         switch selectedFilter {
         case .all:
+//            RSSFeedListView(rss: rss, viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), rssItem: item, selectedFilter: .all)
+//                .environmentObject(DataSourceService.current.rssItem)
             allArticlesView
-            unreadListView
-                .hidden()
-            archiveListView
-                .hidden()
             
         case .unreadIsOn:
-            allArticlesView
-                .hidden()
+//            RSSFeedListView(rss: rss, viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), rssItem: item, selectedFilter: .unreadIsOn)
+//                .environmentObject(DataSourceService.current.rssItem)
             unreadListView
-            archiveListView
-                .hidden()
-            
+
         case .isArchive:
-            allArticlesView
-                .hidden()
-            unreadListView
-                .hidden()
+//            RSSFeedListView(rss: rss, viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), rssItem: item, selectedFilter: .isArchive)
+//                .environmentObject(DataSourceService.current.rssItem)
             archiveListView
+
         }
     }
 }
@@ -106,8 +96,8 @@ struct FilterPicker_Previews: PreviewProvider {
     static let rss = RSS()
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     static var previews: some View {
-        FilterPicker(selectedFilter: .all, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
-            .previewLayout(.fixed(width: 250, height: 70))
+        FilterPicker(selectedFilter: .unreadIsOn, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
+//            .previewLayout(.fixed(width: 250, height: 70))
                 .preferredColorScheme(.dark)
         
     }

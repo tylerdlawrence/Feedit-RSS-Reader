@@ -15,7 +15,6 @@ import UIKit
 import MobileCoreServices
 
 struct AddRSSView: View {
-    @AppStorage("darkMode") var darkMode = false
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var viewModel: AddRSSViewModel
     var onDoneAction: (() -> Void)?
@@ -90,6 +89,8 @@ struct AddRSSView: View {
         }
     }
     
+//    @Binding var count: Int
+    
     var body: some View {
         NavigationView {
             Form {
@@ -105,7 +106,7 @@ struct AddRSSView: View {
                                 .padding(.trailing)
                                 .multilineTextAlignment(.leading)
                     }
-                    HStack(alignment: .center){
+                    HStack(alignment: .center) {
                         sectionHeader
                     }
                 }
@@ -180,18 +181,9 @@ struct AddRSSView: View {
     }
 }
 
-
-
 #if DEBUG
 
 struct AddRSSView_Previews: PreviewProvider {
-
-    static var group: RSSGroup = {
-      let controller = Persistence.current
-        return controller.makeRandomFolder(context: controller.context)
-    }()
-
-    @State static var selection: Set<RSSGroup> = [group]
 
     static var previews: some View {
         AddRSSView(viewModel: AddRSSViewModel(dataSource: DataSourceService.current.rss))

@@ -26,47 +26,92 @@ public extension URL {
 
 class Persistence: ObservableObject {
 
-    static let shared = Persistence(version: 1)
-    
-    let container: NSPersistentContainer
-    
     static private(set) var current = Persistence(version: 1)
+    private var subscriptions: Set<AnyCancellable> = []
+    let appTransactionAuthorName = "app"
+    private let isStoreLoaded = CurrentValueSubject<Bool, Error>(false)
     
-    lazy var managedObjectContext: NSManagedObjectContext = {
-        let context = self.persistentContainer.viewContext
-        context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-        return context
-    }()
-
-    lazy var persistentContainer: NSPersistentContainer  = {
-        let container = NSPersistentContainer(name: "RSS")
-        container.loadPersistentStores { (persistentStoreDescription, error) in
-            if let error = error {
-                fatalError(error.localizedDescription)
-            }
+    lazy var persistentContainer: NSPersistentContainer = {
+        // Create a container that can load CloudKit-backed stores
+        let container = NSPersistentCloudKitContainer(name: "feeditrssreader")
+        
+        // Enable history tracking and remote notifications
+        guard let description = container.persistentStoreDescriptions.first else {
+            fatalError("###\(#function): Failed to retrieve a persistent store description.")
         }
+        description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
+        description.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
+
+        container.loadPersistentStores(completionHandler: { (_, error) in
+            guard let error = error as NSError? else { return }
+            fatalError("###\(#function): Failed to load persistent stores:\(error)")
+        })
+        
+        container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+            container.viewContext.transactionAuthor = appTransactionAuthorName
+               container.viewContext.automaticallyMergesChangesFromParent = true
+            do {
+                try container.viewContext.setQueryGenerationFrom(.current)
+            } catch {
+                assertionFailure("###\(#function): Failed to pin viewContext to the current generation:\(error)")
+            }
+        
+        // Observe Core Data remote change notifications.
+        NotificationCenter.default.addObserver(
+            self, selector: #selector(type(of: self).storeRemoteChange(_:)),
+            name: .NSPersistentStoreRemoteChange, object: container)
+        
+        NotificationCenter.default
+              .publisher(for: .NSPersistentStoreRemoteChange)
+              .sink {
+                self.storeRemoteChange($0)
+              }
+              .store(in: &subscriptions)
+        
         return container
     }()
 
-    
-    private static let authorName = "Author"
-    private static let remoteDataImportAuthorName = "Data Import"
-
-    var context: NSManagedObjectContext {
-      return container.viewContext
+    /**
+     Track the last history token processed for a store, and write its value to file.
+     
+     The historyQueue reads the token when executing operations, and updates it after processing is complete.
+     */
+    private var lastHistoryToken: NSPersistentHistoryToken? = nil {
+        didSet {
+            guard let token = lastHistoryToken,
+                let data = try? NSKeyedArchiver.archivedData( withRootObject: token, requiringSecureCoding: true) else { return }
+            
+            do {
+                try data.write(to: tokenFile)
+            } catch {
+                print("###\(#function): Failed to write token data. Error = \(error)")
+            }
+        }
     }
-
-//    private let container: NSPersistentContainer
     
-    private var subscriptions: Set<AnyCancellable> = []
-        
-//    var context: NSManagedObjectContext {
-//        let c = container.viewContext
-//        c.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-//        return c
-//    }    
-    private let isStoreLoaded = CurrentValueSubject<Bool, Error>(false)
+    /**
+     The file URL for persisting the persistent history token.
+    */
+    private lazy var tokenFile: URL = {
+        let url = NSPersistentContainer.defaultDirectoryURL().appendingPathComponent("CoreDataCloudKitDemo", isDirectory: true)
+        if !FileManager.default.fileExists(atPath: url.path) {
+            do {
+                try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
+            } catch {
+                print("###\(#function): Failed to create persistent container URL. Error = \(error)")
+            }
+        }
+        return url.appendingPathComponent("token.data", isDirectory: false)
+    }()
     
+    /**
+     An operation queue for handling history processing tasks: watching changes, deduplicating tags, and triggering UI updates if needed.
+     */
+    private lazy var historyQueue: OperationQueue = {
+        let queue = OperationQueue()
+        queue.maxConcurrentOperationCount = 1
+        return queue
+    }()
     
     init(directory: FileManager.SearchPathDirectory = .documentDirectory,
          domainMask: FileManager.SearchPathDomainMask = .userDomainMask,
@@ -84,9 +129,27 @@ class Persistence: ObservableObject {
                 isStoreLoaded?.value = true
             }
         }
+        // Load the last token from the token file.
+        if let tokenData = try? Data(contentsOf: tokenFile) {
+            do {
+                lastHistoryToken = try NSKeyedUnarchiver.unarchivedObject(ofClass: NSPersistentHistoryToken.self, from: tokenData)
+            } catch {
+                print("###\(#function): Failed to unarchive NSPersistentHistoryToken. Error = \(error)")
+            }
+        }
     }
     
+    let container: NSPersistentContainer
     
+//    var context: NSManagedObjectContext {
+//      return container.viewContext
+//    }
+    
+    var context: NSManagedObjectContext {
+        let c = container.viewContext
+        c.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        return c
+    }
     
     func saveChanges() {
       guard context.hasChanges else { return }
@@ -114,7 +177,67 @@ class Persistence: ObservableObject {
         self.saveChanges()
       }
     }
-    
+}
+
+extension NSPersistentContainer {
+    func backgroundContext() -> NSManagedObjectContext {
+        let appTransactionAuthorName = "app"
+        let context = newBackgroundContext()
+        context.transactionAuthor = appTransactionAuthorName
+        return context
+    }
+}
+
+extension Persistence {
+    func processPersistentHistory() {
+        let backgroundContext = persistentContainer.newBackgroundContext()
+        backgroundContext.performAndWait {
+
+            // Fetch history received from outside the app since the last token
+            let historyFetchRequest = NSPersistentHistoryTransaction.fetchRequest!
+            historyFetchRequest.predicate = NSPredicate(format: "author != %@", appTransactionAuthorName)
+            let request = NSPersistentHistoryChangeRequest.fetchHistory(after: lastHistoryToken)
+            request.fetchRequest = historyFetchRequest
+
+            let result = (try? backgroundContext.execute(request)) as? NSPersistentHistoryResult
+            guard let transactions = result?.result as? [NSPersistentHistoryTransaction],
+                  !transactions.isEmpty
+                else { return }
+
+            print("transactions = \(transactions)")
+            self.mergeChanges(from: transactions)
+
+            // Update the history token using the last transaction.
+            lastHistoryToken = transactions.last!.token
+        }
+    }
+}
+
+extension Persistence {
+    private func mergeChanges(from transactions: [NSPersistentHistoryTransaction]) {
+        
+            context.perform {
+                transactions.forEach { [weak self] transaction in
+                    guard let self = self, let userInfo = transaction.objectIDNotification().userInfo else { return }
+                    NSManagedObjectContext.mergeChanges(fromRemoteContextSave: userInfo, into: [self.context])
+            }
+        }
+    }
+}
+
+extension Persistence {
+    /**
+     Handle remote store change notifications (.NSPersistentStoreRemoteChange).
+     */
+    @objc
+    func storeRemoteChange(_ notification: Notification) {
+        print("###\(#function): Merging changes from the other persistent store coordinator.")
+        
+        // Process persistent history to merge changes from other coordinators.
+        historyQueue.addOperation {
+            self.processPersistentHistory()
+        }
+    }
 }
 
 extension Persistence {
@@ -189,55 +312,31 @@ struct PersistenceController {
     }
 }
 
-//class Persistence: ObservableObject {
-//    private let persistence = Persistence.current
+//extension Persistence {
+//  static var random: Persistence = {
+//    let controller = Persistence(version: 1)
+//    controller.context.perform {
+//      for i in 0..<1 {
+//        controller.makeRandomFolder(context: controller.context)      }
+//      for i in 0..<1 {
+//        controller.makeRandomFolder(context: controller.context)
+//      }
+//    }
+//    return controller
+//  }()
 //
-//    lazy var managedObjectContext: NSManagedObjectContext = {
-//        let context = self.persistentContainer.viewContext
-//        context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-//        return context
-//    }()
-//
-//    lazy var persistentContainer: NSPersistentContainer  = {
-//        let container = NSPersistentContainer(name: "RSS")
-//        container.loadPersistentStores { (persistentStoreDescription, error) in
-//            if let error = error {
-//                fatalError(error.localizedDescription)
-//            }
-//        }
-//        return container
-//    }()
-//
-//    var context: NSManagedObjectContext {
-//        return persistence.context
+//    func makeRandomFolder(context: NSManagedObjectContext) -> RSSGroup {
+//        let group = RSSGroup()
+//        group.id = UUID()
+//        group.name = "Default Folder"
+//        group.items = [
+//            makeRandomFolder(context: context),
+//            makeRandomFolder(context: context),
+//            makeRandomFolder(context: context)
+//        ]
+//        return group
 //    }
 //}
-
-extension Persistence {
-  static var random: Persistence = {
-    let controller = Persistence(version: 1)
-    controller.context.perform {
-      for i in 0..<1 {
-        controller.makeRandomFolder(context: controller.context)      }
-      for i in 0..<1 {
-        controller.makeRandomFolder(context: controller.context)
-      }
-    }
-    return controller
-  }()
-
-    func makeRandomFolder(context: NSManagedObjectContext) -> RSSGroup {
-        let group = RSSGroup()
-        group.id = UUID()
-        group.name = "Default Folder"
-        group.items = [
-            makeRandomFolder(context: context),
-            makeRandomFolder(context: context),
-            makeRandomFolder(context: context)
-        ]
-        return group
-    }
-}
 
 public class Settings: NSManagedObject, Identifiable {
     @NSManaged public var layoutValue: Double
