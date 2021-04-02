@@ -45,12 +45,12 @@ struct SmartFeedsHomeView: View {
                         .opacity(0.0)
                         .buttonStyle(PlainButtonStyle())
                     HStack{
-                        Image(systemName: "archivebox")
+                        Image(systemName: "chart.bar.doc.horizontal")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 21, height: 21,alignment: .center)
-                            .foregroundColor(Color.red.opacity(0.8))
-//                            .foregroundColor(Color("tab").opacity(0.9))
+//                            .foregroundColor(Color.red.opacity(0.8))
+                            .foregroundColor(Color("tab").opacity(0.9))
                         Text("All Articles")
                         Spacer()
                         Text("\(articles.items.count)")
@@ -81,7 +81,7 @@ struct SmartFeedsHomeView: View {
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 21, height: 21,alignment: .center)
-                            .foregroundColor(Color("tab").opacity(0.8))
+                            .foregroundColor(Color("tab").opacity(0.9))
                         Text("Unread")
                         Spacer()
                         Text("\(unread.items.count)")
@@ -113,8 +113,8 @@ struct SmartFeedsHomeView: View {
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 21, height: 21,alignment: .center)
-//                            .foregroundColor(Color("tab").opacity(0.9))
-                            .foregroundColor(Color.yellow.opacity(0.8))
+                            .foregroundColor(Color("tab").opacity(0.9))
+//                            .foregroundColor(Color.yellow.opacity(0.8))
                         Text("Starred")
 
                             Spacer()
@@ -149,7 +149,7 @@ struct SmartFeedsHomeView: View {
 //                        }
 //                }
 //            })
-        }
+        }.listStyle(InsetGroupedListStyle())
 //            .listRowBackground(Color("accent"))
 //            .listRowBackground(Color("darkerAccent"))
             .accentColor(Color("tab"))

@@ -163,7 +163,7 @@ struct HomeView: View {
                     .environmentObject(DataSourceService.current.rss)
                     .environmentObject(DataSourceService.current.rssItem)
                     .environment(\.managedObjectContext, Persistence.current.context)
-//                    .listStyle(GroupedListStyle())
+//                    .listStyle(InsetGroupedListStyle())
                     .listStyle(SidebarListStyle())
                     .navigationBarTitle("Home", displayMode: .automatic)
 //                    .add(self.searchBar)

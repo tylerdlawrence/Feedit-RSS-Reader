@@ -87,22 +87,41 @@ struct RSSFeedListView: View {
     }
     
     private var navButtons: some View {
-        HStack(alignment: .center, spacing: 24) {
+//        HStack(alignment: .center, spacing: 24) {
+//            Toggle(isOn: $rssFeedViewModel.unreadIsOn) { Text("") }
+//                .toggleStyle(CheckboxStyle())
+////            Spacer()
+//
+//            Picker("", selection: $selectedFilter, content: {
+//                ForEach(FilterType.allCases, id: \.self) {
+//                    Text($0.rawValue)
+//                }
+////                SelectedFilterView(selectedFilter: selectedFilter)
+//            }).pickerStyle(SegmentedPickerStyle()).frame(width: 180, height: 20).listRowBackground(Color("accent"))
+////            Spacer()
+//
+//            Toggle(isOn: $rssFeedViewModel.isOn) { Text("") }
+//                .toggleStyle(StarStyle())
+//        }.padding(24)
+        HStack(alignment: .center, spacing: 30) {
             Toggle(isOn: $rssFeedViewModel.unreadIsOn) { Text("") }
-                .toggleStyle(CheckboxStyle())
-//            Spacer()
+                .toggleStyle(CheckboxStyle()).padding(.leading)
+//        }
+            Spacer(minLength: 1)
             
             Picker("", selection: $selectedFilter, content: {
                 ForEach(FilterType.allCases, id: \.self) {
                     Text($0.rawValue)
                 }
 //                SelectedFilterView(selectedFilter: selectedFilter)
-            }).pickerStyle(SegmentedPickerStyle()).frame(width: 180, height: 20).listRowBackground(Color("accent"))
-//            Spacer()
+            }).pickerStyle(SegmentedPickerStyle()).frame(width: 180, height: 20)
+            .listRowBackground(Color("accent"))
+            
+            Spacer(minLength: 0)
             
             Toggle(isOn: $rssFeedViewModel.isOn) { Text("") }
-                .toggleStyle(StarStyle())
-        }.padding(24)
+                .toggleStyle(StarStyle()).padding(.trailing)
+        }
     }
     
     var body: some View {
