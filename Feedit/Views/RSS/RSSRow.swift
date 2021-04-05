@@ -273,10 +273,6 @@ struct RSSRow: View {
                 }
                 
     }
-//    func delete(_ rss: RSS) {
-//        self.viewModel.items.removeAll(where: {$0 == rss})
-//        viewModel.items.remove(at: 0)
-//    }
 }
     
 //#if DEBUG

@@ -59,3 +59,21 @@ struct ToggleAppearence: ToggleStyle {
         }
     }
 }
+
+struct ReaderMode: ToggleStyle {
+    @State private var disabled = false
+    func makeBody(configuration: Self.Configuration) -> some View {
+        return HStack {
+            configuration.label
+            Spacer()
+            Image(systemName: configuration.isOn ? "doc.plaintext.fill" : "doc.plaintext")
+                .imageScale(.medium)
+                .foregroundColor(Color("tab"))
+                .font(.system(size: 20, weight: .regular, design: .default))
+                .onTapGesture {
+                    configuration.isOn.toggle()
+            }
+                .disabled(self.disabled)
+        }
+    }
+}

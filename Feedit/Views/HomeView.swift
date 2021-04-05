@@ -104,13 +104,13 @@ struct HomeView: View {
         HStack(alignment: .center, spacing: 24) {
             settingButton
             Spacer()
-//            Picker("Home", selection: $selectedFilter, content: {
-//                ForEach(FilterType.allCases, id: \.self) {
-//                    Text($0.rawValue)
-//                }
+            Picker("Home", selection: $selectedFilter, content: {
+                ForEach(FilterType.allCases, id: \.self) {
+                    Text($0.rawValue)
+                }
 //                SelectedFilterView(selectedFilter: selectedFilter)
-//            }).pickerStyle(SegmentedPickerStyle()).frame(width: 180, height: 20).listRowBackground(Color("accent"))
-//            Spacer()
+            }).pickerStyle(SegmentedPickerStyle()).frame(width: 180, height: 20).listRowBackground(Color("accent"))
+            Spacer()
             Menu {
                 Button(action: {self.sheetAction = 4
                         self.isSheetPresented = true
@@ -149,12 +149,51 @@ struct HomeView: View {
         }
     
     @State var selectedFilter: FilterType
+    @State private var editMode = EditMode.inactive
+    @State var isEditing = false
+    
+    private var ifEditModeButton: some View {
+        HStack {
+            Button(action: {
+                self.isEditing.toggle()
+            }) {
+                if self.isEditing {
+                    Text("Done")
+                } 
+            }
+        }
+    }
+    
+    @Environment(\.managedObjectContext) private var context
+    @State var selection = Set<String>()
+    private var editMenu: some View {
+        Menu {
+            Button(action: {
+                if self.isEditing {
+                    viewContext.delete(rss)
+                    try! viewContext.save()
+                }
+                self.isEditing.toggle()
+                
+            }) {
+                if self.isEditing {
+                    Text("Remove Selected")
+                    Image(systemName: "trash")
+                } else {
+                    Text("Edit")
+                    Image(systemName: "rectangle.and.pencil.and.ellipsis")
+                }
+            }
+        } label: {
+            Image(systemName: "ellipsis.circle").font(.system(size: 20, weight: .medium, design: .rounded))
+        }
+    }
     
     var body: some View {
         NavigationView {
             ScrollViewReader { scrollViewProxy in
                 ZStack {
-                    List {
+                    List(selection: $selectedCells) {
                         SmartFeedsHomeView(rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), articles: AllArticles(dataSource: DataSourceService.current.rssItem), unread: Unread(dataSource: DataSourceService.current.rssItem))
                         
                         RSSFoldersDisclosureGroup(persistence: Persistence.current, unread: unread, viewModel: self.viewModel, isExpanded: selectedCells.contains(rss))
@@ -163,9 +202,19 @@ struct HomeView: View {
                     .environmentObject(DataSourceService.current.rss)
                     .environmentObject(DataSourceService.current.rssItem)
                     .environment(\.managedObjectContext, Persistence.current.context)
-//                    .listStyle(InsetGroupedListStyle())
-                    .listStyle(SidebarListStyle())
+                    .environment(\.editMode, .constant(self.isEditing ? EditMode.active : EditMode.inactive)).animation(Animation.spring())
+//                    .environment(\.editMode, $editMode)
+                    .listStyle(PlainListStyle())
+//                    .listStyle(SidebarListStyle())
                     .navigationBarTitle("Home", displayMode: .automatic)
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            ifEditModeButton
+                        }
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            editMenu
+                        }
+                    }
 //                    .add(self.searchBar)
                 }
                 Spacer()
@@ -213,6 +262,11 @@ struct HomeView: View {
 }
 
 extension HomeView {
+    func delete(rss: RSS) {
+        if self.viewModel.items.firstIndex(where: { $0.id == rss.id }) != nil {
+            viewModel.delete(rss: rss)
+        }
+    }
     private func onDoneAction() {
         withAnimation {
             self.viewModel.fecthResults()
@@ -255,3 +309,45 @@ struct HomeView_Previews: PreviewProvider {
 }
 #endif
 
+extension EditMode {
+
+    mutating func toggle() {
+        self = self == .active ? .inactive : .active
+    }
+}
+
+struct ContentView: View {
+
+    @State var isEditing = false
+    @State var selection = Set<String>()
+
+    var names = ["Karl", "Hans", "Faustao"]
+
+    var body: some View {
+        NavigationView {
+            VStack {
+                List(names, id: \.self, selection: $selection) { name in
+                    Text(name)
+                }
+                .navigationBarTitle("Names")
+                .environment(\.editMode, .constant(self.isEditing ? EditMode.active : EditMode.inactive)).animation(Animation.spring())
+                Button(action: {
+                    self.isEditing.toggle()
+                }) {
+                    Text(isEditing ? "Done" : "Edit")
+                        .frame(width: 80, height: 40)
+                }
+                .background(Color.yellow)
+            }
+            .padding(.bottom)
+        }
+    }
+}
+
+#if DEBUG
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
+}
+#endif

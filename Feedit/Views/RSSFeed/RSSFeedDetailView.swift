@@ -12,6 +12,19 @@ import CoreMotion
 import KingfisherSwiftUI
 
 struct RSSFeedDetailView: View {
+    enum SettingItem: CaseIterable {
+        case webView
+        case darkMode
+        case batchImport
+
+        var label: String {
+            switch self {
+            case .webView: return "Read Mode"
+            case .darkMode: return "Dark Mode"
+            case .batchImport: return "Import"
+            }
+        }
+    }
     @EnvironmentObject private var persistence: Persistence
     @Environment(\.managedObjectContext) private var context
     @EnvironmentObject var rssDataSource: RSSDataSource
@@ -19,22 +32,23 @@ struct RSSFeedDetailView: View {
     @AppStorage("darkMode") var darkMode = false
     @ObservedObject var rssItem: RSSItem
     @ObservedObject var rssFeedViewModel: RSSFeedViewModel
+    @State private var isSelected: Bool = false
     
     var rssSource: RSS {
         return self.rssFeedViewModel.rss
     }
     
     private var bottomButtons: some View {
-        HStack(alignment: .top, spacing: 75) {
+        HStack(alignment: .center, spacing: 75) {
             MarkAsReadButton(isSet: $rssItem.isRead)
             
             MarkAsStarredButton(isSet: $rssItem.isArchive)
             
-            Button(action: actionSheet) {
-                Image(systemName: "square.and.arrow.up")
-                    .imageScale(.medium)
-                    .foregroundColor(Color("tab"))
-                    .font(.system(size: 20, weight: .regular, design: .default))
+            ForEach([SettingItem.webView], id: \.self) { _ in
+                NavigationLink(destination: WebView(rssItem: rssItem, onCloseClosure: {})) {
+                    
+                    ReaderModeButton(isSet: self.$isSelected)
+                }
             }
             
             NavigationLink(destination: WebView(rssItem: rssItem, onCloseClosure: {})) {
@@ -45,20 +59,23 @@ struct RSSFeedDetailView: View {
         }
     }
     
-    private func iconImageView(_ image: UIImage) -> some View {
-        Image(uiImage: image)
-        .resizable()
-        .frame(width: 60, height: 60, alignment: .center)
-        .cornerRadius(4)
-        .animation(.easeInOut)
+    private var trailingButtons: some View {
+        HStack {
+//            DarkmModeSettingView(darkMode: $darkMode)
+            Button(action: actionSheet) {
+                Image(systemName: "square.and.arrow.up")
+                    .imageScale(.medium)
+                    .foregroundColor(Color("tab"))
+                    .font(.system(size: 20, weight: .regular, design: .default))
+            }
+        }
     }
     
     var body: some View {
         ZStack {
             ScrollView {
-//                VStack(alignment: .leading) {
                 LazyVStack(alignment: .leading, spacing: 0) {
-                    Divider().padding(0).padding([.leading])
+                    Divider().padding(0)
                     HStack {
                         VStack(alignment: .leading) {
                             Text(rssSource.title)
@@ -105,8 +122,6 @@ struct RSSFeedDetailView: View {
                         Spacer()
                     }.padding(.top, 3)
                     
-                    
-                    
                     Text(rssItem.desc.trimHTMLTag.trimWhiteAndSpace)
                         .font(.system(size: 17, weight: .medium, design: .rounded)).foregroundColor(.gray)
                         .padding(.bottom)
@@ -118,7 +133,7 @@ struct RSSFeedDetailView: View {
                 }
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {Text("")}
-                    ToolbarItem(placement: .navigationBarTrailing) { DarkmModeSettingView(darkMode: $darkMode) }
+                    ToolbarItem(placement: .navigationBarTrailing) { trailingButtons }
                 }
                 .padding(EdgeInsets(top: 200.0, leading: 16.0, bottom: 0.0, trailing: 16.0))
                 .offset(x: 0, y: -200.0)
@@ -140,7 +155,7 @@ struct RSSFeedDetailView_Previews: PreviewProvider {
     static var rssFeedViewModel = RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem)
 
     static var previews: some View {
-        return RSSFeedDetailView(rssItem: RSSItem(), rssFeedViewModel: self.rssFeedViewModel).environmentObject(DataSourceService.current.rssItem)
+        return RSSFeedDetailView(rssItem: RSSItem(), rssFeedViewModel: self.rssFeedViewModel)//.environment(\.managedObjectContext, Persistence.current.context).environmentObject(DataSourceService.current.rss)
             .environment(\.colorScheme, .dark)
     }
 }
@@ -164,6 +179,33 @@ struct MarkAsStarredButton: View {
 struct MarkAsStarredButton_Previews: PreviewProvider {
     static var previews: some View {
         MarkAsStarredButton(isSet: .constant(true))
+            .padding()
+            .previewLayout(.sizeThatFits)
+    }
+}
+
+struct ReaderModeButton: View {
+    @Binding var isSet: Bool
+//    @Binding var isSelected: Bool
+    var body: some View {
+        Button(action: {
+            isSet.toggle()
+//            self.isSelected.toggle()
+        }) {
+            
+            Image(systemName: isSet ? "doc.plaintext.fill" : "doc.plaintext")
+                .imageScale(.medium)
+                .foregroundColor(Color("tab"))
+                .font(.system(size: 20, weight: .regular, design: .default))
+        }
+    }
+}
+
+struct ReaderModeButton_Previews: PreviewProvider {
+    static var previews: some View {
+        ReaderModeButton(isSet: .constant(true))
+            .padding()
+            .previewLayout(.sizeThatFits)
     }
 }
 
@@ -185,5 +227,7 @@ struct MarkAsReadButton: View {
 struct MarkAsReadButton_Previews: PreviewProvider {
     static var previews: some View {
         MarkAsReadButton(isSet: .constant(true))
+            .padding()
+            .previewLayout(.sizeThatFits)
     }
 }

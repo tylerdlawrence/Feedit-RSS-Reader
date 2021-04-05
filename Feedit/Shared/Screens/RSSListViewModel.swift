@@ -120,6 +120,13 @@ class RSSListViewModel: NSObject, ObservableObject{
             saveContext()
         }
     }
+    
+    func move(from source: IndexSet, to destination: Int) {
+        withAnimation {
+            items.move(fromOffsets: source, toOffset: destination)
+        }
+    }
+    
     func saveContext() {
         do {
             try Persistence.current.context.save()

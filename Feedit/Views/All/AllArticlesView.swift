@@ -115,7 +115,7 @@ struct AllArticlesView: View {
                 .toolbar{
                     ToolbarItem(placement: .principal) {
                         HStack{
-                            Image(systemName: "archivebox")
+                            Image(systemName: "chart.bar.doc.horizontal")
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
                                 .frame(width: 21, height: 21,alignment: .center)

@@ -66,12 +66,9 @@ struct ArchiveListView: View {
     var body: some View {
         ScrollViewReader { scrollViewProxy in
             ZStack {
-                Color("accent")
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .edgesIgnoringSafeArea(.all)
                 List {
                     ForEach(self.archiveListViewModel.items, id: \.self) { item in
-                        ZStack{
+                        ZStack {
                             NavigationLink(destination: WebView(rssItem: item, onCloseClosure: {})) {
     //                        NavigationLink(destination: RSSFeedDetailView(rssItem: item, rssFeedViewModel: self.rssFeedViewModel)) {
                                 EmptyView()
@@ -79,8 +76,7 @@ struct ArchiveListView: View {
                             .opacity(0.0)
                             .buttonStyle(PlainButtonStyle())
                             
-                            HStack{
-
+                            HStack {
                                 RSSItemRow(rssItem: item, rssFeedViewModel: rssFeedViewModel)
                                     .onTapGesture {
                                         self.selectedItem = item
@@ -96,6 +92,7 @@ struct ArchiveListView: View {
                         }
                     }
                 }
+                
                 .listStyle(PlainListStyle())
                 .navigationBarTitle("", displayMode: .inline)
                 .navigationBarItems(trailing: refreshButton)
@@ -147,7 +144,7 @@ struct ArchiveListView: View {
                         })
                     }
                 })
-            }.animation(.default)
+            }
             Spacer()
             navButtons
                 .frame(width: UIScreen.main.bounds.width, height: 49, alignment: .leading)

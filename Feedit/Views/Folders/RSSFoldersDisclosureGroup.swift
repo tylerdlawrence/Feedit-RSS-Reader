@@ -27,12 +27,13 @@ struct RSSFoldersDisclosureGroup: View {
     @ObservedObject var unread: Unread
     @EnvironmentObject var rssDataSource: RSSDataSource
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    @StateObject var viewModel: RSSListViewModel
+    
+    @ObservedObject var viewModel: RSSListViewModel
 //    @ObservedObject var feed: FeedObject
 //    let rss = RSS()
     
     @State var isExpanded = false
-    @State private var expandFolders = false
+    @State private var expandFolders = true
     var filteredArticles: [RSSItem] {
         return rssFeedViewModel.items.filter({ (item) -> Bool in
             return !((self.rssFeedViewModel.isOn && !item.isArchive) || (self.rssFeedViewModel.unreadIsOn && item.isRead))
@@ -54,10 +55,10 @@ struct RSSFoldersDisclosureGroup: View {
     var body: some View {
        
         
-        Section(header: Text("Folders").font(.system(size: 18, weight: .regular, design: .rounded)).textCase(nil).foregroundColor(Color("text"))) {
-//        DisclosureGroup(
-//            isExpanded: $expandFolders,
-//            content: {
+//        Section(header: Text("Folders").font(.system(size: 18, weight: .regular, design: .rounded)).textCase(nil).foregroundColor(Color("text"))) {
+        DisclosureGroup(
+            isExpanded: $expandFolders,
+            content: {
             ForEach(groups, id: \.id) { group in
                 DisclosureGroup {
 //                HStack {
@@ -106,8 +107,9 @@ struct RSSFoldersDisclosureGroup: View {
                                                 
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .contentShape(Rectangle())
-                        }//.listRowBackground(Color("accent"))
+                        }.listRowBackground(Color("accent"))
                     }.onDelete(perform: delete)
+                    .onMove(perform: move)
                     //.onDelete { indexSet in
 //                        if let index = indexSet.first {
 //                            self.viewModel.delete(at: index)
@@ -129,26 +131,27 @@ struct RSSFoldersDisclosureGroup: View {
                             }
                         
                     }
-                }.accentColor(Color.gray.opacity(0.7))//.listRowBackground(Color("accent"))
+                }.accentColor(Color.gray.opacity(0.7))
+                .listRowBackground(Color("accent"))
             }.onDelete(perform: deleteObjects)
-        }.accentColor(Color("tab"))
-//        },
-//            label: {
-//                HStack {
-//                    Text("Folders")
-//                        .font(.system(size: 18, weight: .regular, design: .rounded)).textCase(nil)
-//                        .frame(maxWidth: .infinity, alignment: .leading)
-//                        .contentShape(Rectangle())
-//                        .onTapGesture {
-//                            withAnimation {
-//                                self.expandFolders.toggle()
-//                            }
-//                        }
-//                }
-//            })
+//        }.accentColor(Color("tab"))
+        },
+        label: {
+            HStack {
+                Text("Folders")
+                    .font(.system(size: 18, weight: .regular, design: .rounded)).textCase(nil)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        withAnimation {
+                            self.expandFolders.toggle()
+                        }
+                    }
+            }
+        })
 //            .listRowBackground(Color("accent")) // MARK: - CLEAR BACKGROUND
-//            .listRowBackground(Color("darkerAccent")) // MARK: - DARK SHADE
-//        .accentColor(Color("tab"))
+        .listRowBackground(Color("darkerAccent")) // MARK: - DARK SHADE
+        .accentColor(Color("tab"))
         .onAppear {
             self.viewModel.fecthResults()
         }
@@ -165,6 +168,13 @@ struct RSSFoldersDisclosureGroup: View {
             saveContext()
         }
     }
+    
+    func move(from source: IndexSet, to destination: Int) {
+        withAnimation {
+            viewModel.move(from: source, to: destination)
+        }
+    }
+    
     private func updateRSS(_ rss: FetchedResults<RSS>.Element) {
         withAnimation {
             rss.itemCount = Int64(rssFeedViewModel.items.count)
