@@ -165,21 +165,31 @@ struct HomeView: View {
     }
     
     @Environment(\.managedObjectContext) private var context
-    @State var selection = Set<String>()
+    @State var selection = Set<UUID>()
     private var editMenu: some View {
         Menu {
-            Button(action: {
-                if self.isEditing {
-                    viewContext.delete(rss)
-                    try! viewContext.save()
+            if self.isEditing {
+                Button(action: {
+                    self.isEditing.toggle()
+                    self.selection = Set<UUID>()
+                }) {
+                    Text("Done")
+                    Image(systemName: "checkmark")
                 }
-                self.isEditing.toggle()
                 
-            }) {
-                if self.isEditing {
+                Button(action: {
+//                    delete(rss: rss)
+                    deleteItems()
+
+                }) {
                     Text("Remove Selected")
                     Image(systemName: "trash")
-                } else {
+                }
+            }
+            if isEditing == false {
+                Button(action: {
+                    self.isEditing.toggle()
+                }) {
                     Text("Edit")
                     Image(systemName: "rectangle.and.pencil.and.ellipsis")
                 }
@@ -189,13 +199,35 @@ struct HomeView: View {
         }
     }
     
+    @State private var revealSmartFilters = true
+    
     var body: some View {
         NavigationView {
             ScrollViewReader { scrollViewProxy in
                 ZStack {
                     List(selection: $selectedCells) {
-                        SmartFeedsHomeView(rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), articles: AllArticles(dataSource: DataSourceService.current.rssItem), unread: Unread(dataSource: DataSourceService.current.rssItem))
-                        
+//                        SmartFeedsHomeView(rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), articles: AllArticles(dataSource: DataSourceService.current.rssItem), unread: Unread(dataSource: DataSourceService.current.rssItem))
+                        DisclosureGroup(
+                            isExpanded: $revealSmartFilters,
+                            content: {
+                            SelectedFilterView(selectedFilter: selectedFilter)
+                                .listRowBackground(Color("accent"))
+                        }, label: {
+                            HStack {
+                                Text("Smart Feeds")
+                                    .font(.system(size: 18, weight: .regular, design: .rounded)).textCase(nil)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .contentShape(Rectangle())
+                                    .onTapGesture {
+                                        withAnimation {
+                                            self.revealSmartFilters.toggle()
+                                        }
+                                    }
+                                }
+                            })
+                            .listRowBackground(Color("darkerAccent"))
+                            .accentColor(Color("tab"))
+                            
                         RSSFoldersDisclosureGroup(persistence: Persistence.current, unread: unread, viewModel: self.viewModel, isExpanded: selectedCells.contains(rss))
                             .onTapGesture { self.selectDeselect(rss) }
                     }
@@ -259,14 +291,35 @@ struct HomeView: View {
 //        }
 //        .navigationViewStyle(StackNavigationViewStyle())
     }
+    private var editButton: some View {
+            Button(action: {
+                self.editMode.toggle()
+                self.selection = Set<UUID>()
+            }) {
+//                Text(self.editMode.title)
+                Image(systemName: "ellipsis.circle").font(.system(size: 20, weight: .medium, design: .rounded))
+            }
+        }
+
+        private func deleteItems() {
+            var items = viewModel.items
+            for _ in selection {
+                if let index = self.viewModel.items.lastIndex(where: { $0.id == rss.id }) {
+                    items.remove(at: index)
+                }
+            }
+            selection = Set<UUID>()
+        }
+    
+    func delete(rss: RSS) {
+        var items = viewModel.items
+        if let index = self.viewModel.items.firstIndex(where: { $0.id == rss.id }) {
+            items.remove(at: index)
+        }
+    }
 }
 
 extension HomeView {
-    func delete(rss: RSS) {
-        if self.viewModel.items.firstIndex(where: { $0.id == rss.id }) != nil {
-            viewModel.delete(rss: rss)
-        }
-    }
     private func onDoneAction() {
         withAnimation {
             self.viewModel.fecthResults()
@@ -309,45 +362,37 @@ struct HomeView_Previews: PreviewProvider {
 }
 #endif
 
-extension EditMode {
+//extension EditMode {
+//
+//    mutating func toggle() {
+//        self = self == .active ? .inactive : .active
+//    }
+//}
 
-    mutating func toggle() {
-        self = self == .active ? .inactive : .active
-    }
-}
-
-struct ContentView: View {
-
-    @State var isEditing = false
-    @State var selection = Set<String>()
-
-    var names = ["Karl", "Hans", "Faustao"]
-
-    var body: some View {
-        NavigationView {
-            VStack {
-                List(names, id: \.self, selection: $selection) { name in
-                    Text(name)
-                }
-                .navigationBarTitle("Names")
-                .environment(\.editMode, .constant(self.isEditing ? EditMode.active : EditMode.inactive)).animation(Animation.spring())
-                Button(action: {
-                    self.isEditing.toggle()
-                }) {
-                    Text(isEditing ? "Done" : "Edit")
-                        .frame(width: 80, height: 40)
-                }
-                .background(Color.yellow)
+extension View {
+    
+    /// Hide or show the view based on a boolean value.
+    ///
+    /// Example for visibility:
+    ///
+    ///     Text("Label")
+    ///         .isHidden(true)
+    ///
+    /// Example for complete removal:
+    ///
+    ///     Text("Label")
+    ///         .isHidden(true, remove: true)
+    ///
+    /// - Parameters:
+    ///   - hidden: Set to `false` to show the view. Set to `true` to hide the view.
+    ///   - remove: Boolean value indicating whether or not to remove the view.
+    @ViewBuilder func isHidden(_ hidden: Bool, remove: Bool = false) -> some View {
+        if hidden {
+            if !remove {
+                self.hidden()
             }
-            .padding(.bottom)
+        } else {
+            self
         }
     }
 }
-
-#if DEBUG
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
-}
-#endif

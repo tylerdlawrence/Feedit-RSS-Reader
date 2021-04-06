@@ -124,6 +124,7 @@ class RSSListViewModel: NSObject, ObservableObject{
     func move(from source: IndexSet, to destination: Int) {
         withAnimation {
             items.move(fromOffsets: source, toOffset: destination)
+            saveContext()
         }
     }
     

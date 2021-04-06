@@ -11,15 +11,6 @@
         }
       },
       {
-        "package": "BetterSafariView",
-        "repositoryURL": "https://github.com/stleamist/BetterSafariView.git",
-        "state": {
-          "branch": null,
-          "revision": "561919b490eddf8f999b0f855cbf237001cbfccd",
-          "version": "2.3.1"
-        }
-      },
-      {
         "package": "FaviconFinder",
         "repositoryURL": "https://github.com/will-lumley/FaviconFinder.git",
         "state": {
@@ -44,6 +35,15 @@
           "branch": null,
           "revision": "2a10bf41da75599a9f8e872dbd44fe0155a2e00c",
           "version": "5.15.8"
+        }
+      },
+      {
+        "package": "Nuke",
+        "repositoryURL": "https://github.com/kean/Nuke.git",
+        "state": {
+          "branch": null,
+          "revision": "200016df418ed8dc70ba918d52c29634f434541c",
+          "version": "9.5.0"
         }
       },
       {
@@ -89,6 +89,15 @@
           "branch": null,
           "revision": "36ecf80429d00a4cd1e81fbfe4655b1d99ebd651",
           "version": "0.1.2"
+        }
+      },
+      {
+        "package": "SwiftUIX",
+        "repositoryURL": "https://github.com/SwiftUIX/SwiftUIX.git",
+        "state": {
+          "branch": null,
+          "revision": "c2890b24e56e540b2c2fe00394b3826e4659c97b",
+          "version": "0.0.5"
         }
       },
       {

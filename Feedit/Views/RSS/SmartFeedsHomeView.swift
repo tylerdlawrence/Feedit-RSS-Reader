@@ -193,8 +193,12 @@ struct SmartFeedsSectionHomeView: View {
         UnreadListView(unreads: Unread(dataSource: DataSourceService.current.rssItem), selectedFilter: .unreadIsOn)
     }
     
+    @State var selectedFilter: FilterType
+    
     var body: some View {
         Section(header: Text("Smart Feeds").font(.system(size: 18, weight: .medium, design: .rounded)).textCase(nil).foregroundColor(Color("text")).padding(.leading)) {
+            
+            if selectedFilter == .all {
                 HStack {
                     ZStack{
                         NavigationLink(destination: allArticlesView) {
@@ -226,7 +230,11 @@ struct SmartFeedsSectionHomeView: View {
                         self.articles.fecthResults()
                     }
                 }//.listRowBackground(Color("accent"))
-
+            } else {
+                self.hidden(true)
+            }
+            
+            if selectedFilter == .unreadIsOn {
                 HStack {
                     ZStack{
                         NavigationLink(destination: unreadListView) {
@@ -258,7 +266,11 @@ struct SmartFeedsSectionHomeView: View {
                         self.unread.fecthResults()
                     }
                 }//.listRowBackground(Color("accent"))
-
+            } else {
+                self.hidden(true)
+            }
+            
+            if selectedFilter == .isArchive {
                 HStack {
                     ZStack{
                     NavigationLink(destination: archiveListView) {
@@ -291,7 +303,12 @@ struct SmartFeedsSectionHomeView: View {
                     .onAppear {
                         self.archiveListViewModel.fecthResults()
                     }
-                }//.listRowBackground(Color("accent"))
+                }
+                
+                //.listRowBackground(Color("accent"))
+            } else {
+                self.hidden(true)
+            }
 
         }.listStyle(InsetGroupedListStyle())
         
@@ -306,7 +323,7 @@ struct SmartFeedsSectionHomeView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             List {
-                SmartFeedsSectionHomeView(rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), articles: AllArticles(dataSource: DataSourceService.current.rssItem), unread: Unread(dataSource: DataSourceService.current.rssItem))
+                SmartFeedsSectionHomeView(rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), articles: AllArticles(dataSource: DataSourceService.current.rssItem), unread: Unread(dataSource: DataSourceService.current.rssItem), selectedFilter: .all)
         
                     .environmentObject(DataSourceService.current.rss)
                     .environmentObject(DataSourceService.current.rssItem)
