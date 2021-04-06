@@ -36,8 +36,8 @@ struct SelectedFilterView: View {
     var selectedFilter: FilterType
     @StateObject var rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
     @StateObject var archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
-    @ObservedObject var articles = AllArticles(dataSource: DataSourceService.current.rssItem)
-    @ObservedObject var unread = Unread(dataSource: DataSourceService.current.rssItem)
+    @StateObject var articles = AllArticles(dataSource: DataSourceService.current.rssItem)
+    @StateObject var unread = Unread(dataSource: DataSourceService.current.rssItem)
     @StateObject var viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     
     private var allArticlesView: some View {
@@ -74,7 +74,7 @@ struct SelectedFilterView: View {
     var body: some View {
         switch selectedFilter {
         case .all:
-            if selectedFilter == .all {
+//            if selectedFilter == .all {
                 HStack {
                     ZStack{
                         NavigationLink(destination: allArticlesView) {
@@ -106,7 +106,7 @@ struct SelectedFilterView: View {
                         self.articles.fecthResults()
                     }
                 }//.listRowBackground(Color("accent"))
-            }
+//            }
 //            allArticlesView
         
             HStack {
