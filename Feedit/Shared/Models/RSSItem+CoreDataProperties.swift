@@ -62,14 +62,13 @@ extension RSSItem {
         return item
     }
     
-    static func requestObjects(rssUUID: UUID, start: Int = 0, limit: Int = 10000) -> NSFetchRequest<RSSItem> {
+    static func requestObjects(rssUUID: UUID, start: Int = 0) -> NSFetchRequest<RSSItem> {
         let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
         let predicate = NSPredicate(format: "rssUUID = %@", argumentArray: [rssUUID])
         request.predicate = predicate
         request.sortDescriptors = [.init(key: #keyPath(RSSItem.createTime), ascending: false)]
 
         request.fetchOffset = start
-        request.fetchLimit = limit
         return request
     }
     static func requestCountObjects(start: Int = 0, limit: Int = 5000) -> NSFetchRequest<RSSItem> {

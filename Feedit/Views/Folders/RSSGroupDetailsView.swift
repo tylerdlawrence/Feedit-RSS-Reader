@@ -55,7 +55,7 @@ struct RSSGroupDetailsView: View {
     }
     private func destinationView(rss: RSS) -> some View {
         let item = RSSItem()
-        return RSSFeedListView(rss: rss, viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), rssItem: item, selectedFilter: .all).environmentObject(DataSourceService.current.rss)
+        return RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), rssItem: item, selectedFilter: .all).environmentObject(DataSourceService.current.rss)
     }
 }
 

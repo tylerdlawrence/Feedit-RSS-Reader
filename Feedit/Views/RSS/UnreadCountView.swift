@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct UnreadCountView: View {
-    
+    @Environment(\.managedObjectContext) private var context
+    @EnvironmentObject var rssDataSource: RSSDataSource
     var count: Int
     
     var body: some View {

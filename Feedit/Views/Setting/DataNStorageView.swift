@@ -33,43 +33,43 @@ struct DataNStorageView: View {
                     .frame(height: 120)
                 Spacer()
                 }
-                VStack(spacing: 10){
-                    HStack{
-                        VStack(alignment: .leading){
-                            Text("All Articles").fontWeight(.bold)
-                            Text("1840").fontWeight(.bold).font(.system(size: 18))
-                        }
-                        Spacer()
-                        Image(systemName: "archivebox.fill").font(.system(size: 24))
-                    }.padding()
-                    .frame(width: (UIScreen.main.bounds.width - 30) / 1)
-                    .background(Color.gray)
-                    .cornerRadius(15)
-                    
-                    HStack{
-                        VStack(alignment: .leading){
-                            Text("Unread").fontWeight(.bold)
-                            Text("228").fontWeight(.bold).font(.system(size: 18))
-                        }
-                        Spacer()
-                        Image(systemName: "circle.fill").font(.system(size: 24))
-                    }.padding()
-                    .frame(width: (UIScreen.main.bounds.width - 30) / 1)
-                    .background(Color.blue)
-                    .cornerRadius(15)
-                    
-                    HStack{
-                       VStack(alignment: .leading){
-                            Text("Starred").fontWeight(.bold)
-                            Text("10").fontWeight(.bold).font(.system(size: 18))
-                        }
-                        Spacer()
-                        Image(systemName: "star.fill").font(.system(size: 24))
-                    }.padding()
-                    .frame(width: (UIScreen.main.bounds.width - 30) / 1)
-                    .background(Color.yellow)
-                    .cornerRadius(15)
-                }.foregroundColor(.white)
+//                VStack(spacing: 10){
+//                    HStack{
+//                        VStack(alignment: .leading){
+//                            Text("All Articles").fontWeight(.bold)
+//                            Text("1840").fontWeight(.bold).font(.system(size: 18))
+//                        }
+//                        Spacer()
+//                        Image(systemName: "archivebox.fill").font(.system(size: 24))
+//                    }.padding()
+//                    .frame(width: (UIScreen.main.bounds.width - 30) / 1)
+//                    .background(Color.gray)
+//                    .cornerRadius(15)
+//
+//                    HStack{
+//                        VStack(alignment: .leading){
+//                            Text("Unread").fontWeight(.bold)
+//                            Text("228").fontWeight(.bold).font(.system(size: 18))
+//                        }
+//                        Spacer()
+//                        Image(systemName: "circle.fill").font(.system(size: 24))
+//                    }.padding()
+//                    .frame(width: (UIScreen.main.bounds.width - 30) / 1)
+//                    .background(Color.blue)
+//                    .cornerRadius(15)
+//
+//                    HStack{
+//                       VStack(alignment: .leading){
+//                            Text("Starred").fontWeight(.bold)
+//                            Text("10").fontWeight(.bold).font(.system(size: 18))
+//                        }
+//                        Spacer()
+//                        Image(systemName: "star.fill").font(.system(size: 24))
+//                    }.padding()
+//                    .frame(width: (UIScreen.main.bounds.width - 30) / 1)
+//                    .background(Color.yellow)
+//                    .cornerRadius(15)
+//                }.foregroundColor(.white)
                 
                 .navigationBarTitle("Archive")
                 .padding([.top, .horizontal])

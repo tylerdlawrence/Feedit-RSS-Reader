@@ -39,7 +39,8 @@ struct HomeView: View {
         case star
     }
     
-    @ObservedObject var rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
+    let rss = RSS()
+    @StateObject var rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
     @StateObject var archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
     
     @EnvironmentObject private var persistence: Persistence
@@ -58,7 +59,7 @@ struct HomeView: View {
     @State private var selectedFeatureItem = FeaureItem.add
     @State var addGroupIsPresented = false
     @State private var selectedCells: Set<RSS> = []
-    var rss = RSS()
+    
     
     private var archiveButton: some View {
         Button(action: {
@@ -108,7 +109,6 @@ struct HomeView: View {
                 ForEach(FilterType.allCases, id: \.self) {
                     Text($0.rawValue)
                 }
-//                SelectedFilterView(selectedFilter: selectedFilter)
             }).pickerStyle(SegmentedPickerStyle()).frame(width: 180, height: 20).listRowBackground(Color("accent"))
             Spacer()
             Menu {
@@ -206,6 +206,7 @@ struct HomeView: View {
             ScrollViewReader { scrollViewProxy in
                 ZStack {
                     List(selection: $selectedCells) {
+
 //                        SmartFeedsHomeView(rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), articles: AllArticles(dataSource: DataSourceService.current.rssItem), unread: Unread(dataSource: DataSourceService.current.rssItem))
                         DisclosureGroup(
                             isExpanded: $revealSmartFilters,
@@ -361,13 +362,6 @@ struct HomeView_Previews: PreviewProvider {
     }
 }
 #endif
-
-//extension EditMode {
-//
-//    mutating func toggle() {
-//        self = self == .active ? .inactive : .active
-//    }
-//}
 
 extension View {
     

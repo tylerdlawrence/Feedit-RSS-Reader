@@ -107,9 +107,11 @@ struct RSSItemRow: View {
             VStack(alignment: .leading) {
                 HStack(alignment: .top) {
                 VStack(alignment: .center) {
-//                    ImageView(withURL: rssSource.image)
-//                        .frame(width:25, height:25)
-//                        .cornerRadius(3.0)
+//                    KFImage(URL(string: rssItem.urlToImage ?? ""))
+//                        .renderingMode(.original)
+//                        .resizable()
+//                        .scaledToFill()
+//                        .frame(width: 60, height: 60)
                     
                     if !rssItem.isRead {
                         Text("")
@@ -200,7 +202,6 @@ struct RSSItemRow: View {
 //                            Text(self.rssSource.title).font(.system(size: 11, weight: .medium, design: .rounded))
 //                                .textCase(.uppercase)
 //                                .foregroundColor(.gray)
-                            
                             Text(rssItem.author).font(.system(size: 11, weight: .medium, design: .rounded))
                                 .textCase(.uppercase)
                                 .foregroundColor(.gray)

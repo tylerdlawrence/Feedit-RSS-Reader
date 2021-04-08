@@ -13,59 +13,111 @@ import Combine
 import Foundation
 import os.log
 
+struct RSSIndexListView: View {
+    
+    @EnvironmentObject var rssDataSource: RSSDataSource
+    @Environment(\.managedObjectContext) private var viewContext
+    @StateObject var viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+    
+    var rss = RSS()
+    
+    var body: some View {
+//        List(0..<viewModel.items.count,id:\.self) { index in
+        List(0..<viewModel.items.count,id:\.self) { index in
+            ZStack {
+                NavigationLink(destination: NavigationLazyView(self.destinationView(rss: rss)).environmentObject(DataSourceService.current.rss)
+                          
+                ) {
+                    EmptyView()
+                }
+                .opacity(0.0)
+                .buttonStyle(PlainButtonStyle())
+                
+                HStack {
+                    RSSRow(viewModel: viewModel, rss: rss).environmentObject(DataSourceService.current.rss)
+                    Spacer()
+                    Text("\(viewModel.items[index].itemCount)")
+                }
+            }
+            .onAppear {
+                self.viewModel.fecthResults()
+            }
+        }
+    }
+    private func destinationView(rss: RSS) -> some View {
+        let item = RSSItem()
+        return RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), rssItem: item, selectedFilter: .all)
+            .environmentObject(DataSourceService.current.rss)
+    }
+}
+
+struct RSSIndexListView_Previews: PreviewProvider {
+    static var previews: some View {
+        NavigationView {
+            RSSIndexListView()
+                .environmentObject(DataSourceService.current.rss)
+                .environmentObject(DataSourceService.current.rssItem)
+                .environment(\.managedObjectContext, Persistence.current.context)
+                .preferredColorScheme(.dark)
+        }
+    }
+}
+
 struct RSSListView: View {
     @EnvironmentObject var rssDataSource: RSSDataSource
     @Environment(\.managedObjectContext) private var viewContext
     @StateObject var viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     @State private var revealFeedsDisclosureGroup = false
-    
-//    @Binding var count: Int
-    
+        
     var body: some View {
-        DisclosureGroup(
-            isExpanded: $revealFeedsDisclosureGroup,
-            content: {
-            ForEach(viewModel.items, id: \.self) { rss in
-                ZStack {
-                    NavigationLink(destination: NavigationLazyView(self.destinationView(rss: rss)).environmentObject(DataSourceService.current.rss)
-                              
-                    ) {
-                        EmptyView()
+        List(0..<viewModel.items.count,id:\.self) { index in
+            DisclosureGroup(
+                isExpanded: $revealFeedsDisclosureGroup,
+                content: {
+                ForEach(viewModel.items, id: \.self) { rss in
+                    ZStack {
+                        NavigationLink(destination: NavigationLazyView(self.destinationView(rss: rss)).environmentObject(DataSourceService.current.rss)
+                                  
+                        ) {
+                            EmptyView()
+                        }
+                        .opacity(0.0)
+                        .buttonStyle(PlainButtonStyle())
+                        
+                        HStack {
+                            RSSRow(viewModel: viewModel, rss: rss).environmentObject(DataSourceService.current.rss)
+//                            Spacer()
+//                            Text("\(viewModel.items[index].itemCount)")
+                        }
                     }
-                    .opacity(0.0)
-                    .buttonStyle(PlainButtonStyle())
-                    
-                    HStack {
-                        RSSRow(viewModel: viewModel, rss: rss).environmentObject(DataSourceService.current.rss)
-                    }
+                }.onDelete(perform: delete)
+                .onAppear {
+                    self.viewModel.fecthResults()
                 }
-            }.onDelete(perform: delete)
-            .onAppear {
-                self.viewModel.fecthResults()
-            }
-            .listRowBackground(Color("accent"))
-            .environmentObject(DataSourceService.current.rss)
-            .environmentObject(DataSourceService.current.rssItem)
-            .environment(\.managedObjectContext, Persistence.current.context)
-                },
-                label: {
-                    HStack {
-                        Text("Feeds")
-                            .font(.system(size: 14, weight: .regular, design: .rounded)).textCase(.uppercase)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .contentShape(Rectangle())
-                            .onTapGesture {
-                                withAnimation {
-                                    self.revealFeedsDisclosureGroup.toggle()
+                .listRowBackground(Color("accent"))
+                .environmentObject(DataSourceService.current.rss)
+                .environmentObject(DataSourceService.current.rssItem)
+                .environment(\.managedObjectContext, Persistence.current.context)
+                    },
+                    label: {
+                        HStack {
+                            Text("Feeds")
+                                .font(.system(size: 14, weight: .regular, design: .rounded)).textCase(.uppercase)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .contentShape(Rectangle())
+                                .onTapGesture {
+                                    withAnimation {
+                                        self.revealFeedsDisclosureGroup.toggle()
+                                    }
                                 }
-                            }
-                    }.frame(maxWidth: .infinity)
-                })
+                        }.frame(maxWidth: .infinity)
+                    })
 //                .listRowBackground(Color("darkerAccent"))
             .accentColor(Color("tab"))
             .onAppear {
                 self.viewModel.fecthResults()
             }
+        }
     }
     private func delete(offsets: IndexSet) {
         withAnimation {
@@ -83,7 +135,7 @@ struct RSSListView: View {
     }
     private func destinationView(rss: RSS) -> some View {
         let item = RSSItem()
-        return RSSFeedListView(rss: rss, viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), rssItem: item, selectedFilter: .all)
+        return RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), rssItem: item, selectedFilter: .all)
             .environmentObject(DataSourceService.current.rss)
     }
 }

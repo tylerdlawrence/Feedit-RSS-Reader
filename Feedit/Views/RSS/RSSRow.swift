@@ -78,12 +78,18 @@ struct RSSRow: View {
     @ObservedObject var unread = Unread(dataSource: DataSourceService.current.rssItem)
     @ObservedObject var rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
     
+    var filteredArticles: [RSSItem] {
+        return rssFeedViewModel.items.filter({ (item) -> Bool in
+            return !((self.rssFeedViewModel.isOn && !item.isArchive) || (self.rssFeedViewModel.unreadIsOn && item.isRead))
+        })
+    }
+    
     var rssSource: RSS {
         return self.rssFeedViewModel.rss
     }
     
     @State private var count: Int = 0
-   
+    
 //    private var urlButton: some View{
 //        Button("") {
 //            openURL(URL(string: (rssSource.rssURL?.host!)!)!)
@@ -180,17 +186,8 @@ struct RSSRow: View {
                         .foregroundColor(Color("text"))
                     Spacer()
                     
-//                    UnreadCountView(count: count)
+//                    UnreadCountView(count: filteredArticles.count)
 //                    Text("\(unread.items.count)")
-//                    Text("\(rss.title.count)")
-//                        .font(.caption)
-//                        .fontWeight(.bold)
-//                        .padding(.horizontal, 7)
-//                        .padding(.vertical, 1)
-//                        .background(Color.gray.opacity(0.5))
-//                        .opacity(0.4)
-//                        .foregroundColor(Color("text"))
-//                        .cornerRadius(8)
                 }
 //                .onAppear {
 //                    self.viewModel.fetchUnreadCount()
@@ -202,8 +199,8 @@ struct RSSRow: View {
                 .dismissSwipeCell()
                 .frame(height: 25)
                 .sheet(isPresented: $infoHaptic, content: { InfoView(rssGroup: rssGroup, rss: rss)})
-                .actionSheet(isPresented: $showAlert, content: {
-                            self.actionSheet })
+                .actionSheet(isPresented: $showAlert, content: { self.actionSheet })
+
 //                .sheet(isPresented: $showSheet, content: { Text("Hello world")})
 //                .alert(isPresented: $showSheet) {
 //                    Alert(
@@ -273,6 +270,7 @@ struct RSSRow: View {
                 }
                 
     }
+
 }
     
 //#if DEBUG

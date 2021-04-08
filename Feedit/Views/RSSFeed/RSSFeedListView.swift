@@ -31,12 +31,6 @@ struct UnreadCount: Equatable, Identifiable {
 }
 
 struct RSSFeedListView: View {
-   
-//    enum FilterType {
-//        case all, unreadIsOn, isArchive
-//    }
-
-//    let filter: FilterType
 
     var filterTitle: String {
         switch selectedFilter {
@@ -50,7 +44,6 @@ struct RSSFeedListView: View {
     }
     
     @State var selectedFilter: FilterType
-    
     var filteredArticles: [RSSItem] {
         return rssFeedViewModel.items.filter({ (item) -> Bool in
             return !((self.rssFeedViewModel.isOn && !item.isArchive) || (self.rssFeedViewModel.unreadIsOn && item.isRead))
@@ -71,9 +64,9 @@ struct RSSFeedListView: View {
     @State private var footer: String = "Refresh"
     @State var cancellables = Set<AnyCancellable>()
     
-    let rss:RSS
-    init(rss: RSS, viewModel: RSSFeedViewModel, rssItem: RSSItem, selectedFilter: FilterType) {
-        self.rss = rss
+    var rss = RSS()
+    init(viewModel: RSSFeedViewModel, rssItem: RSSItem, selectedFilter: FilterType) {
+//        self.rss = rss
         self.rssFeedViewModel = viewModel
         self.rssItem = rssItem
         self.selectedFilter = selectedFilter
@@ -87,22 +80,6 @@ struct RSSFeedListView: View {
     }
     
     private var navButtons: some View {
-//        HStack(alignment: .center, spacing: 24) {
-//            Toggle(isOn: $rssFeedViewModel.unreadIsOn) { Text("") }
-//                .toggleStyle(CheckboxStyle())
-////            Spacer()
-//
-//            Picker("", selection: $selectedFilter, content: {
-//                ForEach(FilterType.allCases, id: \.self) {
-//                    Text($0.rawValue)
-//                }
-////                SelectedFilterView(selectedFilter: selectedFilter)
-//            }).pickerStyle(SegmentedPickerStyle()).frame(width: 180, height: 20).listRowBackground(Color("accent"))
-////            Spacer()
-//
-//            Toggle(isOn: $rssFeedViewModel.isOn) { Text("") }
-//                .toggleStyle(StarStyle())
-//        }.padding(24)
         HStack(alignment: .center, spacing: 30) {
             Toggle(isOn: $rssFeedViewModel.unreadIsOn) { Text("") }
                 .toggleStyle(CheckboxStyle()).padding(.leading)

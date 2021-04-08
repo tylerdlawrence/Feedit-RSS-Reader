@@ -28,9 +28,7 @@ struct RSSFoldersDisclosureGroup: View {
     @EnvironmentObject var rssDataSource: RSSDataSource
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     
-    @ObservedObject var viewModel: RSSListViewModel
-//    @ObservedObject var feed: FeedObject
-//    let rss = RSS()
+    @StateObject var viewModel: RSSListViewModel
     
     @State var isExpanded = false
     @State private var expandFolders = true
@@ -40,120 +38,141 @@ struct RSSFoldersDisclosureGroup: View {
         })
     }
     
-    @ObservedObject var rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
+    @StateObject var rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
     var rssSource: RSS {
         return self.rssFeedViewModel.rss
     }
     
-    @FetchRequest(sortDescriptors: [])
-    private var rss: FetchedResults<RSS>
+//    @FetchRequest(sortDescriptors: [])
+//    private var rss: FetchedResults<RSS>
+    var rss = RSS()
     
-//    @State private var count: UnreadCount?
-//    @State private var unreadItemCount: Int = 0
-//    @Binding var unreadItemCount: Int
-        
-    var body: some View {
-       
-        
-//        Section(header: Text("Folders").font(.system(size: 18, weight: .regular, design: .rounded)).textCase(nil).foregroundColor(Color("text"))) {
-        DisclosureGroup(
-            isExpanded: $expandFolders,
-            content: {
-            ForEach(groups, id: \.id) { group in
-                DisclosureGroup {
-//                HStack {
-//                    VStack{
-//                        Image(systemName: isExpanded == true ? "chevron.down" : "chevron.right").font(.system(size: 16, weight: .semibold, design: .rounded))
-//                            .foregroundColor(Color.gray).opacity(0.9)
-//                    }
-//                    .animation(.easeOut(duration: 0.40))
-//                    .onTapGesture {
-//                        self.isExpanded.toggle()
-//                    }
-//                    .onReceive([self.isExpanded].publisher.first()) { (value) in
-//                            print("New value is: \(value)")
-//                    }
-//
-//                    Text("\(group.name ?? "Untitled")")
-//                    Spacer()
-//                    UnreadCountView(count: group.itemCount)
-//                        .contentShape(Rectangle())
-//                    }
+    private var listView: some View {
+        List(0..<viewModel.items.count,id:\.self) { index in
+            ZStack {
+                NavigationLink(destination: NavigationLazyView(self.destinationView(rss: rss)).environmentObject(DataSourceService.current.rss)
+                          
+                ) {
+                    EmptyView()
+                }
+                .opacity(0.0)
+                .buttonStyle(PlainButtonStyle())
                 
-//                if isExpanded == true {
-                    ForEach(viewModel.items, id: \.self) { rss in
-                        ZStack {
-                            NavigationLink(destination: NavigationLazyView(self.destinationView(rss: rss)).environmentObject(DataSourceService.current.rss)) {
-                                EmptyView()
-                            }
-                            .opacity(0.0)
-                            .buttonStyle(PlainButtonStyle())
-                            
-                            HStack {
-                                RSSRow(viewModel: viewModel, rss: rss)
-                                Spacer()
-//                                Text("\(feed.posts.filter { !$0.isRead }.count)")
-//                                if filteredArticles.filter { !$0.isRead }.count == 0 {
-//                                    Text("")
-//                                } else {
-//                                    UnreadCountView(count: filteredArticles.filter { !$0.isRead }.count)
-//                                }
-//                                if viewModel.unreadCount > 0 {
-//                                    UnreadCountView(count: viewModel.unreadCount)
-//                                }
-                                
-                            }
-                            
-                                                
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .contentShape(Rectangle())
-                        }.listRowBackground(Color("accent"))
-                    }.onDelete(perform: delete)
-                    .onMove(perform: move)
-                    //.onDelete { indexSet in
-//                        if let index = indexSet.first {
-//                            self.viewModel.delete(at: index)
-//                        }
-//                    }
-                } label: {
-                    HStack {
-                        if group.itemCount > 0 {
-                            UnreadCountView(count: Int(group.itemCount))
-                                .contentShape(Rectangle())
-                        }
-                        Text("\(group.name ?? "Untitled")")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .contentShape(Rectangle())
-                            .onTapGesture {
-                                withAnimation {
-                                    self.isExpanded.toggle()
-                                }
-                            }
-                        
-                    }
-                }.accentColor(Color.gray.opacity(0.7))
-                .listRowBackground(Color("accent"))
-            }.onDelete(perform: deleteObjects)
-//        }.accentColor(Color("tab"))
-        },
-        label: {
-            HStack {
-                Text("Folders")
-                    .font(.system(size: 18, weight: .regular, design: .rounded)).textCase(nil)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        withAnimation {
-                            self.expandFolders.toggle()
-                        }
-                    }
+                HStack {
+                    RSSRow(viewModel: viewModel, rss: rss).environmentObject(DataSourceService.current.rss)
+                        Spacer()
+                        Text("\(viewModel.items[index].itemCount)")
+                }
             }
-        })
-//            .listRowBackground(Color("accent")) // MARK: - CLEAR BACKGROUND
-        .listRowBackground(Color("darkerAccent")) // MARK: - DARK SHADE
-        .accentColor(Color("tab"))
-        .onAppear {
-            self.viewModel.fecthResults()
+        }
+    }
+    
+//    var aCount: Int {
+//        self.viewModel.items
+//            .filter { $0 == rss }
+//            .count
+//    }
+    
+    
+    var body: some View {
+//        Section(header: Text("Folders").font(.system(size: 18, weight: .regular, design: .rounded)).textCase(nil).foregroundColor(Color("text"))) {
+            DisclosureGroup(
+                isExpanded: $expandFolders,
+                content: {
+                ForEach(groups, id: \.id) { group in
+                    DisclosureGroup {
+    //                HStack {
+    //                    VStack{
+    //                        Image(systemName: isExpanded == true ? "chevron.down" : "chevron.right").font(.system(size: 16, weight: .semibold, design: .rounded))
+    //                            .foregroundColor(Color.gray).opacity(0.9)
+    //                    }
+    //                    .animation(.easeOut(duration: 0.40))
+    //                    .onTapGesture {
+    //                        self.isExpanded.toggle()
+    //                    }
+    //                    .onReceive([self.isExpanded].publisher.first()) { (value) in
+    //                            print("New value is: \(value)")
+    //                    }
+    //
+    //                    Text("\(group.name ?? "Untitled")")
+    //                    Spacer()
+    //                    UnreadCountView(count: group.itemCount)
+    //                        .contentShape(Rectangle())
+    //                    }
+                    
+    //                if isExpanded == true {
+//                        ForEach(0..<viewModel.items.count, id:\.self) { index, rss in
+                        ForEach(viewModel.items, id: \.objectID) { rss in
+                            ZStack {
+                                NavigationLink(destination: NavigationLazyView(self.destinationView(rss: rss)).environmentObject(DataSourceService.current.rss)) {
+                                    EmptyView()
+                                }
+                                .opacity(0.0)
+                                .buttonStyle(PlainButtonStyle())
+                                
+                                HStack {
+//                                    Text(self.viewModel.items[index].title)
+                                    RSSRow(viewModel: viewModel, rss: rss)
+                                    Spacer()
+                                    UnreadCountView(count: unread.items.count)
+                                        .onAppear {
+                                            unread.fecthResults()
+                                        }
+//                                    Text("\(viewModel.items[index].itemCount)")
+    //                                if filteredArticles.filter { !$0.isRead }.count == 0 {
+                                }
+                                
+                                                    
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .contentShape(Rectangle())
+                            }.listRowBackground(Color("accent"))
+                        }.onDelete(perform: delete)
+                        .onMove(perform: move)
+    //                }
+                        //.onDelete { indexSet in
+    //                        if let index = indexSet.first {
+    //                            self.viewModel.delete(at: index)
+    //                        }
+    //                    }
+                    } label: {
+                        HStack {
+                            if group.itemCount > 0 {
+                                UnreadCountView(count: Int(group.itemCount))
+                                    .contentShape(Rectangle())
+                            }
+                            Text("\(group.name ?? "Untitled")")
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .contentShape(Rectangle())
+                                .onTapGesture {
+                                    withAnimation {
+                                        self.isExpanded.toggle()
+                                    }
+                                }
+                            
+                        }
+                    }.accentColor(Color.gray.opacity(0.7))
+                    .listRowBackground(Color("accent"))
+                }.onDelete(perform: deleteObjects)
+    //        }.accentColor(Color("tab"))
+            },
+            label: {
+                HStack {
+                    Text("Folders")
+                        .font(.system(size: 18, weight: .regular, design: .rounded)).textCase(nil)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            withAnimation {
+                                self.expandFolders.toggle()
+                            }
+                        }
+                }
+            })
+    //            .listRowBackground(Color("accent")) // MARK: - CLEAR BACKGROUND
+            .listRowBackground(Color("darkerAccent")) // MARK: - DARK SHADE
+            .accentColor(Color("tab"))
+            .onAppear {
+                self.viewModel.fecthResults()
         }
     }
     
@@ -172,6 +191,7 @@ struct RSSFoldersDisclosureGroup: View {
     func move(from source: IndexSet, to destination: Int) {
         withAnimation {
             viewModel.move(from: source, to: destination)
+            saveContext()
         }
     }
     
@@ -191,7 +211,7 @@ struct RSSFoldersDisclosureGroup: View {
     }
     private func destinationView(rss: RSS) -> some View {
         let item = RSSItem()
-        return RSSFeedListView(rss: rss, viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), rssItem: item, selectedFilter: .all)
+        return RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), rssItem: item, selectedFilter: .all)
             .environmentObject(DataSourceService.current.rss)
     }
 }

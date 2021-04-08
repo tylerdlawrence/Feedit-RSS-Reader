@@ -39,11 +39,11 @@ class Unread: NSObject, ObservableObject {
         }
     }
     
-    func fetchUnreadCount(start: Int = 0, limit: Int = 1000) {
+    func fetchUnreadCount(start: Int = 0) {
         if start == 0 {
             items.removeAll()
         }
-        dataSource.performFetch(RSSItem.requestCountUnreadObjects(start: start))
+        dataSource.performFetch(RSSItem.requestObjects(rssUUID: UUID.init(), start: start))
         if let objects = dataSource.fetchedResult.fetchedObjects {
             items.append(contentsOf: objects)
         }

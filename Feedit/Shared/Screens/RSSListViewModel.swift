@@ -16,7 +16,6 @@ class RSSListViewModel: NSObject, ObservableObject{
     @Published var isOn = false
     @Published var unreadIsOn = false
     @Published private(set) var items: [RSS] = []
-//    @Published var count = Int()
     
     @Published var feeds: [FeedObject] = []
     @Published var shouldSelectFeedObject: FeedObject?
@@ -29,9 +28,20 @@ class RSSListViewModel: NSObject, ObservableObject{
     @Published var fetchContentType: ContentTimeType = .minute60
     @Published var totalUnreadPosts: Int = 0
     @Published var totalReadPostsToday: Int = 0
-//    private var subscriptions: Set<AnyCancellable> = []
     var cancellables = Set<AnyCancellable>()
     
+    @Published var loading: Bool = true
+    @Published var error: RSSError?
+    
+    
+    
+    var articles = RSSItem() { didSet { didChange.send() } }
+    var feed: RSS? { didSet { didChange.send() } }
+    let didChange = PassthroughSubject<Void, Never>()
+    
+    
+    
+    var subscriptions: Set<AnyCancellable> = []
     let dataSource: RSSDataSource
     var start = 0
     
@@ -88,17 +98,6 @@ class RSSListViewModel: NSObject, ObservableObject{
             items.append(contentsOf: objects)
         }
     }
-    
-    func fetchUnreadCount(start: Int = 0) {
-        self.start = items.count
-        fecthResults(start: start)
-        
-        dataSource.performFetch(RSS.requestUnreadObjects(start: start))
-        if let objects = dataSource.fetchedResult.fetchedObjects {
-            items.append(contentsOf: objects)
-        }
-    }
-    
 
     //MARK: context menu action for delete
     func delete(rss: RSS) {

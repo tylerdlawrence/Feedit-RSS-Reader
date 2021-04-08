@@ -161,5 +161,6 @@ extension ArchiveListView {
 struct ArchiveListView_Previews: PreviewProvider {
     static var previews: some View {
         ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem), selectedFilter: .isArchive)
+            .preferredColorScheme(.dark)
     }
 }

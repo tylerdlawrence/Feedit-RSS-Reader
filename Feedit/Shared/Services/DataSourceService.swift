@@ -7,6 +7,8 @@
 
 import UIKit
 import SwiftUI
+import Combine
+import CoreData
 
 class DataSourceService: NSObject {
     
@@ -14,4 +16,6 @@ class DataSourceService: NSObject {
     
     var rss = RSSDataSource(parentContext: Persistence.current.context)
     var rssItem = RSSItemDataSource(parentContext: Persistence.current.context)
+    
+
 }

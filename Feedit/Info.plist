@@ -11,13 +11,11 @@
 		<key>CFBundleAlternateIcons</key>
 		<dict>
 			<key>UIPrerenderedIcon</key>
-			<false/>
+			<true/>
 			<key>bot</key>
 			<dict>
-				<key>CFBundleIconFiles</key>
-				<array>
-					<string>bot</string>
-				</array>
+				<key>Item 0</key>
+				<string></string>
 			</dict>
 		</dict>
 		<key>CFBundlePrimaryIcon</key>
