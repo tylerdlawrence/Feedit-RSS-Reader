@@ -227,7 +227,6 @@ struct SelectedFilterView: View {
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 21, height: 21,alignment: .center)
                             .foregroundColor(Color("tab").opacity(0.9))
-//                            .foregroundColor(Color.yellow.opacity(0.8))
                         Text("Starred")
 
                             Spacer()
@@ -248,7 +247,6 @@ struct SelectedFilterView: View {
                     }
                 }
                 
-                //.listRowBackground(Color("accent"))
             }
         }
     }
@@ -266,100 +264,52 @@ struct FilterPicker_Previews: PreviewProvider {
 }
 
 struct FilterBar: View {
-    @Binding var selectedFilter: FilterType
-//    @Binding var showFilter: Bool
-//    @Binding var isOn: Bool
-    var markedAllPostsRead: (() -> Void)?
+    var selectedFilter: FilterType
+    @StateObject var rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
+    @StateObject var archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
+    @StateObject var articles = AllArticles(dataSource: DataSourceService.current.rssItem)
+    @StateObject var unread = Unread(dataSource: DataSourceService.current.rssItem)
+    @StateObject var viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+    
+    private var allArticlesView: some View {
+        let rss = RSS()
+        return AllArticlesView(articles: AllArticles(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), selectedFilter: .all)
+    }
+    private var archiveListView: some View {
+        ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: self.rssFeedViewModel, selectedFilter: .isArchive)
+    }
+    private var unreadListView: some View {
+        UnreadListView(unreads: Unread(dataSource: DataSourceService.current.rssItem), selectedFilter: .unreadIsOn)
+    }
+    
+    var filteredFeeds: [RSS] {
+        return viewModel.items.filter({ (rss) -> Bool in
+            return !((self.viewModel.isOn && !rss.isArchive) || (self.viewModel.unreadIsOn && rss.isRead))
+        })
+    }
+    
+    func filterFeeds(url: String?) -> RSS? {
+            guard let url = url else { return nil }
+        return viewModel.items.first(where: { $0.url.id == url })
+        }
+    
+    var filteredArticles: [RSSItem] {
+        return rssFeedViewModel.items.filter({ (item) -> Bool in
+            return !((self.rssFeedViewModel.isOn && !item.isArchive) || (self.rssFeedViewModel.unreadIsOn && item.isRead))
+        })
+    }
+    
+    let item = RSSItem()
+    let rss = RSS()
     
     var body: some View {
-        ZStack {
-//            Capsule()
-            RoundedRectangle(cornerRadius: 25.0)
-                .frame(width: 205, height: 35).foregroundColor(Color("text")).opacity(0.1)
-            HStack(spacing: 0) {
-                Spacer()
-                ZStack {
-                    if selectedFilter == .isArchive {
-                        Capsule()
-                            .frame(width: 85, height: 25)
-                            .opacity(0.5)
-                            .foregroundColor(Color.gray.opacity(0.5))
-
-                    HStack {
-                        Image(systemName: "star.fill").font(.system(size: 10, weight: .black))
-                        Text(FilterType.isArchive.rawValue)
-                            .textCase(.uppercase)
-                            .font(.system(size: 10, weight: .medium, design: .rounded))
-                            .foregroundColor(Color("text"))
-                        }
-                    } else {
-                        Image(systemName: "star.fill").font(.system(size: 10, weight: .black))
-                    }
-                }
-                .padding()
-                .onTapGesture {
-                    self.selectedFilter = .isArchive
-                }
-                Divider()
-        
-                ZStack {
-                    if selectedFilter == .unreadIsOn {
-                        Capsule()
-                            .frame(width: 85, height: 25)
-                            .opacity(0.5)
-                            .foregroundColor(Color.gray.opacity(0.5))
-                    HStack {
-                        Image(systemName: "circle.fill").font(.system(size: 10, weight: .black))
-                        Text(FilterType.unreadIsOn.rawValue)
-                            .textCase(.uppercase)
-                            .font(.system(size: 10, weight: .medium, design: .rounded))
-                                .foregroundColor(Color("text"))
-                        }
-                    } else {
-                        Image(systemName: "circle.fill").font(.system(size: 10, weight: .black)).padding()
-                    }
-                }//.padding()
-                .onTapGesture {
-                    self.selectedFilter = .unreadIsOn
-                }
-                Divider()
-                
-                ZStack {
-                    if selectedFilter == .all {
-                        Capsule()
-                            .frame(width: 65, height: 25)
-                            .opacity(0.5)
-                            .foregroundColor(Color.gray.opacity(0.5))
-
-
-                    HStack{
-                        Image(systemName: "text.justifyleft").font(.system(size: 10, weight: .black))
-                        Text(FilterType.all.rawValue)
-                            .textCase(.uppercase)
-                            .font(.system(size: 10, weight: .medium, design: .rounded))
-                            .foregroundColor(Color("text"))
-                        }
-                    } else {
-                        Image(systemName: "text.justifyleft").font(.system(size: 10, weight: .black))
-                        }
-                    }.padding()
-                    .onTapGesture {
-                        self.selectedFilter = .all
-                    }
-                    Spacer()
-            }
-            .frame(width: 125, height: 20)
+        switch selectedFilter {
+        case .all:
+            allArticlesView
+        case .unreadIsOn:
+            unreadListView
+        case .isArchive:
+            archiveListView
         }
     }
 }
-
-//struct FilterBar_Previews: PreviewProvider {
-//    static var previews: some View {
-//        VStack{
-//            Spacer()
-//            FilterBar(selectedFilter: .constant(.unreadIsOn),
-//                   isOn: .constant(true), markedAllPostsRead: nil)
-//                .preferredColorScheme(.dark)
-//        }
-//    }
-//}

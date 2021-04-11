@@ -290,25 +290,41 @@ struct HomeView: View {
 //        }
 //        .navigationViewStyle(StackNavigationViewStyle())
     }
+    
     private var editButton: some View {
-            Button(action: {
-                self.editMode.toggle()
-                self.selection = Set<UUID>()
-            }) {
-//                Text(self.editMode.title)
-                Image(systemName: "ellipsis.circle").font(.system(size: 20, weight: .medium, design: .rounded))
-            }
+        Button(action: {
+            self.editMode.toggle()
+            self.selection = Set<UUID>()
+        }) {
+            Image(systemName: "ellipsis.circle").font(.system(size: 20, weight: .medium, design: .rounded))
         }
+    }
+    
+    func move(from source: IndexSet, to destination: Int) {
+        withAnimation {
+            viewModel.move(from: source, to: destination)
+            saveContext()
+        }
+    }
+    
+    private func saveContext() {
+        do {
+            try Persistence.current.context.save()
+        } catch {
+            let error = error as NSError
+            fatalError("Unresolved Error: \(error)")
+        }
+    }
 
-        private func deleteItems() {
-            var items = viewModel.items
-            for _ in selection {
-                if let index = self.viewModel.items.lastIndex(where: { $0.id == rss.id }) {
-                    items.remove(at: index)
-                }
+    private func deleteItems() {
+        var items = viewModel.items
+        for _ in selection {
+            if let index = self.viewModel.items.lastIndex(where: { $0.id == rss.id }) {
+                items.remove(at: index)
             }
-            selection = Set<UUID>()
         }
+        selection = Set<UUID>()
+    }
     
     func delete(rss: RSS) {
         var items = viewModel.items

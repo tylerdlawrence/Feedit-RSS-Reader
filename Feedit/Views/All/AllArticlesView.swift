@@ -122,6 +122,10 @@ struct AllArticlesView: View {
                                             Image(systemName: "checkmark.circle").font(.system(size: 18)).foregroundColor(Color("tab"))
                                         }
                 )
+            }
+            Spacer()
+            navButtons
+                .frame(width: UIScreen.main.bounds.width, height: 49)
                 .toolbar{
                     ToolbarItem(placement: .principal) {
                         HStack{
@@ -159,10 +163,10 @@ struct AllArticlesView: View {
 //                        Toggle(isOn: $rssFeedViewModel.isOn) { Text("") }
 //                            .toggleStyle(StarStyle())
                     }
-                }
-            Spacer()
-            navButtons
-                .frame(width: UIScreen.main.bounds.width, height: 49, alignment: .leading)
+//                }
+//            Spacer()
+//            navButtons
+//                .frame(width: UIScreen.main.bounds.width, height: 49)
             }
         .onAppear {
             self.articles.fecthResults()

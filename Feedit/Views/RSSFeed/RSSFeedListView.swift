@@ -70,9 +70,7 @@ struct RSSFeedListView: View {
         self.rssItem = rssItem
         self.selectedFilter = selectedFilter
     }
-    
-//    var markAllRead: (() -> Void)?
-    
+        
     private var refreshButton: some View {
         Button(action: self.rssFeedViewModel.loadMore) {
             Image(systemName: "arrow.clockwise").font(.system(size: 16, weight: .bold)).foregroundColor(Color("tab")).padding()
@@ -88,13 +86,17 @@ struct RSSFeedListView: View {
                 ForEach(FilterType.allCases, id: \.self) {
                     Text($0.rawValue)
                 }
-            }).pickerStyle(SegmentedPickerStyle()).frame(width: 180, height: 20)
+            }).pickerStyle(SegmentedPickerStyle()).frame(width: 180, height: 20).hidden()
             .listRowBackground(Color("accent"))
+            
             Spacer(minLength: 0)
+            
             Toggle(isOn: $rssFeedViewModel.isOn) { Text("") }
                 .toggleStyle(StarStyle()).padding(.trailing)
         }
     }
+    
+    @State private var showMarkAllAsReadAlert = false
     
     var body: some View {
         ScrollViewReader { scrollViewProxy in
@@ -107,17 +109,19 @@ struct RSSFeedListView: View {
                             }
                             .opacity(0.0)
                             .buttonStyle(PlainButtonStyle())
-                            
+
                             HStack {
                                 RSSItemRow(rssItem: item, menu: self.contextmenuAction(_:), rssFeedViewModel: rssFeedViewModel)
                                     .contentShape(Rectangle())
                                     .onTapGesture {
                                         self.selectedItem = item
                                 }
-                                
+
                             }
+
                         }
                     }
+                    
                     .environmentObject(DataSourceService.current.rss)
                     .environmentObject(DataSourceService.current.rssItem)
                     .environment(\.managedObjectContext, Persistence.current.context)
@@ -129,6 +133,7 @@ struct RSSFeedListView: View {
                 .navigationBarTitle("", displayMode: .inline)
                 .navigationBarItems(trailing:
                                         Button(action: {
+                                            showMarkAllAsReadAlert.toggle()
                                             rssFeedViewModel.items.forEach { (item) in
                                                 item.isRead = true
                                                 rssFeedViewModel.items.removeAll()
@@ -138,11 +143,11 @@ struct RSSFeedListView: View {
                                             Image(systemName: "checkmark.circle").font(.system(size: 18)).foregroundColor(Color("tab"))
                                         }
                 )
-    //            .onAppear { }
+//            .onAppear { }
             }
             Spacer()
             navButtons
-                .frame(width: UIScreen.main.bounds.width, height: 49, alignment: .leading)
+                .frame(width: UIScreen.main.bounds.width, height: 49)
             .toolbar{
                 ToolbarItem(placement: .principal) {
                     HStack {

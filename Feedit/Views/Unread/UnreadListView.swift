@@ -43,7 +43,6 @@ struct UnreadListView: View {
         HStack(alignment: .center, spacing: 30) {
             Toggle(isOn: $rssFeedViewModel.unreadIsOn) { Text("") }
                 .toggleStyle(CheckboxStyle()).padding(.leading)
-//        }
             Spacer(minLength: 1)
             
             Picker("", selection: $selectedFilter, content: {
@@ -100,6 +99,10 @@ struct UnreadListView: View {
                                             Image(systemName: "checkmark.circle").font(.system(size: 18)).foregroundColor(Color("tab"))
                                         }
                 )
+            }
+            Spacer()
+            navButtons
+                .frame(width: UIScreen.main.bounds.width, height: 49)
                 .toolbar{
                     ToolbarItem(placement: .principal) {
                         HStack{
@@ -135,7 +138,6 @@ struct UnreadListView: View {
 //                            .toggleStyle(StarStyle())
 //                    }
                 }
-                
                 .sheet(item: $selectedItem, content: { item in
                     if UserEnvironment.current.useSafari {
                         SafariView(url: URL(string: item.url)!)
@@ -154,10 +156,10 @@ struct UnreadListView: View {
                 .onAppear {
                     self.unreads.fecthResults()
                 }
-            }
-            Spacer()
-            navButtons
-                .frame(width: UIScreen.main.bounds.width, height: 49, alignment: .leading)
+//            }
+//            Spacer()
+//            navButtons
+//                .frame(width: UIScreen.main.bounds.width, height: 49)
         }
     }
     private func saveContext() {

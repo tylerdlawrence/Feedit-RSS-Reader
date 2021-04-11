@@ -106,6 +106,10 @@ struct ArchiveListView: View {
                                             Image(systemName: "checkmark.circle").font(.system(size: 18)).foregroundColor(Color("tab"))
                                         }
                 )
+            }
+            Spacer()
+            navButtons
+                .frame(width: UIScreen.main.bounds.width, height: 49)
                 .add(self.searchBar)
                 .toolbar {
                     ToolbarItem(placement: .principal) {
@@ -154,10 +158,10 @@ struct ArchiveListView: View {
                         })
                     }
                 })
-            }
-            Spacer()
-            navButtons
-                .frame(width: UIScreen.main.bounds.width, height: 49, alignment: .leading)
+//            }
+//            Spacer()
+//            navButtons
+//                .frame(width: UIScreen.main.bounds.width, height: 49)
         }
         .onAppear {
             self.archiveListViewModel.fecthResults()
