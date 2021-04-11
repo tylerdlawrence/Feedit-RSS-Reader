@@ -132,12 +132,12 @@ struct RSSFeedListView: View {
                                             rssFeedViewModel.items.forEach { (item) in
                                                 item.isRead = true
                                                 rssFeedViewModel.items.removeAll()
+                                                saveContext()
                                             }
                                         }) {
                                             Image(systemName: "checkmark.circle").font(.system(size: 18)).foregroundColor(Color("tab"))
                                         }
                 )
-                    
     //            .onAppear { }
             }
             Spacer()
@@ -184,5 +184,13 @@ struct RSSFeedListView: View {
     }
     func contextmenuAction(_ item: RSSItem) {
         rssFeedViewModel.archiveOrCancel(item)
+    }
+    private func saveContext() {
+        do {
+            try Persistence.current.context.save()
+        } catch {
+            let error = error as NSError
+            fatalError("Unresolved Error: \(error)")
+        }
     }
 }

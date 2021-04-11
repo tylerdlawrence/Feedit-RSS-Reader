@@ -116,6 +116,7 @@ struct AllArticlesView: View {
                                             articles.items.forEach { (article) in
                                                 article.isRead = true
                                                 articles.items.removeAll()
+                                                saveContext()
                                             }
                                         }) {
                                             Image(systemName: "checkmark.circle").font(.system(size: 18)).foregroundColor(Color("tab"))
@@ -169,6 +170,14 @@ struct AllArticlesView: View {
     }
     func contextmenuAction(_ item: RSSItem) {
         articles.archiveOrCancel(item)
+    }
+    private func saveContext() {
+        do {
+            try Persistence.current.context.save()
+        } catch {
+            let error = error as NSError
+            fatalError("Unresolved Error: \(error)")
+        }
     }
 }
 

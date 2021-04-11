@@ -94,6 +94,7 @@ struct UnreadListView: View {
                                             unreads.items.forEach { (unread) in
                                                 unread.isRead = true
                                                 unreads.items.removeAll()
+                                                saveContext()
                                             }
                                         }) {
                                             Image(systemName: "checkmark.circle").font(.system(size: 18)).foregroundColor(Color("tab"))
@@ -157,6 +158,14 @@ struct UnreadListView: View {
             Spacer()
             navButtons
                 .frame(width: UIScreen.main.bounds.width, height: 49, alignment: .leading)
+        }
+    }
+    private func saveContext() {
+        do {
+            try Persistence.current.context.save()
+        } catch {
+            let error = error as NSError
+            fatalError("Unresolved Error: \(error)")
         }
     }
     func contextmenuAction(_ item: RSSItem) {
