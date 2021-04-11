@@ -66,12 +66,12 @@ struct RSSFeedListView: View {
     
     var rss = RSS()
     init(viewModel: RSSFeedViewModel, rssItem: RSSItem, selectedFilter: FilterType) {
-//        self.rss = rss
         self.rssFeedViewModel = viewModel
         self.rssItem = rssItem
         self.selectedFilter = selectedFilter
     }
-//    var markAllPostsRead: (() -> Void)?
+    
+//    var markAllRead: (() -> Void)?
     
     private var refreshButton: some View {
         Button(action: self.rssFeedViewModel.loadMore) {
@@ -83,19 +83,14 @@ struct RSSFeedListView: View {
         HStack(alignment: .center, spacing: 30) {
             Toggle(isOn: $rssFeedViewModel.unreadIsOn) { Text("") }
                 .toggleStyle(CheckboxStyle()).padding(.leading)
-//        }
             Spacer(minLength: 1)
-            
             Picker("", selection: $selectedFilter, content: {
                 ForEach(FilterType.allCases, id: \.self) {
                     Text($0.rawValue)
                 }
-//                SelectedFilterView(selectedFilter: selectedFilter)
             }).pickerStyle(SegmentedPickerStyle()).frame(width: 180, height: 20)
             .listRowBackground(Color("accent"))
-            
             Spacer(minLength: 0)
-            
             Toggle(isOn: $rssFeedViewModel.isOn) { Text("") }
                 .toggleStyle(StarStyle()).padding(.trailing)
         }
@@ -127,20 +122,30 @@ struct RSSFeedListView: View {
                     .environmentObject(DataSourceService.current.rssItem)
                     .environment(\.managedObjectContext, Persistence.current.context)
                 }
-            .animation(.easeInOut)
-            .add(self.searchBar)
-            .accentColor(Color("tab"))
-            .listRowBackground(Color("accent"))
-            .navigationBarTitle("", displayMode: .inline)
-//            .navigationBarItems(trailing: refreshButton)
-//            .onAppear { }
+                .animation(.easeInOut)
+                .add(self.searchBar)
+                .accentColor(Color("tab"))
+                .listRowBackground(Color("accent"))
+                .navigationBarTitle("", displayMode: .inline)
+                .navigationBarItems(trailing:
+                                        Button(action: {
+                                            rssFeedViewModel.items.forEach { (item) in
+                                                item.isRead = true
+                                                rssFeedViewModel.items.removeAll()
+                                            }
+                                        }) {
+                                            Image(systemName: "checkmark.circle").font(.system(size: 18)).foregroundColor(Color("tab"))
+                                        }
+                )
+                    
+    //            .onAppear { }
             }
             Spacer()
             navButtons
                 .frame(width: UIScreen.main.bounds.width, height: 49, alignment: .leading)
             .toolbar{
                 ToolbarItem(placement: .principal) {
-                    HStack{
+                    HStack {
                         KFImage(URL(string: rssSource.image))
                             .placeholder({
                                 Image("getInfo")
@@ -155,20 +160,7 @@ struct RSSFeedListView: View {
 
                     }
                 }
-
-//                ToolbarItem(placement: .bottomBar) {
-//                    Toggle(isOn: $rssFeedViewModel.unreadIsOn) { Text("") }
-//                        .toggleStyle(CheckboxStyle())
-//                }
-//                ToolbarItem(placement: .bottomBar) {
-//                    Spacer()
-//                }
-//                ToolbarItem(placement: .bottomBar) {
-//                    Toggle(isOn: $rssFeedViewModel.isOn) { Text("") }
-//                        .toggleStyle(StarStyle())
-//                }
             }
-//            .modifier(ToolbarModifier(rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem)))
             .sheet(item: $selectedItem, content: { item in
                 if UserEnvironment.current.useSafari {
                     SafariView(url: URL(string: item.url)!)

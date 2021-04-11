@@ -206,8 +206,6 @@ struct HomeView: View {
             ScrollViewReader { scrollViewProxy in
                 ZStack {
                     List(selection: $selectedCells) {
-
-//                        SmartFeedsHomeView(rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), archiveListViewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), articles: AllArticles(dataSource: DataSourceService.current.rssItem), unread: Unread(dataSource: DataSourceService.current.rssItem))
                         DisclosureGroup(
                             isExpanded: $revealSmartFilters,
                             content: {

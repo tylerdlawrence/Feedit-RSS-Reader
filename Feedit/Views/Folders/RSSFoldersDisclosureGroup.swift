@@ -8,8 +8,10 @@
 import SwiftUI
 import CoreData
 import Combine
+import FeedKit
 import Foundation
 import os.log
+import KingfisherSwiftUI
 
 struct RSSFoldersDisclosureGroup: View {
     static var fetchRequest: NSFetchRequest<RSSGroup> {
@@ -17,11 +19,16 @@ struct RSSFoldersDisclosureGroup: View {
         request.sortDescriptors = [NSSortDescriptor(keyPath: \RSSGroup.items, ascending: true)]
       return request
     }
-    
     @FetchRequest(
       fetchRequest: RSSGroupListView.fetchRequest,
       animation: .default)
     var groups: FetchedResults<RSSGroup>
+    
+    static var fetchRequestCount: NSFetchRequest<RSS> {
+      let request: NSFetchRequest<RSS> = RSS.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \RSS.itemCount, ascending: true)]
+      return request
+    }
     
     @ObservedObject var persistence: Persistence
     @ObservedObject var unread: Unread
@@ -42,30 +49,9 @@ struct RSSFoldersDisclosureGroup: View {
     var rssSource: RSS {
         return self.rssFeedViewModel.rss
     }
-    
-//    @FetchRequest(sortDescriptors: [])
-//    private var rss: FetchedResults<RSS>
+
     var rss = RSS()
-    
-    private var listView: some View {
-        List(0..<viewModel.items.count,id:\.self) { index in
-            ZStack {
-                NavigationLink(destination: NavigationLazyView(self.destinationView(rss: rss)).environmentObject(DataSourceService.current.rss)
-                          
-                ) {
-                    EmptyView()
-                }
-                .opacity(0.0)
-                .buttonStyle(PlainButtonStyle())
-                
-                HStack {
-                    RSSRow(viewModel: viewModel, rss: rss).environmentObject(DataSourceService.current.rss)
-                        Spacer()
-                        Text("\(viewModel.items[index].itemCount)")
-                }
-            }
-        }
-    }
+    var start = 0
     
 //    var aCount: Int {
 //        self.viewModel.items
@@ -73,36 +59,37 @@ struct RSSFoldersDisclosureGroup: View {
 //            .count
 //    }
     
+//    @ObservedObject var feed: FeedObject
     
     var body: some View {
 //        Section(header: Text("Folders").font(.system(size: 18, weight: .regular, design: .rounded)).textCase(nil).foregroundColor(Color("text"))) {
             DisclosureGroup(
                 isExpanded: $expandFolders,
                 content: {
-                ForEach(groups, id: \.id) { group in
+                    ForEach(groups, id: \.id) { group in
                     DisclosureGroup {
-    //                HStack {
-    //                    VStack{
-    //                        Image(systemName: isExpanded == true ? "chevron.down" : "chevron.right").font(.system(size: 16, weight: .semibold, design: .rounded))
-    //                            .foregroundColor(Color.gray).opacity(0.9)
-    //                    }
-    //                    .animation(.easeOut(duration: 0.40))
-    //                    .onTapGesture {
-    //                        self.isExpanded.toggle()
-    //                    }
-    //                    .onReceive([self.isExpanded].publisher.first()) { (value) in
-    //                            print("New value is: \(value)")
-    //                    }
-    //
-    //                    Text("\(group.name ?? "Untitled")")
-    //                    Spacer()
-    //                    UnreadCountView(count: group.itemCount)
-    //                        .contentShape(Rectangle())
-    //                    }
-                    
-    //                if isExpanded == true {
-//                        ForEach(0..<viewModel.items.count, id:\.self) { index, rss in
-                        ForEach(viewModel.items, id: \.objectID) { rss in
+//                HStack {
+//                    VStack{
+//                        Image(systemName: isExpanded == true ? "chevron.down" : "chevron.right").font(.system(size: 16, weight: .semibold, design: .rounded))
+//                            .foregroundColor(Color.gray).opacity(0.9)
+//                    }
+//                    .animation(.easeOut(duration: 0.40))
+//                    .onTapGesture {
+//                        self.isExpanded.toggle()
+//                    }
+//                    .onReceive([self.isExpanded].publisher.first()) { (value) in
+//                            print("New value is: \(value)")
+//                    }
+//
+//                    Text("\(group.name ?? "Untitled")")
+//                    Spacer()
+//                    UnreadCountView(count: group.itemCount)
+//                        .contentShape(Rectangle())
+//                    }
+                
+//                if isExpanded == true {
+//                   ForEach(0..<viewModel.items.count, id:\.self) { index, rss in
+                        ForEach(viewModel.items, id: \.uuid) { rss in
                             ZStack {
                                 NavigationLink(destination: NavigationLazyView(self.destinationView(rss: rss)).environmentObject(DataSourceService.current.rss)) {
                                     EmptyView()
@@ -111,29 +98,32 @@ struct RSSFoldersDisclosureGroup: View {
                                 .buttonStyle(PlainButtonStyle())
                                 
                                 HStack {
-//                                    Text(self.viewModel.items[index].title)
                                     RSSRow(viewModel: viewModel, rss: rss)
                                     Spacer()
+                                    
+//                                    Text("\(feed.articles.filter { !$0.isRead }.count)")
                                     UnreadCountView(count: unread.items.count)
                                         .onAppear {
                                             unread.fecthResults()
-                                        }
-//                                    Text("\(viewModel.items[index].itemCount)")
-    //                                if filteredArticles.filter { !$0.isRead }.count == 0 {
+                                    }
+                                    
+//                    Text("\(viewModel.items[index].itemCount)")
+//                    if filteredArticles.filter { !$0.isRead }.count == 0 {
+                                        .environmentObject(DataSourceService.current.rss)
+                                        .environmentObject(DataSourceService.current.rssItem)
+                                        .environment(\.managedObjectContext, Persistence.current.context)
                                 }
-                                
-                                                    
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .contentShape(Rectangle())
                             }.listRowBackground(Color("accent"))
                         }.onDelete(perform: delete)
                         .onMove(perform: move)
-    //                }
-                        //.onDelete { indexSet in
-    //                        if let index = indexSet.first {
-    //                            self.viewModel.delete(at: index)
-    //                        }
-    //                    }
+//                }
+//                    .onDelete { indexSet in
+//                        if let index = indexSet.first {
+//                            self.viewModel.delete(at: index)
+//                        }
+//                    }
                     } label: {
                         HStack {
                             if group.itemCount > 0 {
@@ -150,10 +140,12 @@ struct RSSFoldersDisclosureGroup: View {
                                 }
                             
                         }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .contentShape(Rectangle())
                     }.accentColor(Color.gray.opacity(0.7))
                     .listRowBackground(Color("accent"))
                 }.onDelete(perform: deleteObjects)
-    //        }.accentColor(Color("tab"))
+//        }.accentColor(Color("tab"))
             },
             label: {
                 HStack {
@@ -168,7 +160,7 @@ struct RSSFoldersDisclosureGroup: View {
                         }
                 }
             })
-    //            .listRowBackground(Color("accent")) // MARK: - CLEAR BACKGROUND
+//            .listRowBackground(Color("accent")) // MARK: - CLEAR BACKGROUND
             .listRowBackground(Color("darkerAccent")) // MARK: - DARK SHADE
             .accentColor(Color("tab"))
             .onAppear {
@@ -235,3 +227,5 @@ struct RSSFoldersDisclosureGroup_Previews: PreviewProvider {
     }
 }
 #endif
+
+//, feed: FeedObject.init(articles: [Post]())!

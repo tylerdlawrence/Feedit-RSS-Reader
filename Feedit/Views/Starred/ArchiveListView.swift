@@ -95,7 +95,17 @@ struct ArchiveListView: View {
                 
                 .listStyle(PlainListStyle())
                 .navigationBarTitle("", displayMode: .inline)
-                .navigationBarItems(trailing: refreshButton)
+//                .navigationBarItems(trailing: refreshButton)
+                .navigationBarItems(trailing:
+                                        Button(action: {
+                                            archiveListViewModel.items.forEach { (item) in
+                                                item.isRead = true
+                                                archiveListViewModel.items.removeAll()
+                                            }
+                                        }) {
+                                            Image(systemName: "checkmark.circle").font(.system(size: 18)).foregroundColor(Color("tab"))
+                                        }
+                )
                 .add(self.searchBar)
                 .toolbar {
                     ToolbarItem(placement: .principal) {

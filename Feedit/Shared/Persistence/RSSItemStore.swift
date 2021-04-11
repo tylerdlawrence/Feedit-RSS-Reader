@@ -101,13 +101,6 @@ class RSSItemStore: NSObject {
             try context.save()
         } catch { fatalError() }
     }
-    
-//    private func saveChanges() {
-//        guard persistenceManager.managedObjectContext.hasChanges else { return }
-//        do {
-//            try persistenceManager.managedObjectContext.save()
-//        } catch { fatalError() }
-//    }
 }
 
 extension RSSItemStore: NSFetchedResultsControllerDelegate {

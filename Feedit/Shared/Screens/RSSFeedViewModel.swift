@@ -44,7 +44,7 @@ class RSSFeedViewModel: NSObject, ObservableObject {
 //    @Published var selectedTimelineItemID: String? = nil    // Don't use directly.  Use selectedTimelineItemsPublisher
 //    @Published var listID = ""
 //    private var bag = Set<AnyCancellable>()
-        
+    
     @Published var isOn = false
     @Published var unreadIsOn = false
     @Published var items = [RSSItem]()
@@ -55,7 +55,7 @@ class RSSFeedViewModel: NSObject, ObservableObject {
 //    @Published var filterType = FilterType.unreadIsOn
 //    private var cancellable: AnyCancellable? = nil
 //    private var cancellable2: AnyCancellable? = nil
-    
+    @ObservedObject var store = RSSStore.instance
     
     var startIndex: Int { items.startIndex }
     var endIndex: Int { items.endIndex }
@@ -77,13 +77,14 @@ class RSSFeedViewModel: NSObject, ObservableObject {
 //                self.filteredArticles = newValue.0.posts.filter { newValue.1 == .unreadIsOn ? !$0.isRead : true }
 //            })
 //
+    
     init(rss: RSS, dataSource: RSSItemDataSource) {
         self.dataSource = dataSource
         self.rss = rss
         super.init()
     }
 
-    
+
     
     func archiveOrCancel(_ item: RSSItem) {
         let updatedItem = dataSource.readObject(item)
@@ -117,6 +118,17 @@ class RSSFeedViewModel: NSObject, ObservableObject {
             items.append(contentsOf: objects)
         }
     }
+    
+//    func markAllPostsRead(_ item: RSSItem) {
+//        item.title.forEach { (item) in
+//            items.removeAll()
+//        }
+//    }
+    
+//    func markAllPostsRead() {
+//        self.store.markAllPostsRead(item: self.item)
+//        shouldReload = true
+//    }
 
     func fetchRemoteRSSItems() {
         guard let url = URL(string: rss.url) else {
@@ -175,25 +187,24 @@ class RSSFeedViewModel: NSObject, ObservableObject {
     }
 }
 
-class FeedObject: Identifiable, ObservableObject {
+class FeedObject: Codable, Identifiable, ObservableObject {
     var id = UUID()
-    var url: URL
-    var posts: [Post] {
+//    var count: Int
+    var articles: [Post] = [] {
         didSet {
             objectWillChange.send()
         }
     }
 
 //    let feed = ""
-    var imageURL: URL?
+//    var imageURL: URL?
+//    var lastUpdateDate: Date
 
-    var lastUpdateDate: Date
-
-    init?(url: URL, posts: [Post]) {
+    init?(articles: [Post]) {
 //        self.feed = feed
-        self.url = url
-        lastUpdateDate = Date()
-        self.posts = posts
+//        self.count = count
+//        lastUpdateDate = Date()
+        self.articles = articles
     }
 }
 

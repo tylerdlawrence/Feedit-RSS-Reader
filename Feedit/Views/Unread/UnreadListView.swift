@@ -50,7 +50,6 @@ struct UnreadListView: View {
                 ForEach(FilterType.allCases, id: \.self) {
                     Text($0.rawValue)
                 }
-//                SelectedFilterView(selectedFilter: selectedFilter)
             }).pickerStyle(SegmentedPickerStyle()).frame(width: 180, height: 20)
             .listRowBackground(Color("accent"))
             
@@ -89,8 +88,17 @@ struct UnreadListView: View {
                 .accentColor(Color("tab"))
                 .listRowBackground(Color("accent"))
                 .navigationBarTitle("", displayMode: .inline)
-                .navigationBarItems(trailing: refreshButton)
-                
+//                .navigationBarItems(trailing: refreshButton)
+                .navigationBarItems(trailing:
+                                        Button(action: {
+                                            unreads.items.forEach { (unread) in
+                                                unread.isRead = true
+                                                unreads.items.removeAll()
+                                            }
+                                        }) {
+                                            Image(systemName: "checkmark.circle").font(.system(size: 18)).foregroundColor(Color("tab"))
+                                        }
+                )
                 .toolbar{
                     ToolbarItem(placement: .principal) {
                         HStack{

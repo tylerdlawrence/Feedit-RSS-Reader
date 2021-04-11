@@ -8,9 +8,11 @@
 import SwiftUI
 import Foundation
 import Combine
+import CoreData
 import UIKit
 
-class RSSListViewModel: NSObject, ObservableObject{
+class RSSListViewModel: NSObject, ObservableObject, NSFetchedResultsControllerDelegate {
+    
     @ObservedObject var store = RSSStore.instance
 
     @Published var isOn = false
@@ -33,7 +35,7 @@ class RSSListViewModel: NSObject, ObservableObject{
     @Published var loading: Bool = true
     @Published var error: RSSError?
     
-    
+
     
     var articles = RSSItem() { didSet { didChange.send() } }
     var feed: RSS? { didSet { didChange.send() } }
@@ -45,49 +47,84 @@ class RSSListViewModel: NSObject, ObservableObject{
     let dataSource: RSSDataSource
     var start = 0
     
-    var children: [RSS] = [RSS]()
-
     init(dataSource: RSSDataSource) {
         self.dataSource = dataSource
         super.init()
     }
     
+    private let persistence = Persistence.current
+    
+    private lazy var fetchedResultsController: NSFetchedResultsController<RSSItem> = {
+        let fetchRequest: NSFetchRequest<RSSItem> = RSSItem.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "createTime", ascending: false)]
+        
+        let fetechedResultsController = NSFetchedResultsController(
+            fetchRequest: fetchRequest,
+            managedObjectContext: persistence.context,
+            sectionNameKeyPath: nil,
+            cacheName: nil)
+        fetechedResultsController.delegate = self
+        return fetechedResultsController
+    }()
+    
+    public func fetchRSSItem(RSS item: RSS, start: Int) throws -> [RSSItem] {
+        guard let uuid = item.uuid else {
+            throw RSSError.invalidParameter
+        }
+        let fetchRequest: NSFetchRequest<RSSItem> = RSSItem.fetchRequest()
+        let predicate = NSPredicate(format: "rssUUID = %@", argumentArray: [uuid])
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "createTime", ascending: false)]
+        fetchRequest.predicate = predicate
+        fetchRequest.fetchOffset = start
+        do {
+            let rs = try fetchedResultsController.managedObjectContext.fetch(fetchRequest)
+            rs.forEach { item in
+                print("item created time = \(String(describing: item.itemCount))")
+            }
+            return rs
+        } catch let error {
+            throw error
+        }
+    }
+    
     func fetchInfo() {
         self.feeds = store.feeds
-            
+
             store.$feeds
                 .receive(on: DispatchQueue.main)
                 .sink(receiveValue: { (newValue) in
                     self.feeds = newValue
                 })
                 .store(in: &cancellables)
-            
-            Publishers.CombineLatest(store.$shouldSelectFeedURL, store.$shouldOpenSettings)
-                .receive(on: DispatchQueue.main)
-                .map { (newValue) -> (FeedObject?, Bool) in
-                    guard let url = newValue.0 else {
-                        return (nil, newValue.1)
-                    }
-                    return (self.feeds.first(where: {$0.url.absoluteString == url }), newValue.1)
-                }
-                .removeDuplicates(by: { (lhs, rhs) -> Bool in
-                    return lhs.0?.url.absoluteURL != rhs.0?.url.absoluteURL && lhs.1 != rhs.1
-                })
-                .sink(receiveValue: { (newValue) in
-                    self.shouldSelectFeedObject = newValue.0
-                    self.shouldSelectFeed = newValue.0 != nil
-                    self.shouldOpenSettings = newValue.1
-                    self.shouldPresentDetail = self.shouldSelectFeed || self.shouldOpenSettings
-                    print("present∂etail: \(self.shouldPresentDetail)")
-                    self.objectWillChange.send()
-                })
-                .store(in: &cancellables)
+
+//            Publishers.CombineLatest(store.$shouldSelectFeedURL, store.$shouldOpenSettings)
+//                .receive(on: DispatchQueue.main)
+//                .map { (newValue) -> (FeedObject?, Bool) in
+//                    guard let url = newValue.0 else {
+//                        return (nil, newValue.1)
+//                    }
+//                    return (self.feeds.first(where: {$0.url.absoluteString == url }), newValue.1)
+//                }
+//                .removeDuplicates(by: { (lhs, rhs) -> Bool in
+//                    return lhs.0?.url.absoluteURL != rhs.0?.url.absoluteURL && lhs.1 != rhs.1
+//                })
+//                .sink(receiveValue: { (newValue) in
+//                    self.shouldSelectFeedObject = newValue.0
+//                    self.shouldSelectFeed = newValue.0 != nil
+//                    self.shouldOpenSettings = newValue.1
+//                    self.shouldPresentDetail = self.shouldSelectFeed || self.shouldOpenSettings
+//                    print("present∂etail: \(self.shouldPresentDetail)")
+//                    self.objectWillChange.send()
+//                })
+//                .store(in: &cancellables)
         }
 
     func loadMore() {
         start = items.count
         fecthResults(start: start)
     }
+    
+    var rss = RSS()
 
     func fecthResults(start: Int = 0) {
         if start == 0 {

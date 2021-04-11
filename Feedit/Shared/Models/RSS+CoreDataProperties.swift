@@ -42,6 +42,8 @@ extension RSS {
     @NSManaged public var itemCount: Int64
     @NSManaged public var children: String
     
+    @NSManaged public var articles: NSSet?
+    
     public var rssURL: URL? {
         return URL(string: url)
     }

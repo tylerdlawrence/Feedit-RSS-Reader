@@ -110,8 +110,17 @@ struct AllArticlesView: View {
                 .accentColor(Color("tab"))
                 .listRowBackground(Color("accent"))
                 .navigationBarTitle("", displayMode: .inline)
-                .navigationBarItems(trailing: refreshButton)
-                            
+//                .navigationBarItems(trailing: refreshButton)
+                .navigationBarItems(trailing:
+                                        Button(action: {
+                                            articles.items.forEach { (article) in
+                                                article.isRead = true
+                                                articles.items.removeAll()
+                                            }
+                                        }) {
+                                            Image(systemName: "checkmark.circle").font(.system(size: 18)).foregroundColor(Color("tab"))
+                                        }
+                )
                 .toolbar{
                     ToolbarItem(placement: .principal) {
                         HStack{
