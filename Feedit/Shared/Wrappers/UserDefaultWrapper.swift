@@ -30,5 +30,5 @@ struct UserDefault<T> {
 }
 
 extension UserDefaults {
-    static let appGroup = UserDefaults(suiteName: "group.com.tylerdlawrence.feeditrssreader")!
+    static let appGroup = UserDefaults(suiteName: "group.com.tylerdlawrence.feedit.shared")!
 }

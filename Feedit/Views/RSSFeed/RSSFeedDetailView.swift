@@ -62,12 +62,12 @@ struct RSSFeedDetailView: View {
     private var trailingButtons: some View {
         HStack {
 //            DarkmModeSettingView(darkMode: $darkMode)
-            Button(action: actionSheet) {
+//            Button(action: actionSheet) {
                 Image(systemName: "square.and.arrow.up")
                     .imageScale(.medium)
                     .foregroundColor(Color("tab"))
                     .font(.system(size: 20, weight: .regular, design: .default))
-            }
+//            }
         }
     }
     
@@ -142,11 +142,11 @@ struct RSSFeedDetailView: View {
         Spacer()
         bottomButtons
     }
-    func actionSheet() {
-        guard let urlShare = URL(string: rssItem.url) else { return }
-           let activityVC = UIActivityViewController(activityItems: [urlShare], applicationActivities: nil)
-           UIApplication.shared.windows.first?.rootViewController?.present(activityVC, animated: true, completion: nil)
-       }
+//    func actionSheet() {
+//        guard let urlShare = URL(string: rssItem.url) else { return }
+//           let activityVC = UIActivityViewController(activityItems: [urlShare], applicationActivities: nil)
+//           UIApplication.shared.windows.first?.rootViewController?.present(activityVC, animated: true, completion: nil)
+//       }
 }
 
 #if DEBUG

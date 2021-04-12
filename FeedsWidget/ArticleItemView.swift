@@ -6,6 +6,9 @@
 //
 
 import SwiftUI
+import WidgetKit
+import CoreData
+import Foundation
 
 struct ArticleItemView: View {
     
@@ -48,7 +51,7 @@ struct ArticleItemView: View {
     
     func thumbnail(_ data: Data?) -> UIImage {
         if data == nil {
-            return UIImage(systemName: "globe")!
+            return UIImage(systemName: "getInfo")!
         } else {
             return UIImage(data: data!)!
         }

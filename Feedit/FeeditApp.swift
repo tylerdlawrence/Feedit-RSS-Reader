@@ -35,6 +35,9 @@ struct FeeditApp: App {
   var body: some Scene {
     WindowGroup {
         HomeView(articles: articles, unread: unread, rssItem: rssItem, viewModel: viewModel, selectedFilter: FilterType.all)
+            .onOpenURL { url in
+                print("Received deep link: \(url)")
+            }
             .environment(\.managedObjectContext, Persistence.current.context)
             .environmentObject(rssFeedViewModel).environmentObject(viewModel)
             .environmentObject(persistence)

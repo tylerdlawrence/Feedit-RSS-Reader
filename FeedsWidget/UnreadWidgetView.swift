@@ -32,7 +32,7 @@ struct UnreadWidgetView : View {
                     }
                 }
                 .frame(width: metrics.size.width * 0.15)
-                
+
                 Spacer()
                 
                 VStack(alignment:.leading, spacing: 0) {

@@ -51,16 +51,16 @@ struct SelectedFilterView: View {
         UnreadListView(unreads: Unread(dataSource: DataSourceService.current.rssItem), selectedFilter: .unreadIsOn)
     }
     
-    var filteredFeeds: [RSS] {
-        return viewModel.items.filter({ (rss) -> Bool in
-            return !((self.viewModel.isOn && !rss.isArchive) || (self.viewModel.unreadIsOn && rss.isRead))
-        })
-    }
+//    var filteredFeeds: [RSS] {
+//        return viewModel.items.filter({ (rss) -> Bool in
+//            return !((self.viewModel.isOn && !rss.isArchive) || (self.viewModel.unreadIsOn && rss.isRead))
+//        })
+//    }
     
-    func filterFeeds(url: String?) -> RSS? {
-            guard let url = url else { return nil }
-        return viewModel.items.first(where: { $0.url.id == url })
-        }
+//    func filterFeeds(url: String?) -> RSS? {
+//            guard let url = url else { return nil }
+//        return viewModel.items.first(where: { $0.url.id == url })
+//        }
     
     var filteredArticles: [RSSItem] {
         return rssFeedViewModel.items.filter({ (item) -> Bool in
@@ -74,40 +74,36 @@ struct SelectedFilterView: View {
     var body: some View {
         switch selectedFilter {
         case .all:
-//            if selectedFilter == .all {
-                HStack {
-                    ZStack{
-                        NavigationLink(destination: allArticlesView) {
-                            EmptyView()
-                        }
-                        .opacity(0.0)
-                        .buttonStyle(PlainButtonStyle())
-                    HStack{
-                        Image(systemName: "chart.bar.doc.horizontal")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 21, height: 21,alignment: .center)
-//                            .foregroundColor(Color.red.opacity(0.8))
-                            .foregroundColor(Color("tab").opacity(0.9))
-                        Text("All Articles")
-                        Spacer()
-                        Text("\(articles.items.count)")
-                            .font(.caption)
-                            .fontWeight(.bold)
-                            .padding(.horizontal, 7)
-                            .padding(.vertical, 1)
-                            .background(Color.gray.opacity(0.5))
-                            .opacity(0.4)
-                            .cornerRadius(8)
+            HStack {
+                ZStack{
+                    NavigationLink(destination: allArticlesView) {
+                        EmptyView()
+                    }
+                    .opacity(0.0)
+                    .buttonStyle(PlainButtonStyle())
+                HStack{
+                    Image(systemName: "chart.bar.doc.horizontal")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 21, height: 21,alignment: .center)
+                        .foregroundColor(Color("tab").opacity(0.9))
+                    Text("All Articles")
+                    Spacer()
+                    Text("\(articles.items.count)")
+                        .font(.caption)
+                        .fontWeight(.bold)
+                        .padding(.horizontal, 7)
+                        .padding(.vertical, 1)
+                        .background(Color.gray.opacity(0.5))
+                        .opacity(0.4)
+                        .cornerRadius(8)
 
-                        }.accentColor(Color("tab").opacity(0.9))
-                    }
-                    .onAppear {
-                        self.articles.fecthResults()
-                    }
-                }//.listRowBackground(Color("accent"))
-//            }
-//            allArticlesView
+                    }.accentColor(Color("tab").opacity(0.9))
+                }
+                .onAppear {
+                    self.articles.fecthResults()
+                }
+            }
         
             HStack {
                 ZStack{
@@ -139,7 +135,7 @@ struct SelectedFilterView: View {
                 .onAppear {
                     self.unread.fecthResults()
                 }
-            }//.listRowBackground(Color("accent"))
+            }
         
             HStack {
                 ZStack{
@@ -154,9 +150,7 @@ struct SelectedFilterView: View {
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 21, height: 21,alignment: .center)
                         .foregroundColor(Color("tab").opacity(0.9))
-//                            .foregroundColor(Color.yellow.opacity(0.8))
                     Text("Starred")
-
                         Spacer()
                     Text("\(archiveListViewModel.items.count)")
                         .font(.caption)
@@ -168,15 +162,14 @@ struct SelectedFilterView: View {
                         .cornerRadius(8)
                 }
             }
-                .accentColor(Color("tab").opacity(0.9))
-                .environment(\.managedObjectContext, Persistence.current.context)
-                .onAppear {
-                    self.archiveListViewModel.fecthResults()
-                }
+            .accentColor(Color("tab").opacity(0.9))
+            .environment(\.managedObjectContext, Persistence.current.context)
+            .onAppear {
+                self.archiveListViewModel.fecthResults()
             }
+        }
             
         case .unreadIsOn:
-//            unreadListView
             if selectedFilter == .unreadIsOn {
                 HStack {
                     ZStack{
@@ -208,11 +201,10 @@ struct SelectedFilterView: View {
                     .onAppear {
                         self.unread.fecthResults()
                     }
-                }//.listRowBackground(Color("accent"))
+                }
             }
 
         case .isArchive:
-//            archiveListView
             if selectedFilter == .isArchive {
                 HStack {
                     ZStack{
@@ -246,20 +238,28 @@ struct SelectedFilterView: View {
                         self.archiveListViewModel.fecthResults()
                     }
                 }
-                
             }
         }
     }
 }
 
-struct FilterPicker_Previews: PreviewProvider {
+struct SelectedFilterView_Previews: PreviewProvider {
+    @State static var selectedFilter: FilterType = .unreadIsOn
     static let rss = RSS()
     static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     static var previews: some View {
-        FilterPicker(selectedFilter: .unreadIsOn, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
-//            .previewLayout(.fixed(width: 250, height: 70))
-                .preferredColorScheme(.dark)
-        
+        NavigationView {
+            List {
+            Picker("Home", selection: $selectedFilter, content: {
+                ForEach(FilterType.allCases, id: \.self) {
+                    Text($0.rawValue)
+                }
+            }).pickerStyle(SegmentedPickerStyle()).frame(width: 180, height: 20).listRowBackground(Color("accent"))
+            
+                SelectedFilterView(selectedFilter: selectedFilter, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
+                    .preferredColorScheme(.dark)
+            }
+        }
     }
 }
 
@@ -282,16 +282,16 @@ struct FilterBar: View {
         UnreadListView(unreads: Unread(dataSource: DataSourceService.current.rssItem), selectedFilter: .unreadIsOn)
     }
     
-    var filteredFeeds: [RSS] {
-        return viewModel.items.filter({ (rss) -> Bool in
-            return !((self.viewModel.isOn && !rss.isArchive) || (self.viewModel.unreadIsOn && rss.isRead))
-        })
-    }
-    
-    func filterFeeds(url: String?) -> RSS? {
-            guard let url = url else { return nil }
-        return viewModel.items.first(where: { $0.url.id == url })
-        }
+//    var filteredFeeds: [RSS] {
+//        return viewModel.items.filter({ (rss) -> Bool in
+//            return !((self.viewModel.isOn && !rss.isArchive) || (self.viewModel.unreadIsOn && rss.isRead))
+//        })
+//    }
+//
+//    func filterFeeds(url: String?) -> RSS? {
+//            guard let url = url else { return nil }
+//        return viewModel.items.first(where: { $0.url.id == url })
+//        }
     
     var filteredArticles: [RSSItem] {
         return rssFeedViewModel.items.filter({ (item) -> Bool in

@@ -15,7 +15,7 @@ import UIKit
 import Combine
 import SwipeCell
 import FeedKit
-import SDWebImageSwiftUI
+//import SDWebImageSwiftUI
 import Intents
 
 struct RSSItemRow: View {
@@ -259,20 +259,20 @@ struct RSSItemRow: View {
                     }
 
 
-                    Button(action: actionSheet) {
-                        Text("Share Article")
-                        Image(systemName: "square.and.arrow.up")
-                    }
+//                    Button(action: actionSheet) {
+//                        Text("Share Article")
+//                        Image(systemName: "square.and.arrow.up")
+//                    }
                 }
             }
         }
     }
     
-    func actionSheet() {
-        guard let urlShare = URL(string: rssItem.url) else { return }
-           let activityVC = UIActivityViewController(activityItems: [urlShare], applicationActivities: nil)
-           UIApplication.shared.windows.first?.rootViewController?.present(activityVC, animated: true, completion: nil)
-       }
+//    func actionSheet() {
+//        guard let urlShare = URL(string: rssItem.url) else { return }
+//           let activityVC = UIActivityViewController(activityItems: [urlShare], applicationActivities: nil)
+//           UIApplication.shared.windows.first?.rootViewController?.present(activityVC, animated: true, completion: nil)
+//       }
 }
 
 extension Int {

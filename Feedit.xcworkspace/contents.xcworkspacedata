@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:Feedit/../FeedsWidgetExtension.entitlements">
+   </FileRef>
+   <FileRef
       location = "container:Feedit.xcodeproj">
    </FileRef>
 </Workspace>

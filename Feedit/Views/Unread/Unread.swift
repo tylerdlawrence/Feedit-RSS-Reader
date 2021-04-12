@@ -16,6 +16,9 @@ class Unread: NSObject, ObservableObject {
     @Published var isOn: Bool = false
     @Published var unreadIsOn: Bool = true
     
+//    public static let shared = Unread(dataSource: DataSourceService.current.rssItem)
+//    let unreadFeed = UnreadListView(unreads: Unread(dataSource: DataSourceService.current.rssItem), selectedFilter: .unreadIsOn)
+    
     let dataSource: RSSItemDataSource
     var start = 0
     

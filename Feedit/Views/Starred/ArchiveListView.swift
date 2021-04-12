@@ -10,7 +10,7 @@ import SwiftUI
 import UIKit
 import KingfisherSwiftUI
 import Intents
-import SwipeCell
+//import SwipeCell
 import MobileCoreServices
 
 struct ArchiveListView: View {

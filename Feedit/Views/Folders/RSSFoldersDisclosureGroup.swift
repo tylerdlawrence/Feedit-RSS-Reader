@@ -76,10 +76,10 @@ struct RSSFoldersDisclosureGroup: View {
                             HStack {
                                 RSSRow(viewModel: viewModel, rss: rss)
                                 Spacer()
-                                UnreadCountView(count: unread.items.count)
-                                    .onAppear {
-                                        unread.fecthResults()
-                                }
+//                                UnreadCountView(count: unread.items.count)
+//                                    .onAppear {
+//                                        unread.fecthResults()
+//                                }
                                     .environmentObject(DataSourceService.current.rss)
                                     .environmentObject(DataSourceService.current.rssItem)
                                     .environment(\.managedObjectContext, Persistence.current.context)

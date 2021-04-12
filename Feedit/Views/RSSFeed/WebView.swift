@@ -105,12 +105,12 @@ struct WebView: View {
                 }
                 .frame(width: 40, height: 50, alignment: .center)
                 
-                Button(action: actionSheet) {
-                    Image(systemName: "square.and.arrow.up")
-                        .imageScale(.medium)
-                        .foregroundColor(Color("tab"))
-                        .font(.system(size: 20, weight: .regular, design: .default))
-                }.frame(width: 50, height: 50, alignment: .center)
+//                Button(action: actionSheet) {
+//                    Image(systemName: "square.and.arrow.up")
+//                        .imageScale(.medium)
+//                        .foregroundColor(Color("tab"))
+//                        .font(.system(size: 20, weight: .regular, design: .default))
+//                }.frame(width: 50, height: 50, alignment: .center)
                 
                 Link(destination: URL(string: rssItem.url)!, label: {
                     HStack {
@@ -124,11 +124,11 @@ struct WebView: View {
             }
         }
     }
-    func actionSheet() {
-        guard let urlShare = URL(string: rssItem.url) else { return }
-           let activityVC = UIActivityViewController(activityItems: [urlShare], applicationActivities: nil)
-           UIApplication.shared.windows.first?.rootViewController?.present(activityVC, animated: true, completion: nil)
-       }
+//    func actionSheet() {
+//        guard let urlShare = URL(string: rssItem.url) else { return }
+//           let activityVC = UIActivityViewController(activityItems: [urlShare], applicationActivities: nil)
+//           UIApplication.shared.windows.first?.rootViewController?.present(activityVC, animated: true, completion: nil)
+//       }
 
 }
 

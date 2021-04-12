@@ -16,6 +16,7 @@ public extension URL {
 
     /// Returns a URL for the given app group and database pointing to the sqlite database.
     static func storeURL(for appGroup: String, databaseName: String) -> URL {
+        let appGroup = "group.com.tylerdlawrence.feedit.shared"
         guard let fileContainer = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroup) else {
             fatalError("Shared file container could not be created.")
         }
@@ -25,10 +26,11 @@ public extension URL {
 }
 
 class Persistence: ObservableObject {
-
+    static let shared = Persistence(version: 1)
+    
     static private(set) var current = Persistence(version: 1)
     private var subscriptions: Set<AnyCancellable> = []
-    let appTransactionAuthorName = "app"
+    let appTransactionAuthorName = "appGroup"
     private let isStoreLoaded = CurrentValueSubject<Bool, Error>(false)
     
     lazy var persistentContainer: NSPersistentContainer = {
@@ -93,7 +95,8 @@ class Persistence: ObservableObject {
      The file URL for persisting the persistent history token.
     */
     private lazy var tokenFile: URL = {
-        let url = NSPersistentContainer.defaultDirectoryURL().appendingPathComponent("CoreDataCloudKitDemo", isDirectory: true)
+        
+        let url = NSPersistentContainer.defaultDirectoryURL().appendingPathComponent("Persistence.sqlite", isDirectory: true)
         if !FileManager.default.fileExists(atPath: url.path) {
             do {
                 try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
@@ -113,13 +116,23 @@ class Persistence: ObservableObject {
         return queue
     }()
     
+    /// Returns a URL for the given app group and database pointing to the sqlite database.
+    static func storeURL(for appGroup: String, databaseName: String) -> URL {
+        let appGroup = "group.com.tylerdlawrence.feedit.shared"
+        guard let fileContainer = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroup) else {
+            fatalError("Shared file container could not be created.")
+        }
+
+        return fileContainer.appendingPathComponent("\(databaseName).sqlite")
+    }
+    
     init(directory: FileManager.SearchPathDirectory = .documentDirectory,
          domainMask: FileManager.SearchPathDomainMask = .userDomainMask,
          version vNumber: UInt) {
         let version = Version(vNumber)
         container = NSPersistentContainer(name: version.modelName)
-        if let url = version.dbFileURL(directory, domainMask) {
-            let store = NSPersistentStoreDescription(url: url)
+        if let storeURL = version.dbFileURL(directory, domainMask) {
+            let store = NSPersistentStoreDescription(url: storeURL)
             container.persistentStoreDescriptions = [store]
         }
         container.loadPersistentStores { [weak isStoreLoaded] (storeDescription, error) in
@@ -181,7 +194,7 @@ class Persistence: ObservableObject {
 
 extension NSPersistentContainer {
     func backgroundContext() -> NSManagedObjectContext {
-        let appTransactionAuthorName = "app"
+        let appTransactionAuthorName = "appGroup"
         let context = newBackgroundContext()
         context.transactionAuthor = appTransactionAuthorName
         return context
@@ -311,32 +324,6 @@ struct PersistenceController {
         })
     }
 }
-
-//extension Persistence {
-//  static var random: Persistence = {
-//    let controller = Persistence(version: 1)
-//    controller.context.perform {
-//      for i in 0..<1 {
-//        controller.makeRandomFolder(context: controller.context)      }
-//      for i in 0..<1 {
-//        controller.makeRandomFolder(context: controller.context)
-//      }
-//    }
-//    return controller
-//  }()
-//
-//    func makeRandomFolder(context: NSManagedObjectContext) -> RSSGroup {
-//        let group = RSSGroup()
-//        group.id = UUID()
-//        group.name = "Default Folder"
-//        group.items = [
-//            makeRandomFolder(context: context),
-//            makeRandomFolder(context: context),
-//            makeRandomFolder(context: context)
-//        ]
-//        return group
-//    }
-//}
 
 public class Settings: NSManagedObject, Identifiable {
     @NSManaged public var layoutValue: Double

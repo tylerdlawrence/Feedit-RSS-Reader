@@ -17,6 +17,9 @@ class AllArticles: NSObject, ObservableObject {
     @Published var isOn: Bool = false
     @Published var unreadIsOn: Bool = false
     
+//    public static let shared = AllArticles(dataSource: DataSourceService.current.rssItem)
+//    let todayFeed = AllArticlesView(articles: AllArticles(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem), selectedFilter: .all)
+    
     let dataSource: RSSItemDataSource
     var start = 0
     

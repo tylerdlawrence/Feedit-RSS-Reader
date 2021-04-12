@@ -9,12 +9,12 @@ import WidgetKit
 import SwiftUI
 
 struct StarredWidgetView : View {
-    
+
     @Environment(\.widgetFamily) var family: WidgetFamily
     @Environment(\.sizeCategory) var sizeCategory: ContentSizeCategory
-    
+
     var entry: Provider.Entry
-    
+
     var body: some View {
         if entry.widgetData.starredArticles.count == 0 {
             inboxZero
@@ -28,13 +28,13 @@ struct StarredWidgetView : View {
                             .padding(.vertical, 12)
                             .padding(.leading, 8)
                         Spacer()
-                    
+
                     }
                 }
                 .frame(width: metrics.size.width * 0.15)
-                
+
                 Spacer()
-                
+
                 VStack(alignment:.leading, spacing: 0) {
                     ForEach(0..<maxCount(), content: { i in
                         if i != 0 {
@@ -70,12 +70,12 @@ struct StarredWidgetView : View {
                     .padding(.horizontal)
                     .padding(.bottom, 6)
                 )
-            
+
             }.widgetURL(WidgetDeepLink.starred.url)
-            
+
         }
     }
-    
+
     var starredImage: some View {
         Image(systemName: "star.fill")
             .resizable()
@@ -83,19 +83,19 @@ struct StarredWidgetView : View {
             .cornerRadius(4)
             .foregroundColor(.yellow)
     }
-    
+
     func maxCount() -> Int {
         var reduceAccessibilityCount: Int = 0
         if SizeCategories().isSizeCategoryLarge(category: sizeCategory) {
             reduceAccessibilityCount = 1
         }
-        
+
         if family == .systemLarge {
             return entry.widgetData.currentStarredCount >= 7 ? (7 - reduceAccessibilityCount) : entry.widgetData.currentStarredCount
         }
         return entry.widgetData.currentStarredCount >= 3 ? (3 - reduceAccessibilityCount) : entry.widgetData.currentStarredCount
     }
-    
+
     var inboxZero: some View {
         VStack(alignment: .center) {
             Spacer()
@@ -104,12 +104,12 @@ struct StarredWidgetView : View {
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 30)
                 .foregroundColor(.yellow)
-                
+
 
             Text(L10n.starredWidgetNoItemsTitle)
                 .font(.headline)
                 .foregroundColor(.primary)
-            
+
             Text(L10n.starredWidgetNoItems)
                 .font(.caption)
                 .foregroundColor(.gray)
@@ -118,6 +118,6 @@ struct StarredWidgetView : View {
         .multilineTextAlignment(.center)
         .padding()
     }
-    
+
 }
 
