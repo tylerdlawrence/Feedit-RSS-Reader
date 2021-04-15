@@ -7,6 +7,7 @@
 import UIKit
 import SwiftUI
 import BackgroundTasks
+import WidgetKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
@@ -16,13 +17,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //    }
     @EnvironmentObject var iconSettings: IconNames
     @Environment(\.scenePhase) private var scenePhase
-    @Environment(\.managedObjectContext) private var context
+    @Environment(\.managedObjectContext) private var moc
 
-    let unread = Unread(dataSource: DataSourceService.current.rssItem)
-    let articles = AllArticles(dataSource: DataSourceService.current.rssItem)
-    let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-    let rss = RSS()
-    let rssItem = RSSItem()
+    @StateObject private var unread = Unread(dataSource: DataSourceService.current.rssItem)
+    @StateObject private var articles = AllArticles(dataSource: DataSourceService.current.rssItem)
+    @StateObject private var viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+    @StateObject private var rss = RSS()
+    @StateObject private var rssItem = RSSItem()
     
     private(set) static var shared: SceneDelegate?
     
@@ -30,8 +31,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let homeView =
             HomeView(articles: articles, unread: unread, rssItem: rssItem, viewModel: viewModel, selectedFilter: FilterType.all)
                 .environmentObject(iconSettings)
-                .environmentObject(DataSourceService.current.rssItem)
-                .environmentObject(Persistence.current)
+                .environmentObject(viewModel)
+                .environmentObject(articles)
+                .environmentObject(unread)
+                .environmentObject(rss)
+                .environmentObject(rssItem)
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
@@ -40,6 +44,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             self.window = window
             window.makeKeyAndVisible()
         }
+        if managedObjectContext.hasChanges {
+                do {
+                    try managedObjectContext.save()
+                    WidgetCenter.shared.reloadAllTimelines()
+                } catch let error {
+                    print("Error Save Oppty: \(error.localizedDescription)")
+                }
+
+            }
     }
 
 

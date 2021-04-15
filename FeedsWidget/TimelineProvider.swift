@@ -64,41 +64,12 @@ var persistentContainer: NSPersistentCloudKitContainer = {
 }()
 
 struct Provider: TimelineProvider {
-    @State var selectedFilter: FilterType = .all
-    @StateObject var rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
-    @StateObject var archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
     
-    private var allArticlesView: some View {
-        let rss = RSS()
-        return AllArticlesView(articles: AllArticles(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), selectedFilter: .all)
-    }
-
-    private var archiveListView: some View {
-        ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: self.rssFeedViewModel, selectedFilter: .isArchive)
-    }
-
-    private var unreadListView: some View {
-        UnreadListView(unreads: Unread(dataSource: DataSourceService.current.rssItem), selectedFilter: .unreadIsOn)
-    }
-    
-    @StateObject var articles = AllArticles(dataSource: DataSourceService.current.rssItem)
-    @StateObject var unread = Unread(dataSource: DataSourceService.current.rssItem)
-    
-    @EnvironmentObject var rssDataSource: RSSDataSource
-    @Environment(\.managedObjectContext) private var viewContext
-    @EnvironmentObject private var persistence: Persistence
-    
-    var filteredArticles: [RSSItem] {
-        return rssFeedViewModel.items.filter({ (item) -> Bool in
-            return !((self.rssFeedViewModel.isOn && !item.isArchive) || (self.rssFeedViewModel.unreadIsOn && item.isRead))
-        })
-    }
-    
-    var moc = managedObjectContext
-
-    init(context : NSManagedObjectContext) {
-        self.moc = context
-    }
+//    var moc = managedObjectContext
+//
+//    init(context : NSManagedObjectContext) {
+//        self.moc = context
+//    }
 
     func placeholder(in context: Context) -> WidgetTimelineEntry {
         let currentDate = Date()
@@ -131,7 +102,6 @@ struct Provider: TimelineProvider {
         let timeline = Timeline(
             entries:[entry],
             policy: .after(nextUpdateDate))
-
         completion(timeline)
     }
     
@@ -143,3 +113,4 @@ struct WidgetTimelineEntry: TimelineEntry {
     public let date: Date
     public let widgetData: WidgetData
 }
+

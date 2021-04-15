@@ -9,6 +9,11 @@ import SwiftUI
 import Foundation
 import CoreData
 import Combine
+import WidgetKit
+
+//extension Unread: Codable {
+//    
+//}
 
 class Unread: NSObject, ObservableObject {
     
@@ -32,7 +37,7 @@ class Unread: NSObject, ObservableObject {
         fecthResults(start: start)
     }
     
-    func fecthResults(start: Int = 0, limit: Int = 1000) {
+    func fecthResults(start: Int = 0) {
         if start == 0 {
             items.removeAll()
         }

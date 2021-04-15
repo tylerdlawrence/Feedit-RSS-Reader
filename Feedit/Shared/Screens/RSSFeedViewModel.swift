@@ -13,9 +13,10 @@ import UIKit
 import FeedKit
 import FaviconFinder
 import BackgroundTasks
+import WidgetKit
 
 extension RSSFeedViewModel: Identifiable {
-    
+
 }
 
 
@@ -35,6 +36,7 @@ class RSSFeedListItem: Identifiable, Codable {
 
 class RSSFeedViewModel: NSObject, ObservableObject {
     typealias Element = RSSItem
+    typealias Context = RSSItem
     private(set) lazy var rssFeedViewModel = RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem) //, feed: feed)
 //    var changeReadFilterSubject = PassthroughSubject<Bool, Never>()
 //    var selectNextUnreadSubject = PassthroughSubject<Bool, Never>()
@@ -63,6 +65,9 @@ class RSSFeedViewModel: NSObject, ObservableObject {
             return items[position]
     }
     
+    func placeholder(in with: Context) -> RSSFeedViewModel {
+        RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem)
+    }
     let dataSource: RSSItemDataSource
     let rss: RSS
     var start = 0

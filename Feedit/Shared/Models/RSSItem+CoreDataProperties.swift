@@ -10,6 +10,7 @@ import Foundation
 import CoreData
 
 extension RSSItem: Identifiable {
+    
 }
 
 extension RSSItem {
@@ -46,7 +47,7 @@ extension RSSItem {
         uuid = UUID()
     }
     
-    static func create(uuid: UUID, title: String = "", desc: String = "", author: String = "", url: String = "",
+    static func create(uuid: UUID, title: String, desc: String = "", author: String, url: String,
                        createTime: Date = Date(), progress: Double = 0, in context: NSManagedObjectContext) -> RSSItem {
         let item = RSSItem(context: context)
         item.rssUUID = uuid

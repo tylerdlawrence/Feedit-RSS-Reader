@@ -41,61 +41,66 @@ struct SmartFeedsView: View {
     
     @ViewBuilder
     var smallWidget: some View {
-        VStack(alignment: .leading) {
-            Spacer()
-            Link(destination: WidgetDeepLink.today.url, label: {
-                HStack {
-                    todayImage
-                    VStack(alignment: .leading, spacing: nil, content: {
-                      Text(formattedCount(articles.items.count))
-//                        Text("\(articles.items.count)")
-                            .font(Font.system(.caption, design: .rounded)).bold()
-                        Text(L10n.today)
-                            .font(.caption).textCase(.uppercase)
-                            .foregroundColor(Color("text"))
-                    }).foregroundColor(Color("tab"))
-                    Spacer()
-                }
-            })
-            
-            Link(destination: WidgetDeepLink.unread.url, label: {
-                HStack {
-                    unreadImage
-                    VStack(alignment: .leading, spacing: nil, content: {
-                        Text(formattedCount(unread.items.count))
-//                        Text("\(unread.items.count)")
-                            .font(Font.system(.caption, design: .rounded)).bold()
-                        Text(L10n.unread)
-                            .font(.caption).textCase(.uppercase).foregroundColor(Color("text"))
-                    }).foregroundColor(Color("tab"))
-                    Spacer()
-                }
-            })
-            
-            Link(destination: WidgetDeepLink.starred.url, label: {
-                HStack {
-                    starredImage
-                    VStack(alignment: .leading, spacing: nil, content: {
-                        Text(formattedCount(archiveListViewModel.items.count))
-//                        Text("\(archiveListViewModel.items.count)")
-                            .font(Font.system(.caption, design: .rounded)).bold()
-                            
-                        Text(L10n.starred)
-                            .font(.caption).textCase(.uppercase).foregroundColor(Color("text"))
-                    }).foregroundColor(Color("tab"))
-                    Spacer()
-                }
-            })
-            Spacer()
-        }.padding()
-        .onAppear {
-            self.articles.fecthResults()
-            self.unread.fecthResults()
-            self.archiveListViewModel.fecthResults()
+        ZStack(alignment: .topLeading) {
+            Image("launch")
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .opacity(0.4).padding([.top, .leading], -25)
+                .frame(width: 135, height: 135)
+            VStack(alignment: .leading) {
+                Spacer()
+                Link(destination: WidgetDeepLink.today.url, label: {
+                    HStack {
+                        todayImage
+                        VStack(alignment: .leading, spacing: nil, content: {
+                          Text(formattedCount(articles.items.count))
+    //                        Text("\(articles.items.count)")
+                                .font(Font.system(.caption, design: .rounded)).bold()
+                            Text(L10n.today)
+                                .font(.caption).textCase(.uppercase)
+                                .foregroundColor(Color("text"))
+                        }).foregroundColor(Color("tab"))
+                        Spacer()
+                    }
+                })
+                
+                Link(destination: WidgetDeepLink.unread.url, label: {
+                    HStack {
+                        unreadImage
+                        VStack(alignment: .leading, spacing: nil, content: {
+                            Text(formattedCount(unread.items.count))
+    //                        Text("\(unread.items.count)")
+                                .font(Font.system(.caption, design: .rounded)).bold()
+                            Text(L10n.unread)
+                                .font(.caption).textCase(.uppercase).foregroundColor(Color("text"))
+                        }).foregroundColor(Color("tab"))
+                        Spacer()
+                    }
+                })
+                
+                Link(destination: WidgetDeepLink.starred.url, label: {
+                    HStack {
+                        starredImage
+                        VStack(alignment: .leading, spacing: nil, content: {
+                            Text(formattedCount(archiveListViewModel.items.count))
+    //                        Text("\(archiveListViewModel.items.count)")
+                                .font(Font.system(.caption, design: .rounded)).bold()
+                                
+                            Text(L10n.starred)
+                                .font(.caption).textCase(.uppercase).foregroundColor(Color("text"))
+                        }).foregroundColor(Color("tab"))
+                        Spacer()
+                    }
+                })
+                Spacer()
+            }
+            .background(Color(UIColor.systemBackground).blur(radius: 10.0).opacity(0.5))
+            .onAppear {
+                self.articles.fecthResults()
+                self.unread.fecthResults()
+                self.archiveListViewModel.fecthResults()
+            }.padding()
         }
-        .environmentObject(DataSourceService.current.rss)
-        .environmentObject(DataSourceService.current.rssItem)
-        .environment(\.managedObjectContext, Persistence.current.context)
     }
     
     func formattedCount(_ count: Int) -> String {
@@ -140,26 +145,18 @@ struct SmartFeedsView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             SmartFeedsView(entry: WidgetTimelineEntry(date: Date(), widgetData: WidgetData(currentUnreadCount: 50, currentTodayCount: 125, currentStarredCount: 10, unreadArticles: [], starredArticles: [], todayArticles: [], lastUpdateTime: Date())))
-                .background(Color("WidgetBackground"))
+//                .background(Color("WidgetBackground"))
                 .preferredColorScheme(.dark)
                 .previewContext(WidgetPreviewContext(family: .systemSmall))
                 .redacted(reason: .placeholder)
             
             SmartFeedsView(entry: WidgetTimelineEntry(date: Date(), widgetData: WidgetData(currentUnreadCount: 50, currentTodayCount: 125, currentStarredCount: 10, unreadArticles: [], starredArticles: [], todayArticles: [], lastUpdateTime: Date())))
-                .background(Color("WidgetBackground"))
+//                .background(Color("WidgetBackground"))
                 .preferredColorScheme(.dark)
                 .previewContext(WidgetPreviewContext(family: .systemSmall))
-                .environmentObject(DataSourceService.current.rss)
-                .environmentObject(DataSourceService.current.rssItem)
-                .environment(\.managedObjectContext, Persistence.current.context)
+//                .environmentObject(DataSourceService.current.rss)
+//                .environmentObject(DataSourceService.current.rssItem)
+//                .environment(\.managedObjectContext, Persistence.current.context)
         }
-    }
-}
-
-struct PlaceHolderView: View {
-    @Environment(\.widgetFamily) var family: WidgetFamily
-    var body: some View {
-        SmartFeedsView(entry: WidgetTimelineEntry(date: Date(), widgetData: WidgetData(currentUnreadCount: 50, currentTodayCount: 125, currentStarredCount: 10, unreadArticles: [], starredArticles: [], todayArticles: [], lastUpdateTime: Date())))
-            .redacted(reason: .placeholder)
     }
 }

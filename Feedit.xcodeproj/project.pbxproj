@@ -27,7 +27,6 @@
 		611F17902612299C00D11687 /* SmartFeedsHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F178F2612299C00D11687 /* SmartFeedsHomeView.swift */; };
 		611F17B12613FB0E00D11687 /* DataSourceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C818D524E1F70900593939 /* DataSourceService.swift */; };
 		611F17B926143D1100D11687 /* Nuke in Frameworks */ = {isa = PBXBuildFile; productRef = 611F17B826143D1100D11687 /* Nuke */; };
-		611F17BD26143DCE00D11687 /* FetchImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F17BC26143DCE00D11687 /* FetchImage.swift */; };
 		612FB85A2540F04200D9822B /* RSSListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612FB83D2540F04000D9822B /* RSSListView.swift */; };
 		613428862606572800B9C20C /* MailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613428852606572800B9C20C /* MailView.swift */; };
 		6134288E2606D25F00B9C20C /* bot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6134288C2606D25F00B9C20C /* bot@2x.png */; };
@@ -53,6 +52,18 @@
 		616CAF6724F715B600690804 /* RFC822DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616CAF6624F715B600690804 /* RFC822DateFormatter.swift */; };
 		616CAF6924F715DD00690804 /* ISO8601DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616CAF6824F715DD00690804 /* ISO8601DateFormatter.swift */; };
 		616CAF9224F974AF00690804 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616CAF9124F974AF00690804 /* SettingViewModel.swift */; };
+		6171B88F2625F739000486FB /* CountWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6171B88D2625F739000486FB /* CountWidget.swift */; };
+		6171B89526262E8D000486FB /* FeedsWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E99358260AC0DE00679853 /* FeedsWidget.swift */; };
+		6171B8972626329C000486FB /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6171B8962626329C000486FB /* CoreDataManager.swift */; };
+		6171B898262633C7000486FB /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6171B8962626329C000486FB /* CoreDataManager.swift */; };
+		6171B89A26265144000486FB /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6171B89926265144000486FB /* PersistenceController.swift */; };
+		6171B89B26265145000486FB /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6171B89926265144000486FB /* PersistenceController.swift */; };
+		6171B89C26267404000486FB /* CountWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6171B88D2625F739000486FB /* CountWidget.swift */; };
+		6171B89E2626A6A3000486FB /* GenericStory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6171B89D2626A6A3000486FB /* GenericStory.swift */; };
+		6171B89F2626A6A3000486FB /* GenericStory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6171B89D2626A6A3000486FB /* GenericStory.swift */; };
+		6171B8A1262750A5000486FB /* FeedWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6171B8A0262750A5000486FB /* FeedWidget.swift */; };
+		6171B8A2262750A5000486FB /* FeedWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6171B8A0262750A5000486FB /* FeedWidget.swift */; };
+		6171B8A426280351000486FB /* AppGroupWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6171B8A326280350000486FB /* AppGroupWidget.swift */; };
 		617B49D8260054090016FC3D /* FeeditApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617B49D7260054090016FC3D /* FeeditApp.swift */; };
 		617B49DA260073520016FC3D /* ListSeperator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617B49D9260073520016FC3D /* ListSeperator.swift */; };
 		617B49E3260264F70016FC3D /* AllArticlesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617B49E2260264F50016FC3D /* AllArticlesView.swift */; };
@@ -97,7 +108,6 @@
 		6191E4232623620700527270 /* KingfisherSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 6191E4222623620700527270 /* KingfisherSwiftUI */; };
 		6191E424262363F100527270 /* UnreadCountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6168A2F0260F778D002F70EC /* UnreadCountView.swift */; };
 		6191E4252623823500527270 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 61C8189E24E1F3FD00593939 /* Assets.xcassets */; };
-		6191E42726240F1600527270 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6191E42626240EFF00527270 /* AppGroup.swift */; };
 		6195028025B115C200277F70 /* Bundle-Decodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6195027F25B115C200277F70 /* Bundle-Decodable.swift */; };
 		61967EC724E204BC00AA647C /* UserDefaultWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61967EC524E204BC00AA647C /* UserDefaultWrapper.swift */; };
 		61967ECB24E204FB00AA647C /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61967EC824E204FB00AA647C /* AppEnvironment.swift */; };
@@ -275,7 +285,6 @@
 		611F17822612278100D11687 /* SwiftLinkPreview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftLinkPreview.swift; sourceTree = "<group>"; };
 		611F178B2612279900D11687 /* NSURLSessionExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSURLSessionExtension.swift; sourceTree = "<group>"; };
 		611F178F2612299C00D11687 /* SmartFeedsHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartFeedsHomeView.swift; sourceTree = "<group>"; };
-		611F17BC26143DCE00D11687 /* FetchImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchImage.swift; sourceTree = "<group>"; };
 		612FB83D2540F04000D9822B /* RSSListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RSSListView.swift; path = Feedit/Views/RSSListView.swift; sourceTree = SOURCE_ROOT; };
 		613428852606572800B9C20C /* MailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MailView.swift; sourceTree = "<group>"; };
 		6134288C2606D25F00B9C20C /* bot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bot@2x.png"; path = "Feedit/Assets.xcassets/bot.appiconset/bot@2x.png"; sourceTree = SOURCE_ROOT; };
@@ -295,6 +304,12 @@
 		616CAF6624F715B600690804 /* RFC822DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RFC822DateFormatter.swift; sourceTree = "<group>"; };
 		616CAF6824F715DD00690804 /* ISO8601DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ISO8601DateFormatter.swift; sourceTree = "<group>"; };
 		616CAF9124F974AF00690804 /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
+		6171B88D2625F739000486FB /* CountWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountWidget.swift; sourceTree = "<group>"; };
+		6171B8962626329C000486FB /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		6171B89926265144000486FB /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
+		6171B89D2626A6A3000486FB /* GenericStory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericStory.swift; sourceTree = "<group>"; };
+		6171B8A0262750A5000486FB /* FeedWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedWidget.swift; sourceTree = "<group>"; };
+		6171B8A326280350000486FB /* AppGroupWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGroupWidget.swift; sourceTree = "<group>"; };
 		617B49D7260054090016FC3D /* FeeditApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeeditApp.swift; sourceTree = "<group>"; };
 		617B49D9260073520016FC3D /* ListSeperator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListSeperator.swift; sourceTree = "<group>"; };
 		617B49E2260264F50016FC3D /* AllArticlesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllArticlesView.swift; sourceTree = "<group>"; };
@@ -314,7 +329,6 @@
 		618F9028250DCD4F00D5A03E /* RSS+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RSS+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		618F9029250DCD4F00D5A03E /* RSSItem+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RSSItem+CoreDataClass.swift"; sourceTree = "<group>"; };
 		618F902A250DCD4F00D5A03E /* RSSItem+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RSSItem+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		6191E42626240EFF00527270 /* AppGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGroup.swift; sourceTree = "<group>"; };
 		6195027F25B115C200277F70 /* Bundle-Decodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle-Decodable.swift"; sourceTree = "<group>"; };
 		61967EC524E204BC00AA647C /* UserDefaultWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultWrapper.swift; sourceTree = "<group>"; };
 		61967EC824E204FB00AA647C /* AppEnvironment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
@@ -515,6 +529,7 @@
 				61967EE024E205AD00AA647C /* RSSItemStore.swift */,
 				61967EE124E205AD00AA647C /* RSSStore.swift */,
 				61C818E624E1F9BA00593939 /* PersistenceManager.swift */,
+				6171B89926265144000486FB /* PersistenceController.swift */,
 			);
 			path = Persistence;
 			sourceTree = "<group>";
@@ -679,7 +694,6 @@
 				616CAF5F24F7131000690804 /* OPMLParser.swift */,
 				61967EC824E204FB00AA647C /* AppEnvironment.swift */,
 				61967ECA24E204FB00AA647C /* ImageServices.swift */,
-				611F17BC26143DCE00D11687 /* FetchImage.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -792,7 +806,6 @@
 				611F17AF2613FA9300D11687 /* Services */,
 				611F17AE2613F86C00D11687 /* Wrappers */,
 				61B95ED225D1069600829741 /* RSS.xcdatamodeld */,
-				6191E42626240EFF00527270 /* AppGroup.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -813,6 +826,8 @@
 				61E993A7260AF6AE00679853 /* AllArticlesWidgetView.swift */,
 				61E993AA260AF6DE00679853 /* UnreadWidgetView.swift */,
 				61E993AD260AF7F400679853 /* WidgetBundle.swift */,
+				6171B88D2625F739000486FB /* CountWidget.swift */,
+				6171B8A0262750A5000486FB /* FeedWidget.swift */,
 			);
 			path = FeedsWidget;
 			sourceTree = "<group>";
@@ -823,6 +838,9 @@
 				61E9938C260AEF8700679853 /* Localizable.stringsdict */,
 				61E9938D260AEF8800679853 /* Localized.swift */,
 				61E9938E260AEF8900679853 /* widget-sample.json */,
+				6171B8962626329C000486FB /* CoreDataManager.swift */,
+				6171B89D2626A6A3000486FB /* GenericStory.swift */,
+				6171B8A326280350000486FB /* AppGroupWidget.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -1065,6 +1083,7 @@
 				611F17902612299C00D11687 /* SmartFeedsHomeView.swift in Sources */,
 				613428862606572800B9C20C /* MailView.swift in Sources */,
 				61967F0024E2068400AA647C /* AddRSSView.swift in Sources */,
+				6171B89E2626A6A3000486FB /* GenericStory.swift in Sources */,
 				611F17832612278300D11687 /* Regex.swift in Sources */,
 				61CDCF5F24E8466C007654C5 /* WKWebViewWrapper.swift in Sources */,
 				618F902E250DCD4F00D5A03E /* RSSItem+CoreDataClass.swift in Sources */,
@@ -1088,31 +1107,34 @@
 				61967ED224E2053D00AA647C /* Date+Ext.swift in Sources */,
 				61967EEB24E205DD00AA647C /* TextFieldView.swift in Sources */,
 				61967ECD24E204FB00AA647C /* ImageServices.swift in Sources */,
+				6171B89C26267404000486FB /* CountWidget.swift in Sources */,
+				6171B8A1262750A5000486FB /* FeedWidget.swift in Sources */,
 				61CDCF5D24E84645007654C5 /* TextView.swift in Sources */,
 				61967EE224E205AD00AA647C /* RSSItemStore.swift in Sources */,
 				61967EF324E2061100AA647C /* RSSFeedRow.swift in Sources */,
 				61C818E424E1F91B00593939 /* RSSDataSource.swift in Sources */,
 				616CAF6724F715B600690804 /* RFC822DateFormatter.swift in Sources */,
+				6171B89526262E8D000486FB /* FeedsWidget.swift in Sources */,
 				617B49E3260264F70016FC3D /* AllArticlesView.swift in Sources */,
 				618F902B250DCD4F00D5A03E /* ModelHelper.swift in Sources */,
 				61B95D8825CEEAA800829741 /* RSSActions.swift in Sources */,
 				61967EEA24E205DD00AA647C /* ProgressBar.swift in Sources */,
 				616CAF6924F715DD00690804 /* ISO8601DateFormatter.swift in Sources */,
+				6171B898262633C7000486FB /* CoreDataManager.swift in Sources */,
 				611F178C2612279A00D11687 /* NSURLSessionExtension.swift in Sources */,
 				610A854125FF11470027FF48 /* RSSFoldersDisclosureGroup.swift in Sources */,
 				6103807625490A1300222019 /* ViewExtensions.swift in Sources */,
 				616CAF9224F974AF00690804 /* SettingViewModel.swift in Sources */,
 				61967EED24E205DD00AA647C /* SectionView.swift in Sources */,
-				611F17BD26143DCE00D11687 /* FetchImage.swift in Sources */,
 				61967F0124E2068400AA647C /* AddRSSViewModel.swift in Sources */,
 				61E9939C260AF1E500679853 /* ArticleItemView.swift in Sources */,
 				61C818D624E1F70900593939 /* DataSourceService.swift in Sources */,
 				611F17852612278300D11687 /* Response.swift in Sources */,
 				613428952608360800B9C20C /* TrackableScrollView.swift in Sources */,
 				61E993A2260AF4D300679853 /* DeepLinks.swift in Sources */,
-				6191E42726240F1600527270 /* AppGroup.swift in Sources */,
 				618F902D250DCD4F00D5A03E /* RSS+CoreDataProperties.swift in Sources */,
 				61C818E924E1FA7D00593939 /* RSSItemDataSource.swift in Sources */,
+				6171B89A26265144000486FB /* PersistenceController.swift in Sources */,
 				617B49EA260298510016FC3D /* Unread.swift in Sources */,
 				61DE7AC325CD1E18008F8DDE /* CheckboxToggle.swift in Sources */,
 				61B95EC525D0B51300829741 /* Binding.swift in Sources */,
@@ -1145,6 +1167,8 @@
 				61E99380260AC9E900679853 /* RFC3339DateFormatter.swift in Sources */,
 				61E99364260AC1F200679853 /* RSSListViewModel.swift in Sources */,
 				61E9936D260AC1F200679853 /* RSSDataSource.swift in Sources */,
+				6171B8A2262750A5000486FB /* FeedWidget.swift in Sources */,
+				6171B8972626329C000486FB /* CoreDataManager.swift in Sources */,
 				6191E41826235F2F00527270 /* Searchbar.swift in Sources */,
 				61E99368260AC1F200679853 /* RSS+CoreDataClass.swift in Sources */,
 				61E99369260AC1F200679853 /* RSSItem+CoreDataProperties.swift in Sources */,
@@ -1154,6 +1178,7 @@
 				61E99397260AF04400679853 /* TimelineProvider.swift in Sources */,
 				61E993A6260AF66700679853 /* StarredWidgetView.swift in Sources */,
 				61E99371260AC1F200679853 /* DataSource.swift in Sources */,
+				6171B8A426280351000486FB /* AppGroupWidget.swift in Sources */,
 				6191E41726235EEF00527270 /* FilterBar.swift in Sources */,
 				6191E41B26235F7E00527270 /* CheckboxToggle.swift in Sources */,
 				61E99370260AC1F200679853 /* RSSItemStore.swift in Sources */,
@@ -1174,6 +1199,7 @@
 				61E99381260AC9E900679853 /* RFC822DateFormatter.swift in Sources */,
 				6191E41A26235F7100527270 /* SafariView.swift in Sources */,
 				6191E41326235E2E00527270 /* ArchiveListView.swift in Sources */,
+				6171B89F2626A6A3000486FB /* GenericStory.swift in Sources */,
 				6191E41F2623609C00527270 /* ActionContextMenu.swift in Sources */,
 				6191E424262363F100527270 /* UnreadCountView.swift in Sources */,
 				61E9937D260AC9AC00679853 /* String+Ext.swift in Sources */,
@@ -1186,11 +1212,13 @@
 				6191E41626235E9700527270 /* ProgressBar.swift in Sources */,
 				6191E41926235F5600527270 /* WKWebViewWrapper.swift in Sources */,
 				61E99365260AC1F200679853 /* PersistenceManager.swift in Sources */,
+				6171B88F2625F739000486FB /* CountWidget.swift in Sources */,
 				61E9939A260AF11D00679853 /* SizeCategories.swift in Sources */,
 				61E9938A260AEB8300679853 /* UserDefaultWrapper.swift in Sources */,
 				61E99378260AC1FA00679853 /* RSS.xcdatamodeld in Sources */,
 				61E9936C260AC1F200679853 /* ArchiveListViewModel.swift in Sources */,
 				6191E41D26235FA300527270 /* RSSFeedDetailView.swift in Sources */,
+				6171B89B26265145000486FB /* PersistenceController.swift in Sources */,
 				61E993A9260AF6AE00679853 /* AllArticlesWidgetView.swift in Sources */,
 				61E9939D260AF1E600679853 /* ArticleItemView.swift in Sources */,
 				6191E41226235E2E00527270 /* Unread.swift in Sources */,

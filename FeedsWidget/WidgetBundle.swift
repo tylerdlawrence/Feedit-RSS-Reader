@@ -9,6 +9,7 @@ import SwiftUI
 import WidgetKit
 import CoreData
 import Foundation
+import Intents
 
 // MARK: - Supported Widgets
 
@@ -17,7 +18,7 @@ struct UnreadWidget: Widget {
 
     var body: some WidgetConfiguration {
 
-        return StaticConfiguration(kind: kind, provider: Provider(context: managedObjectContext), content: { entry in
+        return StaticConfiguration(kind: kind, provider: Provider(), content: { entry in
             UnreadWidgetView(entry: entry)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color("WidgetBackground"))
@@ -35,7 +36,7 @@ struct AllArticlesWidget: Widget {
 
     var body: some WidgetConfiguration {
 
-        return StaticConfiguration(kind: kind, provider: Provider(context: managedObjectContext), content: { entry in
+        return StaticConfiguration(kind: kind, provider: Provider(), content: { entry in
             AllArticlesWidgetView(entry: entry)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color("WidgetBackground"))
@@ -52,8 +53,8 @@ struct StarredWidget: Widget {
     let kind: String = "group.com.tylerdlawrence.feedit.StarredWidget"
 
     var body: some WidgetConfiguration {
-
-        return StaticConfiguration(kind: kind, provider: Provider(context: managedObjectContext), content: { entry in
+//context: managedObjectContext
+        return StaticConfiguration(kind: kind, provider: Provider(), content: { entry in
             StarredWidgetView(entry: entry)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color("WidgetBackground"))
@@ -66,32 +67,20 @@ struct StarredWidget: Widget {
     }
 }
 
-struct SmartFeedSummaryWidget: Widget {
-    let kind: String =  "group.com.tylerdlawrence.feedit.FeedsWidget"
-    
-    @State var selectedFilter: FilterType = .all
-    @ObservedObject var rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
-    @ObservedObject var archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
-    @ObservedObject var articles = AllArticles(dataSource: DataSourceService.current.rssItem)
-    @ObservedObject var unread = Unread(dataSource: DataSourceService.current.rssItem)
-    
-    var body: some WidgetConfiguration {
-        return StaticConfiguration(kind: kind, provider: Provider(context: Persistence.current.context), content: { entry in
-            SmartFeedsView(entry: WidgetTimelineEntry(date: Date(), widgetData: WidgetData(currentUnreadCount: unread.items.count, currentTodayCount: articles.items.count, currentStarredCount: archiveListViewModel.items.count, unreadArticles: [], starredArticles: [], todayArticles: [], lastUpdateTime: Date())))
-                
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color("WidgetBackground"))
-                .environment(\.managedObjectContext, Persistence.current.context)
-                .environmentObject(DataSourceService.current.rss)
-                .environmentObject(DataSourceService.current.rssItem)
-        })
-        .configurationDisplayName(L10n.smartFeedSummaryWidgetTitle)
-        .description(L10n.smartFeedSummaryWidgetDescription)
-        .supportedFamilies([.systemSmall])
+struct CountWidget: Widget {
+    @Environment(\.widgetFamily) var family
+    let kind: String = "CountWidget"
         
+    var body: some WidgetConfiguration {
+        StaticConfiguration(kind: kind, provider: CountProvider(context: managedObjectContext)) { entry in
+            CountWidgetEntryView(entry: entry)
+                
+        }
+        .configurationDisplayName("Unread")
+        .description("View your recent unread articles")
+        .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
     }
 }
-
 
 // MARK: - WidgetBundle
 @main
@@ -100,8 +89,12 @@ struct FeeditWidgets: WidgetBundle {
     @WidgetBundleBuilder
     var body: some Widget {
         SmartFeedSummaryWidget()
-        AllArticlesWidget()
-        UnreadWidget()
-        StarredWidget()
+        CountWidget()
+        
+//        SmartFeedsSummaryWidget()
+//        FeedWidget()
+//        AllArticlesWidget()
+//        UnreadWidget()
+//        StarredWidget()
     }
 }

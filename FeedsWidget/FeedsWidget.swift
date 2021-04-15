@@ -7,114 +7,115 @@
 
 //import WidgetKit
 //import SwiftUI
+//import Intents
 //import CoreData
 
-//struct Provider: TimelineProvider {
-//    func placeholder(in context: Context) -> SimpleEntry {
-//        let string: String = ""
-////        let uri = char?.objectID.uriRepresentation().absoluteString;
-//        return SimpleEntry(date: Date(), title: string, desc: string, uri: nil)
+//struct ArticleProvider: TimelineProvider {
+//    /// Access to CoreDataManger
+//    let dataController = DataController()
+//    let coreDataManager: CoreDataManager
+//    let rssItem = RSSItem()
+//
+//    init() {
+//        coreDataManager = CoreDataManager(dataController)
 //    }
 //
-//    func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> ()) {
-//        let string: String = ""
-////        let uri = char?.objectID.uriRepresentation().absoluteString;
-//        let entry = SimpleEntry(date: Date(), title: string, desc: string, uri: nil)
-//        completion(entry)
+//    /// Placeholder for Widget
+//    func placeholder(in context: Context) -> WidgetEntry {
+//        WidgetEntry(date: Date(), article: rssItem)
 //    }
 //
-//    func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-//        var entries: [SimpleEntry] = []
+//    /// Provides a timeline entry representing the current time and state of a widget.
+//    func getSnapshot(in context: Context, completion: @escaping (WidgetEntry) -> Void) { //swiftlint:disable:this line_length
+//        articleForWidget() { selectedArticle in
+//            let entry = WidgetEntry(
+//                date: Date(),
+//                article: selectedArticle
+//            )
+//            completion(entry)
+//        }
+//    }
 //
-//        // Generate a timeline consisting of five entries an hour apart, starting from the current date.
-//        let string: String = ""
-//        let currentDate = Date()
-//        for hourOffset in 0 ..< 5 {
-////            let midnight = Calendar.current.startOfDay(for: Date())
-////            let nextMidnight = Calendar.current.date(byAdding: .day, value: 1, to: midnight)!
-//            let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-//            let entry = SimpleEntry(date: entryDate, title: string, desc: string, uri: nil)
+//    /// Provides an array of timeline entries for the current time and, optionally, any future times to update a widget.
+//    func getTimeline(in context: Context, completion: @escaping (Timeline<WidgetEntry>) -> Void) { //swiftlint:disable:this line_length
+//        coreDataManager.fetchArticles()
+//
+////        let interval = configuration.interval as! Int
+//
+//        /// Fetches the vehicle selected in the configuration
+//        articleForWidget() { selectedArticle in
+//            let currentDate = Date()
+//            var entries: [WidgetEntry] = []
+//
+//            // Create a date that's 60 minutes in the future.
+//            let nextUpdateDate = Calendar.current.date(byAdding: .minute, value: 60, to: currentDate)!
+//
+//            // Generate an Entry
+//            let entry = WidgetEntry(date: currentDate, article: selectedArticle)
 //            entries.append(entry)
+//
+//            let timeline = Timeline(entries: entries, policy: .after(nextUpdateDate))
+//            completion(timeline)
+//        }
+//    }
+//
+//    /// Fetches the Vehicle defined in the Configuration
+//    /// - Parameters:
+//    ///   - configuration: Intent Configuration
+//    ///   - completion: completion handler returning the selected Vehicle
+//    func articleForWidget(completion: @escaping (RSSItem?) -> Void) {
+//        var selectedArticle: RSSItem?
+//        defer {
+//            completion(selectedArticle)
 //        }
 //
-//        let timeline = Timeline(entries: entries, policy: .atEnd)
-//        completion(timeline)
+//        for article in coreDataManager.articleArray where article.uuid?.uuidString == rssItem.isRead.string { //swiftlint:disable:this line_length
+//            selectedArticle = article
+//        }
 //    }
 //}
 //
-//struct SimpleEntry: TimelineEntry {
+//struct WidgetEntry: TimelineEntry {
 //    let date: Date
-//    let title: String
-//    let desc: String
-//    let uri: String?
-//
-//    var url: URL? {
-//        get {
-//            if let linkID = self.uri {
-//                return URL(string: "feeditrssreader://" + linkID)
-//            }
-//            return nil
-//        }
-//    }
+////    let configuration: SelectedArticleIntent
+//    var article: RSSItem?
 //}
 //
-//private struct CoreDataWidgetEntryView: View {
-//    var entry: Provider.Entry
+//struct RSSWidgetEntryView: View {
+////    var entry: Provider.Entry
+//    var entry: ArticleProvider.Entry
 //
 //    var body: some View {
-//        return Text("Items count: \(itemsCount)")
-//    }
-//
-//    var itemsCount: Int {
-//        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "RSSItem")
-//        do {
-//            return try Persistence.shared.context.count(for: request)
-//        } catch {
-//            print(error.localizedDescription)
-//            return 0
+//        VStack {
+////            Text(entry.date, style: .time)
+//            Text(entry.article?.author ?? "No author")
+//            Text("CoreData: \(entry.article?.title.count ?? 25)")
+//            Text("Name: \(entry.article?.desc ?? "No description")")
+//            Divider()
+//            Text("Refreshed: \(entry.date, style: .relative)")
+//                .font(.caption)
 //        }
+//        .padding(.all)
 //    }
 //}
 //
-//struct FeedsWidgetEntryView : View {
-//    var entry: Provider.Entry
-//
-//    var body: some View {
-////        CoreDataWidgetEntryView(entry: entry)
-////        Text(entry.date, style: .time)
-//        HStack(alignment: .top) {
-//            VStack(alignment: .leading) {
-//                Text("Untitled").font(.system(size: 18, weight: .medium, design: .rounded)).lineLimit(3).fixedSize(horizontal: true, vertical: true).opacity(0.9)
-//
-//            }
-//            .padding()
-//            .cornerRadius(6)
-//        }
-//        //.widgetURL(entry.url)
-//        //.frame(width: 500, height: 500, alignment: .center)
-//    }
-//}
-//
-//@main
-//struct FeedsWidget: Widget {
-//
-//    let kind: String = "FeedsWidget"
-//    let snapshotEntry = SimpleEntry(date: Date(), title: "Article Title", desc: "Article Description", uri: nil)
+////@main
+//struct RSSWidget: Widget {
+//    let kind: String = "RSSWidget"
 //
 //    var body: some WidgetConfiguration {
-//        StaticConfiguration(kind: kind, provider: Provider()) { entry in
-//            FeedsWidgetEntryView(entry: Provider.Entry.init(date: Date(), widgetData: WidgetDataDecoder.sampleData()))
-////            FeedsWidgetEntryView(entry: entry, article: article)
+//        StaticConfiguration(kind: kind, provider: ArticleProvider()) { entry in
+//            RSSWidgetEntryView(entry: entry)
 //        }
-//        .configurationDisplayName("Articles")
-//        .description("Most Recent Articles")
-//        .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
+//        .configurationDisplayName("My Widget")
+//        .description("This is an example widget.")
 //    }
 //}
-
-//struct FeedsWidget_Previews: PreviewProvider {
+//
+//struct RSSWidget_Previews: PreviewProvider {
 //    static var previews: some View {
-//        FeedsWidgetEntryView(entry: SimpleEntry(date: Date(), title: "Article Title", desc: "Article Description", uri: nil))
-//            .previewContext(WidgetPreviewContext(family: .systemMedium))
+//        RSSWidgetEntryView(entry: WidgetEntry(date: Date()))
+//            .environment(\.managedObjectContext, Persistence.current.context)
+////            .previewContext(WidgetPreviewContext(family: .systemSmall))
 //    }
 //}
