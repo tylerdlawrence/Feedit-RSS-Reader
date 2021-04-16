@@ -10,57 +10,36 @@ import WidgetKit
 import CoreData
 import Foundation
 
-struct SmartFeedsView: View {
-    @State var selectedFilter: FilterType = .all
-    @StateObject var rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
-    @StateObject var archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
-    
-    @StateObject var articles = AllArticles(dataSource: DataSourceService.current.rssItem)
-    @StateObject var unread = Unread(dataSource: DataSourceService.current.rssItem)
-    
-    @EnvironmentObject var rssDataSource: RSSDataSource
-    @Environment(\.managedObjectContext) private var viewContext
-    @EnvironmentObject private var persistence: Persistence
-    @Environment(\.managedObjectContext) private var context
-    var filteredArticles: [RSSItem] {
-        return rssFeedViewModel.items.filter({ (item) -> Bool in
-            return !((self.rssFeedViewModel.isOn && !item.isArchive) || (self.rssFeedViewModel.unreadIsOn && item.isRead))
-        })
-    }
+struct SmartFeedSummaryWidgetView: View {
     
     @Environment(\.widgetFamily) var family: WidgetFamily
     
     var entry: Provider.Entry
     
-    @FetchRequest(entity: RSSItem.entity(), sortDescriptors: []) var items: FetchedResults<RSSItem>
-    
     var body: some View {
         smallWidget
             .widgetURL(WidgetDeepLink.icon.url)
+            
     }
     
     @ViewBuilder
     var smallWidget: some View {
         ZStack(alignment: .topLeading) {
-            Image("launch")
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .opacity(0.4).padding([.top, .leading], -25)
-                .frame(width: 135, height: 135)
+//            Image("launch")
+//                .resizable()
+//                .aspectRatio(contentMode: .fill)
+//                .opacity(0.4).padding([.top, .leading], -25)
+//                .frame(width: 135, height: 135)
+        
             VStack(alignment: .leading) {
                 Spacer()
                 Link(destination: WidgetDeepLink.today.url, label: {
                     HStack {
                         todayImage
                         VStack(alignment: .leading, spacing: nil, content: {
-                            Text(formattedCount(entry.widgetData.currentTodayCount))
-//                          Text(formattedCount(articles.items.count))
-    //                        Text("\(articles.items.count)")
-                                .font(Font.system(.caption, design: .rounded)).bold()
-                            Text(L10n.today)
-                                .font(.caption).textCase(.uppercase)
-                                .foregroundColor(Color("text"))
-                        }).foregroundColor(Color("tab"))
+                            Text(formattedCount(entry.widgetData.currentTodayCount)).font(Font.system(.caption, design: .rounded)).bold()
+                            Text(L10n.today).font(.caption).textCase(.uppercase).foregroundColor(.gray)
+                        })
                         Spacer()
                     }
                 })
@@ -69,13 +48,9 @@ struct SmartFeedsView: View {
                     HStack {
                         unreadImage
                         VStack(alignment: .leading, spacing: nil, content: {
-                            Text(formattedCount(entry.widgetData.currentUnreadCount))
-//                            Text(formattedCount(unread.items.count))
-    //                        Text("\(unread.items.count)")
-                                .font(Font.system(.caption, design: .rounded)).bold()
-                            Text(L10n.unread)
-                                .font(.caption).textCase(.uppercase).foregroundColor(Color("text"))
-                        }).foregroundColor(Color("tab"))
+                            Text(formattedCount(entry.widgetData.currentUnreadCount)).font(Font.system(.caption, design: .rounded)).bold()
+                            Text(L10n.unread).font(.caption).textCase(.uppercase).foregroundColor(.gray)
+                        })
                         Spacer()
                     }
                 })
@@ -84,25 +59,15 @@ struct SmartFeedsView: View {
                     HStack {
                         starredImage
                         VStack(alignment: .leading, spacing: nil, content: {
-                            Text(formattedCount(entry.widgetData.currentStarredCount))
-//                            Text(formattedCount(archiveListViewModel.items.count))
-    //                        Text("\(archiveListViewModel.items.count)")
-                                .font(Font.system(.caption, design: .rounded)).bold()
-                                
-                            Text(L10n.starred)
-                                .font(.caption).textCase(.uppercase).foregroundColor(Color("text"))
-                        }).foregroundColor(Color("tab"))
+                            Text(formattedCount(entry.widgetData.currentStarredCount)).font(Font.system(.caption, design: .rounded)).bold()
+                            Text(L10n.starred).font(.caption).textCase(.uppercase).foregroundColor(.gray)
+                        })
                         Spacer()
                     }
                 })
                 Spacer()
-            }
-            .background(Color(UIColor.systemBackground).blur(radius: 10.0).opacity(0.5))
-            .onAppear {
-                self.articles.fecthResults()
-                self.unread.fecthResults()
-                self.archiveListViewModel.fecthResults()
-            }.padding()
+            }//.background(Color(UIColor.systemBackground).blur(radius: 10.0).opacity(0.5))
+            .padding()
         }
     }
     
@@ -120,7 +85,7 @@ struct SmartFeedsView: View {
             .foregroundColor(Color("tab"))
     }
     
-    var feeditImage: some View {
+    var nnwImage: some View {
         Image("CornerIcon")
             .resizable()
             .frame(width: 20, height: 20, alignment: .center)
@@ -140,16 +105,36 @@ struct SmartFeedsView: View {
             .frame(width: 20, height: 20, alignment: .center)
             .foregroundColor(Color("tab"))
     }
-    
 }
 
-
-struct SmartFeedsView_Previews: PreviewProvider {
+struct SmartFeedSummaryWidgetView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            SmartFeedsView(entry: Provider.Entry.init(date: Date(), widgetData: WidgetDataDecoder.sampleData()))
+            SmartFeedSummaryWidgetView(entry: Provider.Entry.init(date: Date(), widgetData: WidgetDataDecoder.sampleData()))
                 .background(Color(UIColor.systemBackground)).environment(\.colorScheme, .dark)
+                .previewContext(WidgetPreviewContext(family: .systemSmall))
+            
+            SmartFeedSummaryWidgetView(entry: Provider.Entry.init(date: Date(), widgetData: WidgetDataDecoder.sampleData()))
+                .background(Color(UIColor.systemBackground)).environment(\.colorScheme, .light)
                 .previewContext(WidgetPreviewContext(family: .systemSmall))
         }
     }
 }
+
+struct SmartFeedSummaryWidget: Widget {
+    let kind: String = "SmartFeedSummaryWidget"
+    
+    var body: some WidgetConfiguration {
+        
+        return StaticConfiguration(kind: kind, provider: Provider(), content: { entry in
+            SmartFeedSummaryWidgetView(entry: entry)
+        })
+        .configurationDisplayName(L10n.smartFeedSummaryWidgetTitle)
+        .description(L10n.smartFeedSummaryWidgetDescription)
+        .supportedFamilies([.systemSmall])
+        
+    }
+}
+
+
+

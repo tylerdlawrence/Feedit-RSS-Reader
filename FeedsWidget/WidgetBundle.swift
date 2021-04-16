@@ -20,8 +20,8 @@ struct UnreadWidget: Widget {
 
         return StaticConfiguration(kind: kind, provider: Provider(), content: { entry in
             UnreadWidgetView(entry: entry)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color("WidgetBackground"))
+//                .frame(maxWidth: .infinity, maxHeight: .infinity)
+//                .background(Color("WidgetBackground"))
 
         })
         .configurationDisplayName(L10n.unreadWidgetTitle)
@@ -37,8 +37,8 @@ struct AllArticlesWidget: Widget {
 
         return StaticConfiguration(kind: kind, provider: Provider(), content: { entry in
             AllArticlesWidgetView(entry: entry)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color("WidgetBackground"))
+//                .frame(maxWidth: .infinity, maxHeight: .infinity)
+//                .background(Color("WidgetBackground"))
 
         })
         .configurationDisplayName(L10n.todayWidgetTitle)
@@ -53,8 +53,8 @@ struct StarredWidget: Widget {
     var body: some WidgetConfiguration {
         return StaticConfiguration(kind: kind, provider: Provider(), content: { entry in
             StarredWidgetView(entry: entry)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color("WidgetBackground"))
+//                .frame(maxWidth: .infinity, maxHeight: .infinity)
+//                .background(Color("WidgetBackground"))
         })
         .configurationDisplayName(L10n.starredWidgetTitle)
         .description(L10n.starredWidgetDescription)
@@ -67,11 +67,11 @@ struct CountWidget: Widget {
     let kind: String = "CountWidget"
         
     var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: CountProvider(context: managedObjectContext)) { entry in
+        return StaticConfiguration(kind: kind, provider: Provider(), content: { entry in
             CountWidgetEntryView(entry: entry)
-        }
-        .configurationDisplayName("Unread")
-        .description("View your recent unread articles")
+        })
+        .configurationDisplayName("Recent Articles")
+        .description("View your recent articles")
         .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
     }
 }
@@ -82,13 +82,9 @@ struct FeeditWidgets: WidgetBundle {
 
     @WidgetBundleBuilder
     var body: some Widget {
-        TestWidget()
-        CountWidget()
         SmartFeedSummaryWidget()
-//        FeedWidget()
-        
-        
-        
+        CountWidget()
+//        TestWidget()
 //        AllArticlesWidget()
 //        UnreadWidget()
 //        StarredWidget()

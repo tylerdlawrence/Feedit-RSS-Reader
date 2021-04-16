@@ -121,3 +121,21 @@ struct StarredWidgetView : View {
 
 }
 
+struct StarredWidgetView_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+//            StarredWidgetView(entry: Provider.Entry.init(date: Date(), widgetData: WidgetDataDecoder.sampleData()))
+//                .background(Color(UIColor.systemBackground)).environment(\.colorScheme, .dark)
+//                .previewContext(WidgetPreviewContext(family: .systemSmall))
+
+            StarredWidgetView(entry: Provider.Entry.init(date: Date(), widgetData: WidgetDataDecoder.sampleData()))
+                .background(Color(UIColor.systemBackground)).environment(\.colorScheme, .dark)
+                .previewContext(WidgetPreviewContext(family: .systemMedium))
+            
+            StarredWidgetView(entry: Provider.Entry.init(date: Date(), widgetData: WidgetDataDecoder.sampleData()))
+                .background(Color(UIColor.systemBackground)).environment(\.colorScheme, .dark)
+                .previewContext(WidgetPreviewContext(family: .systemLarge))
+            
+        }.previewLayout(.sizeThatFits)
+    }
+}

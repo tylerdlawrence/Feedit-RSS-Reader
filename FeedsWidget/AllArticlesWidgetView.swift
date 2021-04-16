@@ -120,3 +120,21 @@ struct AllArticlesWidgetView : View {
     
 }
 
+struct AllArticlesWidgetView_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+//            StarredWidgetView(entry: Provider.Entry.init(date: Date(), widgetData: WidgetDataDecoder.sampleData()))
+//                .background(Color(UIColor.systemBackground)).environment(\.colorScheme, .dark)
+//                .previewContext(WidgetPreviewContext(family: .systemSmall))
+
+            AllArticlesWidgetView(entry: Provider.Entry.init(date: Date(), widgetData: WidgetDataDecoder.sampleData()))
+                .background(Color(UIColor.systemBackground)).environment(\.colorScheme, .dark)
+                .previewContext(WidgetPreviewContext(family: .systemMedium))
+            
+            AllArticlesWidgetView(entry: Provider.Entry.init(date: Date(), widgetData: WidgetDataDecoder.sampleData()))
+                .background(Color(UIColor.systemBackground)).environment(\.colorScheme, .dark)
+                .previewContext(WidgetPreviewContext(family: .systemLarge))
+            
+        }.previewLayout(.sizeThatFits)
+    }
+}

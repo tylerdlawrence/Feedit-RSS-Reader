@@ -22,20 +22,21 @@ struct UnreadWidgetView : View {
         }
         else {
             GeometryReader { metrics in
-                HStack {
-                    VStack {
-                        unreadImage
-                            .padding(.vertical, 12)
-                            .padding(.leading, 8)
-                        Spacer()
-                    
-                    }
-                }
-                .frame(width: metrics.size.width * 0.15)
+//                HStack {
+//                    VStack {
+//                        unreadImage
+//                            .padding(.vertical, 12)
+//                            .padding(.leading, 8)
+//                        Spacer()
+//
+//                    }
+//                }
+//                .frame(width: metrics.size.width * 0.15)
 
-                Spacer()
+//                Spacer()
                 
                 VStack(alignment:.leading, spacing: 0) {
+                    Spacer(minLength: 0)
                     ForEach(0..<maxCount(), content: { i in
                         if i != 0 {
                             Divider()
@@ -51,9 +52,10 @@ struct UnreadWidgetView : View {
                     })
                     Spacer()
                 }
-                .padding(.leading, metrics.size.width * 0.175)
-                .padding([.bottom, .trailing])
-                .padding(.top, 12)
+                .padding()
+//                .padding(.leading, metrics.size.width * 0.175)
+//                .padding([.bottom, .trailing])
+//                .padding(.top, 12)
                 .overlay(
                      VStack {
                         Spacer()
@@ -79,7 +81,7 @@ struct UnreadWidgetView : View {
         Image(systemName: "largecircle.fill.circle")
             .resizable()
             .frame(width: 30, height: 30, alignment: .top)
-            .foregroundColor(.accentColor)
+            .foregroundColor(Color("tab"))
     }
     
     func maxCount() -> Int {
@@ -121,8 +123,14 @@ struct UnreadWidgetView : View {
 struct UnreadWidgetView_Previews: PreviewProvider {
     
     static var previews: some View {
-        UnreadWidgetView(entry: Provider.Entry.init(date: Date(), widgetData: WidgetDataDecoder.sampleData()))
-            .background(Color(UIColor.systemBackground)).environment(\.colorScheme, .dark)
-            .previewContext(WidgetPreviewContext(family: .systemMedium))
+        Group {
+            UnreadWidgetView(entry: Provider.Entry.init(date: Date(), widgetData: WidgetDataDecoder.sampleData()))
+                .background(Color(UIColor.systemBackground)).environment(\.colorScheme, .dark)
+                .previewContext(WidgetPreviewContext(family: .systemMedium))
+            
+            UnreadWidgetView(entry: Provider.Entry.init(date: Date(), widgetData: WidgetDataDecoder.sampleData()))
+                .background(Color(UIColor.systemBackground)).environment(\.colorScheme, .dark)
+                .previewContext(WidgetPreviewContext(family: .systemLarge))
+        }
     }
 }
