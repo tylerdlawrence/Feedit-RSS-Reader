@@ -41,6 +41,13 @@ extension RSSItem {
     @NSManaged public var unread: Bool
     @NSManaged public var itemCount: Int64
     @NSManaged public var urlToImage: String?
+    
+    @NSManaged public var unreadArticles: [RSSItem]
+    @NSManaged public var starredArticles: [RSSItem]
+    @NSManaged public var todayArticles: [RSSItem]
+//    let unreadArticles: [LatestArticle]
+//    let starredArticles: [LatestArticle]
+//    let todayArticles: [LatestArticle]
         
     public override func awakeFromInsert() {
         super.awakeFromInsert()

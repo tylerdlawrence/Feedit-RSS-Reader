@@ -11,6 +11,7 @@ import FeedKit
 
 func fetchNewRSS(url: URL,
                  completionHandler: @escaping ((Result<Feed, Error>) -> Void)) {
+//func fetchNewRSS(url: URL, completionHandler: (([RSSItem]) -> Void)?) {
     let parser = FeedParser(URL: url)
     parser.parseAsync(queue: DispatchQueue.global()) { result in
         DispatchQueue.main.async {

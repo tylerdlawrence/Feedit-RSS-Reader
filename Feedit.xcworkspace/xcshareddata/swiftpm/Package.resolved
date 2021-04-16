@@ -15,8 +15,8 @@
         "repositoryURL": "https://github.com/will-lumley/FaviconFinder.git",
         "state": {
           "branch": null,
-          "revision": "14826bd49bfa7de4f3e40c0790255ee91016c444",
-          "version": "2.2.0"
+          "revision": "c692db00ce366db890c43222422e858511f579ca",
+          "version": "2.3.0"
         }
       },
       {
@@ -38,15 +38,6 @@
         }
       },
       {
-        "package": "Nuke",
-        "repositoryURL": "https://github.com/kean/Nuke.git",
-        "state": {
-          "branch": null,
-          "revision": "6e6c6b5f8acaaac1ac4f7024dcf40f2facabc0a3",
-          "version": "9.4.1"
-        }
-      },
-      {
         "package": "Reachability",
         "repositoryURL": "https://github.com/ashleymills/Reachability.swift.git",
         "state": {
@@ -56,12 +47,21 @@
         }
       },
       {
+        "package": "RSWeb",
+        "repositoryURL": "https://github.com/Ranchero-Software/RSWeb.git",
+        "state": {
+          "branch": null,
+          "revision": "2f9ad98736c5c17dfb2be0b3cc06e71a49b061fa",
+          "version": "1.0.1"
+        }
+      },
+      {
         "package": "SDWebImage",
         "repositoryURL": "https://github.com/SDWebImage/SDWebImage.git",
         "state": {
           "branch": null,
-          "revision": "88b3ba211c0d604e60eab204c1baf8229c513399",
-          "version": "5.9.4"
+          "revision": "9ffc546b8f68c3251ca09cfa95bbd20084b6321e",
+          "version": "5.11.0"
         }
       },
       {
@@ -87,17 +87,8 @@
         "repositoryURL": "https://github.com/timbersoftware/SwiftUI-Introspect.git",
         "state": {
           "branch": null,
-          "revision": "36ecf80429d00a4cd1e81fbfe4655b1d99ebd651",
-          "version": "0.1.2"
-        }
-      },
-      {
-        "package": "SwiftUIX",
-        "repositoryURL": "https://github.com/SwiftUIX/SwiftUIX.git",
-        "state": {
-          "branch": null,
-          "revision": "c2890b24e56e540b2c2fe00394b3826e4659c97b",
-          "version": "0.0.5"
+          "revision": "2e09be8af614401bc9f87d40093ec19ce56ccaf2",
+          "version": "0.1.3"
         }
       },
       {

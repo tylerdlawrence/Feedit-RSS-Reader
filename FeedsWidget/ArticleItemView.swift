@@ -11,6 +11,7 @@ import CoreData
 import Foundation
 import os.log
 import UIKit
+import RSWeb
 
 struct ArticleItemView: View {
     
@@ -53,7 +54,7 @@ struct ArticleItemView: View {
     
     func thumbnail(_ data: Data?) -> UIImage {
         if data == nil {
-            return UIImage(systemName: "CornerIcon")!
+            return UIImage(systemName: "launch")!
         } else {
             return UIImage(data: data!)!
         }
@@ -62,13 +63,15 @@ struct ArticleItemView: View {
     func pubDate(_ dateString: String) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
-        let date = dateFormatter.date(from: dateString)
+        guard let date = dateFormatter.date(from: dateString) else {
+            return ""
+        }
         
         let displayFormatter = DateFormatter()
         displayFormatter.dateStyle = .medium
         displayFormatter.timeStyle = .none
         
-        return displayFormatter.string(from: date!)
+        return displayFormatter.string(from: date)
     }
 }
 
@@ -86,53 +89,90 @@ struct SmartFeedSummaryWidgetView: View {
     
     @ViewBuilder
     var smallWidget: some View {
-        ZStack(alignment: .topLeading) {
+//        ZStack(alignment: .topLeading) {
 //            Image("launch")
 //                .resizable()
 //                .aspectRatio(contentMode: .fill)
 //                .opacity(0.4).padding([.top, .leading], -25)
-//                .frame(width: 100, height: 100)
-            Text("\(Image(systemName: "largecircle.fill.circle"))").font(Font.system(size: 100)).foregroundColor(.gray).opacity(0.4).padding([.top, .leading], -10)
-            VStack(alignment: .leading) {
-                Spacer(minLength: 0)
-                Link(destination: WidgetDeepLink.today.url, label: {
-                    HStack {
-                        todayImage
-                        VStack(alignment: .leading, spacing: nil, content: {
-                            Text(formattedCount(entry.widgetData.currentTodayCount)).font(Font.system(.caption, design: .rounded)).bold()
-                            Text(L10n.today).foregroundColor(.gray).font(.caption).textCase(.uppercase)
-                        })
-                        Spacer(minLength: 0)
-                    }
-                })
-                
-                Link(destination: WidgetDeepLink.unread.url, label: {
-                    HStack {
-                        unreadImage
-                        VStack(alignment: .leading, spacing: nil, content: {
-                            Text(formattedCount(entry.widgetData.currentUnreadCount)).font(Font.system(.caption, design: .rounded)).bold()
-                            Text(L10n.unread).foregroundColor(.gray).font(.caption).textCase(.uppercase)
-                        })
+//                .frame(width: 135, height: 135)
+////            Text("\(Image(systemName: "largecircle.fill.circle"))").font(Font.system(size: 100)).foregroundColor(.gray).opacity(0.4).padding([.top, .leading], -10)
+//
+//            VStack(alignment: .leading) {
+//                Spacer(minLength: 0)
+//                Link(destination: WidgetDeepLink.today.url, label: {
+//                    HStack {
+//                        todayImage
+//                        VStack(alignment: .leading, spacing: nil, content: {
+//                            Text(formattedCount(entry.widgetData.currentTodayCount)).font(Font.system(.caption, design: .rounded)).bold()
+//                            Text(L10n.today).foregroundColor(.gray).font(.caption).textCase(.uppercase)
+//                        })
 //                        Spacer(minLength: 0)
-                    }
-                })
-                
-                Link(destination: WidgetDeepLink.starred.url, label: {
-                    HStack {
-                        starredImage
-                        VStack(alignment: .leading, spacing: nil, content: {
-                            Text(formattedCount(entry.widgetData.currentStarredCount)).font(Font.system(.caption, design: .rounded)).bold()
-                            Text(L10n.starred).foregroundColor(.gray).font(.caption).textCase(.uppercase)
-                        })
-//                        Spacer(minLength: 0)
-                    }
-                })
-                Spacer(minLength: 0)
-            }
-            .background(Color(UIColor.systemBackground).blur(radius: 10.0).opacity(0.5))
+//                    }
+//                })
+//
+//                Link(destination: WidgetDeepLink.unread.url, label: {
+//                    HStack {
+//                        unreadImage
+//                        VStack(alignment: .leading, spacing: nil, content: {
+//                            Text(formattedCount(entry.widgetData.currentUnreadCount)).font(Font.system(.caption, design: .rounded)).bold()
+//                            Text(L10n.unread).foregroundColor(.gray).font(.caption).textCase(.uppercase)
+//                        })
+////                        Spacer(minLength: 0)
+//                    }
+//                })
+//
+//                Link(destination: WidgetDeepLink.starred.url, label: {
+//                    HStack {
+//                        starredImage
+//                        VStack(alignment: .leading, spacing: nil, content: {
+//                            Text(formattedCount(entry.widgetData.currentStarredCount)).font(Font.system(.caption, design: .rounded)).bold()
+//                            Text(L10n.starred).foregroundColor(.gray).font(.caption).textCase(.uppercase)
+//                        })
+////                        Spacer(minLength: 0)
+//                    }
+//                })
+//                Spacer(minLength: 0)
+//            }
+//            .background(Color(UIColor.systemBackground).blur(radius: 10.0).opacity(0.5))
+//
+//            .padding()
+//        }
+        VStack(alignment: .leading) {
+            Spacer()
+            Link(destination: WidgetDeepLink.today.url, label: {
+                HStack {
+                    todayImage
+                    VStack(alignment: .leading, spacing: nil, content: {
+                        Text(formattedCount(entry.widgetData.currentTodayCount)).font(Font.system(.caption, design: .rounded)).bold()
+                        Text(L10n.today).bold().font(.caption).textCase(.uppercase)
+                    }).foregroundColor(.white)
+                    Spacer()
+                }
+            })
             
-            .padding()
-        }
+            Link(destination: WidgetDeepLink.unread.url, label: {
+                HStack {
+                    unreadImage
+                    VStack(alignment: .leading, spacing: nil, content: {
+                        Text(formattedCount(entry.widgetData.currentUnreadCount)).font(Font.system(.caption, design: .rounded)).bold()
+                        Text(L10n.unread).bold().font(.caption).textCase(.uppercase)
+                    }).foregroundColor(.white)
+                    Spacer()
+                }
+            })
+            
+            Link(destination: WidgetDeepLink.starred.url, label: {
+                HStack {
+                    starredImage
+                    VStack(alignment: .leading, spacing: nil, content: {
+                        Text(formattedCount(entry.widgetData.currentStarredCount)).font(Font.system(.caption, design: .rounded)).bold()
+                        Text(L10n.starred).bold().font(.caption).textCase(.uppercase)
+                    }).foregroundColor(.white)
+                    Spacer()
+                }
+            })
+            Spacer()
+        }.padding()
     }
     
     func formattedCount(_ count: Int) -> String {
@@ -171,10 +211,21 @@ struct SmartFeedSummaryWidgetView: View {
     }
 }
 
+//struct ArticleItemView_Previews: PreviewProvider {
+//    static let article = LatestArticle(id: "abc", feedTitle: "NetNewsWire", articleTitle: "NetNewsWire 5.0.4d2 for Mac: Misc. Fixes", articleSummary: "If you had already signed up for NetNewsWire 5 testing, you’ll need to sign up again. We were getting close to the maximum number of testers, so we figured the fair thing was to remove that group and start fresh.", feedIcon: Data(), pubDate: "2020-07-11 01:13:34 +0000")
+//
+//    static let deepLink = URL(string: "https://google.com")
+//
+//    static var previews: some View {
+//        ArticleItemView(article: article, deepLink: deepLink!)
+//            .background(Color(UIColor.systemBackground)).environment(\.colorScheme, .dark)
+//    }
+//}
+
 struct SmartFeedSummaryWidgetView_Previews: PreviewProvider {
     static var previews: some View {
         SmartFeedSummaryWidgetView(entry: Provider.Entry.init(date: Date(), widgetData: WidgetDataDecoder.sampleData()))
-//            .background(Color(UIColor.systemBackground)).environment(\.colorScheme, .dark)
+            .background(Color(UIColor.systemBackground)).environment(\.colorScheme, .dark)
             .previewContext(WidgetPreviewContext(family: .systemSmall))
     }
 }
@@ -190,7 +241,7 @@ struct SmartFeedSummaryWidget: Widget {
         })
         .configurationDisplayName(L10n.smartFeedSummaryWidgetTitle)
         .description(L10n.smartFeedSummaryWidgetDescription)
-        .supportedFamilies([.systemSmall, .systemMedium])
+        .supportedFamilies([.systemSmall])
         
     }
 }

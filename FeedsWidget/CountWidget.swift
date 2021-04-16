@@ -16,11 +16,7 @@ import Combine
 
 struct CountProvider: TimelineProvider {
     @ObservedObject var unreads = Unread(dataSource: DataSourceService.current.rssItem)
-    
-    static var widgetPlaceholder: NewestStory {
-        return NewestStory(short_id: "Author Name", short_id_url: "https://", created_at: "2020-09-17T08:35:19.000-05:00", title: "Story title", url: "https://")
-    }
-    
+
     let dataController = DataController()
     let coreDataManager: CoreDataManager
     var moc = managedObjectContext
@@ -149,6 +145,7 @@ struct SmallestHottestWidgetView: View {
                 .aspectRatio(contentMode: .fill)
                 .opacity(0.4).padding([.top, .leading], -25)
                 .frame(width: 100, height: 100)
+            
             Spacer()
             if unreads.items.count == 0 {
                 Text("\(unreads.items.count) Unread").font(.caption).foregroundColor(.gray)

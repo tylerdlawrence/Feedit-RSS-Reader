@@ -10,178 +10,194 @@ import WidgetKit
 import CoreData
 import Combine
 import KingfisherSwiftUI
+import Foundation
+import FeedKit
 
-final class FeedProvider: TimelineProvider {
-    public typealias Entry = RSSFeedViewModel
+class RSSParser: NSObject, XMLParserDelegate {
+    var rssItems: [RSSItem] = []
+    private var currentElement = ""
 
-    let dataSource: RSSItemDataSource
-    let rss: RSS
+    private var currentTitle: String = "" {
+        didSet {
+            currentTitle = currentTitle.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+        }
+    }
     
-    var snapshotCancellable: AnyCancellable?
-    var timelineCancellable: AnyCancellable?
-
-    private var entryPublisher: AnyPublisher<Entry, Never>
+    private var currentDescription: String = "" {
+        didSet {
+            currentDescription = currentDescription.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+        }
+    }
     
-    init(rss: RSS, dataSource: RSSItemDataSource, entryPublisher: Any) {
-        self.dataSource = dataSource
-        self.rss = rss
-        self.entryPublisher = entryPublisher as! AnyPublisher<FeedProvider.Entry, Never>
+    private var currentPubDate: String = "" {
+        didSet {
+            currentPubDate = currentPubDate.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+        }
+    }
+    
+    private var currentLink: String = "" {
+        didSet {
+            currentLink = currentLink.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+        }
+    }
+    
+    private var parserCompletionHandler: (([RSSItem]) -> Void)?
+        func parse(url: String, completionHandler: (([RSSItem]) -> Void)?) {
+        self.parserCompletionHandler = completionHandler
+
+        let request = URLRequest(url: URL(string: url)!)
+        let urlSession = URLSession.shared
+        let task = urlSession.dataTask(with: request) { (data, response, error) in
+            guard let data = data else {
+                if let error = error {
+                    print(error.localizedDescription)
+                }
+                return
+            }
+            /// parse our xml data
+            let parser = XMLParser(data: data)
+            parser.delegate = self
+            parser.parse()
+        }
+        
+        task.resume()
     }
 
-    func placeholder(in with: Context) -> RSSFeedViewModel {
-        RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem)
+    // MARK: - XML Parser Delegate
+    func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
+        currentElement = elementName
+        if currentElement == "item" {
+            currentTitle = ""
+            currentDescription = ""
+            currentPubDate = ""
+            currentLink = ""
+        }
     }
 
-    func getSnapshot(in context: Context, completion: @escaping (RSSFeedViewModel) -> Void) {
-        snapshotCancellable = entryPublisher
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: completion)
+    func parser(_ parser: XMLParser, foundCharacters string: String) {
+        switch currentElement {
+        case "title": currentTitle += string
+        case "description" : currentDescription += string
+        case "pubDate" : currentPubDate += string
+        case "link" : currentLink += string
+
+        default: break
+        }
     }
 
-    func getTimeline(in context: Context, completion: @escaping (Timeline<RSSFeedViewModel>) -> Void) {
-        timelineCancellable = entryPublisher
-            .map { Timeline(entries: [$0], policy: .atEnd) }
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: completion)
+    func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
+        if elementName == "item" {
+//            let rssItem = RSSItem(title: currentTitle, link: currentLink, description: currentDescription, pubDate: currentPubDate)
+            let rssItem = RSSItem()
+            self.rssItems.append(rssItem)
+        }
+    }
+
+    func parserDidEndDocument(_ parser: XMLParser) {
+        WidgetCenter.shared.reloadAllTimelines()
+        parserCompletionHandler?(rssItems)
+    }
+
+    func parser(_ parser: XMLParser, parseErrorOccurred parseError: Error) {
+        print(parseError.localizedDescription)
     }
 }
 
-extension RSSFeedViewModel: TimelineEntry {
-    var date: Date {
-        items.last?.createTime?.addingTimeInterval(1) ?? Date()
+
+struct ParserProvider: TimelineProvider {
+//    @State private var rssItems:[RSSItem]?
+    var rssItems:[RSSItem]?
+    let feedParser = RSSParser()
+    func placeholder(in context: Context) -> SimpleEntry {
+        //SimpleEntry(date: Date(), title:"News", description: "News article here", url: "Http://link", createTime: Date())
+        SimpleEntry(date: Date(), title: "A Message on the Upcoming Shows", description: "We are happy to announce that the Band and Fans WILL be seeing each other, in concert setting – SOON! A long awaited moment.", url: "https://www.apple.com", createTime: Date())
+    }
+
+    func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> ()) {
+        let entry = SimpleEntry(date: Date(), title: "A Message on the Upcoming Shows", description: "We are happy to announce that the Band and Fans WILL be seeing each other, in concert setting – SOON! A long awaited moment.", url: "https://www.apple.com", createTime: Date())
+            //SimpleEntry(date: Date(), title:"News", description: "News Article Here", url: "https://link", createTime: Date())
+        completion(entry)
+    }
+    
+//    func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
+//        guard !feedParser.rssItems.isEmpty else { return }
+    func getTimeline(in context: Context, completion: @escaping (Timeline<SimpleEntry>) -> ()) {
+        
+        var entries: [SimpleEntry] = []
+        feedParser.parse(url: "https://widespreadpanic.com/feed") {(rssItems) in
+//             self.rssItems = rssItems
+            let refreshDate = Calendar.current.date(byAdding: .minute, value: 30, to: Date())!
+            let currentDate = Date()
+            let entry = SimpleEntry(date: currentDate, title:rssItems[0].title, description: rssItems[0].description, url: rssItems[0].url, createTime: rssItems[0].createTime!)
+            entries.append(entry)
+        
+            let timeline = Timeline(entries: entries, policy: .after(refreshDate))
+            completion(timeline)
+        }
     }
 }
 
-struct FeedEntry: TimelineEntry {
+struct SimpleEntry: TimelineEntry {
     let date: Date
-    var items: RSSItem
-    
+    let title: String
+    let description: String
+    let url: String
+    let createTime: Date
+    let rssItems = RSSItem()
 }
 
-struct FeedsEntryView: View {
-    let entry: RSSFeedViewModel
-
+struct FritchNewsEntryView : View {
+    var entry: SimpleEntry
     var body: some View {
-        SmallFeedWidgetView(entry: entry, viewModel: entry).padding()
-    }
-}
-
-struct SmallFeedWidgetView: View {
-    @Environment(\.widgetFamily) var family: WidgetFamily
-    @Environment(\.sizeCategory) var sizeCategory: ContentSizeCategory
-    
-    var entry: FeedProvider.Entry
-    
-    @ObservedObject var viewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
-    
-    @ObservedObject var unreads = Unread(dataSource: DataSourceService.current.rssItem)
-    
-    var body: some View {
-        ZStack(alignment: .topLeading) {
+        ZStack {
             Image("launch")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
-                .opacity(0.4).padding([.top, .leading], -25)
-                .frame(width: 100, height: 100)
+                .opacity(0.4).padding([.top, .leading], -45)
+                .frame(width: 125, height: 125)
+                
+        Spacer()
             
-            VStack(alignment: .leading) {
-                Spacer(minLength: 0)
-                VStack(alignment: .leading) {
-
-
-                    ForEach(unreads.items, id: \.self) { entry in
-                        HStack {
-                            unreadImage
-                            VStack(alignment: .leading) {
-                                Text("\(entry.createTime?.string() ?? "")")
-                                    .textCase(.uppercase)
-                                    .font(.system(size: 11, weight: .medium, design: .rounded))
-                                    .foregroundColor(.gray)
-                                    .opacity(0.8)
-                                Text(entry.title)
-                            }
-                        }
-                    }
-                }
-                .onAppear {
-                    self.unreads.fecthResults()
-                }
-            }.background(Color(UIColor.systemBackground).blur(radius: 10.0).opacity(0.5))
-        }
-    }
-    var unreadImage: some View {
-        Image(systemName: "largecircle.fill.circle")
-            .resizable()
-            .frame(width: 15, height: 15, alignment: .top)
-            .foregroundColor(.gray)
-    }
-    
-    func maxCount() -> Int {
-        var reduceAccessibilityCount: Int = 0
-        if SizeCategories().isSizeCategoryLarge(category: sizeCategory) {
-            reduceAccessibilityCount = 1
-        }
-        
-        if family == .systemLarge {
-            return entry.items.count >= 7 ? (7 - reduceAccessibilityCount) : entry.items.count
-        }
-        return entry.items.count >= 3 ? (3 - reduceAccessibilityCount) : entry.items.count
-    }
-    
-    var inboxZero: some View {
-        VStack(alignment: .center) {
-            Spacer()
-//            Image(systemName: "largecircle.fill.circle")
-//                .resizable()
-//                .aspectRatio(contentMode: .fit)
-//                .foregroundColor(.gray)
-//                .frame(width: 30)
-            Text("\(unreads.items.count) Unread")
-                .font(.title3)
-                .bold()
-                .padding(.leading, 50)
+        VStack(alignment: .leading, spacing: 2) {
+            Text("\(entry.createTime.string())")
+                .textCase(.uppercase)
+                .font(.system(size: 11, weight: .medium, design: .rounded))
+                .foregroundColor(.gray)
+            
+            Text(entry.title)
+                .lineLimit(3)
+                .font(.system(.subheadline).bold())
                 .foregroundColor(Color("text"))
-            Text(L10n.unreadWidgetNoItemsTitle)
-                .font(.headline)
+            
+            Text(entry.description)
+                .lineLimit(1)
+                .font(.system(size: 12, weight: .medium, design: .rounded))
                 .foregroundColor(.gray)
-
-            Text(L10n.unreadWidgetNoItems)
-                .font(.caption)
-                .foregroundColor(.gray)
-            Spacer()
         }
-        .multilineTextAlignment(.center)
-        .padding()
+        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .leading)
+                .padding()
+        .background(Color(UIColor.systemBackground).blur(radius: 10.0).opacity(0.3))
+        }
     }
 }
 
-struct FeedWidget: Widget {
-    let kind: String = "group.com.tylerdlawrence.feedit.FeedWidget"
-    
-    let entry = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
-    
+struct TestWidget: Widget {
+    let kind: String = "TestWidget"
+
     var body: some WidgetConfiguration {
-        return StaticConfiguration(kind: kind, provider: FeedProvider(rss: RSS(), dataSource: DataSourceService.current.rssItem, entryPublisher: entry), content: { entry in
-            FeedsEntryView(entry: entry)
-//                .environmentObject(entry)
-//                .background(Color("WidgetBackground"))
-
-        })
-        .configurationDisplayName(L10n.unreadWidgetTitle)
-        .description(L10n.unreadWidgetDescription)
+        StaticConfiguration(kind: kind, provider: ParserProvider()) { entry in
+            FritchNewsEntryView(entry: entry)
+        }
+        .configurationDisplayName("Random Article")
+        .description("One of your most recent articles")
         .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
-
     }
 }
 
-struct FeedWidget_Previews: PreviewProvider {
+struct TestWidget_Previews: PreviewProvider {
     static var previews: some View {
-        FeedsEntryView(entry: RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem))
-//            .previewContext(WidgetPreviewContext(family: .systemSmall))
-        FeedsEntryView(entry: RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem))
-            .previewContext(WidgetPreviewContext(family: .systemMedium))
-        FeedsEntryView(entry: RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem))
-            .previewContext(WidgetPreviewContext(family: .systemLarge))
-
+        FritchNewsEntryView(entry: SimpleEntry(date: Date(), title: "A Message on the Upcoming Shows", description: "We are happy to announce that the Band and Fans WILL be seeing each other, in concert setting – SOON! A long awaited moment.", url: "https://www.apple.com", createTime: Date()))
+            .background(Color(UIColor.systemBackground)).environment(\.colorScheme, .dark)
+            .previewContext(WidgetPreviewContext(family: .systemSmall))
     }
 }

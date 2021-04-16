@@ -14,7 +14,7 @@ import Intents
 // MARK: - Supported Widgets
 
 struct UnreadWidget: Widget {
-    let kind: String = "group.com.tylerdlawrence.feedit.UnreadWidget"
+    let kind: String = "UnreadWidget"
 
     var body: some WidgetConfiguration {
 
@@ -27,12 +27,11 @@ struct UnreadWidget: Widget {
         .configurationDisplayName(L10n.unreadWidgetTitle)
         .description(L10n.unreadWidgetDescription)
         .supportedFamilies([.systemMedium, .systemLarge])
-
     }
 }
 
 struct AllArticlesWidget: Widget {
-    let kind: String = "group.com.tylerdlawrence.feedit.AllArticlesWidget"
+    let kind: String = "AllArticlesWidget"
 
     var body: some WidgetConfiguration {
 
@@ -45,25 +44,21 @@ struct AllArticlesWidget: Widget {
         .configurationDisplayName(L10n.todayWidgetTitle)
         .description(L10n.todayWidgetDescription)
         .supportedFamilies([.systemMedium, .systemLarge])
-
     }
 }
 
 struct StarredWidget: Widget {
-    let kind: String = "group.com.tylerdlawrence.feedit.StarredWidget"
+    let kind: String = "StarredWidget"
 
     var body: some WidgetConfiguration {
-//context: managedObjectContext
         return StaticConfiguration(kind: kind, provider: Provider(), content: { entry in
             StarredWidgetView(entry: entry)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color("WidgetBackground"))
-
         })
         .configurationDisplayName(L10n.starredWidgetTitle)
         .description(L10n.starredWidgetDescription)
         .supportedFamilies([.systemMedium, .systemLarge])
-
     }
 }
 
@@ -74,7 +69,6 @@ struct CountWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: CountProvider(context: managedObjectContext)) { entry in
             CountWidgetEntryView(entry: entry)
-                
         }
         .configurationDisplayName("Unread")
         .description("View your recent unread articles")
@@ -88,11 +82,13 @@ struct FeeditWidgets: WidgetBundle {
 
     @WidgetBundleBuilder
     var body: some Widget {
-        SmartFeedSummaryWidget()
+        TestWidget()
         CountWidget()
-        
-//        SmartFeedsSummaryWidget()
+        SmartFeedSummaryWidget()
 //        FeedWidget()
+        
+        
+        
 //        AllArticlesWidget()
 //        UnreadWidget()
 //        StarredWidget()

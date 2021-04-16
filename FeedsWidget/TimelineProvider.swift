@@ -17,7 +17,6 @@ struct WidgetData: Codable {
     let currentUnreadCount: Int
     let currentTodayCount: Int
     let currentStarredCount: Int
-    
     let unreadArticles: [LatestArticle]
     let starredArticles: [LatestArticle]
     let todayArticles: [LatestArticle]
@@ -25,14 +24,12 @@ struct WidgetData: Codable {
 }
 
 struct LatestArticle: Codable, Identifiable {
-    
     var id: String
     let feedTitle: String
     let articleTitle: String?
     let articleSummary: String?
     let feedIcon: Data? // Base64 encoded image data
     let pubDate: String
-    
 }
 
 var managedObjectContext: NSManagedObjectContext {
@@ -47,7 +44,6 @@ var workingContext: NSManagedObjectContext {
 
 var persistentContainer: NSPersistentCloudKitContainer = {
     let container = NSPersistentCloudKitContainer(name: "feeditrssreader")
-
     let storeURL = URL.storeURL(for: "group.com.tylerdlawrence.feedit.shared", databaseName: "feeditrssreader")
     let description = NSPersistentStoreDescription(url: storeURL)
 
@@ -72,24 +68,36 @@ struct Provider: TimelineProvider {
 //    }
 
     func placeholder(in context: Context) -> WidgetTimelineEntry {
-        let currentDate = Date()
-        let entryDate = Calendar.current.date(byAdding: .minute, value: 1, to: currentDate)!
-        return WidgetTimelineEntry(date: entryDate, widgetData: WidgetData(currentUnreadCount: 50, currentTodayCount: 125, currentStarredCount: 10, unreadArticles: [], starredArticles: [], todayArticles: [], lastUpdateTime: Date()))
-            
+        do {
+            let data = try WidgetDataDecoder.decodeWidgetData()
+            return WidgetTimelineEntry(date: Date(), widgetData: data)
+        } catch {
+            return WidgetTimelineEntry(date: Date(), widgetData: WidgetDataDecoder.sampleData())
+        }
     }
     
     func getSnapshot(in context: Context, completion: @escaping (WidgetTimelineEntry) -> Void) {
         if context.isPreview {
-            var entries: [WidgetTimelineEntry] = []
-            let currentDate = Date()
-            let entryDate = Calendar.current.date(byAdding: .minute, value: 1, to: currentDate)!
-            let entry = WidgetTimelineEntry(date: entryDate, widgetData: WidgetData(currentUnreadCount: 50, currentTodayCount: 125, currentStarredCount: 10, unreadArticles: [], starredArticles: [], todayArticles: [], lastUpdateTime: Date()))
-                    entries.append(entry)
-
-            completion(entry)
+            do {
+                let data = try WidgetDataDecoder.decodeWidgetData()
+                completion(WidgetTimelineEntry(date: Date(), widgetData: data))
+            } catch {
+                completion(WidgetTimelineEntry(date: Date(),
+                                               widgetData: WidgetDataDecoder.sampleData()))
+            }
+        } else {
+            do {
+                let widgetData = try WidgetDataDecoder.decodeWidgetData()
+                let entry = WidgetTimelineEntry(date: Date(), widgetData: widgetData)
+                completion(entry)
+            } catch {
+                let entry = WidgetTimelineEntry(date: Date(),
+                                                widgetData: WidgetDataDecoder.sampleData())
+                completion(entry)
+            }
         }
     }
-    
+   
     func getTimeline(in context: Context, completion: @escaping (Timeline<WidgetTimelineEntry>) -> Void) {
         let date = Date()
         var entry: WidgetTimelineEntry
@@ -104,6 +112,27 @@ struct Provider: TimelineProvider {
             policy: .after(nextUpdateDate))
         completion(timeline)
     }
+    
+//    func getTimeline(in context: Context, completion: @escaping (Timeline<WidgetTimelineEntry>) -> Void) {
+//        let date = Date()
+//        var entry: WidgetTimelineEntry
+//
+//        // Configure next update in 1 hour.
+//        let nextUpdateDate = Calendar.current.date(byAdding: .hour, value: 1, to: date)!
+//
+//        do {
+//            let widgetData = try WidgetDataDecoder.decodeWidgetData()
+//            entry = WidgetTimelineEntry(date: date, widgetData: widgetData)
+//        } catch {
+//            entry = WidgetTimelineEntry(date: date, widgetData: WidgetData(currentUnreadCount: 0, currentTodayCount: 0, currentStarredCount: 0, unreadArticles: [], starredArticles: [], todayArticles: [], lastUpdateTime: Date()))
+//        }
+//
+//        let timeline = Timeline(
+//            entries:[entry],
+//            policy: .after(nextUpdateDate))
+//
+//        completion(timeline)
+//    }
     
     public typealias Entry = WidgetTimelineEntry
     

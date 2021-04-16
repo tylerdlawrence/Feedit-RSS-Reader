@@ -118,4 +118,11 @@ struct UnreadWidgetView : View {
     
 }
 
-
+struct UnreadWidgetView_Previews: PreviewProvider {
+    
+    static var previews: some View {
+        UnreadWidgetView(entry: Provider.Entry.init(date: Date(), widgetData: WidgetDataDecoder.sampleData()))
+            .background(Color(UIColor.systemBackground)).environment(\.colorScheme, .dark)
+            .previewContext(WidgetPreviewContext(family: .systemMedium))
+    }
+}

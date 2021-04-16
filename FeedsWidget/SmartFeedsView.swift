@@ -53,7 +53,8 @@ struct SmartFeedsView: View {
                     HStack {
                         todayImage
                         VStack(alignment: .leading, spacing: nil, content: {
-                          Text(formattedCount(articles.items.count))
+                            Text(formattedCount(entry.widgetData.currentTodayCount))
+//                          Text(formattedCount(articles.items.count))
     //                        Text("\(articles.items.count)")
                                 .font(Font.system(.caption, design: .rounded)).bold()
                             Text(L10n.today)
@@ -68,7 +69,8 @@ struct SmartFeedsView: View {
                     HStack {
                         unreadImage
                         VStack(alignment: .leading, spacing: nil, content: {
-                            Text(formattedCount(unread.items.count))
+                            Text(formattedCount(entry.widgetData.currentUnreadCount))
+//                            Text(formattedCount(unread.items.count))
     //                        Text("\(unread.items.count)")
                                 .font(Font.system(.caption, design: .rounded)).bold()
                             Text(L10n.unread)
@@ -82,7 +84,8 @@ struct SmartFeedsView: View {
                     HStack {
                         starredImage
                         VStack(alignment: .leading, spacing: nil, content: {
-                            Text(formattedCount(archiveListViewModel.items.count))
+                            Text(formattedCount(entry.widgetData.currentStarredCount))
+//                            Text(formattedCount(archiveListViewModel.items.count))
     //                        Text("\(archiveListViewModel.items.count)")
                                 .font(Font.system(.caption, design: .rounded)).bold()
                                 
@@ -144,19 +147,9 @@ struct SmartFeedsView: View {
 struct SmartFeedsView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            SmartFeedsView(entry: WidgetTimelineEntry(date: Date(), widgetData: WidgetData(currentUnreadCount: 50, currentTodayCount: 125, currentStarredCount: 10, unreadArticles: [], starredArticles: [], todayArticles: [], lastUpdateTime: Date())))
-//                .background(Color("WidgetBackground"))
-                .preferredColorScheme(.dark)
+            SmartFeedsView(entry: Provider.Entry.init(date: Date(), widgetData: WidgetDataDecoder.sampleData()))
+                .background(Color(UIColor.systemBackground)).environment(\.colorScheme, .dark)
                 .previewContext(WidgetPreviewContext(family: .systemSmall))
-                .redacted(reason: .placeholder)
-            
-            SmartFeedsView(entry: WidgetTimelineEntry(date: Date(), widgetData: WidgetData(currentUnreadCount: 50, currentTodayCount: 125, currentStarredCount: 10, unreadArticles: [], starredArticles: [], todayArticles: [], lastUpdateTime: Date())))
-//                .background(Color("WidgetBackground"))
-                .preferredColorScheme(.dark)
-                .previewContext(WidgetPreviewContext(family: .systemSmall))
-//                .environmentObject(DataSourceService.current.rss)
-//                .environmentObject(DataSourceService.current.rssItem)
-//                .environment(\.managedObjectContext, Persistence.current.context)
         }
     }
 }

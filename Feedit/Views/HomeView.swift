@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SwiftUIX
 import CoreData
 import Introspect
 import Combine
@@ -293,7 +292,7 @@ struct HomeView: View {
     
     private var editButton: some View {
         Button(action: {
-            self.editMode.toggle()
+//            self.editMode.toggle()
             self.selection = Set<UUID>()
         }) {
             Image(systemName: "ellipsis.circle").font(.system(size: 20, weight: .medium, design: .rounded))

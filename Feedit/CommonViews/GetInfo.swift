@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SwiftUIX
 import Introspect
 import UIKit
 import MobileCoreServices
@@ -111,32 +110,33 @@ struct InfoView: View {
                 Section(header: Text("Home Page").padding(.leading).textCase(nil)){
                     HStack{
 //                        Text(rssSource.url).textCase(.lowercase)
-                        LinkPresentationView(url: URL(string: rssSource.url)!)
-                            .frame(width: 320, height: 70)
-                            .contextMenu {
-                                Button(action: {
-                                    self.actionSheetShown = true
-                                    UIPasteboard.general.setValue(rssSource.url,
-                                                                  forPasteboardType: kUTTypePlainText as String)
-                                }) {
-                                    Text("Copy URL")
-                                    Image(systemName: "doc.on.clipboard")
-                                }
-                     
-                                Link(destination: URL(string: rssSource.url)!, label: {
-                                    HStack {
-                                        Text("Go To Website")
-                                        Spacer()
-                                        Image(systemName: "safari")
-                                    }
-                                })
+//                        LinkPresentationView(url: URL(string: rssSource.url)!)
+                        Link(destination: URL(string: rss.rssURL!.relativeString)!, label: {
+                            HStack {
+                                Image(systemName: "safari")
                             }
+                        })
+                        .frame(width: 320, height: 70)
+                        .contextMenu {
+                            Button(action: {
+                                self.actionSheetShown = true
+                                UIPasteboard.general.setValue(rssSource.url,
+                                                              forPasteboardType: kUTTypePlainText as String)
+                            }) {
+                                Text("Copy URL")
+                                Image(systemName: "doc.on.clipboard")
+                            }
+                 
+                            Link(destination: URL(string: rssSource.url)!, label: {
+                                HStack {
+                                    Text("Go To Website")
+                                    Spacer()
+                                    Image(systemName: "safari")
+                                }
+                            })
+                        }
                         Spacer()
-//                        Link(destination: URL(string: rss.rssURL!.relativeString)!, label: {
-//                            HStack {
-//                                Image(systemName: "safari")
-//                            }
-//                        })
+
                         
                     }
                 }
