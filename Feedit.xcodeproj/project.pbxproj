@@ -576,6 +576,7 @@
 		614136D0262A87E900C0B197 /* ArticleViews */ = {
 			isa = PBXGroup;
 			children = (
+				6171B88D2625F739000486FB /* RecentArticleWidget.swift */,
 				61E9939B260AF1E500679853 /* ArticleItemView.swift */,
 			);
 			path = ArticleViews;
@@ -837,7 +838,6 @@
 				61E9938B260AEF6A00679853 /* Resources */,
 				61E9935A260AC0E200679853 /* Assets.xcassets */,
 				61E9935C260AC0E200679853 /* Info.plist */,
-				6171B88D2625F739000486FB /* RecentArticleWidget.swift */,
 				6171B8A0262750A5000486FB /* TestWidget.swift */,
 				61E99358260AC0DE00679853 /* AnotherTestView.swift */,
 			);
