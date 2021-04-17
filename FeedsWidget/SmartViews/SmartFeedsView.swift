@@ -121,20 +121,7 @@ struct SmartFeedSummaryWidgetView_Previews: PreviewProvider {
     }
 }
 
-struct SmartFeedSummaryWidget: Widget {
-    let kind: String = "SmartFeedSummaryWidget"
-    
-    var body: some WidgetConfiguration {
-        
-        return StaticConfiguration(kind: kind, provider: Provider(), content: { entry in
-            SmartFeedSummaryWidgetView(entry: entry)
-        })
-        .configurationDisplayName(L10n.smartFeedSummaryWidgetTitle)
-        .description(L10n.smartFeedSummaryWidgetDescription)
-        .supportedFamilies([.systemSmall])
-        
-    }
-}
+
 
 
 

@@ -32,41 +32,8 @@ struct LatestArticle: Codable, Identifiable {
     let pubDate: String
 }
 
-var managedObjectContext: NSManagedObjectContext {
-    return persistentContainer.viewContext
-}
-
-var workingContext: NSManagedObjectContext {
-    let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-    context.parent = managedObjectContext
-    return context
-}
-
-var persistentContainer: NSPersistentCloudKitContainer = {
-    let container = NSPersistentCloudKitContainer(name: "feeditrssreader")
-    let storeURL = URL.storeURL(for: "group.com.tylerdlawrence.feedit.shared", databaseName: "feeditrssreader")
-    let description = NSPersistentStoreDescription(url: storeURL)
-
-    container.loadPersistentStores(completionHandler: { storeDescription, error in
-        if let error = error as NSError? {
-            print(error)
-        }
-    })
-
-    container.viewContext.automaticallyMergesChangesFromParent = true
-    container.viewContext.mergePolicy = NSMergeByPropertyStoreTrumpMergePolicy
-
-    return container
-}()
-
 struct Provider: TimelineProvider {
     
-//    var moc = managedObjectContext
-//
-//    init(context : NSManagedObjectContext) {
-//        self.moc = context
-//    }
-
     func placeholder(in context: Context) -> WidgetTimelineEntry {
         do {
             let data = try WidgetDataDecoder.decodeWidgetData()
@@ -102,7 +69,14 @@ struct Provider: TimelineProvider {
         let date = Date()
         var entry: WidgetTimelineEntry
 
-        entry = WidgetTimelineEntry(date: date, widgetData: WidgetData(currentUnreadCount: 50, currentTodayCount: 125, currentStarredCount: 10, unreadArticles: [], starredArticles: [], todayArticles: [], lastUpdateTime: Date()))
+        entry = WidgetTimelineEntry(date: date, widgetData: WidgetData(currentUnreadCount: 0, currentTodayCount: 0, currentStarredCount: 0, unreadArticles: [], starredArticles: [], todayArticles: [], lastUpdateTime: Date()))
+        
+//        do {
+//            let widgetData = try WidgetDataDecoder.decodeWidgetData()
+//            entry = WidgetTimelineEntry(date: date, widgetData: widgetData)
+//        } catch {
+//            entry = WidgetTimelineEntry(date: date, widgetData: WidgetData(currentUnreadCount: 0, currentTodayCount: 0, currentStarredCount: 0, unreadArticles: [], starredArticles: [], todayArticles: [], lastUpdateTime: Date()))
+//        }
 
         // Configure next update in 1 hour.
         let nextUpdateDate = Calendar.current.date(byAdding: .hour, value: 1, to: date)!
@@ -112,27 +86,6 @@ struct Provider: TimelineProvider {
             policy: .after(nextUpdateDate))
         completion(timeline)
     }
-    
-//    func getTimeline(in context: Context, completion: @escaping (Timeline<WidgetTimelineEntry>) -> Void) {
-//        let date = Date()
-//        var entry: WidgetTimelineEntry
-//
-//        // Configure next update in 1 hour.
-//        let nextUpdateDate = Calendar.current.date(byAdding: .hour, value: 1, to: date)!
-//
-//        do {
-//            let widgetData = try WidgetDataDecoder.decodeWidgetData()
-//            entry = WidgetTimelineEntry(date: date, widgetData: widgetData)
-//        } catch {
-//            entry = WidgetTimelineEntry(date: date, widgetData: WidgetData(currentUnreadCount: 0, currentTodayCount: 0, currentStarredCount: 0, unreadArticles: [], starredArticles: [], todayArticles: [], lastUpdateTime: Date()))
-//        }
-//
-//        let timeline = Timeline(
-//            entries:[entry],
-//            policy: .after(nextUpdateDate))
-//
-//        completion(timeline)
-//    }
     
     public typealias Entry = WidgetTimelineEntry
     

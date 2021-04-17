@@ -26,9 +26,9 @@ struct AnotherTestView: View {
                 
             })
         }
-        .onAppear {
+        .onAppear(perform : {
             self.unreads.fecthResults()
-        }
+        })
     }
     func maxCount() -> Int {
         var reduceAccessibilityCount: Int = 0
@@ -127,14 +127,14 @@ struct ArticleTestItemView: View {
 struct AnotherTestProvider: TimelineProvider {
     @ObservedObject var unreads = Unread(dataSource: DataSourceService.current.rssItem)
 
-    let dataController = DataController()
-    let coreDataManager: CoreDataManager
-    var moc = managedObjectContext
-    
-    init(context : NSManagedObjectContext) {
-        self.moc = context
-        coreDataManager = CoreDataManager(dataController)
-    }
+//    let dataController = DataController()
+//    let coreDataManager: CoreDataManager
+//    var moc = managedObjectContext
+//
+//    init(context : NSManagedObjectContext) {
+//        self.moc = context
+//        coreDataManager = CoreDataManager(dataController)
+//    }
     
     func placeholder(in context: Context) -> AnotherTestEntry {
         AnotherTestEntry(date: Date(), items: [])
@@ -165,4 +165,19 @@ struct AnotherTestEntry: TimelineEntry {
     let date: Date
     var items: [RSSItem]//?
     
+}
+
+struct AnotherTestWidget: Widget {
+    @Environment(\.widgetFamily) var family
+    let kind: String = "AnotherTestWidget"
+            
+    var body: some WidgetConfiguration {
+        return StaticConfiguration(kind: kind, provider: AnotherTestProvider(), content: { entry in
+            AnotherTestView(entry: entry)
+            //CountWidgetEntryView(entry: entry)
+        })
+        .configurationDisplayName("Recent Articles")
+        .description("View your recent articles")
+        .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
+    }
 }

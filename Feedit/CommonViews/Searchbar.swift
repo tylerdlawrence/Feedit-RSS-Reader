@@ -5,11 +5,15 @@
 //  Created by Tyler D Lawrence on 1/18/21.
 //
 
+import Foundation
+import Combine
 import SwiftUI
 
-class SearchBar: NSObject, ObservableObject {
+final class SearchBar: NSObject, ObservableObject {
     @Published var text: String = ""
     let searchController: UISearchController = UISearchController(searchResultsController: nil)
+    
+    let objectWillChange = PassthroughSubject<Void, Never>()
     
     override init() {
         super.init()
@@ -18,6 +22,7 @@ class SearchBar: NSObject, ObservableObject {
         self.searchController.searchBar.autocapitalizationType = .none
         self.searchController.searchBar.placeholder = "Search"
     }
+    func willSet() { objectWillChange.send() }
 }
 
 extension SearchBar: UISearchResultsUpdating {

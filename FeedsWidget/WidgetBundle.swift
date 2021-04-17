@@ -64,11 +64,26 @@ struct RecentArticleWidget: Widget {
     var body: some WidgetConfiguration {
         return StaticConfiguration(kind: kind, provider: Provider(), content: { entry in
             RecentArticleWidgetEntryView(entry: Provider.Entry.init(date: Date(), widgetData: WidgetDataDecoder.sampleData()))
-            //CountWidgetEntryView(entry: entry)
+//            RecentArticleWidgetEntryView(entry: entry)
         })
         .configurationDisplayName("Recent Articles")
         .description("View your recent articles")
         .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
+    }
+}
+
+struct SmartFeedSummaryWidget: Widget {
+    let kind: String = "SmartFeedSummaryWidget"
+    
+    var body: some WidgetConfiguration {
+        
+        return StaticConfiguration(kind: kind, provider: Provider(), content: { entry in
+            SmartFeedSummaryWidgetView(entry: entry)
+        })
+        .configurationDisplayName(L10n.smartFeedSummaryWidgetTitle)
+        .description(L10n.smartFeedSummaryWidgetDescription)
+        .supportedFamilies([.systemSmall])
+        
     }
 }
 
@@ -80,8 +95,6 @@ struct FeeditWidgets: WidgetBundle {
     var body: some Widget {
         SmartFeedSummaryWidget()
         RecentArticleWidget()
-//        AllArticlesWidget()
-//        UnreadWidget()
-//        StarredWidget()
+        //TestWidget()
     }
 }
