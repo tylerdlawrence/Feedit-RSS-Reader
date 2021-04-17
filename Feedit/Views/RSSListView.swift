@@ -8,69 +8,24 @@
 //
 
 import SwiftUI
+import FeedKit
+import UIKit
 import CoreData
 import Combine
 import Foundation
 import os.log
-
-struct RSSIndexListView: View {
-    
-    @EnvironmentObject var rssDataSource: RSSDataSource
-    @Environment(\.managedObjectContext) private var viewContext
-    @StateObject var viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-    
-    var rss = RSS()
-    
-    var body: some View {
-//        List(0..<viewModel.items.count,id:\.self) { index in
-        List(0..<viewModel.items.count,id:\.self) { index in
-            ZStack {
-                NavigationLink(destination: NavigationLazyView(self.destinationView(rss: rss)).environmentObject(DataSourceService.current.rss)
-                          
-                ) {
-                    EmptyView()
-                }
-                .opacity(0.0)
-                .buttonStyle(PlainButtonStyle())
-                
-                HStack {
-                    RSSRow(viewModel: viewModel, rss: rss).environmentObject(DataSourceService.current.rss)
-                    Spacer()
-                    Text("\(viewModel.items[index].itemCount)")
-                }
-            }
-            .onAppear {
-                self.viewModel.fecthResults()
-            }
-        }
-    }
-    private func destinationView(rss: RSS) -> some View {
-        let item = RSSItem()
-        return RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), rssItem: item, selectedFilter: .all)
-            .environmentObject(DataSourceService.current.rss)
-    }
-}
-
-struct RSSIndexListView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationView {
-            RSSIndexListView()
-                .environmentObject(DataSourceService.current.rss)
-                .environmentObject(DataSourceService.current.rssItem)
-                .environment(\.managedObjectContext, Persistence.current.context)
-                .preferredColorScheme(.dark)
-        }
-    }
-}
 
 struct RSSListView: View {
     @EnvironmentObject var rssDataSource: RSSDataSource
     @Environment(\.managedObjectContext) private var viewContext
     @StateObject var viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     @State private var revealFeedsDisclosureGroup = false
-        
+    
+    var rssFeed: RSSFeed?
+    
     var body: some View {
-        List(0..<viewModel.items.count,id:\.self) { index in
+//        ForEach(viewModel.items,id:\.self) { rss in
+        
             DisclosureGroup(
                 isExpanded: $revealFeedsDisclosureGroup,
                 content: {
@@ -87,13 +42,12 @@ struct RSSListView: View {
                         HStack {
                             RSSRow(viewModel: viewModel, rss: rss).environmentObject(DataSourceService.current.rss)
 //                            Spacer()
-//                            Text("\(viewModel.items[index].itemCount)")
+//                                .environmentObject(DataSourceService.current.rss)
+//                                .environmentObject(DataSourceService.current.rssItem)
                         }
                     }
                 }.onDelete(perform: delete)
-                .onAppear {
-                    self.viewModel.fecthResults()
-                }
+                
                 .listRowBackground(Color("accent"))
                 .environmentObject(DataSourceService.current.rss)
                 .environmentObject(DataSourceService.current.rssItem)
@@ -117,7 +71,7 @@ struct RSSListView: View {
             .onAppear {
                 self.viewModel.fecthResults()
             }
-        }
+//        }
     }
     private func delete(offsets: IndexSet) {
         withAnimation {

@@ -25,6 +25,7 @@ struct InfoView: View {
     
     let rssGroup: RSSGroup
     @ObservedObject var rss: RSS
+    @ObservedObject var rssItem = RSSItem()
     @State private var isSelected: Bool = false
     @State private var actionSheetShown = false
     
@@ -106,39 +107,6 @@ struct InfoView: View {
                                 }
                             }
                         }
-                }
-                Section(header: Text("Home Page").padding(.leading).textCase(nil)){
-                    HStack{
-//                        Text(rssSource.url).textCase(.lowercase)
-//                        LinkPresentationView(url: URL(string: rssSource.url)!)
-                        Link(destination: URL(string: rss.rssURL!.relativeString)!, label: {
-                            HStack {
-                                Image(systemName: "safari")
-                            }
-                        })
-                        .frame(width: 320, height: 70)
-                        .contextMenu {
-                            Button(action: {
-                                self.actionSheetShown = true
-                                UIPasteboard.general.setValue(rssSource.url,
-                                                              forPasteboardType: kUTTypePlainText as String)
-                            }) {
-                                Text("Copy URL")
-                                Image(systemName: "doc.on.clipboard")
-                            }
-                 
-                            Link(destination: URL(string: rssSource.url)!, label: {
-                                HStack {
-                                    Text("Go To Website")
-                                    Spacer()
-                                    Image(systemName: "safari")
-                                }
-                            })
-                        }
-                        Spacer()
-
-                        
-                    }
                 }
             }
             .listStyle(InsetGroupedListStyle())

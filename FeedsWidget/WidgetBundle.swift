@@ -13,62 +13,58 @@ import Intents
 
 // MARK: - Supported Widgets
 
-struct UnreadWidget: Widget {
-    let kind: String = "UnreadWidget"
+//struct UnreadWidget: Widget {
+//    let kind: String = "UnreadWidget"
+//
+//    var body: some WidgetConfiguration {
+//
+//        return StaticConfiguration(kind: kind, provider: Provider(), content: { entry in
+//            UnreadWidgetView(entry: entry)
+//
+//        })
+//        .configurationDisplayName(L10n.unreadWidgetTitle)
+//        .description(L10n.unreadWidgetDescription)
+//        .supportedFamilies([.systemMedium, .systemLarge])
+//    }
+//}
+//
+//struct AllArticlesWidget: Widget {
+//    let kind: String = "AllArticlesWidget"
+//
+//    var body: some WidgetConfiguration {
+//
+//        return StaticConfiguration(kind: kind, provider: Provider(), content: { entry in
+//            AllArticlesWidgetView(entry: entry)
+//
+//
+//        })
+//        .configurationDisplayName(L10n.todayWidgetTitle)
+//        .description(L10n.todayWidgetDescription)
+//        .supportedFamilies([.systemMedium, .systemLarge])
+//    }
+//}
+//
+//struct StarredWidget: Widget {
+//    let kind: String = "StarredWidget"
+//
+//    var body: some WidgetConfiguration {
+//        return StaticConfiguration(kind: kind, provider: Provider(), content: { entry in
+//            StarredWidgetView(entry: entry)
+//        })
+//        .configurationDisplayName(L10n.starredWidgetTitle)
+//        .description(L10n.starredWidgetDescription)
+//        .supportedFamilies([.systemMedium, .systemLarge])
+//    }
+//}
 
-    var body: some WidgetConfiguration {
-
-        return StaticConfiguration(kind: kind, provider: Provider(), content: { entry in
-            UnreadWidgetView(entry: entry)
-//                .frame(maxWidth: .infinity, maxHeight: .infinity)
-//                .background(Color("WidgetBackground"))
-
-        })
-        .configurationDisplayName(L10n.unreadWidgetTitle)
-        .description(L10n.unreadWidgetDescription)
-        .supportedFamilies([.systemMedium, .systemLarge])
-    }
-}
-
-struct AllArticlesWidget: Widget {
-    let kind: String = "AllArticlesWidget"
-
-    var body: some WidgetConfiguration {
-
-        return StaticConfiguration(kind: kind, provider: Provider(), content: { entry in
-            AllArticlesWidgetView(entry: entry)
-//                .frame(maxWidth: .infinity, maxHeight: .infinity)
-//                .background(Color("WidgetBackground"))
-
-        })
-        .configurationDisplayName(L10n.todayWidgetTitle)
-        .description(L10n.todayWidgetDescription)
-        .supportedFamilies([.systemMedium, .systemLarge])
-    }
-}
-
-struct StarredWidget: Widget {
-    let kind: String = "StarredWidget"
-
-    var body: some WidgetConfiguration {
-        return StaticConfiguration(kind: kind, provider: Provider(), content: { entry in
-            StarredWidgetView(entry: entry)
-//                .frame(maxWidth: .infinity, maxHeight: .infinity)
-//                .background(Color("WidgetBackground"))
-        })
-        .configurationDisplayName(L10n.starredWidgetTitle)
-        .description(L10n.starredWidgetDescription)
-        .supportedFamilies([.systemMedium, .systemLarge])
-    }
-}
-
-struct CountWidget: Widget {
+struct RecentArticleWidget: Widget {
     @Environment(\.widgetFamily) var family
-    let kind: String = "CountWidget"
+    let kind: String = "RecentArticleWidget"
         
     var body: some WidgetConfiguration {
         return StaticConfiguration(kind: kind, provider: Provider(), content: { entry in
-            CountWidgetEntryView(entry: entry)
+            RecentArticleWidgetEntryView(entry: Provider.Entry.init(date: Date(), widgetData: WidgetDataDecoder.sampleData()))
+            //CountWidgetEntryView(entry: entry)
         })
         .configurationDisplayName("Recent Articles")
         .description("View your recent articles")
@@ -83,8 +79,7 @@ struct FeeditWidgets: WidgetBundle {
     @WidgetBundleBuilder
     var body: some Widget {
         SmartFeedSummaryWidget()
-        CountWidget()
-//        TestWidget()
+        RecentArticleWidget()
 //        AllArticlesWidget()
 //        UnreadWidget()
 //        StarredWidget()

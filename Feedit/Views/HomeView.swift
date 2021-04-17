@@ -199,6 +199,7 @@ struct HomeView: View {
     }
     
     @State private var revealSmartFilters = true
+    @State private var isShowing = false
     
     var body: some View {
         NavigationView {
@@ -228,12 +229,18 @@ struct HomeView: View {
                             
                         RSSFoldersDisclosureGroup(persistence: Persistence.current, unread: unread, viewModel: self.viewModel, isExpanded: selectedCells.contains(rss))
                             .onTapGesture { self.selectDeselect(rss) }
+                            
+                                                
+                    }
+                    .pullToRefresh(isShowing: $isShowing) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            self.isShowing = false
+                        }
                     }
                     .environmentObject(DataSourceService.current.rss)
                     .environmentObject(DataSourceService.current.rssItem)
                     .environment(\.managedObjectContext, Persistence.current.context)
                     .environment(\.editMode, .constant(self.isEditing ? EditMode.active : EditMode.inactive)).animation(Animation.spring())
-//                    .environment(\.editMode, $editMode)
                     .listStyle(PlainListStyle())
 //                    .listStyle(SidebarListStyle())
                     .navigationBarTitle("Home", displayMode: .automatic)
@@ -247,6 +254,7 @@ struct HomeView: View {
                     }
 //                    .add(self.searchBar)
                 }
+                
                 Spacer()
                 if addRSSProgressValue > 0 && addRSSProgressValue < 1.0 {
                     LinerProgressBar(lineWidth: 3, color: .blue, progress: $addRSSProgressValue)
