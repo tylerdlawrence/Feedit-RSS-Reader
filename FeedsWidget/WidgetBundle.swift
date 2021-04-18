@@ -95,6 +95,7 @@ struct FeeditWidgets: WidgetBundle {
     var body: some Widget {
         SmartFeedSummaryWidget()
         RecentArticleWidget()
+        NewsWidget()
         //TestWidget()
     }
 }

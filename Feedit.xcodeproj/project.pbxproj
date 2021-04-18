@@ -38,6 +38,8 @@
 		614136D7262A99D700C0B197 /* RSSParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614136D5262A99D700C0B197 /* RSSParser.swift */; };
 		614136D9262A9A4200C0B197 /* WidgetDataDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614136D8262A9A4200C0B197 /* WidgetDataDecoder.swift */; };
 		614136DB262ABF2D00C0B197 /* WidgetDataDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614136D8262A9A4200C0B197 /* WidgetDataDecoder.swift */; };
+		614136DD262BB8F900C0B197 /* WidgetContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614136DC262BB8F800C0B197 /* WidgetContent.swift */; };
+		614136DE262BB8F900C0B197 /* WidgetContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614136DC262BB8F800C0B197 /* WidgetContent.swift */; };
 		615E971F25323C1900891083 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615E971E25323C1900891083 /* Reachability.swift */; };
 		616121E42553670B0074F061 /* FeedKit in Frameworks */ = {isa = PBXBuildFile; productRef = 616121E32553670B0074F061 /* FeedKit */; };
 		616121EC2553678B0074F061 /* AFNetworking in Frameworks */ = {isa = PBXBuildFile; productRef = 616121EB2553678B0074F061 /* AFNetworking */; };
@@ -56,7 +58,7 @@
 		616CAF6924F715DD00690804 /* ISO8601DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616CAF6824F715DD00690804 /* ISO8601DateFormatter.swift */; };
 		616CAF9224F974AF00690804 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616CAF9124F974AF00690804 /* SettingViewModel.swift */; };
 		6171B88F2625F739000486FB /* RecentArticleWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6171B88D2625F739000486FB /* RecentArticleWidget.swift */; };
-		6171B89526262E8D000486FB /* AnotherTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E99358260AC0DE00679853 /* AnotherTestView.swift */; };
+		6171B89526262E8D000486FB /* RandomNewsWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E99358260AC0DE00679853 /* RandomNewsWidget.swift */; };
 		6171B8972626329C000486FB /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6171B8962626329C000486FB /* CoreDataManager.swift */; };
 		6171B898262633C7000486FB /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6171B8962626329C000486FB /* CoreDataManager.swift */; };
 		6171B89A26265144000486FB /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6171B89926265144000486FB /* PersistenceController.swift */; };
@@ -171,7 +173,7 @@
 		61DEBE3F25152CB90025B1B3 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61DEBE3E25152CB90025B1B3 /* SwiftUI.framework */; };
 		61E99355260AC0DE00679853 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61DEBE3225152CB20025B1B3 /* WidgetKit.framework */; };
 		61E99356260AC0DE00679853 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61DEBE3E25152CB90025B1B3 /* SwiftUI.framework */; };
-		61E99359260AC0DE00679853 /* AnotherTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E99358260AC0DE00679853 /* AnotherTestView.swift */; };
+		61E99359260AC0DE00679853 /* RandomNewsWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E99358260AC0DE00679853 /* RandomNewsWidget.swift */; };
 		61E9935B260AC0E200679853 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 61E9935A260AC0E200679853 /* Assets.xcassets */; };
 		61E9935F260AC0E200679853 /* FeedsWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 61E99354260AC0DE00679853 /* FeedsWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		61E99363260AC1F200679853 /* ManagedObjectContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61967ECF24E2053D00AA647C /* ManagedObjectContext.swift */; };
@@ -298,6 +300,7 @@
 		614136CE262A759F00C0B197 /* PullToRefresh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PullToRefresh.swift; sourceTree = "<group>"; };
 		614136D5262A99D700C0B197 /* RSSParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSSParser.swift; sourceTree = "<group>"; };
 		614136D8262A9A4200C0B197 /* WidgetDataDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetDataDecoder.swift; sourceTree = "<group>"; };
+		614136DC262BB8F800C0B197 /* WidgetContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetContent.swift; sourceTree = "<group>"; };
 		615E971E25323C1900891083 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		6162F25725B68BA1008E7FA7 /* Searchbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Searchbar.swift; sourceTree = "<group>"; };
 		6162F2A525B71AF3008E7FA7 /* FilterBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterBar.swift; sourceTree = "<group>"; };
@@ -397,7 +400,7 @@
 		61DEBE3225152CB20025B1B3 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		61DEBE3E25152CB90025B1B3 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		61E99354260AC0DE00679853 /* FeedsWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FeedsWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		61E99358260AC0DE00679853 /* AnotherTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnotherTestView.swift; sourceTree = "<group>"; };
+		61E99358260AC0DE00679853 /* RandomNewsWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomNewsWidget.swift; sourceTree = "<group>"; };
 		61E9935A260AC0E200679853 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		61E9935C260AC0E200679853 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		61E99379260AC4F600679853 /* FeedsWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = FeedsWidgetExtension.entitlements; path = ../FeedsWidgetExtension.entitlements; sourceTree = "<group>"; };
@@ -845,7 +848,8 @@
 				61E9935A260AC0E200679853 /* Assets.xcassets */,
 				61E9935C260AC0E200679853 /* Info.plist */,
 				6171B8A0262750A5000486FB /* TestWidget.swift */,
-				61E99358260AC0DE00679853 /* AnotherTestView.swift */,
+				61E99358260AC0DE00679853 /* RandomNewsWidget.swift */,
+				614136DC262BB8F800C0B197 /* WidgetContent.swift */,
 			);
 			path = FeedsWidget;
 			sourceTree = "<group>";
@@ -1131,7 +1135,7 @@
 				61967EF324E2061100AA647C /* RSSFeedRow.swift in Sources */,
 				61C818E424E1F91B00593939 /* RSSDataSource.swift in Sources */,
 				616CAF6724F715B600690804 /* RFC822DateFormatter.swift in Sources */,
-				6171B89526262E8D000486FB /* AnotherTestView.swift in Sources */,
+				6171B89526262E8D000486FB /* RandomNewsWidget.swift in Sources */,
 				617B49E3260264F70016FC3D /* AllArticlesView.swift in Sources */,
 				618F902B250DCD4F00D5A03E /* ModelHelper.swift in Sources */,
 				61B95D8825CEEAA800829741 /* RSSActions.swift in Sources */,
@@ -1146,6 +1150,7 @@
 				61967F0124E2068400AA647C /* AddRSSViewModel.swift in Sources */,
 				61E9939C260AF1E500679853 /* ArticleItemView.swift in Sources */,
 				61C818D624E1F70900593939 /* DataSourceService.swift in Sources */,
+				614136DD262BB8F900C0B197 /* WidgetContent.swift in Sources */,
 				611F17852612278300D11687 /* Response.swift in Sources */,
 				613428952608360800B9C20C /* TrackableScrollView.swift in Sources */,
 				61E993A2260AF4D300679853 /* DeepLinks.swift in Sources */,
@@ -1209,8 +1214,9 @@
 				6191E41E26235FC000527270 /* AppEnvironment.swift in Sources */,
 				61E9936A260AC1F200679853 /* RSSFeedViewModel.swift in Sources */,
 				61E9936F260AC1F200679853 /* RSSStore.swift in Sources */,
-				61E99359260AC0DE00679853 /* AnotherTestView.swift in Sources */,
+				61E99359260AC0DE00679853 /* RandomNewsWidget.swift in Sources */,
 				61E993AF260AF7F400679853 /* WidgetBundle.swift in Sources */,
+				614136DE262BB8F900C0B197 /* WidgetContent.swift in Sources */,
 				61E9936E260AC1F200679853 /* ModelHelper.swift in Sources */,
 				61E993A0260AF47B00679853 /* SmartFeedsView.swift in Sources */,
 				6191E41526235E8100527270 /* WebView.swift in Sources */,

@@ -10,6 +10,7 @@ import CoreData
 import Introspect
 import Combine
 import WebKit
+import WidgetKit
 
 struct HomeView: View {
     @Environment(\.presentationMode) var presentationMode
@@ -292,9 +293,10 @@ struct HomeView: View {
                 }
             })
         }
-//        .onAppear {
-//            self.viewModel.fecthResults()
-//        }
+        .onAppear {
+            WidgetCenter.shared.reloadAllTimelines()
+            self.viewModel.fecthResults()
+        }
 //        .navigationViewStyle(StackNavigationViewStyle())
     }
     
