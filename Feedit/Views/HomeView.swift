@@ -178,8 +178,10 @@ struct HomeView: View {
                 }
                 
                 Button(action: {
-//                    delete(rss: rss)
-                    deleteItems()
+                    context.delete(rss)
+                    saveContext()
+                    try! context.save()
+//                    deleteItems()
 
                 }) {
                     Text("Remove Selected")
@@ -200,7 +202,7 @@ struct HomeView: View {
     }
     
     @State private var revealSmartFilters = true
-    @State private var isShowing = false
+    @State var isShowing: Bool = false
     
     var body: some View {
         NavigationView {
@@ -227,15 +229,20 @@ struct HomeView: View {
                             })
                             .listRowBackground(Color("darkerAccent"))
                             .accentColor(Color("tab"))
-                            
-                        RSSFoldersDisclosureGroup(persistence: Persistence.current, unread: unread, viewModel: self.viewModel, isExpanded: selectedCells.contains(rss))
-                            .onTapGesture { self.selectDeselect(rss) }
-                            
-                                                
+                        
+//                        UnreadRSSCountIndex(rss: rss).environmentObject(DataSourceService.current.rss)
+//                            .environmentObject(DataSourceService.current.rssItem)
+//                            .environment(\.managedObjectContext, Persistence.current.context)
+                        RSSListView()
+//                        RSSFoldersDisclosureGroup(persistence: Persistence.current, unread: unread, viewModel: self.viewModel, isExpanded: selectedCells.contains(rss))
+//                            .onTapGesture { self.selectDeselect(rss) }
+                        
+                    
                     }
                     .pullToRefresh(isShowing: $isShowing) {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                             self.isShowing = false
+                            self.viewModel.fecthResults()
                         }
                     }
                     .environmentObject(DataSourceService.current.rss)
@@ -419,3 +426,33 @@ extension String: Identifiable {
         return self
     }
 }
+
+struct VScroll<Content: View>: View {
+  init(showsIndicators: Bool = true, @ViewBuilder content: () -> Content) {
+    self.showsIndicators = showsIndicators
+    self.content = content()
+  }
+
+  var showsIndicators: Bool
+  var content: Content
+
+  var body: some View {
+    GeometryReader { scrollGeometry in
+      ScrollView(.vertical, showsIndicators: self.showsIndicators) {
+        self.content
+          .frame(width: scrollGeometry.size.width)
+          .frame(minHeight: scrollGeometry.size.height)
+      }
+    }
+  }
+}
+
+#if DEBUG
+struct VScroll_Previews: PreviewProvider {
+  static var previews: some View {
+    VScroll {
+      Text("Content")
+    }
+  }
+}
+#endif

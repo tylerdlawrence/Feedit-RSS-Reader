@@ -13,23 +13,6 @@ import SwipeCell
 import FeedKit
 import KingfisherSwiftUI
 
-struct UnreadPreferenceKey: PreferenceKey {
-    static var defaultValue: UnreadCount?
-
-    static func reduce(value: inout UnreadCount?, nextValue: () -> UnreadCount?) {
-        value = nextValue()
-    }
-}
-
-struct UnreadCount: Equatable, Identifiable {
-    let id = UUID()
-    let count: String?
-    
-    static func == (lhs: UnreadCount, rhs: UnreadCount) -> Bool {
-        lhs.id == rhs.id
-    }
-}
-
 struct RSSFeedListView: View {
 
     var filterTitle: String {
@@ -154,9 +137,9 @@ struct RSSFeedListView: View {
                         KFImage(URL(string: rssSource.image))
                             .placeholder({
                                 Image("getInfo")
-                                    .renderingMode(.original).resizable().aspectRatio(contentMode: .fit).frame(width: 20, height: 20,alignment: .center).cornerRadius(2)
+                                    .renderingMode(.original).resizable().aspectRatio(contentMode: .fit).frame(width: 20, height: 20,alignment: .center).cornerRadius(2).clipped()
                             })
-                            .renderingMode(.original).resizable().aspectRatio(contentMode: .fit).frame(width: 20, height: 20,alignment: .center).cornerRadius(2)
+                            .renderingMode(.original).resizable().aspectRatio(contentMode: .fit).frame(width: 20, height: 20,alignment: .center).cornerRadius(2).clipped()
 
                         Text(rssSource.title)
                             .font(.system(size: 20, weight: .medium, design: .rounded))

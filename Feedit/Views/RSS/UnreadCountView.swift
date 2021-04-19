@@ -7,10 +7,14 @@
 
 import SwiftUI
 
-struct UnreadCountView: View {
-    @Environment(\.managedObjectContext) private var context
-    @EnvironmentObject var rssDataSource: RSSDataSource
-    var count: Int
+struct UnreadCountView: View, Equatable, Identifiable {
+    static func == (lhs: UnreadCountView, rhs: UnreadCountView) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    let id = UUID()
+    let count: Int
+//    let count: String?
     
     var body: some View {
         Text(verbatim: String(count))
@@ -28,5 +32,13 @@ struct UnreadCountView: View {
 struct UnreadCountView_Previews: PreviewProvider {
     static var previews: some View {
         UnreadCountView(count: 123)
+    }
+}
+
+struct UnreadPreferenceKey: PreferenceKey {
+    static var defaultValue: UnreadCountView?
+
+    static func reduce(value: inout UnreadCountView?, nextValue: () -> UnreadCountView?) {
+        value = nextValue()
     }
 }

@@ -74,7 +74,7 @@ struct RSSFoldersDisclosureGroup: View {
                             .buttonStyle(PlainButtonStyle())
                             
                             HStack {
-                                RSSRow(viewModel: viewModel, rss: rss)
+                                RSSRow(rss: rss)
                                 Spacer()
 //                                UnreadCountView(count: unread.items.count)
 //                                    .onAppear {

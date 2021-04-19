@@ -156,6 +156,7 @@ extension WidgetContent {
     static func loadData(completion: @escaping ([Article]?) -> ()) {
         
         let urlString = "https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=3845667a828c4e3ab88593f284a10f32"
+
         
         guard let url = URL(string: urlString) else { return }
         

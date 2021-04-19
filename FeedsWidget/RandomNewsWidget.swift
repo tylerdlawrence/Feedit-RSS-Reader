@@ -174,41 +174,36 @@ struct MediumNewsWidgetView: View {
             Spacer()
         }
         Divider()
-        VStack(alignment: .leading, spacing: 0) {
-            Text(entry.title)
-                .font(.system(size: 14, weight: .medium, design: .rounded))
-                .foregroundColor(Color("text"))
-                .lineLimit(2)
-            HStack(spacing: 4.0) {
-                Text(article?.sourceName ?? "\(article?.publishedAt ?? entry.date.string())")
-                    .textCase(.uppercase)
-                    .font(.system(size: 11, weight: .medium, design: .rounded))
-                Spacer(minLength: 0)
-//                Text("\(article?.publishedAt ?? entry.date.string())")
-//                    .textCase(.uppercase)
-//                    .font(.system(size: 11, weight: .medium, design: .rounded))
-            }.foregroundColor(.gray)
-        }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .leading)
-        .padding(.horizontal)
-        .background(Color(UIColor.systemBackground).blur(radius: 10.0).opacity(0.3))
-        
-        VStack(alignment: .leading, spacing: 2) {
-            Text(entry.title)
-                .font(.system(size: 14, weight: .medium, design: .rounded))
-                .foregroundColor(Color("text"))
-                .lineLimit(2)
-            HStack(spacing: 4.0) {
-                Text(article?.sourceName ?? "\(article?.publishedAt ?? entry.date.string())")
-                    .textCase(.uppercase)
-                    .font(.system(size: 11, weight: .medium, design: .rounded))
-                Spacer(minLength: 0)
-//                Text("\(article?.publishedAt ?? entry.date.string())")
-//                    .textCase(.uppercase)
-//                    .font(.system(size: 11, weight: .medium, design: .rounded))
-            }.foregroundColor(.gray)
-        }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .leading)
-        .padding([.bottom, .horizontal])
-        .background(Color(UIColor.systemBackground).blur(radius: 10.0).opacity(0.3))
+        ForEach(0..<1, id: \.self, content: { i in
+            VStack(alignment: .leading, spacing: 0) {
+                HStack {
+                    Text(entry.title)
+                        .font(.system(size: 14, weight: .medium, design: .rounded))
+                        .foregroundColor(Color("text"))
+                        .lineLimit(4)
+                    Spacer()
+                    if entry.image != nil {
+                        Image(uiImage: entry.image!)
+                            .resizable()
+                            .renderingMode(.original)
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 45, height: 45)
+                    } else {
+                        Image("launch")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 45, height: 45)
+                    }
+                }
+                HStack(spacing: 4.0) {
+                    Text(article?.sourceName ?? "\(article?.publishedAt ?? entry.date.string())")
+                        .textCase(.uppercase)
+                        .font(.system(size: 11, weight: .medium, design: .rounded))
+                    Spacer(minLength: 0)
+                }.foregroundColor(.gray)
+            }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .leading).padding()
+            .background(Color(UIColor.systemBackground).blur(radius: 10.0).opacity(0.3))
+        })
     }
 }
 
@@ -216,8 +211,6 @@ struct LargeNewsWidgetView: View {
     var entry: NewsWidgetContent
     
     var article: ArticleViewModel?
-//    var articles = [ArticleViewModel]()
-    
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
@@ -236,20 +229,19 @@ struct LargeNewsWidgetView: View {
                     Text(entry.title)
                         .font(.system(size: 14, weight: .medium, design: .rounded))
                         .foregroundColor(Color("text"))
-                        .lineLimit(2)
-//                    HStack(spacing: 4.0) {
-//                        Text(article?.sourceName ?? "\(article?.publishedAt ?? entry.date.string())")
-//                            .textCase(.uppercase)
-//                            .font(.system(size: 11, weight: .medium, design: .rounded))
-//                        Spacer(minLength: 0)
-//                    }.foregroundColor(.gray)
+                        .lineLimit(4)
                     Spacer()
-                    if article?.image != nil {
-                        Image(uiImage: (article?.image)!)
+                    if entry.image != nil {
+                        Image(uiImage: entry.image!)
                             .resizable()
+                            .renderingMode(.original)
                             .aspectRatio(contentMode: .fit)
+                            .frame(width: 45, height: 45)
                     } else {
-                        Image(systemName: "globe").font(.system(size: 20, weight: .regular, design: .rounded))
+                        Image("launch")
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 45, height: 45)
                     }
                 }
                 HStack(spacing: 4.0) {
@@ -261,48 +253,12 @@ struct LargeNewsWidgetView: View {
             }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .leading).padding()
             .background(Color(UIColor.systemBackground).blur(radius: 10.0).opacity(0.3))
         })
-//        VStack(alignment: .leading, spacing: 0) {
-//            Text(entry.title)
-//                .font(.system(size: 14, weight: .medium, design: .rounded))
-//                .foregroundColor(Color("text"))
-//                .lineLimit(2)
-//            HStack(spacing: 4.0) {
-//                Text(article?.sourceName ?? "\(article?.publishedAt ?? entry.date.string())")
-//                    .textCase(.uppercase)
-//                    .font(.system(size: 11, weight: .medium, design: .rounded))
-//                Spacer(minLength: 0)
-////                Text("\(article?.publishedAt ?? entry.date.string())")
-////                    .textCase(.uppercase)
-////                    .font(.system(size: 11, weight: .medium, design: .rounded))
-//            }.foregroundColor(.gray)
-//        }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .leading)
-//        .padding()
-//        .background(Color(UIColor.systemBackground).blur(radius: 10.0).opacity(0.3))
-        
-//        VStack(alignment: .leading, spacing: 0) {
-//            Text(entry.title)
-//                .font(.system(size: 14, weight: .medium, design: .rounded))
-//                .foregroundColor(Color("text"))
-//                .lineLimit(2)
-//            HStack(spacing: 4.0) {
-//                Text(article?.sourceName ?? "\(article?.publishedAt ?? entry.date.string())")
-//                    .textCase(.uppercase)
-//                    .font(.system(size: 11, weight: .medium, design: .rounded))
-//                Spacer(minLength: 0)
-////                Text("\(article?.publishedAt ?? entry.date.string())")
-////                    .textCase(.uppercase)
-////                    .font(.system(size: 11, weight: .medium, design: .rounded))
-//            }.foregroundColor(.gray)
-//        }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .leading)
-//        .padding()
-//        .background(Color(UIColor.systemBackground).blur(radius: 10.0).opacity(0.3))
     }
 }
 
 // View of widget
 struct NewsWidgetEntryView : View {
     var entry: NewsWidgetContent
-//    @ObservedObject private var article = ArticleListViewModel()
     
     @Environment(\.widgetFamily) var widgetFamily
     var body: some View {
@@ -312,7 +268,7 @@ struct NewsWidgetEntryView : View {
         case .systemMedium:
             MediumNewsWidgetView(entry: entry)
         case .systemLarge:
-            LargeNewsWidgetView(entry: entry)//, article: article.articles[0])
+            LargeNewsWidgetView(entry: entry)
         default:
             SmallNewsWidgetView(entry: entry)
         }
@@ -340,61 +296,11 @@ struct Source: Codable {
     let name: String
 }
 
-//struct NewsArticle: View {
-//    var entry: WidgetContent
-//    var source: Source?
-//    var article: Article//?
-//
-//    var body: some View {
-//
-//        ZStack(alignment: .topLeading) {
-//            HStack(alignment: .center, spacing: nil, content: {
-//                VStack(alignment: .leading, spacing: 0) {
-//                    Divider()
-//                    Image(uiImage: thumbnail(entry.image))
-//                        .resizable()
-//                        .frame(width: 20, height: 20)
-//                        .cornerRadius(4)
-//                    Text("\(article.title)")
-//                        .lineLimit(3)
-//                        .font(.system(size: 14, weight: .medium, design: .rounded))
-//                        .foregroundColor(Color("text"))
-//                    HStack {
-//                        Text(source?.name ?? "Unknown Author")
-//                            .textCase(.uppercase)
-//                            .font(.system(size: 11, weight: .medium, design: .rounded))
-//                            .foregroundColor(.gray)
-//                        Spacer()
-//                        Text("\(article.publishedAt)")
-//                            .textCase(.uppercase)
-//                            .font(.system(size: 11, weight: .medium, design: .rounded))
-//                            .foregroundColor(.gray)
-//                    }
-//                }
-//                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .leading)
-//            .background(Color(UIColor.systemBackground).blur(radius: 10.0).opacity(0.3))
-//            })
-//        }
-//    }
-//    func thumbnail(_ data: Data?) -> UIImage {
-//        if data == nil {
-//            return UIImage(systemName: "globe")!
-//        } else {
-//            return UIImage(data: data!)!
-//        }
-//    }
-//    func string(format: String = "MMM d, h:mm") -> String {
-//        let f = DateFormatter()
-//        f.dateFormat = format
-//        return f.string(from: Date())
-//    }
-//}
-
 struct NewsWidgetEntryView_Previews: PreviewProvider {
     static var previews: some View {
         let entry = NewsWidgetContent(date: Date(), title: "A Message on the Upcoming Shows", description: "We are happy to announce that the Band and Fans WILL be seeing each other, in concert setting – SOON! A long awaited moment.")
         Group {
-            NewsWidgetEntryView(entry: entry)//, article: ArticleListViewModel().articles[0])
+            NewsWidgetEntryView(entry: entry)
                 .background(Color(UIColor.systemBackground)).environment(\.colorScheme, .dark).previewContext(WidgetPreviewContext(family: .systemSmall))
             
             NewsWidgetEntryView(entry: entry)

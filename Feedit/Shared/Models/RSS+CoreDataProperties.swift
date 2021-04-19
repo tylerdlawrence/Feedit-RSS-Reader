@@ -48,9 +48,6 @@ extension RSS {
         return URL(string: url)
     }
     
-    
-    
-    
     public var createTimeStr: String {
         return "\(self.createTime?.string() ?? "")"
     }
@@ -69,7 +66,7 @@ extension RSS {
     }
 
     static func simple() -> RSS {
-        let rss = RSS(context: Persistence.current.context)
+        let rss = RSS(context: Persistence.previews.context)
         rss.title = "demo"
         rss.image = ""
         rss.desc = "desc demo"
@@ -98,7 +95,7 @@ extension RSS {
         return request
     }
     
-    static func requestUnreadObjects(start: Int = 0) -> NSFetchRequest<RSS> {
+    static func requestUnreadObjects() -> NSFetchRequest<RSS> {
         let request = RSS.fetchRequest() as NSFetchRequest<RSS>
         request.predicate = .init(value: true)
         request.sortDescriptors = [.init(key: #keyPath(RSS.isRead), ascending: true)]

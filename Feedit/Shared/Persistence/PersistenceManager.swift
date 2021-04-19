@@ -56,8 +56,10 @@ extension UserDefaults {
 
 class Persistence: ObservableObject {
     static let shared = Persistence(version: 1)
-    
     static private(set) var current = Persistence(version: 1)
+    
+    static let previews = Persistence(version: 2)
+    
     private var subscriptions: Set<AnyCancellable> = []
     let appTransactionAuthorName = "appGroup"
     private let isStoreLoaded = CurrentValueSubject<Bool, Error>(false)

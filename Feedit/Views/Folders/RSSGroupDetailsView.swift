@@ -45,7 +45,7 @@ struct RSSGroupDetailsView: View {
             }
             ForEach(viewModel.items) { rss in
                 HStack {
-                    RSSRow(viewModel: self.viewModel, rss: rss)
+                    RSSRow(rss: rss)
 
                 }
             }.environment(\.managedObjectContext, Persistence.current.context)

@@ -25,17 +25,19 @@ struct FeeditApp: App {
     @StateObject private var rss = RSS()
     @StateObject private var rssItem = RSSItem()
     
+    
     var body: some Scene {
         WindowGroup {
-        HomeView(articles: articles, unread: unread, rssItem: rssItem, viewModel: viewModel, selectedFilter: FilterType.all)
-            .environmentObject(viewModel)
-            .environmentObject(articles)
-            .environmentObject(unread)
-            .environmentObject(rss)
-            .environmentObject(rssItem)
-            .environment(\.managedObjectContext, Persistence.current.context)
-            .onOpenURL { url in
-                print("Received deep link: \(url)")
+            
+            HomeView(articles: articles, unread: unread, rssItem: rssItem, viewModel: viewModel, selectedFilter: FilterType.all)
+                .environmentObject(viewModel)
+                .environmentObject(articles)
+                .environmentObject(unread)
+                .environmentObject(rss)
+                .environmentObject(rssItem)
+                .environment(\.managedObjectContext, Persistence.current.context)
+                .onOpenURL { url in
+                    print("Received deep link: \(url)")
             }
         }
         .onChange(of: scenePhase) { phase in

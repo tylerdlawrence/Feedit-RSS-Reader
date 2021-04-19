@@ -115,6 +115,11 @@ struct ArchiveListView: View {
                     ToolbarItem(placement: .principal) {
                         VStack{
                             HStack{
+                                Image(systemName: "star.fill")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 21, height: 21,alignment: .center)
+                                    .foregroundColor(Color("tab").opacity(0.9))
                                 Text("Starred")
                                     .font(.system(.body))
                                     .fontWeight(.bold)

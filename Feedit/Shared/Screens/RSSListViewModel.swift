@@ -45,7 +45,7 @@ class RSSListViewModel: NSObject, ObservableObject, NSFetchedResultsControllerDe
     
     var subscriptions: Set<AnyCancellable> = []
     let dataSource: RSSDataSource
-    var start = 0
+    var start = 4
     
     init(dataSource: RSSDataSource) {
         self.dataSource = dataSource

@@ -95,25 +95,43 @@ class ParentResolverViewController: UIViewController {
 }
 
 
-struct Searchbar: View {
-    @ObservedObject var searchBar: SearchBar = SearchBar()
+//struct Searchbar: View {
+//    @ObservedObject var searchBar: SearchBar = SearchBar()
+//
+//    var body: some View {
+//        NavigationView{
+//            List {
+//                Text("test")
+//                Text("hi")
+//                Text("hello")
+//            }
+//            .navigationBarTitle("Search")
+//            .listStyle(InsetGroupedListStyle())
+//            .add(searchBar)
+//        }
+//    }
+//}
 
+struct SearchbarView: View {
+    @Binding var searchText: String
+//    @ObservedObject var searchBar: SearchBar = SearchBar()
+    
     var body: some View {
-        NavigationView{
-            List {
-                Text("test")
-                Text("hi")
-                Text("hello")
+        HStack {
+          Image(systemName: "magnifyingglass")
+            .padding(.leading, -10)
+            .foregroundColor(.secondary)
+            TextField("Search", text: $searchText, onCommit:  {
+                UIApplication.init().windows.first { $0.isKeyWindow }?.endEditing(true)
+            })
+          .padding(.leading, 10)
+            Button(action: {
+                self.searchText = ""
+            }) {
+                Image(systemName: "xmark.circle.fill")
+.foregroundColor(.secondary)
+.opacity(searchText == "" ? 0 : 1)
             }
-            .navigationBarTitle("Search")
-            .listStyle(InsetGroupedListStyle())
-            .add(searchBar)
-        }
-    }
-}
-
-struct Searchbar_Previews: PreviewProvider {
-    static var previews: some View {
-        Searchbar()
+        }.padding(.horizontal)
     }
 }

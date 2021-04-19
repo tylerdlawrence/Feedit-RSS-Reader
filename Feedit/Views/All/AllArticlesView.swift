@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import Introspect
+import DispatchIntrospection
 import CoreData
 import Foundation
 import os.log
@@ -39,14 +41,14 @@ struct AllArticlesView: View {
         }.buttonStyle(BorderlessButtonStyle())
     }
     
-    private func list(of articles: [RSSItem]) -> some View {
-        return List(filteredArticles) { item in
-               NavigationLink(
-                   destination: RSSFeedDetailView(rssItem: item, rssFeedViewModel: self.rssFeedViewModel),
-                   label: { RSSItemRow(rssItem: item, menu: self.contextmenuAction(_:), rssFeedViewModel: rssFeedViewModel) }
-               )
-           }
-       }
+//    private func list(of articles: [RSSItem]) -> some View {
+//        return List(filteredArticles) { item in
+//               NavigationLink(
+//                   destination: RSSFeedDetailView(rssItem: item, rssFeedViewModel: self.rssFeedViewModel),
+//                   label: { RSSItemRow(rssItem: item, menu: self.contextmenuAction(_:), rssFeedViewModel: rssFeedViewModel) }
+//               )
+//           }
+//       }
     
     @State private var selection = Set<String>()
     
@@ -79,12 +81,16 @@ struct AllArticlesView: View {
         }
     }
     
+    @State var isShowing: Bool = false
+    @State private var searchTerm : String = ""
+    
     var body: some View {
         ScrollViewReader { scrollViewProxy in
             ZStack {
                 List {
+//                    SearchbarView(searchText: $searchTerm)
                     ForEach(articles.items, id: \.self) { article in
-    //                    list(of: filteredArticles).eraseToAnyView()
+//                    ForEach(self.filteredArticles.filter { self.searchTerm.isEmpty ? true : $0.localizedCaseInsensitiveContains(self.searchTerm) }, id: \.self) { article in
                         ZStack {
                             NavigationLink(destination: WebView(rssItem: article, onCloseClosure: {})) {
     //                        NavigationLink(destination: RSSFeedDetailView(rssItem: unread, rssFeedViewModel: RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)).environmentObject(DataSourceService.current.rss)) {
@@ -103,10 +109,9 @@ struct AllArticlesView: View {
                            }
                     }.environment(\.managedObjectContext, Persistence.current.context)
                     .environmentObject(rssFeedViewModel)
-    //                .environmentObject(persistence)
                 }
-                .animation(.default)
-                .add(self.searchBar)
+//                .animation(.default)
+                .add(searchBar)
                 .accentColor(Color("tab"))
                 .listRowBackground(Color("accent"))
                 .navigationBarTitle("", displayMode: .inline)
@@ -123,6 +128,7 @@ struct AllArticlesView: View {
                                         }
                 )
             }
+
             Spacer()
             navButtons
                 .frame(width: UIScreen.main.bounds.width, height: 49)
@@ -147,26 +153,7 @@ struct AllArticlesView: View {
                                 .cornerRadius(8)
                         }
                     }
-
-//                    ToolbarItem(placement: .bottomBar) {
-//                        Toggle(isOn: $rssFeedViewModel.unreadIsOn) { Text("") }
-//                            .toggleStyle(CheckboxStyle())
-//    //                    MarkAsReadButton(isSet: $rssItem.isRead)
-//
-//
-//                    }
-//                    ToolbarItem(placement: .bottomBar) {
-//                        Spacer()
-//                    }
-//                    ToolbarItem(placement: .bottomBar) {
-//    //                    MarkAsStarredButton(isSet: $rssItem.isArchive)
-//                        Toggle(isOn: $rssFeedViewModel.isOn) { Text("") }
-//                            .toggleStyle(StarStyle())
-                    }
-//                }
-//            Spacer()
-//            navButtons
-//                .frame(width: UIScreen.main.bounds.width, height: 49)
+                }
             }
         .onAppear {
             self.articles.fecthResults()
@@ -186,12 +173,15 @@ struct AllArticlesView: View {
 }
 
 extension AllArticlesView {
-
+    
 }
 
-//struct AllArticlesView_Previews: PreviewProvider {
-//    static let rss = RSS()
-//    static var previews: some View {
-//        AllArticlesView(articles: AllArticles(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
-//    }
-//}
+struct AllArticlesView_Previews: PreviewProvider {
+    static let rss = RSS()
+    static var previews: some View {
+        NavigationView {
+            AllArticlesView(articles: AllArticles(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), selectedFilter: .all)
+                .preferredColorScheme(.dark)
+        }
+    }
+}
