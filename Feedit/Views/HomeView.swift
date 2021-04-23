@@ -230,12 +230,9 @@ struct HomeView: View {
                             .listRowBackground(Color("darkerAccent"))
                             .accentColor(Color("tab"))
                         
-//                        UnreadRSSCountIndex(rss: rss).environmentObject(DataSourceService.current.rss)
-//                            .environmentObject(DataSourceService.current.rssItem)
-//                            .environment(\.managedObjectContext, Persistence.current.context)
-                        RSSListView()
-//                        RSSFoldersDisclosureGroup(persistence: Persistence.current, unread: unread, viewModel: self.viewModel, isExpanded: selectedCells.contains(rss))
-//                            .onTapGesture { self.selectDeselect(rss) }
+//                        RSSListView()
+                        RSSFoldersDisclosureGroup(persistence: Persistence.current, unread: unread, viewModel: self.viewModel, isExpanded: selectedCells.contains(rss))
+                            .onTapGesture { self.selectDeselect(rss) }
                         
                     
                     }
@@ -301,7 +298,7 @@ struct HomeView: View {
             })
         }
         .onAppear {
-            WidgetCenter.shared.reloadAllTimelines()
+            //WidgetCenter.shared.reloadAllTimelines()
             self.viewModel.fecthResults()
         }
 //        .navigationViewStyle(StackNavigationViewStyle())
@@ -426,33 +423,3 @@ extension String: Identifiable {
         return self
     }
 }
-
-struct VScroll<Content: View>: View {
-  init(showsIndicators: Bool = true, @ViewBuilder content: () -> Content) {
-    self.showsIndicators = showsIndicators
-    self.content = content()
-  }
-
-  var showsIndicators: Bool
-  var content: Content
-
-  var body: some View {
-    GeometryReader { scrollGeometry in
-      ScrollView(.vertical, showsIndicators: self.showsIndicators) {
-        self.content
-          .frame(width: scrollGeometry.size.width)
-          .frame(minHeight: scrollGeometry.size.height)
-      }
-    }
-  }
-}
-
-#if DEBUG
-struct VScroll_Previews: PreviewProvider {
-  static var previews: some View {
-    VScroll {
-      Text("Content")
-    }
-  }
-}
-#endif
