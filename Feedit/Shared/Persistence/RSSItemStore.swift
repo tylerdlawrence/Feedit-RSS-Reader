@@ -5,13 +5,15 @@
 //  Created by Tyler D Lawrence on 8/10/20.
 //
 
-import Foundation
 import SwiftUI
-import Combine
-import CoreData
 import FeedKit
+import Combine
+import BackgroundTasks
+import CoreData
+import Foundation
+import FaviconFinder
 
-class RSSItemStore: NSObject {
+class RSSItemStore: NSObject, ObservableObject {
     private let persistence = Persistence.current
 
     private lazy var fetchedResultsController: NSFetchedResultsController<RSSItem> = {
@@ -100,6 +102,16 @@ class RSSItemStore: NSObject {
         do {
             try context.save()
         } catch { fatalError() }
+    }
+    
+    var isRead: Bool {
+        return readDate != nil
+    }
+    
+    var readDate: Date? {
+        didSet {
+            objectWillChange.send()
+        }
     }
 }
 

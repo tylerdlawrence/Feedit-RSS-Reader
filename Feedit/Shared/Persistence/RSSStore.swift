@@ -22,10 +22,11 @@ class RSSStore: NSObject, ObservableObject {
     @Published var fetchContentType: ContentTimeType = .minute60
     @Published var totalUnreadPosts: Int = 0
     @Published var totalReadPostsToday: Int = 0
-    @Published var feeds: [FeedObject] = []
+    @Published var feeds: [RSS] = []
     
 
     static let instance = RSSStore()
+    
     private let persistence = Persistence.current
     
     var userDefaults = UserDefaults(suiteName: "group.com.tylerdlawrence.feedit.shared");
@@ -58,13 +59,13 @@ class RSSStore: NSObject, ObservableObject {
         }
     }
     
-//    func setPostRead(_ rss: RSS, item: FeedObject) {
-//        rss.readDate = Date()
-//        item.objectWillChange.send()
-//        
-//        if self.rssSources.firstIndex(where: {$0.url == rss.url}) != nil {
-//        }
-//    }
+    func setPostRead(_ rss: RSS, item: RSSItem) {
+        rss.readDate = Date()
+        item.objectWillChange.send()
+        
+        if self.rssSources.firstIndex(where: {$0.url == rss.url}) != nil {
+        }
+    }
 
     var context: NSManagedObjectContext {
         return persistence.context
@@ -79,7 +80,14 @@ class RSSStore: NSObject, ObservableObject {
     public var rssSources: [RSS] = []
     var cancellables = Set<AnyCancellable>()
     
+    var posts = [RSSItem]() {
+        didSet {
+            objectWillChange.send()
+        }
+    }
+    
     override init() {
+        
         super.init()
         fetchRSS()
         self.rssSources = items;
@@ -169,6 +177,36 @@ class RSSStore: NSObject, ObservableObject {
             }
         }
     }
+    func removeFeed(at index: Int) {
+        feeds.remove(at: index)
+        updateFeeds()
+    }
+    func updateFeeds() {
+        UserDefaults.feeds = self.feeds
+    }
+    
+    func refreshExtensionFeeds() {
+        print("New feeds (\(UserDefaults.newFeedsToAdd)")
+        for feed in UserDefaults.newFeedsToAdd {
+            addFeed(feedURL: feed) { (success) in
+                print("New feed (\(feed.absoluteString): \(success)")
+            }
+        }
+        UserDefaults.newFeedsToAdd = []
+    }
+    
+    func addFeedFromExtension(url: URL) {
+        UserDefaults.newFeedsToAdd = UserDefaults.newFeedsToAdd + [url]
+    }
+    
+    func addFeed(feedURL: URL, handler: @escaping (_ success: Bool) -> Void) {
+        if self.feeds.contains(where: {$0.url == feedURL.absoluteString }) {
+            handler(false)
+            return
+        }
+        
+        update(RSS())
+    }
 }
 
 extension RSSStore: NSFetchedResultsControllerDelegate {
@@ -177,41 +215,127 @@ extension RSSStore: NSFetchedResultsControllerDelegate {
     }
 }
 
-//extension RSSStore {
-//    func reloadFeedPosts(feed: FeedObject, handler: ((_ success: Bool) -> Void)? = nil) {
-//        
-//        fetchContents(feedURL: feed.url) { (feedObject) in
-//            
-//            guard let feedObject = feedObject,
-//                  let newFeed = FeedObject(feed: feedObject, url: feed.url, posts: [RSSItem]()) else { return }
-//            let recentFeedPosts = newFeed.posts.filter { newPost in
-//                return !feed.posts.contains { (post) -> Bool in
-//                    return post.title == newPost.title
-//                }
-//            }
-//            
-//            guard !recentFeedPosts.isEmpty else {
-//                handler?(true)
-//                return
-//            }
-//            
-//            feed.posts.insert(contentsOf: recentFeedPosts, at: 0)
-//            handler?(true)
+// MARK: - Public Methods
+extension RSSStore {
+    
+    func reloadAllPosts(handler: (() -> Void)? = nil) {
+        var updatedCount = 0
+        for rss in self.items {
+            print("RELOADING POST")
+
+            updateFeeds()
+            update(rss)
+            reloadAllPosts()
+            reloadAllPosts(handler: handler)
+            print("GOT POST")
+            
+            updatedCount += 1
+                
+            if updatedCount >= self.items.count {
+                    handler?()
+            }
+        }
+    }
+    
+    func reloadFeedPosts(feed: RSS, handler: ((_ success: Bool) -> Void)? = nil) {
+        fetchContents(feedURL: feed.rssURL?.absoluteURL ?? URL(string: "")!) { (feedObject) in
+
+            guard let feedObject = feedObject,
+                  let newFeed = self.shouldSelectFeedURL else { return }
+            let recentFeedPosts = newFeed.description.filter { newPost in
+                return !(self.feeds.contains { (post) -> Bool in
+                    return post.title == newPost.description
+                })
+            }
+
+            guard !recentFeedPosts.isEmpty else {
+                handler?(true)
+                return
+            }
+
+            self.posts.insert(contentsOf: self.posts, at: 0)
+
+            if let index = self.feeds.firstIndex(where: {$0.url == feed.url }) {
+                self.feeds.remove(at: index)
+                self.feeds.insert(feed, at: index)
+            }
+            self.updateFeeds()
+            self.scheduleNewPostNotification(for: feed)
+            handler?(true)
+        }
+    }
+    
+    func markAllPostsRead(feed: RSS) {
+        feed.posts.forEach { (post) in
+            setPostRead(post: post, feed: feed)
+        }
+    }
+    
+    func setPostRead(post: RSSItem, feed: RSS) {
+        post.readDate = Date()
+        feed.objectWillChange.send()
+//        totalUnreadPosts -= 1
+//        totalReadPostsToday += 1
+//        if let index = feed.posts.firstIndex(where: {$0.url.absoluteString == post.url.absoluteString}) {
+//            feed.posts.remove(at: index)
+//            feed.posts.insert(post, at: index)
 //        }
-//    }
-//    func update(feedURL: URL, handler: @escaping (_ success: Bool) -> Void) {
-//        
-//        fetchContents(feedURL: feedURL) { (feedObject) in
-//            
-//            guard let feedObject = feedObject,
-//                  let _ = FeedObject(feed: feedObject, url: feedURL, posts: [RSSItem]()) else {
-//                    handler(false)
-//                    return
-//                }
-//            handler(true)
+//
+//        if let index = self.feeds.firstIndex(where: {$0.url.absoluteString == feed.url.absoluteString}) {
+//            self.feeds.remove(at: index)
+//            self.feeds.insert(feed, at: index)
 //        }
-//    }
-//}
+        
+        self.updateFeeds()
+    }
+    
+    func totalReadPosts(in date: Date) -> Int {
+        let allPosts = feeds.map { $0.posts }.reduce([], +)
+        
+        return allPosts.filter { (post) -> Bool in
+            guard  let readDate = post.readDate else {
+                return false
+            }
+            return Calendar.current.isDate(readDate, inSameDayAs: date)
+        }.count
+    }
+}
+
+// MARK: - Notifications
+extension RSSStore {
+    func scheduleNewPostNotification(for feed: RSS) {
+        Notifier.notify(title: "New post from \(feed.title)", body: feed.posts.first?.title ?? "", info: ["feedURL": feed.url])
+    }
+}
+
+struct Notifier {
+    static func notify(title: String, body: String, info: [AnyHashable: Any]? = nil) {
+        Notifier.requestAuthorization { _ in
+            let center = UNUserNotificationCenter.current()
+            
+            let content = UNMutableNotificationContent()
+            content.title = title
+            content.body = body
+
+            if let info = info {
+                content.userInfo = info
+            }
+            content.sound = UNNotificationSound.default
+            
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+            
+            let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+            center.add(request)
+        }
+
+    }
+    
+    static func requestAuthorization(handler: @escaping (_ isAccepted: Bool) -> Void) {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { (isAccepted, error) in
+            handler(isAccepted)
+        }
+    }
+}
 
 enum ContentTimeType: String, CaseIterable {
     case minute60 = "1 hour"

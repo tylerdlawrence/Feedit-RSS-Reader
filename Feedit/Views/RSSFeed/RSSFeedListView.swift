@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Introspect
 import Foundation
 import Combine
 import UIKit
@@ -14,7 +15,7 @@ import FeedKit
 import KingfisherSwiftUI
 
 struct RSSFeedListView: View {
-
+    
     var filterTitle: String {
         switch selectedFilter {
         case .all:
@@ -26,34 +27,32 @@ struct RSSFeedListView: View {
         }
     }
     
-    @State var selectedFilter: FilterType
+    @State var selectedFilter: FilterType = .unreadIsOn
     var filteredArticles: [RSSItem] {
         return rssFeedViewModel.items.filter({ (item) -> Bool in
             return !((self.rssFeedViewModel.isOn && !item.isArchive) || (self.rssFeedViewModel.unreadIsOn && item.isRead))
         })
     }
-            
+    
     var rssSource: RSS {
         return self.rssFeedViewModel.rss
     }
     
-    @ObservedObject var rssItem: RSSItem
     @EnvironmentObject var rssDataSource: RSSDataSource
     @ObservedObject var rssFeedViewModel: RSSFeedViewModel
     @ObservedObject var searchBar: SearchBar = SearchBar()
-    
+    @State var isShowing: Bool = false
     @State var selectedItem: RSSItem?
     @State private var start: Int = 0
     @State private var footer: String = "Refresh"
     @State var cancellables = Set<AnyCancellable>()
     
     var rss = RSS()
-    init(viewModel: RSSFeedViewModel, rssItem: RSSItem, selectedFilter: FilterType) {
+    init(viewModel: RSSFeedViewModel, selectedFilter: FilterType) {
         self.rssFeedViewModel = viewModel
-        self.rssItem = rssItem
         self.selectedFilter = selectedFilter
     }
-        
+    
     private var refreshButton: some View {
         Button(action: self.rssFeedViewModel.loadMore) {
             Image(systemName: "arrow.clockwise").font(.system(size: 16, weight: .bold)).foregroundColor(Color("tab")).padding()
@@ -99,17 +98,21 @@ struct RSSFeedListView: View {
                                     .onTapGesture {
                                         self.selectedItem = item
                                 }
-
                             }
-
                         }
                     }
-                    
                     .environmentObject(DataSourceService.current.rss)
                     .environmentObject(DataSourceService.current.rssItem)
                     .environment(\.managedObjectContext, Persistence.current.context)
                 }
                 .animation(.easeInOut)
+                .pullToRefresh(isShowing: $isShowing) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        self.isShowing = false
+                        rssFeedViewModel.fecthResults()
+                        rssFeedViewModel.fetchRemoteRSSItems()
+                    }
+                }
                 .add(self.searchBar)
                 .accentColor(Color("tab"))
                 .listRowBackground(Color("accent"))
@@ -126,44 +129,43 @@ struct RSSFeedListView: View {
                                             Image(systemName: "checkmark.circle").font(.system(size: 18)).foregroundColor(Color("tab"))
                                         }
                 )
-//            .onAppear { }
             }
             Spacer()
             navButtons
                 .frame(width: UIScreen.main.bounds.width, height: 49)
-            .toolbar{
-                ToolbarItem(placement: .principal) {
-                    HStack {
-                        KFImage(URL(string: rssSource.image))
-                            .placeholder({
-                                Image("getInfo")
-                                    .renderingMode(.original).resizable().aspectRatio(contentMode: .fit).frame(width: 20, height: 20,alignment: .center).cornerRadius(2).clipped()
-                            })
-                            .renderingMode(.original).resizable().aspectRatio(contentMode: .fit).frame(width: 20, height: 20,alignment: .center).cornerRadius(2).clipped()
-
-                        Text(rssSource.title)
-                            .font(.system(size: 20, weight: .medium, design: .rounded))
-
-                        UnreadCountView(count: filteredArticles.count)
-
+                .toolbar{
+                    ToolbarItem(placement: .principal) {
+                        HStack {
+                            KFImage(URL(string: rssSource.image))
+                                .placeholder({
+                                    Image("getInfo")
+                                        .renderingMode(.original).resizable().aspectRatio(contentMode: .fit).frame(width: 20, height: 20,alignment: .center).cornerRadius(2).clipped()
+                                })
+                                .renderingMode(.original).resizable().aspectRatio(contentMode: .fit).frame(width: 20, height: 20,alignment: .center).cornerRadius(2).clipped()
+                            
+                            Text(rssSource.title)
+                                .font(.system(size: 20, weight: .medium, design: .rounded))
+                            
+                            UnreadCountView(count: filteredArticles.count)
+                            
+                        }
                     }
                 }
-            }
-            .sheet(item: $selectedItem, content: { item in
-                if UserEnvironment.current.useSafari {
-                    SafariView(url: URL(string: item.url)!)
-                } else {
-                    WebView(
-                        rssItem: item,
-                        onCloseClosure: {
-                            self.selectedItem = nil
-                        },
-                        onArchiveClosure: {
-                            self.rssFeedViewModel.archiveOrCancel(item)
-                        }
-                    ).environmentObject(DataSourceService.current.rss)
-                }
-            })
+                .sheet(item: $selectedItem, content: { item in
+                    if UserEnvironment.current.useSafari {
+                        SafariView(url: URL(string: item.url)!)
+                    } else {
+                        WebView(
+                            rssItem: item,
+                            onCloseClosure: {
+                                self.selectedItem = nil
+                            },
+                            onArchiveClosure: {
+                                self.rssFeedViewModel.archiveOrCancel(item)
+                            }
+                        ).environmentObject(DataSourceService.current.rss)
+                    }
+                })
         }
         .onAppear {
             self.rssFeedViewModel.fecthResults()
@@ -180,5 +182,31 @@ struct RSSFeedListView: View {
             let error = error as NSError
             fatalError("Unresolved Error: \(error)")
         }
+    }
+}
+
+struct RSSFeedListView_Previews: PreviewProvider {
+    static let rss = RSS.simple()
+    static let rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
+    
+    static var filteredArticles: [RSSItem] {
+        return rssFeedViewModel.items.filter({ (item) -> Bool in
+            return !((self.rssFeedViewModel.isOn && !item.isArchive) || (self.rssFeedViewModel.unreadIsOn && item.isRead))
+        })
+    }
+    
+    //UnreadCountView(count: feed.posts.filter { !$0.isRead }.count)
+    
+    static var previews: some View {
+        NavigationView {
+            List {
+                ForEach(filteredArticles) { index in
+                    RSSFeedListView(viewModel: rssFeedViewModel, selectedFilter: .all)
+                }
+            }
+            .environmentObject(DataSourceService.current.rss)
+            .environmentObject(DataSourceService.current.rssItem)
+            .environment(\.managedObjectContext, Persistence.current.context)
+        }.preferredColorScheme(.dark)
     }
 }

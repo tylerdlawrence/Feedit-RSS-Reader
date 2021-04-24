@@ -11,11 +11,23 @@ import CoreData
 import Combine
 import WidgetKit
 
-class Unread: NSObject, ObservableObject {
+public class Unread: NSObject, ObservableObject {
     
     @Published var items: [RSSItem] = []
     @Published var isOn: Bool = false
     @Published var unreadIsOn: Bool = true
+    
+    @ObservedObject var store = RSSStore.instance
+    //@Published var feed: RSS
+    @Published var filteredPosts: [RSSItem] = []
+    @Published var filterType = FilterType.unreadIsOn
+    @Published var selectedPost: RSSItem?
+    @Published var showingDetail = false
+    @Published var shouldReload = false
+    @Published var showFilter = false
+    
+    private var cancellable: AnyCancellable? = nil
+    private var cancellable2: AnyCancellable? = nil
     
     let dataSource: RSSItemDataSource
     var start = 0
@@ -24,6 +36,20 @@ class Unread: NSObject, ObservableObject {
         self.dataSource = dataSource
         super.init()
     }
+    
+//    init(dataSource: RSSItemDataSource, feed: RSS) {
+//        self.dataSource = dataSource
+//        self.feed = feed
+//        super.init()
+//
+//        self.filteredPosts = feed.posts.filter { self.filterType == .unreadIsOn ? !$0.isRead : true }
+//
+//        cancellable = Publishers.CombineLatest3(self.$feed, self.$filterType, self.$shouldReload)
+//            .receive(on: DispatchQueue.main)
+//            .sink(receiveValue: { (newValue) in
+//                self.filteredPosts = newValue.0.posts.filter { newValue.1 == .unreadIsOn ? !$0.isRead : true }
+//        })
+//    }
     
     func loadMore() {
         start = items.count
@@ -75,5 +101,25 @@ class Unread: NSObject, ObservableObject {
         dataSource.setUpdateObject(updatedItem)
         
         _ = dataSource.saveUpdateObject()
+    }
+    
+    func markAllPostsRead() {
+        self.store.markAllPostsRead(feed: RSS())
+        shouldReload = true
+    }
+    
+    func markPostRead(index: Int) {
+        self.store.setPostRead(post: self.filteredPosts[index], feed: RSS())
+        shouldReload = true
+    }
+    
+    func reloadPosts() {
+        store.reloadFeedPosts(feed: RSS())
+    }
+    
+    func selectPost(index: Int) {
+        self.selectedPost = self.filteredPosts[index]
+        self.showingDetail.toggle()
+        self.markPostRead(index: index)
     }
 }

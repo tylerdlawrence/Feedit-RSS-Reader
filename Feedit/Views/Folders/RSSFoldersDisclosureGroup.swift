@@ -53,12 +53,6 @@ struct RSSFoldersDisclosureGroup: View {
     var rss = RSS()
     var start = 0
     
-//    var aCount: Int {
-//        self.viewModel.items
-//            .filter { $0 == rss }
-//            .count
-//    }
-    
     var body: some View {
         DisclosureGroup(
             isExpanded: $expandFolders,
@@ -75,11 +69,6 @@ struct RSSFoldersDisclosureGroup: View {
                             
                             HStack {
                                 RSSRow(rss: rss)
-                                Spacer()
-//                                UnreadCountView(count: unread.items.count)
-//                                    .onAppear {
-//                                        unread.fecthResults()
-//                                }
                                     .environmentObject(DataSourceService.current.rss)
                                     .environmentObject(DataSourceService.current.rssItem)
                                     .environment(\.managedObjectContext, Persistence.current.context)
@@ -164,8 +153,7 @@ struct RSSFoldersDisclosureGroup: View {
         }
     }
     private func destinationView(rss: RSS) -> some View {
-        let item = RSSItem()
-        return RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), rssItem: item, selectedFilter: .all)
+        return RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), selectedFilter: .all)
             .environmentObject(DataSourceService.current.rss)
     }
 }

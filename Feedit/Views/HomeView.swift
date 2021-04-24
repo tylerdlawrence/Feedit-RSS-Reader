@@ -13,9 +13,6 @@ import WebKit
 import WidgetKit
 
 struct HomeView: View {
-    @Environment(\.presentationMode) var presentationMode
-    @Environment(\.managedObjectContext) private var viewContext
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @FetchRequest(fetchRequest: Settings.fetchAllRequest()) var all_settings: FetchedResults<Settings>
     var settings: Settings {
         if let first = self.all_settings.first {
@@ -39,17 +36,32 @@ struct HomeView: View {
         case star
     }
     
-    let rss = RSS()
-    @StateObject var rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
-    @StateObject var archiveListViewModel = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
+    @ObservedObject var unreads = Unread(dataSource: DataSourceService.current.rssItem)
     
+    @ObservedObject var starred = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
+    
+    @ObservedObject var all = AllArticles(dataSource: DataSourceService.current.rssItem)
+    
+    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @EnvironmentObject private var persistence: Persistence
-    @ObservedObject var articles: AllArticles
-    @ObservedObject var unread: Unread
-    @ObservedObject var rssItem: RSSItem
-    @ObservedObject var viewModel: RSSListViewModel
+    @Environment(\.managedObjectContext) private var context
     @ObservedObject var searchBar: SearchBar = SearchBar()
     
+    @Environment(\.injected) private var injected: DIContainer
+    @State private var isActive: Bool = false
+    private let container: DIContainer
+    let inspection = PassthroughSubject<((AnyView) -> Void), Never>()
+    init(container: DIContainer) {
+        self.container = container
+    }
+    private var stateUpdate: AnyPublisher<Bool, Never> {
+        injected.appState.updates(for: \.system.isActive)
+    }
+    
+    @State var selection = Set<UUID>()
+    @State var selectedFilter: FilterType = .all
     @State private var archiveScale: Image.Scale = .medium
     @State private var addRSSProgressValue = 1.0
     @State private var isSheetPresented = false
@@ -59,7 +71,13 @@ struct HomeView: View {
     @State private var selectedFeatureItem = FeaureItem.add
     @State var addGroupIsPresented = false
     @State private var selectedCells: Set<RSS> = []
+    @State private var editMode = EditMode.inactive
+    @State var isEditing = false
+    @State private var revealSmartFilters = true
+    @State var isShowing: Bool = false
     
+    @ObservedObject var viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
+    let rss = RSS()
     
     private var archiveButton: some View {
         Button(action: {
@@ -101,6 +119,8 @@ struct HomeView: View {
         })
     }
     
+
+    
     private var navButtons: some View {
         HStack(alignment: .center, spacing: 24) {
             settingButton
@@ -128,9 +148,11 @@ struct HomeView: View {
                         icon: {Image(systemName: "plus.circle") }
                     )
                 })
-            } label: {
-               Image(systemName: "plus").font(.system(size: 18, weight: .medium, design: .rounded)).padding([.top, .bottom])
             }
+            label: {
+                Image(systemName: "plus").font(.system(size: 18, weight: .medium, design: .rounded)).padding([.top, .bottom])
+             }
+            
         }.padding(24)
     }
     
@@ -148,10 +170,6 @@ struct HomeView: View {
         return viewModel.items.first(where: { $0.url.id == url })
         }
     
-    @State var selectedFilter: FilterType
-    @State private var editMode = EditMode.inactive
-    @State var isEditing = false
-    
     private var ifEditModeButton: some View {
         HStack {
             Button(action: {
@@ -164,8 +182,6 @@ struct HomeView: View {
         }
     }
     
-    @Environment(\.managedObjectContext) private var context
-    @State var selection = Set<UUID>()
     private var editMenu: some View {
         Menu {
             if self.isEditing {
@@ -176,13 +192,10 @@ struct HomeView: View {
                     Text("Done")
                     Image(systemName: "checkmark")
                 }
-                
                 Button(action: {
                     context.delete(rss)
                     saveContext()
                     try! context.save()
-//                    deleteItems()
-
                 }) {
                     Text("Remove Selected")
                     Image(systemName: "trash")
@@ -200,9 +213,6 @@ struct HomeView: View {
             Image(systemName: "ellipsis.circle").font(.system(size: 20, weight: .medium, design: .rounded))
         }
     }
-    
-    @State private var revealSmartFilters = true
-    @State var isShowing: Bool = false
     
     var body: some View {
         NavigationView {
@@ -230,16 +240,17 @@ struct HomeView: View {
                             .listRowBackground(Color("darkerAccent"))
                             .accentColor(Color("tab"))
                         
-//                        RSSListView()
-                        RSSFoldersDisclosureGroup(persistence: Persistence.current, unread: unread, viewModel: self.viewModel, isExpanded: selectedCells.contains(rss))
-                            .onTapGesture { self.selectDeselect(rss) }
-                        
-                    
+                        RSSListView().inject(self.container)
+//                        RSSFoldersDisclosureGroup(persistence: Persistence.current, unread: unread, viewModel: self.viewModel, isExpanded: selectedCells.contains(rss))
+//                            .onTapGesture { self.selectDeselect(rss) }
                     }
                     .pullToRefresh(isShowing: $isShowing) {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                             self.isShowing = false
-                            self.viewModel.fecthResults()
+                            viewModel.fecthResults()
+                            all.fecthResults()
+                            unreads.fecthResults()
+                            starred.fecthResults()
                         }
                     }
                     .environmentObject(DataSourceService.current.rss)
@@ -269,6 +280,11 @@ struct HomeView: View {
                     .frame(width: UIScreen.main.bounds.width, height: 49, alignment: .leading)
                     EmptyView()
             }
+            .onReceive(stateUpdate) { self.isActive = $0 }
+            .onReceive(inspection) { callback in
+                viewModel.fecthResults()
+                //self.viewModel.fetchInfo()
+            }
             .onReceive(addRSSPublisher, perform: { output in
                 guard
                     let userInfo = output.userInfo,
@@ -277,7 +293,8 @@ struct HomeView: View {
             })
         
             .onReceive(rssRefreshPublisher, perform: { output in
-                self.viewModel.fecthResults()
+                viewModel.fecthResults()
+                //viewModel.fetchInfo()
             })
             
             .sheet(isPresented: $isSheetPresented, content: {
@@ -287,7 +304,7 @@ struct HomeView: View {
                                             onDoneAction: self.onDoneAction)
                     
                 } else if FeaureItem.setting == self.selectedFeatureItem {
-                    SettingView(fetchContentTime: .constant("minute1"), iconSettings: IconNames())
+                    SettingView(fetchContentTime: $viewModel.store.fetchContentTime, notificationsEnabled: $viewModel.store.notificationsEnabled, shouldOpenSettings: $viewModel.shouldOpenSettings, iconSettings: IconNames())
                         .environment(\.managedObjectContext, Persistence.current.context).environmentObject(Settings(context: Persistence.current.context))
                 } else if FeaureItem.folder == self.selectedFeatureItem {
                     AddGroup { name in
@@ -297,11 +314,15 @@ struct HomeView: View {
                 }
             })
         }
-        .onAppear {
-            //WidgetCenter.shared.reloadAllTimelines()
-            self.viewModel.fecthResults()
-        }
-//        .navigationViewStyle(StackNavigationViewStyle())
+        .onAppear(perform: {
+            WidgetCenter.shared.reloadAllTimelines()
+            all.fecthResults()
+            unreads.fecthResults()
+            starred.fecthResults()
+            //viewModel.fecthResults()
+            //self.viewModel.fetchInfo()
+            
+        })
     }
     
     private var editButton: some View {
@@ -332,7 +353,7 @@ struct HomeView: View {
     private func deleteItems() {
         var items = viewModel.items
         for _ in selection {
-            if let index = self.viewModel.items.lastIndex(where: { $0.id == rss.id }) {
+            if let index = self.viewModel.items.lastIndex(where: { $0.uuid == rss.uuid }) {
                 items.remove(at: index)
             }
         }
@@ -341,7 +362,7 @@ struct HomeView: View {
     
     func delete(rss: RSS) {
         var items = viewModel.items
-        if let index = self.viewModel.items.firstIndex(where: { $0.id == rss.id }) {
+        if let index = self.viewModel.items.firstIndex(where: { $0.uuid == rss.uuid }) {
             items.remove(at: index)
         }
     }
@@ -350,7 +371,8 @@ struct HomeView: View {
 extension HomeView {
     private func onDoneAction() {
         withAnimation {
-            self.viewModel.fecthResults()
+            //viewModel.fetchInfo()
+            viewModel.fecthResults()
         }
     }
     private func selectDeselect(_ group: RSSGroup) {
@@ -374,16 +396,9 @@ extension HomeView {
 
 #if DEBUG
 struct HomeView_Previews: PreviewProvider {
-    static let rss = RSS()
-    static let rssItem = RSSItem()
-    static let unread = Unread(dataSource: DataSourceService.current.rssItem)
-    static let articles = AllArticles(dataSource: DataSourceService.current.rssItem)
-    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-    static let persistence = Persistence.current
     
     static var previews: some View {
-        HomeView(articles: articles, unread: unread, rssItem: rssItem, viewModel: viewModel, selectedFilter: FilterType.all)
-            .environmentObject(DataSourceService.current.rssItem)
+        HomeView(container: DIContainer.defaultValue)
             .environment(\.managedObjectContext, Persistence.current.context)
             .preferredColorScheme(.dark)
     }

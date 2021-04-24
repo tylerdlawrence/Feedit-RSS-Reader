@@ -18,24 +18,20 @@ struct UnreadListView: View {
     @EnvironmentObject private var persistence: Persistence
     @Environment(\.managedObjectContext) private var context
     @EnvironmentObject var rssDataSource: RSSDataSource
+    
     @EnvironmentObject var rss: RSS
     @ObservedObject var unreads: Unread
+    
     @ObservedObject var searchBar: SearchBar = SearchBar()
     @StateObject var rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
     
     @State private var selectedItem: RSSItem?
     @State private var footer = "Load More Articles"
     @State private var disabled = true
-        
+    
     init(unreads: Unread, selectedFilter: FilterType) {
         self.unreads = unreads
         self.selectedFilter = selectedFilter
-    }
-    
-    private var refreshButton: some View {
-        Button(action: self.unreads.loadMore) {
-            Image(systemName: "arrow.clockwise").font(.system(size: 16, weight: .bold)).foregroundColor(Color("tab")).padding()
-        }.buttonStyle(BorderlessButtonStyle())
     }
     
     @State var selectedFilter: FilterType
@@ -63,23 +59,33 @@ struct UnreadListView: View {
         ScrollViewReader { scrollViewProxy in
             ZStack {
                 List {
+//                    ForEach(unreads.filteredPosts.indices, id: \.self) { index in
+//                        ZStack {
+//                            Button(action: {
+//                                self.unreads.showingDetail = true
+//                                self.unreads.selectPost(index: index)
+//                            })  {
+//                                RSSItemRow(rssItem: self.unreads.filteredPosts[index], menu: self.contextmenuAction(_:), rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
+//                            }
+//                        }
+//                    }
                     ForEach(unreads.items, id: \.self) { unread in
                         ZStack {
                             NavigationLink(destination: WebView(rssItem: unread, onCloseClosure: {})) {
-    //                        NavigationLink(destination: RSSFeedDetailView(rssItem: unread, rssFeedViewModel: RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)).environmentObject(DataSourceService.current.rss)) {
-                               EmptyView()
-                           }
-                           .opacity(0.0)
-                           .buttonStyle(PlainButtonStyle())
-                           
-                           HStack {
-                            RSSItemRow(rssItem: unread, menu: self.contextmenuAction(_:), rssFeedViewModel: RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem))
-                                   .contentShape(Rectangle())
-                                   .onTapGesture {
-                                       self.selectedItem = unread
-                                   }
-                               }
-                           }
+
+                                EmptyView()
+                            }
+                            .opacity(0.0)
+                            .buttonStyle(PlainButtonStyle())
+
+                            HStack {
+                                RSSItemRow(rssItem: unread, menu: self.contextmenuAction(_:), rssFeedViewModel: RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem))
+                                    .contentShape(Rectangle())
+                                    .onTapGesture {
+                                        self.selectedItem = unread
+                                }
+                            }
+                        }
                     }
                 }
                 .animation(.default)
@@ -87,7 +93,6 @@ struct UnreadListView: View {
                 .accentColor(Color("tab"))
                 .listRowBackground(Color("accent"))
                 .navigationBarTitle("", displayMode: .inline)
-//                .navigationBarItems(trailing: refreshButton)
                 .navigationBarItems(trailing:
                                         Button(action: {
                                             unreads.items.forEach { (unread) in
@@ -124,19 +129,6 @@ struct UnreadListView: View {
                                 .cornerRadius(8)
                         }
                     }
-
-//                    ToolbarItem(placement: .bottomBar) {
-//                        Toggle(isOn: $unreads.unreadIsOn) { Text("") }
-//                            .toggleStyle(CheckboxStyle())
-//                            .disabled(self.disabled)
-//                    }
-//                    ToolbarItem(placement: .bottomBar) {
-//                        Spacer()
-//                    }
-//                    ToolbarItem(placement: .bottomBar) {
-//                        Toggle(isOn: $unreads.isOn) { Text("") }
-//                            .toggleStyle(StarStyle())
-//                    }
                 }
                 .sheet(item: $selectedItem, content: { item in
                     if UserEnvironment.current.useSafari {
@@ -156,10 +148,6 @@ struct UnreadListView: View {
                 .onAppear {
                     self.unreads.fecthResults()
                 }
-//            }
-//            Spacer()
-//            navButtons
-//                .frame(width: UIScreen.main.bounds.width, height: 49)
         }
     }
     private func saveContext() {
@@ -175,8 +163,11 @@ struct UnreadListView: View {
     }
 }
 
-//struct UnreadListView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        UnreadListView(unreads: Unread(dataSource: DataSourceService.current.rssItem))
-//    }
-//}
+struct UnreadListView_Previews: PreviewProvider {
+    static let rss = RSS()
+    static var previews: some View {
+        NavigationView {
+            UnreadListView(unreads: Unread(dataSource: DataSourceService.current.rssItem), selectedFilter: .unreadIsOn)
+        }.preferredColorScheme(.dark)
+    }
+}

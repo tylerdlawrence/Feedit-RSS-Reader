@@ -62,13 +62,13 @@ struct ColorPaletteView: View {
     }
 }
 
-struct ColorPaletteContainerView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationView {
-            ColorPaletteContainerView()
-        }
-    }
-}
+//struct ColorPaletteContainerView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        NavigationView {
+//            ColorPaletteContainerView()
+//        }
+//    }
+//}
 struct AccentColorChooserView: View {
     @EnvironmentObject var settings: Settings
     
@@ -203,9 +203,12 @@ struct SettingView: View {
     @State private var isSettingsExpanded: Bool = true
     @State var accounts: String = ""
     @State var isPrivate: Bool = false
-    @State var notificationsEnabled: Bool = false
+    //@State var notificationsEnabled: Bool = false
     @State private var previewIndex = 0
+    
     @Binding var fetchContentTime: String
+    @Binding var notificationsEnabled: Bool
+    @Binding var shouldOpenSettings: Bool
     
     @ObservedObject var iconSettings: IconNames
     
@@ -303,9 +306,12 @@ struct SettingView: View {
                             .font(Font(.footnote))) {
                     
                     if UIApplication.shared.supportsAlternateIcons {
-
-                        NavigationLink(destination: AppIconChooserView().environmentObject(settings)
-                                       , label: {
+                        ZStack {
+                            NavigationLink(destination: AppIconChooserView().environmentObject(settings)) {
+                                EmptyView()
+                            }.opacity(0.0)
+                            .buttonStyle(PlainButtonStyle())
+                                
                             HStack {
                                 Label(
                                     title: { Text("App Icon").foregroundColor(Color(UIColor.label)) },
@@ -315,24 +321,27 @@ struct SettingView: View {
                                         Image(uiImage: UIImage(contentsOfFile: Bundle.main.resourcePath! + "/" + (settings.alternateIconName ?? "feedit") + "@2x.png")!).resizable().aspectRatio( contentMode: .fit).mask(Image(systemName: "app.fill").resizable().aspectRatio(contentMode: .fit))
                                     } }
                         ).labelStyle(HorizontallyAlignedLabelStyle())
-
                                 Spacer()
                                 Text("\(settings.alternateIconName ?? "Default")").foregroundColor(.gray)
                             }
-                        })
-                    }
-                    
-                    NavigationLink(destination: AccentColorChooserView().environmentObject(settings), label: {
-                        HStack {
-                            ZZLabel(iconBackgroundColor: settings.accentColor, iconColor: settings.accentUIColor == .white ? .black : .white, systemImage: "paintbrush.fill", text: "Accent Color")
-                            Spacer()
-                            Text("\(settings.accentUIColor.name ?? "Feedit Blue")").foregroundColor(.gray)
                         }
-                    })
-                    
-                    HStack {
-                        SettingsTextSizeSlider().environmentObject(settings)
                     }
+                    ZStack {
+                        NavigationLink(destination: AccentColorChooserView().environmentObject(settings)) {
+                            EmptyView()
+                        }.opacity(0.0)
+                        .buttonStyle(PlainButtonStyle())
+                        
+                            HStack {
+                                ZZLabel(iconBackgroundColor: settings.accentColor, iconColor: settings.accentUIColor == .white ? .black : .white, systemImage: "paintbrush.fill", text: "Accent Color")
+                                Spacer()
+                                Text("\(settings.accentUIColor.name ?? "Feedit Blue")").foregroundColor(.gray)
+                            }
+                        }.pickerStyle(MenuPickerStyle())
+                
+//                    HStack {
+//                        SettingsTextSizeSlider().environmentObject(settings)
+//                    }
                     
                 }
                 Section(header: Text("Layout").font(Font(.footnote, sizeModifier: CGFloat(settings.textSizeModifier)))) {
@@ -341,15 +350,21 @@ struct SettingView: View {
                 
                 Section(header: Text("Feeds")) {
                     Picker(selection: $fetchContentTime, label:
-                            Text("Fetch content time")) {
+                        HStack {
+                            Text("Fetch Content Time").foregroundColor(Color("text"))
+                            Spacer()
+                            Text("\($fetchContentTime.wrappedValue)")
+                                .foregroundColor(Color("text"))
+                        }
+                    ) {
                         ForEach(ContentTimeType.allCases, id: \.self.rawValue) { type in
                             Text(type.rawValue)
                         }
-                    }
+                    }.pickerStyle(MenuPickerStyle())
+                    
                     Toggle(isOn: $notificationsEnabled) {
                         Text("Notifications")
-                    }
-                    .toggleStyle(SwitchToggleStyle(tint: .blue))
+                    }.toggleStyle(SwitchToggleStyle(tint: .blue))
 
                     HStack {
                         Image(systemName: "safari")
@@ -362,19 +377,6 @@ struct SettingView: View {
                                 Toggle("Safari Reader", isOn: self.$isSelected)
                             }
                         }.toggleStyle(SwitchToggleStyle(tint: .blue))
-                    
-//                    HStack {
-//                        Image(systemName: "circle.lefthalf.fill")
-//                            .frame(width: 30, height: 30)
-//                            .foregroundColor(.white)
-//                            .background(Color("bg"))
-//                            .opacity(0.9)
-//                            .clipShape(RoundedRectangle(cornerRadius: 5))
-//                        Toggle(isOn: $darkMode) {
-//                                     Text("Light/Dark Mode")
-//                                }
-//                        .toggleStyle(ToggleAppearence())
-//                    }
 
                     HStack {
                         NavigationLink(destination: self.batchImportView) {
@@ -402,7 +404,8 @@ struct SettingView: View {
                             }
                         }
                     }
-                    }
+                }.contentShape(Rectangle())
+                .frame(maxWidth: .infinity, alignment: .leading)
                 
                 Section {
                     SettingsLinkView(image: "github", text: "GitHub", url: "https://github.com/tylerdlawrence/Feedit-RSS-Reader", iconColor: .black)
@@ -458,7 +461,7 @@ struct SettingView: View {
 struct SettingView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            SettingView(fetchContentTime: .constant("minute1"), iconSettings: IconNames())
+            SettingView(fetchContentTime: .constant("minute1"), notificationsEnabled: .constant(false), shouldOpenSettings: .constant(true), iconSettings: IconNames())
                 .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext).environmentObject(Settings(context: PersistenceController.preview.container.viewContext))
         }.previewLayout(.sizeThatFits)
 
@@ -478,12 +481,16 @@ struct SettingsLayoutSlider: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollView {
-                LazyVStack(alignment: .leading, spacing: 0) {
-                    ForEach(1..<3) { _ in
+                LazyVStack(alignment: .leading, spacing: 4) {
+                    ForEach(0..<3) { _ in
                         HStack(alignment: .top) {
                             VStack(alignment: .leading) {
-                                Image("launch")
-                                    .renderingMode(.original).resizable().aspectRatio(contentMode: .fit).frame(width: 25, height: 25, alignment: .center).cornerRadius(3).opacity(0.9)
+                                Image("all")
+                                    .renderingMode(.original).resizable().aspectRatio(contentMode: .fit)
+                                    .frame(width: 25, height: 25, alignment: .center)
+                                    .opacity(0.9)
+                                    .cornerRadius(3)
+                                    .clipShape(RoundedRectangle(cornerRadius: 5))
                             }
                             Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultrices sed nulla nec blandit. Suspendisse in facilisis velit.").font(Font(.body, sizeModifier: CGFloat(settings.textSizeModifier)))
                                 .environmentObject(settings).allowsHitTesting(false)
@@ -494,13 +501,14 @@ struct SettingsLayoutSlider: View {
             }.listStyle(PlainListStyle()).frame(height: 175).padding(0).allowsHitTesting(false).overlay(Rectangle().foregroundColor(.clear).opacity(0.0).background(LinearGradient(gradient: Gradient(colors: [Color(UIColor.secondarySystemGroupedBackground.withAlphaComponent(0.0)), Color(UIColor.secondarySystemGroupedBackground.withAlphaComponent(0.0)), Color(UIColor.secondarySystemGroupedBackground)]), startPoint: .top, endPoint: .bottom)))
             Divider().padding([.bottom], 8.0)
             HStack {
-                Image(systemName: "doc.plaintext").renderingMode(.template).foregroundColor(.accentColor)
-                Picker("Story Cell Layout", selection: $settings.layoutValue, content: {
-                    Text("Compact").tag(Settings.Layout.compact.rawValue)
-                    Text("Comfortable").tag(Settings.Layout.comfortable.rawValue)
-                    Text("Default").tag(Settings.Layout.Default.rawValue)
-                }).pickerStyle(SegmentedPickerStyle())
-                Image(systemName: "doc.richtext").renderingMode(.template).foregroundColor(.accentColor)
+                SettingsTextSizeSlider().environmentObject(settings)
+//                Image(systemName: "doc.plaintext").renderingMode(.template).foregroundColor(.accentColor)
+//                Picker("Story Cell Layout", selection: $settings.layoutValue, content: {
+//                    Text("Compact").tag(Settings.Layout.compact.rawValue)
+//                    Text("Comfortable").tag(Settings.Layout.comfortable.rawValue)
+//                    Text("Default").tag(Settings.Layout.Default.rawValue)
+//                }).pickerStyle(SegmentedPickerStyle())
+//                Image(systemName: "doc.richtext").renderingMode(.template).foregroundColor(.accentColor)
             }
         }
     }
@@ -528,8 +536,7 @@ struct ZZLabel: View {
                 } else {
                     Image(systemName: systemImage ?? "xmark.square").resizable().aspectRatio( contentMode: .fit).scaleEffect(CGSize(width: iconScale, height: iconScale)).foregroundColor(self.iconColor)
                 }
-            } }
-).labelStyle(HorizontallyAlignedLabelStyle())
+            } }).labelStyle(HorizontallyAlignedLabelStyle())
     }
 }
 

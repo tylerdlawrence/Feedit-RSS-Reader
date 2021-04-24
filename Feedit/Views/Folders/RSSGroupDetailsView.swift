@@ -11,7 +11,7 @@ import Combine
 import Foundation
 
 struct RSSGroupDetailsView: View {
-//    @EnvironmentObject var rssDataSource: RSSDataSource
+    @EnvironmentObject var rssDataSource: RSSDataSource
     @ObservedObject var viewModel: RSSListViewModel
     @EnvironmentObject private var persistence: Persistence
     let rssGroup: RSSGroup
@@ -21,7 +21,7 @@ struct RSSGroupDetailsView: View {
     static var fetchRequest: NSFetchRequest<RSSGroup> {
       let request: NSFetchRequest<RSSGroup> = RSSGroup.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(keyPath: \RSSGroup.items, ascending: true)].compactMap { $0 }
-        let predicate = NSPredicate(format: "rssUUID = %@")
+        let predicate = NSPredicate(format: "uuid = %@")//"rssUUID = %@")
         request.predicate = predicate
       return request
     }
@@ -43,19 +43,20 @@ struct RSSGroupDetailsView: View {
                     Text("\(rssGroup.itemCount)")
                 }
             }
-            ForEach(viewModel.items) { rss in
-                HStack {
-                    RSSRow(rss: rss)
-
-                }
-            }.environment(\.managedObjectContext, Persistence.current.context)
-            .environmentObject(Persistence.current)
+//            ForEach(viewModel.items) { rss in
+//                HStack {
+//                    RSSRow(rss: rss)
+//
+//                }
+//            }
+            //.environment(\.managedObjectContext, Persistence.current.context)
+//            .environmentObject(Persistence.current)
         }
         .navigationBarTitle(Text(rssGroup.name ?? "Folders"))
     }
     private func destinationView(rss: RSS) -> some View {
-        let item = RSSItem()
-        return RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), rssItem: item, selectedFilter: .all).environmentObject(DataSourceService.current.rss)
+        return RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), selectedFilter: .all)
+            .environmentObject(DataSourceService.current.rss)
     }
 }
 

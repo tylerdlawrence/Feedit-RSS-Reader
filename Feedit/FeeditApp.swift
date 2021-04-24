@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FeedKit
 import CoreData
 import Introspect
 import WidgetKit
@@ -18,23 +19,15 @@ struct FeeditApp: App {
     
     let persistence = Persistence.current
     
-    @StateObject private var articles = AllArticles(dataSource: DataSourceService.current.rssItem)
-    @StateObject private var unread = Unread(dataSource: DataSourceService.current.rssItem)
-    @StateObject private var viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-    @StateObject private var rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
-    @StateObject private var rss = RSS()
-    @StateObject private var rssItem = RSSItem()
-    
+    var viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     
     var body: some Scene {
         WindowGroup {
-            
-            HomeView(articles: articles, unread: unread, rssItem: rssItem, viewModel: viewModel, selectedFilter: FilterType.all)
-                .environmentObject(viewModel)
-                .environmentObject(articles)
-                .environmentObject(unread)
-                .environmentObject(rss)
-                .environmentObject(rssItem)
+            HomeView(container: DIContainer.defaultValue)
+                .environmentObject(self.viewModel.store)
+                .environmentObject(DataSourceService.current.rss)
+                .environmentObject(DataSourceService.current.rssItem)
+                .environmentObject(persistence)
                 .environment(\.managedObjectContext, Persistence.current.context)
                 .onOpenURL { url in
                     print("Received deep link: \(url)")

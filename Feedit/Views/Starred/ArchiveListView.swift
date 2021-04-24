@@ -7,10 +7,13 @@
 //
 
 import SwiftUI
+import Introspect
+import Combine
+import WebKit
+import CoreData
 import UIKit
 import KingfisherSwiftUI
 import Intents
-//import SwipeCell
 import MobileCoreServices
 
 struct ArchiveListView: View {
@@ -41,6 +44,7 @@ struct ArchiveListView: View {
     }
     
     @State var selectedFilter: FilterType
+    @State var isShowing: Bool = false
     private var navButtons: some View {
         HStack(alignment: .center, spacing: 30) {
             Toggle(isOn: $rssFeedViewModel.unreadIsOn) { Text("") }
@@ -70,7 +74,7 @@ struct ArchiveListView: View {
                     ForEach(self.archiveListViewModel.items, id: \.self) { item in
                         ZStack {
                             NavigationLink(destination: WebView(rssItem: item, onCloseClosure: {})) {
-    //                        NavigationLink(destination: RSSFeedDetailView(rssItem: item, rssFeedViewModel: self.rssFeedViewModel)) {
+                                
                                 EmptyView()
                             }
                             .opacity(0.0)
@@ -92,10 +96,8 @@ struct ArchiveListView: View {
                         }
                     }
                 }
-                
                 .listStyle(PlainListStyle())
                 .navigationBarTitle("", displayMode: .inline)
-//                .navigationBarItems(trailing: refreshButton)
                 .navigationBarItems(trailing:
                                         Button(action: {
                                             archiveListViewModel.items.forEach { (item) in
@@ -107,6 +109,12 @@ struct ArchiveListView: View {
                                         }
                 )
             }
+//            .pullToRefresh(isShowing: $isShowing) {
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+//                    self.isShowing = false
+//                    archiveListViewModel.fecthResults()
+//                }
+//            }
             Spacer()
             navButtons
                 .frame(width: UIScreen.main.bounds.width, height: 49)
@@ -118,7 +126,7 @@ struct ArchiveListView: View {
                                 Image(systemName: "star.fill")
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
-                                    .frame(width: 21, height: 21,alignment: .center)
+                                    .frame(width: 18, height: 18,alignment: .center)
                                     .foregroundColor(Color("tab").opacity(0.9))
                                 Text("Starred")
                                     .font(.system(.body))
@@ -135,20 +143,7 @@ struct ArchiveListView: View {
                             }
                         }
                     }
-    //                    ToolbarItem(placement: .bottomBar) {
-    //                        Toggle("", isOn: $isRead)
-    //                            .toggleStyle(CheckboxStyle())
-    //                    }
-    //                    ToolbarItem(placement: .bottomBar) {
-    //                        Spacer()
-    //                    }
-    //                    ToolbarItem(placement: .bottomBar) {
-    //                        Toggle(isOn: $archiveListViewModel.isArchive) { Text("") }
-    //                            .toggleStyle(StarStyle())
-    //                            .disabled(self.disabled)
-    //                    }
-                    }
-            
+                }
                 .sheet(item: $selectedItem, content: { item in
                     if UserEnvironment.current.useSafari {
                         SafariView(url: URL(string: item.url)!)

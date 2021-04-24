@@ -12,15 +12,13 @@ class ArchiveListViewModel: NSObject, ObservableObject {
     
     @Published var items: [RSSItem] = []
     @Published var filteredArticles: [RSSItem] = []
-//    @Published var filterType = FilterType.isArchive
+    @Published var filterType = FilterType.isArchive
     @Published var selectedPost: RSSItem?
     @Published var isArchive: Bool = true
+    
     @Published var disabled = true
     @Published var selectedFilterToggle = 0
     func markAllPostsRead(item: RSSItem) {}
-    
-//    public static let shared = ArchiveListViewModel(dataSource: DataSourceService.current.rssItem)
-//    let starredFeed = ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem), selectedFilter: .isArchive)
     
     @Published var message = String()
     @Published var shouldShowAlert = false

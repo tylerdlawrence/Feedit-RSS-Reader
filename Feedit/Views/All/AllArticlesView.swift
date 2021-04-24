@@ -40,16 +40,7 @@ struct AllArticlesView: View {
             Image(systemName: "arrow.clockwise").font(.system(size: 16, weight: .bold)).foregroundColor(Color("tab")).padding()
         }.buttonStyle(BorderlessButtonStyle())
     }
-    
-//    private func list(of articles: [RSSItem]) -> some View {
-//        return List(filteredArticles) { item in
-//               NavigationLink(
-//                   destination: RSSFeedDetailView(rssItem: item, rssFeedViewModel: self.rssFeedViewModel),
-//                   label: { RSSItemRow(rssItem: item, menu: self.contextmenuAction(_:), rssFeedViewModel: rssFeedViewModel) }
-//               )
-//           }
-//       }
-    
+
     @State private var selection = Set<String>()
     
     var filteredArticles: [RSSItem] {
@@ -88,12 +79,10 @@ struct AllArticlesView: View {
         ScrollViewReader { scrollViewProxy in
             ZStack {
                 List {
-//                    SearchbarView(searchText: $searchTerm)
                     ForEach(articles.items, id: \.self) { article in
-//                    ForEach(self.filteredArticles.filter { self.searchTerm.isEmpty ? true : $0.localizedCaseInsensitiveContains(self.searchTerm) }, id: \.self) { article in
                         ZStack {
                             NavigationLink(destination: WebView(rssItem: article, onCloseClosure: {})) {
-    //                        NavigationLink(destination: RSSFeedDetailView(rssItem: unread, rssFeedViewModel: RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)).environmentObject(DataSourceService.current.rss)) {
+                                
                                EmptyView()
                            }
                            .opacity(0.0)
@@ -115,7 +104,6 @@ struct AllArticlesView: View {
                 .accentColor(Color("tab"))
                 .listRowBackground(Color("accent"))
                 .navigationBarTitle("", displayMode: .inline)
-//                .navigationBarItems(trailing: refreshButton)
                 .navigationBarItems(trailing:
                                         Button(action: {
                                             articles.items.forEach { (article) in
@@ -138,7 +126,7 @@ struct AllArticlesView: View {
                             Image(systemName: "chart.bar.doc.horizontal")
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
-                                .frame(width: 21, height: 21,alignment: .center)
+                                .frame(width: 18, height: 18,alignment: .center)
                                 .foregroundColor(Color("tab").opacity(0.9))
                             Text("All Articles")
                                 .font(.system(size: 20, weight: .medium, design: .rounded))

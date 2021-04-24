@@ -17,10 +17,10 @@ class RSSListViewModel: NSObject, ObservableObject, NSFetchedResultsControllerDe
 
     @Published var isOn = false
     @Published var unreadIsOn = false
-    @Published private(set) var items: [RSS] = []
+    @Published var items: [RSS] = []
     
-    @Published var feeds: [FeedObject] = []
-    @Published var shouldSelectFeedObject: FeedObject?
+    //@Published var feeds: [FeedObject] = []
+    @Published var shouldSelectFeedObject: RSS?
     @Published var shouldSelectFeed = false
     @Published var shouldPresentDetail = false
     @Published var shouldSelectFeedURL: String?
@@ -30,6 +30,7 @@ class RSSListViewModel: NSObject, ObservableObject, NSFetchedResultsControllerDe
     @Published var fetchContentType: ContentTimeType = .minute60
     @Published var totalUnreadPosts: Int = 0
     @Published var totalReadPostsToday: Int = 0
+    @Published var isSheetPresented = false
     var cancellables = Set<AnyCancellable>()
     
     @Published var loading: Bool = true
@@ -45,11 +46,14 @@ class RSSListViewModel: NSObject, ObservableObject, NSFetchedResultsControllerDe
     
     var subscriptions: Set<AnyCancellable> = []
     let dataSource: RSSDataSource
-    var start = 4
+    var start = 0
     
     init(dataSource: RSSDataSource) {
         self.dataSource = dataSource
         super.init()
+        
+        //fetchInfo()
+        //fecthResults(start: start)
     }
     
     private let persistence = Persistence.current
@@ -88,36 +92,36 @@ class RSSListViewModel: NSObject, ObservableObject, NSFetchedResultsControllerDe
     }
     
     func fetchInfo() {
-        self.feeds = store.feeds
-
-            store.$feeds
-                .receive(on: DispatchQueue.main)
-                .sink(receiveValue: { (newValue) in
-                    self.feeds = newValue
-                })
-                .store(in: &cancellables)
-
-//            Publishers.CombineLatest(store.$shouldSelectFeedURL, store.$shouldOpenSettings)
-//                .receive(on: DispatchQueue.main)
-//                .map { (newValue) -> (FeedObject?, Bool) in
-//                    guard let url = newValue.0 else {
-//                        return (nil, newValue.1)
-//                    }
-//                    return (self.feeds.first(where: {$0.url.absoluteString == url }), newValue.1)
-//                }
-//                .removeDuplicates(by: { (lhs, rhs) -> Bool in
-//                    return lhs.0?.url.absoluteURL != rhs.0?.url.absoluteURL && lhs.1 != rhs.1
-//                })
-//                .sink(receiveValue: { (newValue) in
-//                    self.shouldSelectFeedObject = newValue.0
-//                    self.shouldSelectFeed = newValue.0 != nil
-//                    self.shouldOpenSettings = newValue.1
-//                    self.shouldPresentDetail = self.shouldSelectFeed || self.shouldOpenSettings
-//                    print("present∂etail: \(self.shouldPresentDetail)")
-//                    self.objectWillChange.send()
-//                })
-//                .store(in: &cancellables)
-        }
+        self.items = store.items
+        
+        store.$feeds
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { (newValue) in
+                self.items = newValue
+            })
+            .store(in: &cancellables)
+        
+        Publishers.CombineLatest(store.$shouldSelectFeedURL, store.$shouldOpenSettings)
+            .receive(on: DispatchQueue.main)
+            .map { (newValue) -> (RSS?, Bool) in
+                guard let url = newValue.0 else {
+                    return (nil, newValue.1)
+                }
+                return (self.items.first(where: {$0.url == url }), newValue.1)
+            }
+            .removeDuplicates(by: { (lhs, rhs) -> Bool in
+                return lhs.0?.url != rhs.0?.url && lhs.1 != rhs.1
+            })
+            .sink(receiveValue: { (newValue) in
+                self.shouldSelectFeedObject = newValue.0
+                self.shouldSelectFeed = newValue.0 != nil
+                self.shouldOpenSettings = newValue.1
+                self.isSheetPresented = self.shouldSelectFeed || self.shouldOpenSettings
+                print("present∂etail: \(self.isSheetPresented)")
+                self.objectWillChange.send()
+            })
+            .store(in: &cancellables)
+    }
 
     func loadMore() {
         start = items.count
@@ -138,7 +142,7 @@ class RSSListViewModel: NSObject, ObservableObject, NSFetchedResultsControllerDe
 
     //MARK: context menu action for delete
     func delete(rss: RSS) {
-        if let index = self.items.firstIndex(where: { $0.id == rss.id }) {
+        if let index = self.items.firstIndex(where: { $0.uuid == rss.uuid }) {
             items.remove(at: index)
         }
     }
@@ -162,6 +166,10 @@ class RSSListViewModel: NSObject, ObservableObject, NSFetchedResultsControllerDe
             items.move(fromOffsets: source, toOffset: destination)
             saveContext()
         }
+    }
+    
+    func removeFeed(index: Int) {
+        self.store.removeFeed(at: index)
     }
     
     func saveContext() {

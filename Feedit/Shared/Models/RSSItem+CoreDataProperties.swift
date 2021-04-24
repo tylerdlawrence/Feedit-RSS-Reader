@@ -8,6 +8,10 @@
 import SwiftUI
 import Foundation
 import CoreData
+import FeedKit
+import FaviconFinder
+import Combine
+import BackgroundTasks
 
 extension RSSItem: Identifiable {
     
@@ -48,6 +52,8 @@ extension RSSItem {
 //    let unreadArticles: [LatestArticle]
 //    let starredArticles: [LatestArticle]
 //    let todayArticles: [LatestArticle]
+        
+    @NSManaged public var readDate: Date?
         
     public override func awakeFromInsert() {
         super.awakeFromInsert()

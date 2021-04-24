@@ -15,7 +15,7 @@ import UIKit
 import Combine
 import SwipeCell
 import FeedKit
-//import SDWebImageSwiftUI
+import SDWebImageSwiftUI
 import Intents
 
 struct RSSItemRow: View {
@@ -35,14 +35,13 @@ struct RSSItemRow: View {
     
     @State private var hideRemove = false
     @State private var hideKeep = false
-            
+    
     init(rssItem: RSSItem, menu action: ((RSSItem) -> Void)? = nil, rssFeedViewModel: RSSFeedViewModel) {
         self.rssItem = rssItem
         contextMenuAction = action
         self.rssFeedViewModel = rssFeedViewModel
     }
-//    @State var imgURL: String = "https://..."
-        
+    
     var body: some View {
         let toggleStarred = SwipeCellButton(
             buttonStyle: .view,
@@ -102,50 +101,38 @@ struct RSSItemRow: View {
         let read = SwipeCellSlot(slots: [toggleRead], slotStyle: .destructive, buttonWidth: 60)
         
         
-
+        
         ZStack {
             VStack(alignment: .leading) {
                 HStack(alignment: .top) {
-                VStack(alignment: .center) {
-//                    KFImage(URL(string: rssItem.urlToImage ?? ""))
-//                        .renderingMode(.original)
-//                        .resizable()
-//                        .scaledToFill()
-//                        .frame(width: 60, height: 60)
-                    
-                    if !rssItem.isRead {
-                        Text("")
-                            .frame(width: 8, height: 8)
-                            .background(Color.blue)
-                            .opacity(rssItem.isRead ? 0 : 1)
-                            .clipShape(Circle())
-                            .padding([.bottom])
-                    } else {
-                        Text("")
-                            .frame(width: 8, height: 8)
-                            .background(Color.blue)
-                            .opacity(0)
-                            .clipShape(Circle())
-                            .padding([.bottom])
+                    VStack(alignment: .center) {
+                        if !rssItem.isRead {
+                            Text("")
+                                .frame(width: 8, height: 8)
+                                .background(Color.blue)
+                                .opacity(rssItem.isRead ? 0 : 1)
+                                .clipShape(Circle())
+                                .padding([.bottom])
+                        } else {
+                            Text("")
+                                .frame(width: 8, height: 8)
+                                .background(Color.blue)
+                                .opacity(0)
+                                .clipShape(Circle())
+                                .padding([.bottom])
+                        }
+                        
+                        //WebImage(url: rssSource.rssURL)
+                        KFImage(URL(string: rssItem.image))
+                            .renderingMode(.original)
+                            .resizable()
+                            .placeholder {
+                                Rectangle().foregroundColor(.gray)
+                            }
+                            .frame(width: 21, height: 21)
+                            .clipShape(RoundedRectangle(cornerRadius: 3))
+                            .padding(.leading)
                     }
-//                    if rssItem.isArchive {
-//                        Image(systemName: "star.fill").font(.system(size: 11, weight: .black, design: .rounded))
-//                            .foregroundColor(Color.yellow)
-//                            .multilineTextAlignment(.center)
-//                            .aspectRatio(contentMode: .fit)
-//                            .frame(width: 8, height: 8)
-//                            .opacity(0.8)
-//                            .padding([.top, .leading])
-//                    } else {
-//                        Image(systemName: "star.fill").font(.system(size: 11, weight: .black, design: .rounded))
-//                            .foregroundColor(Color.yellow)
-//                            .multilineTextAlignment(.center)
-//                            .aspectRatio(contentMode: .fit)
-//                            .opacity(rssItem.isArchive ? 1 : 0)
-//                            .frame(width: 8, height: 8)
-//                            .padding([.top, .leading])
-//                    }
-                }
                     HStack{
                         VStack(alignment: .leading){
                             HStack {
@@ -154,19 +141,15 @@ struct RSSItemRow: View {
                                     .font(.system(size: 11, weight: .medium, design: .rounded))
                                     .foregroundColor(.gray)
                                     .opacity(0.8)
-//                                Spacer()
+                                
                                 if rssItem.isArchive {
                                     Image(systemName: "star.fill").font(.system(size: 8, design: .rounded))
                                         .foregroundColor(Color.gray)
-//                                        .multilineTextAlignment(.center)
-//                                        .aspectRatio(contentMode: .fit)
                                         .frame(width: 8, height: 8)
                                         .opacity(0.8)
                                 } else {
                                     Image(systemName: "star.fill").font(.system(size: 8, design: .rounded))
                                         .foregroundColor(Color.gray)
-//                                        .multilineTextAlignment(.center)
-//                                        .aspectRatio(contentMode: .fit)
                                         .opacity(rssItem.isArchive ? 1 : 0)
                                         .frame(width: 8, height: 8)
                                 }
@@ -192,7 +175,7 @@ struct RSSItemRow: View {
                                     .opacity(rssItem.isRead ? 0.6 : 1)
                                     .lineLimit(3)
                             }
-                                
+                            
                             Text(rssItem.desc.trimHTMLTag.trimWhiteAndSpace)
                                 .font(.system(size: 15, weight: .medium, design: .rounded))
                                 .opacity(0.8)
@@ -202,23 +185,24 @@ struct RSSItemRow: View {
 //                            Text(self.rssSource.title).font(.system(size: 11, weight: .medium, design: .rounded))
 //                                .textCase(.uppercase)
 //                                .foregroundColor(.gray)
+                            
                             Text(rssItem.author).font(.system(size: 11, weight: .medium, design: .rounded))
                                 .textCase(.uppercase)
                                 .foregroundColor(.gray)
                         }
                         Spacer()
-                        
-                        
                     }
-               }
+                }
             }
             .swipeCell(cellPosition: .both, leftSlot: read, rightSlot: star)
             .contextMenu {
                 Section{
+                    
 //                    NavigationLink(destination: RSSFeedDetailView(rssItem: rssItem, rssFeedViewModel: self.rssFeedViewModel)) {
 //                        Text("Open Article")
 //                        Image(systemName: "doc.richtext")
 //                    }
+                    
                     Link(destination: URL(string: rssItem.url)!, label: {
                         HStack {
                             Text("Open Article")
@@ -233,23 +217,23 @@ struct RSSItemRow: View {
                         systemName: "circle\(rssItem.progress > 0 ? ".fill" : "")",
                         onAction: {
                             rssItem.progress = 1
-                    })
+                        })
                     ActionContextMenu(
                         label: rssItem.isArchive ? "Unstar" : "Star",
                         systemName: "star\(rssItem.isArchive ? ".fill" : "")",
                         onAction: {
                             self.contextMenuAction?(self.rssItem)
-                    })
+                        })
                     
                     ActionContextMenu(
                         label: "Hide Article",
                         systemName: "eye.slash",
                         onAction: {
                             self.hideRemove.toggle()
-                    })
+                        })
                     
                     Divider()
-
+                    
                     Button(action: {
                         UIPasteboard.general.setValue(rssItem.url,
                                                       forPasteboardType: kUTTypePlainText as String)
@@ -257,36 +241,29 @@ struct RSSItemRow: View {
                         Text("Copy Article Link")
                         Image(systemName: "link")
                     }
-
-
-//                    Button(action: actionSheet) {
-//                        Text("Share Article")
-//                        Image(systemName: "square.and.arrow.up")
-//                    }
+                    
+                    
+                    Button(action: actionSheet) {
+                        Text("Share Article")
+                        Image(systemName: "square.and.arrow.up")
+                    }
                 }
             }
         }
     }
     
-//    func actionSheet() {
-//        guard let urlShare = URL(string: rssItem.url) else { return }
-//           let activityVC = UIActivityViewController(activityItems: [urlShare], applicationActivities: nil)
-//           UIApplication.shared.windows.first?.rootViewController?.present(activityVC, animated: true, completion: nil)
-//       }
-}
-
-extension Int {
-    static func * (lhs: Int, rhs: CGFloat) -> CGFloat {
-        return CGFloat(lhs) * rhs
+    func actionSheet() {
+        guard let urlShare = URL(string: rssItem.url) else { return }
+        let activityVC = UIActivityViewController(activityItems: [urlShare], applicationActivities: nil)
+        UIApplication.init().windows.first?.rootViewController?.present(activityVC, animated: true, completion: nil)
     }
 }
-
 
 #if DEBUG
 struct RSSFeedRow_Previews: PreviewProvider {
     static var rss = RSS()
     static var rssFeedViewModel = RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem)
-
+    
     static var previews: some View {
         return RSSItemRow(rssItem: RSSItem(), rssFeedViewModel: rssFeedViewModel).environmentObject(DataSourceService.current.rssItem)
             
@@ -295,21 +272,3 @@ struct RSSFeedRow_Previews: PreviewProvider {
     }
 }
 #endif
-
-struct tags: View {
-    var tags: Array<String>
-    var body: some View {
-        HStack {
-        ForEach(tags, id: \.self) { e in
-            Text(e)
-                .foregroundColor(Color("text"))
-                .font(.system(size: 6))
-                .padding(4)
-                .overlay(
-                   RoundedRectangle(cornerRadius: 10)
-                    .stroke(Color("tab"), lineWidth: 0.5)
-               )
-           }
-        }
-    }
-}

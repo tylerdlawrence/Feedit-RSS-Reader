@@ -11,6 +11,8 @@
 		6105657725599D8B007DCAA1 /* Subscriptions-OnMyiPhone.opml in Resources */ = {isa = PBXBuildFile; fileRef = 6105657625599D8B007DCAA1 /* Subscriptions-OnMyiPhone.opml */; };
 		610A854125FF11470027FF48 /* RSSFoldersDisclosureGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 610A854025FF11460027FF48 /* RSSFoldersDisclosureGroup.swift */; };
 		610A854325FFFF990027FF48 /* ExpansionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 610A854225FFFF990027FF48 /* ExpansionHandler.swift */; };
+		610A85A72633211F00B72244 /* DBRepoContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 610A85A62633211F00B72244 /* DBRepoContainer.swift */; };
+		610A85A92633F07200B72244 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 610A85A82633F07200B72244 /* SDWebImageSwiftUI */; };
 		6117364924E83C0600A2DEA5 /* DataUnitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6117364824E83C0600A2DEA5 /* DataUnitView.swift */; };
 		6117365524E83C3E00A2DEA5 /* DataNStorageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6117365424E83C3E00A2DEA5 /* DataNStorageView.swift */; };
 		6117365724E83C7B00A2DEA5 /* DataNStorageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6117365624E83C7B00A2DEA5 /* DataNStorageViewModel.swift */; };
@@ -50,7 +52,6 @@
 		6162F25825B68BA1008E7FA7 /* Searchbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6162F25725B68BA1008E7FA7 /* Searchbar.swift */; };
 		6162F28025B69071008E7FA7 /* FaviconFinder in Frameworks */ = {isa = PBXBuildFile; productRef = 6162F27F25B69071008E7FA7 /* FaviconFinder */; };
 		6162F2A625B71AF3008E7FA7 /* FilterBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6162F2A525B71AF3008E7FA7 /* FilterBar.swift */; };
-		6168A2E7260C4635002F70EC /* ToolbarModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6168A2E6260C4634002F70EC /* ToolbarModifier.swift */; };
 		6168A2F1260F7792002F70EC /* UnreadCountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6168A2F0260F778D002F70EC /* UnreadCountView.swift */; };
 		6168A2F82610355E002F70EC /* ScrollViewExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6168A2F72610355A002F70EC /* ScrollViewExt.swift */; };
 		616CAF6024F7131000690804 /* OPMLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616CAF5F24F7131000690804 /* OPMLParser.swift */; };
@@ -277,6 +278,7 @@
 		6105657625599D8B007DCAA1 /* Subscriptions-OnMyiPhone.opml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "Subscriptions-OnMyiPhone.opml"; sourceTree = "<group>"; };
 		610A854025FF11460027FF48 /* RSSFoldersDisclosureGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSSFoldersDisclosureGroup.swift; sourceTree = "<group>"; };
 		610A854225FFFF990027FF48 /* ExpansionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpansionHandler.swift; sourceTree = "<group>"; };
+		610A85A62633211F00B72244 /* DBRepoContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBRepoContainer.swift; sourceTree = "<group>"; };
 		6117364824E83C0600A2DEA5 /* DataUnitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataUnitView.swift; sourceTree = "<group>"; };
 		6117365424E83C3E00A2DEA5 /* DataNStorageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataNStorageView.swift; sourceTree = "<group>"; };
 		6117365624E83C7B00A2DEA5 /* DataNStorageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataNStorageViewModel.swift; sourceTree = "<group>"; };
@@ -305,7 +307,6 @@
 		615E971E25323C1900891083 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		6162F25725B68BA1008E7FA7 /* Searchbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Searchbar.swift; sourceTree = "<group>"; };
 		6162F2A525B71AF3008E7FA7 /* FilterBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterBar.swift; sourceTree = "<group>"; };
-		6168A2E6260C4634002F70EC /* ToolbarModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarModifier.swift; sourceTree = "<group>"; };
 		6168A2F0260F778D002F70EC /* UnreadCountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnreadCountView.swift; sourceTree = "<group>"; };
 		6168A2F72610355A002F70EC /* ScrollViewExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViewExt.swift; sourceTree = "<group>"; };
 		616CAF5F24F7131000690804 /* OPMLParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OPMLParser.swift; sourceTree = "<group>"; };
@@ -451,6 +452,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				610A85A92633F07200B72244 /* SDWebImageSwiftUI in Frameworks */,
 				61E99389260ACFA000679853 /* FeedKit in Frameworks */,
 				6191E4212623619900527270 /* SwipeCell in Frameworks */,
 				61E99356260AC0DE00679853 /* SwiftUI.framework in Frameworks */,
@@ -592,14 +594,6 @@
 			path = ArticleViews;
 			sourceTree = "<group>";
 		};
-		6168A2E5260C45E8002F70EC /* Toolbars */ = {
-			isa = PBXGroup;
-			children = (
-				6168A2E6260C4634002F70EC /* ToolbarModifier.swift */,
-			);
-			path = Toolbars;
-			sourceTree = "<group>";
-		};
 		616CAF6124F7146700690804 /* Dates */ = {
 			isa = PBXGroup;
 			children = (
@@ -703,7 +697,6 @@
 			isa = PBXGroup;
 			children = (
 				611F17B62613FE1200D11687 /* All */,
-				6168A2E5260C45E8002F70EC /* Toolbars */,
 				617B49E6260296A60016FC3D /* Unread */,
 				61C818F024E1FB4F00593939 /* Setting */,
 				61C818DC24E1F7AE00593939 /* Starred */,
@@ -731,6 +724,7 @@
 				61967EFC24E2068400AA647C /* AddRSSView.swift */,
 				61967EFD24E2068400AA647C /* AddRSSViewModel.swift */,
 				61967EFE24E2068400AA647C /* RSSRow.swift */,
+				610A85A62633211F00B72244 /* DBRepoContainer.swift */,
 				618E641025E57BFB00F46B4D /* RSSActionSheet.swift */,
 				61967EFF24E2068400AA647C /* RSSDisplayView.swift */,
 				612FB83D2540F04000D9822B /* RSSListView.swift */,
@@ -947,6 +941,7 @@
 				61E99388260ACFA000679853 /* FeedKit */,
 				6191E4202623619900527270 /* SwipeCell */,
 				6191E4222623620700527270 /* KingfisherSwiftUI */,
+				610A85A82633F07200B72244 /* SDWebImageSwiftUI */,
 			);
 			productName = FeedsWidgetExtension;
 			productReference = 61E99354260AC0DE00679853 /* FeedsWidgetExtension.appex */;
@@ -1119,6 +1114,7 @@
 				6195028025B115C200277F70 /* Bundle-Decodable.swift in Sources */,
 				61967EC724E204BC00AA647C /* UserDefaultWrapper.swift in Sources */,
 				617B49E5260285E20016FC3D /* AllArticles.swift in Sources */,
+				610A85A72633211F00B72244 /* DBRepoContainer.swift in Sources */,
 				61967EF524E2061100AA647C /* RSSFeedListView.swift in Sources */,
 				6117365924E83C9F00A2DEA5 /* BatchImportView.swift in Sources */,
 				612FB85A2540F04200D9822B /* RSSListView.swift in Sources */,
@@ -1176,7 +1172,6 @@
 				6162F25825B68BA1008E7FA7 /* Searchbar.swift in Sources */,
 				618E641125E57BFD00F46B4D /* RSSActionSheet.swift in Sources */,
 				611F17892612278300D11687 /* Cache.swift in Sources */,
-				6168A2E7260C4635002F70EC /* ToolbarModifier.swift in Sources */,
 				618F902F250DCD4F00D5A03E /* RSSItem+CoreDataProperties.swift in Sources */,
 				617B49E82602981C0016FC3D /* UnreadListView.swift in Sources */,
 				61E993A8260AF6AE00679853 /* AllArticlesWidgetView.swift in Sources */,
@@ -1724,6 +1719,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		610A85A82633F07200B72244 /* SDWebImageSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 616121EE255367B60074F061 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			productName = SDWebImageSwiftUI;
+		};
 		615E989E2534046A00891083 /* OAuthSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 615E989A253403D600891083 /* XCRemoteSwiftPackageReference "OAuthSwift" */;

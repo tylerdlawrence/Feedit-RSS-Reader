@@ -257,9 +257,8 @@ struct SelectedFilterView_Previews: PreviewProvider {
             }).pickerStyle(SegmentedPickerStyle()).frame(width: 180, height: 20).listRowBackground(Color("accent"))
             
                 SelectedFilterView(selectedFilter: selectedFilter, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
-                    .preferredColorScheme(.dark)
             }
-        }
+        }.preferredColorScheme(.dark)
     }
 }
 

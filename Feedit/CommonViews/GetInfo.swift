@@ -21,9 +21,10 @@ struct InfoView: View {
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.managedObjectContext) var managedObjectContext
 //    @Environment(\.managedObjectContext) var context
-    @EnvironmentObject private var persistence: Persistence
+//    @EnvironmentObject private var persistence: Persistence
     
     let rssGroup: RSSGroup
+    @ObservedObject var persistence = Persistence(version: 1)
     @ObservedObject var rss: RSS
     @ObservedObject var rssItem = RSSItem()
     @State private var isSelected: Bool = false

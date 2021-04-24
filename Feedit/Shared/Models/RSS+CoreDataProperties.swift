@@ -6,12 +6,12 @@
 //
 
 import Foundation
+import SwiftUI
 import CoreData
 import FeedKit
 import FaviconFinder
 import Combine
 import BackgroundTasks
-
 
 extension RSS {
 
@@ -127,6 +127,22 @@ extension RSS {
             rss.title = rssFeed.title ?? ""
             rss.desc = rssFeed.description?.trimWhiteAndSpace ?? ""
         }
+    }
+}
+
+extension RSS {
+    
+    @discardableResult
+    func store(in context: NSManagedObjectContext) -> RSS? {
+        let rss = RSS(context: context)
+        rss.title = title
+        rss.desc = desc
+        rss.url = url
+        rss.uuid = UUID()
+        rss.createTime = Date()
+        rss.updateTime = Date()
+        rss.isFetched = false
+        return rss
     }
 }
 

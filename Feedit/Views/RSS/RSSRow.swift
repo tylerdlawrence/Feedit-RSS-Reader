@@ -24,20 +24,26 @@ struct RSSRow: View, Equatable {
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.openURL) var openURL
     @Environment(\.editMode) var editMode
-//    @ObservedObject var viewModel: RSSListViewModel
     enum ActionItem {
         case info
         case url
     }
+    
     @ObservedObject var rss: RSS
-//    @ObservedObject var imageLoader: ImageLoader
+    @ObservedObject var feed = RSSStore.instance
+//    @Environment(\.injected) private var injected: DIContainer
+//    private let persistenceManager = PersistenceManager()
+//    private let container: DIContainer
+//    init(rss: RSS, container: DIContainer) {
+//        self.rss = rss
+//        self.container = container
+//    }
+    
     @State private var actionSheetShown = false
     @State private var showAlert = false
     @State private var showSheet = false
     @State var infoHaptic = false
     @State private var toggle = false
-//    @State var selection: Set<RSS>
-    @EnvironmentObject var persistence: Persistence
     let rssGroup = RSSGroup()
     
     var actionSheet: ActionSheet {
@@ -71,13 +77,7 @@ struct RSSRow: View, Equatable {
                 .cancel(),
             ]
         )
-    }
-//    init(rss: RSS, viewModel: RSSListViewModel) {
-//        self.rss = rss
-//        imageLoader = ImageLoader(urlString: rss.url)
-//        self.viewModel = viewModel
-//    }
-    
+    }    
     
     @ObservedObject var unread = Unread(dataSource: DataSourceService.current.rssItem)
     @ObservedObject var rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
@@ -94,20 +94,7 @@ struct RSSRow: View, Equatable {
     
     @State private var count: Int = 0
     
-//    private var urlButton: some View{
-//        Button("") {
-//            openURL(URL(string: (rssSource.rssURL?.host!)!)!)
-//        }
-//    }
-    
     var body: some View {
-//        let _:String = rssSource.rssURL!.absoluteString
-//        let _:String = (rssSource.rssURL?.absoluteStringWithoutScheme!)!
-//
-//        let stringToURL = URL(string: (rssSource.rssURL?.host!)!)
-//        let urlToString = stringToURL?.baseURL
-        
-//        let unreadCount = unread.items.filter { !$0.isRead }.count
         
         let infoButton = SwipeCellButton(
             buttonStyle: .image,
@@ -187,15 +174,16 @@ struct RSSRow: View, Equatable {
                         .font(.system(size: 18, weight: .regular, design: .rounded))
                         .lineLimit(1)
                         .foregroundColor(Color("text"))
-//                    Spacer()
-//                    UnreadCountView(count: unread.items.count)
-//                        .environmentObject(DataSourceService.current.rss)
-//                        .environmentObject(DataSourceService.current.rssItem)
-//                        .environment(\.managedObjectContext, Persistence.current.context)
-//                        .onAppear(perform: {
-//                            unread.fetchUnreadCount()
-//                        })
-//                    Text("\(unread.items.count)")
+                    Spacer()
+                    
+                    
+                    UnreadCountView(count: unread.filteredPosts.filter { !$0.isRead }.count)
+                    
+//                    UnreadCountView(count: filteredArticles.filter { !$0.isRead }.count)
+//                    Text("\(rss.posts.filter { !$0.isRead }.count)")
+//                        .font(.footnote)
+//                        .foregroundColor(.gray)
+                    
                 }
                 .fixedSize(horizontal: false, vertical: true).frame(height: 40)
                 .onTapGesture {
@@ -288,37 +276,22 @@ struct RSSRow: View, Equatable {
 #if DEBUG
 @available(iOS 14.0, *)
 struct RSSRow_Previews: PreviewProvider {
+    static let rss = RSS(context: Persistence.current.context)
+    static let viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     static var previews: some View {
-        let rss = RSS(context: Persistence.current.context)
-        let unread = Unread(dataSource: DataSourceService.current.rssItem)
         return
-            List {
-                ForEach(unread.items, id: \.objectID) { i in
-                    RSSRow(rss: rss)
-                        .environmentObject(DataSourceService.current.rss)
-                        .environmentObject(DataSourceService.current.rssItem)
-                        .environment(\.managedObjectContext, Persistence.current.context)
-            }.content(rss)
+            NavigationView {
+                List {
+                    ForEach(0..<7, id: \.self) { rss in
+                        
+                        RSSRow(rss: RSS.simple())
+                            
+                            .environmentObject(DataSourceService.current.rss)
+                            .environmentObject(DataSourceService.current.rssItem)
+                            .environment(\.managedObjectContext, Persistence.current.context)
+                }
+            }
         }.preferredColorScheme(.dark)
     }
 }
 #endif
-
-//#if DEBUG
-//@available(iOS 14.0, *)
-//struct RSSRow_Previews: PreviewProvider {
-//
-//    static var previews: some View {
-//        NavigationView {
-//            List {
-//                ForEach(0..<5) { i in
-//                    RSSRow(rss: RSS.simple())
-//                        .environmentObject(DataSourceService.current.rss)
-//                            .environmentObject(DataSourceService.current.rssItem)
-//                            .environment(\.managedObjectContext, Persistence.current.context)
-//                }
-//            }
-//        }.preferredColorScheme(.dark)
-//    }
-//}
-//#endif

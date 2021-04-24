@@ -57,20 +57,6 @@ struct WebView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             webViewWrapper
-                .navigationBarItems(trailing: Button(action: {
-//                    self.isArchive ? archiveViewModel.star(for: rssItem, showAlert: true) : archiveViewModel.star(for: rssItem)
-//                    self.isArchive = archiveViewModel.isArticleExists(with: rssItem.url)
-                }, label: {
-                    Image(systemName: "star\(isArchive ? ".fill" : "")").frame(width: 30, height: 50,alignment: .center)
-                }).alert(isPresented: $archiveViewModel.shouldShowAlert) {
-                    Alert(
-                        title: Text(archiveViewModel.message),
-                        dismissButton: .default(Text("OK"))
-                    )
-                })
-//                .onAppear {
-//                    self.isArchive = rssItem.isArticleExists(with: rssItem.url)
-//                }
             HStack(alignment: .top, spacing: 32) {
                 if !self.viewModel.canGoBack {
                     makeFeatureItemView(
@@ -105,12 +91,12 @@ struct WebView: View {
                 }
                 .frame(width: 40, height: 50, alignment: .center)
                 
-//                Button(action: actionSheet) {
-//                    Image(systemName: "square.and.arrow.up")
-//                        .imageScale(.medium)
-//                        .foregroundColor(Color("tab"))
-//                        .font(.system(size: 20, weight: .regular, design: .default))
-//                }.frame(width: 50, height: 50, alignment: .center)
+                Button(action: actionSheet) {
+                    Image(systemName: "square.and.arrow.up")
+                        .imageScale(.medium)
+                        .foregroundColor(Color("tab"))
+                        .font(.system(size: 20, weight: .regular, design: .default))
+                }.frame(width: 50, height: 50, alignment: .center)
                 
                 Link(destination: URL(string: rssItem.url)!, label: {
                     HStack {
@@ -124,11 +110,11 @@ struct WebView: View {
             }
         }
     }
-//    func actionSheet() {
-//        guard let urlShare = URL(string: rssItem.url) else { return }
-//           let activityVC = UIActivityViewController(activityItems: [urlShare], applicationActivities: nil)
-//           UIApplication.shared.windows.first?.rootViewController?.present(activityVC, animated: true, completion: nil)
-//       }
+    func actionSheet() {
+        guard let urlShare = URL(string: rssItem.url) else { return }
+           let activityVC = UIActivityViewController(activityItems: [urlShare], applicationActivities: nil)
+           UIApplication.init().windows.first?.rootViewController?.present(activityVC, animated: true, completion: nil)
+       }
 
 }
 

@@ -19,33 +19,10 @@ extension RSSFeedViewModel: Identifiable {
 
 }
 
-
-class RSSFeedListItem: Identifiable, Codable {
-    var uuid = UUID()
-    var author: String?
-    var title: String
-    var urlToImage: String?
-    var url: String
-    
-    enum CodingKeys: String, CodingKey {
-        case author, title, urlToImage, url
-    }
-}
-
-
-
 class RSSFeedViewModel: NSObject, ObservableObject {
     typealias Element = RSSItem
     typealias Context = RSSItem
-    private(set) lazy var rssFeedViewModel = RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem) //, feed: feed)
-//    var changeReadFilterSubject = PassthroughSubject<Bool, Never>()
-//    var selectNextUnreadSubject = PassthroughSubject<Bool, Never>()
-//    var readFilterAndFeedsPublisher: AnyPublisher<([RSS], Bool?), Never>?
-//    @Published var nameForDisplay = ""
-//    @Published var selectedTimelineItemIDs = Set<String>()  // Don't use directly.  Use selectedTimelineItemsPublisher
-//    @Published var selectedTimelineItemID: String? = nil    // Don't use directly.  Use selectedTimelineItemsPublisher
-//    @Published var listID = ""
-//    private var bag = Set<AnyCancellable>()
+    private(set) lazy var rssFeedViewModel = RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem)
     
     @Published var isOn = false
     @Published var unreadIsOn = false
@@ -53,44 +30,34 @@ class RSSFeedViewModel: NSObject, ObservableObject {
     @Published var filteredArticles: [RSSItem] = []
     @Published var selectedPost: RSSItem?
     @Published var shouldReload = false
-//    @ObservedObject var store = RSSStore.instance
-//    @Published var filterType = FilterType.unreadIsOn
-//    private var cancellable: AnyCancellable? = nil
-//    private var cancellable2: AnyCancellable? = nil
     @ObservedObject var store = RSSStore.instance
+    @Published var filteredPosts: [RSSItem] = []
+    @Published var filterType = FilterType.unreadIsOn
+    @Published var showingDetail = false
+    @Published var showFilter = false
+    @Published var rss: RSS
     
-    var startIndex: Int { items.startIndex }
-    var endIndex: Int { items.endIndex }
-    subscript(position: Int) -> RSSItem {
-            return items[position]
-    }
+    private var cancellable: AnyCancellable? = nil
+    private var cancellable2: AnyCancellable? = nil
     
-    func placeholder(in with: Context) -> RSSFeedViewModel {
-        RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem)
-    }
     let dataSource: RSSItemDataSource
-    let rss: RSS
-    var start = 0
     
-//    init(rss: RSS, dataSource: RSSItemDataSource, feed: FeedObject) {
-//        self.feed = feed
-//        self.filteredArticles = feed.posts.filter { self.filterType == .unreadIsOn ? !$0.isRead : true }
-//
-//        cancellable = Publishers.CombineLatest3(self.$feed, self.$filterType, self.$shouldReload)
-//            .receive(on: DispatchQueue.main)
-//            .sink(receiveValue: { (newValue) in
-//                self.filteredArticles = newValue.0.posts.filter { newValue.1 == .unreadIsOn ? !$0.isRead : true }
-//            })
-//
+    var start = 0
     
     init(rss: RSS, dataSource: RSSItemDataSource) {
         self.dataSource = dataSource
         self.rss = rss
         super.init()
+        
+        self.filteredPosts = rss.posts.filter { self.filterType == .unreadIsOn ? !$0.isRead : true }
+        
+        cancellable = Publishers.CombineLatest3(self.$rss, self.$filterType, self.$shouldReload)
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { (newValue) in
+                self.filteredPosts = newValue.0.posts.filter { newValue.1 == .unreadIsOn ? !$0.isRead : true }
+        })
     }
 
-
-    
     func archiveOrCancel(_ item: RSSItem) {
         let updatedItem = dataSource.readObject(item)
         updatedItem.isArchive = !item.isArchive
@@ -124,16 +91,25 @@ class RSSFeedViewModel: NSObject, ObservableObject {
         }
     }
     
-//    func markAllPostsRead(_ item: RSSItem) {
-//        item.title.forEach { (item) in
-//            items.removeAll()
-//        }
-//    }
+    func markAllPostsRead() {
+        self.store.markAllPostsRead(feed: self.rss)
+        shouldReload = true
+    }
     
-//    func markAllPostsRead() {
-//        self.store.markAllPostsRead(item: self.item)
-//        shouldReload = true
-//    }
+    func markPostRead(index: Int) {
+        self.store.setPostRead(post: self.filteredArticles[index], feed: self.rss)
+        shouldReload = true
+    }
+    
+    func reloadPosts() {
+        store.reloadFeedPosts(feed: rss)
+    }
+    
+    func selectPost(index: Int) {
+        self.selectedPost = self.filteredArticles[index]
+        self.showingDetail.toggle()
+        self.markPostRead(index: index)
+    }
 
     func fetchRemoteRSSItems() {
         guard let url = URL(string: rss.url) else {
@@ -192,37 +168,37 @@ class RSSFeedViewModel: NSObject, ObservableObject {
     }
 }
 
-class FeedObject: Codable, Identifiable, ObservableObject {
-    var id = UUID()
-//    var count: Int
-    var articles: [Post] = [] {
-        didSet {
-            objectWillChange.send()
-        }
-    }
-
-//    let feed = ""
-//    var imageURL: URL?
-//    var lastUpdateDate: Date
-
-    init?(articles: [Post]) {
-//        self.feed = feed
-//        self.count = count
-//        lastUpdateDate = Date()
-        self.articles = articles
-    }
-}
-
-extension RSS {
-    func totalUnreadCount() -> Int {
-        return self.children.reduce(0) { count, rss in
-            // Reduce closures get passed the previous value, as well
-            // as the next element within the sequence that's being
-            // reduced, and then returns a new value.
-            count + self.children.count
-        }
-    }
-}
+//class FeedObject: Codable, Identifiable, ObservableObject {
+//    var id = UUID()
+////    var count: Int
+//    var articles: [Post] = [] {
+//        didSet {
+//            objectWillChange.send()
+//        }
+//    }
+//
+////    let feed = ""
+////    var imageURL: URL?
+////    var lastUpdateDate: Date
+//
+//    init?(articles: [Post]) {
+////        self.feed = feed
+////        self.count = count
+////        lastUpdateDate = Date()
+//        self.articles = articles
+//    }
+//}
+//
+//extension RSS {
+//    func totalUnreadCount() -> Int {
+//        return self.children.reduce(0) { count, rss in
+//            // Reduce closures get passed the previous value, as well
+//            // as the next element within the sequence that's being
+//            // reduced, and then returns a new value.
+//            count + self.children.count
+//        }
+//    }
+//}
 
 class Post: Codable, Identifiable, ObservableObject {
     var id = UUID()

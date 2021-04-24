@@ -11,31 +11,22 @@ import WidgetKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
-//    override init() {
-//        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor(Color("tab"))]
-//        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor(Color("tab"))]
-//    }
+
     @EnvironmentObject var iconSettings: IconNames
     @Environment(\.scenePhase) private var scenePhase
-    @Environment(\.managedObjectContext) private var moc
-
-    @StateObject private var unread = Unread(dataSource: DataSourceService.current.rssItem)
-    @StateObject private var articles = AllArticles(dataSource: DataSourceService.current.rssItem)
+    
     @StateObject private var viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
-    @StateObject private var rss = RSS()
-    @StateObject private var rssItem = RSSItem()
     
     private(set) static var shared: SceneDelegate?
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions, openURLContexts URLContexts: Set<UIOpenURLContext>) {
         let homeView =
-            HomeView(articles: articles, unread: unread, rssItem: rssItem, viewModel: viewModel, selectedFilter: FilterType.all)
-                .environmentObject(iconSettings)
-                .environmentObject(viewModel)
-                .environmentObject(articles)
-                .environmentObject(unread)
-                .environmentObject(rss)
-                .environmentObject(rssItem)
+            HomeView(container: DIContainer.defaultValue)
+            .environmentObject(iconSettings)
+            .environmentObject(self.viewModel.store)
+            .environmentObject(DataSourceService.current.rss)
+            .environmentObject(DataSourceService.current.rssItem)
+            .environment(\.managedObjectContext, Persistence.current.context)
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
@@ -45,14 +36,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             window.makeKeyAndVisible()
         }
         if managedObjectContext.hasChanges {
-                do {
-                    try managedObjectContext.save()
-                    WidgetCenter.shared.reloadAllTimelines()
-                } catch let error {
-                    print("Error Save Oppty: \(error.localizedDescription)")
-                }
-
+            do {
+                try managedObjectContext.save()
+                WidgetCenter.shared.reloadAllTimelines()
+            } catch let error {
+                print("Error Save Oppty: \(error.localizedDescription)")
             }
+        }
     }
 
 
@@ -78,14 +68,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to undo the changes made on entering the background.
     }
 
-//    func sceneDidEnterBackground(_ scene: UIScene) {
-//        // Called as the scene transitions from the foreground to the background.
-//        // Use this method to save data, release shared resources, and store enough scene-specific state information
-//        // to restore the scene back to its current state.
-//
-//        // Save changes in the application's managed object context when the application transitions to the background.
-//        (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
-//    }
+    func sceneDidEnterBackground(_ scene: UIScene) {
+        // Called as the scene transitions from the foreground to the background.
+        // Use this method to save data, release shared resources, and store enough scene-specific state information
+        // to restore the scene back to its current state.
+
+        // Save changes in the application's managed object context when the application transitions to the background.
+        //(UIApplication.shared.delegate as? AppDelegate)?.saveContext()
+    }
 }
 
 class IconNames: ObservableObject {
