@@ -52,7 +52,7 @@ struct InfoView: View {
                 List {
                     VStack(alignment: .center){
                         HStack {
-                            KFImage(URL(string: rssSource.image))
+                            KFImage(URL(string: rssSource.image ?? ""))
                                 .placeholder({
                                     Image("getInfo")
                                         .resizable()

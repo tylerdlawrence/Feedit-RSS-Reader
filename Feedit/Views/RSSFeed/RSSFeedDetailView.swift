@@ -89,7 +89,7 @@ struct RSSFeedDetailView: View {
                         
                         Spacer()
                         
-                        KFImage(URL(string: rssSource.image))
+                        KFImage(URL(string: rssSource.image ?? ""))
                             .placeholder({
                                 Image("getInfo")
                                     .renderingMode(.original)

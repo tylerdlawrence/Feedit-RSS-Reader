@@ -41,14 +41,13 @@ struct SelectedFilterView: View {
     @StateObject var viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     
     private var allArticlesView: some View {
-        let rss = RSS()
-        return AllArticlesView(articles: AllArticles(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), selectedFilter: .all)
+        return AllArticlesView(articles: AllArticles(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem))
     }
     private var archiveListView: some View {
-        ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: self.rssFeedViewModel, selectedFilter: .isArchive)
+        ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: self.rssFeedViewModel)
     }
     private var unreadListView: some View {
-        UnreadListView(unreads: Unread(dataSource: DataSourceService.current.rssItem), selectedFilter: .unreadIsOn)
+        UnreadListView(unreads: Unread(dataSource: DataSourceService.current.rssItem))
     }
     
 //    var filteredFeeds: [RSS] {
@@ -256,7 +255,7 @@ struct SelectedFilterView_Previews: PreviewProvider {
                 }
             }).pickerStyle(SegmentedPickerStyle()).frame(width: 180, height: 20).listRowBackground(Color("accent"))
             
-                SelectedFilterView(selectedFilter: selectedFilter, rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem))
+                SelectedFilterView(selectedFilter: selectedFilter, rssFeedViewModel: RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem))
             }
         }.preferredColorScheme(.dark)
     }
@@ -271,14 +270,13 @@ struct FilterBar: View {
     @StateObject var viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     
     private var allArticlesView: some View {
-        let rss = RSS()
-        return AllArticlesView(articles: AllArticles(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), selectedFilter: .all)
+        return AllArticlesView(articles: AllArticles(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem))
     }
     private var archiveListView: some View {
-        ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: self.rssFeedViewModel, selectedFilter: .isArchive)
+        ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: self.rssFeedViewModel)
     }
     private var unreadListView: some View {
-        UnreadListView(unreads: Unread(dataSource: DataSourceService.current.rssItem), selectedFilter: .unreadIsOn)
+        UnreadListView(unreads: Unread(dataSource: DataSourceService.current.rssItem))
     }
     
 //    var filteredFeeds: [RSS] {

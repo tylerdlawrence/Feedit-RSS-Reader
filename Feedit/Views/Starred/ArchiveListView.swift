@@ -31,10 +31,11 @@ struct ArchiveListView: View {
         return self.rssFeedViewModel.rss
     }
         
-    init(viewModel: ArchiveListViewModel, rssFeedViewModel: RSSFeedViewModel, selectedFilter: FilterType) {
+    init(viewModel: ArchiveListViewModel, rssFeedViewModel: RSSFeedViewModel) {
         self.archiveListViewModel = viewModel
         self.rssFeedViewModel = rssFeedViewModel
-        self.selectedFilter = selectedFilter
+        //self.selectedFilter = selectedFilter
+        
     }
     
     private var refreshButton: some View {
@@ -43,7 +44,7 @@ struct ArchiveListView: View {
         }.buttonStyle(BorderlessButtonStyle())
     }
     
-    @State var selectedFilter: FilterType
+    @State var selectedFilter: FilterType = .isArchive
     @State var isShowing: Bool = false
     private var navButtons: some View {
         HStack(alignment: .center, spacing: 30) {
@@ -174,7 +175,7 @@ extension ArchiveListView {
 
 struct ArchiveListView_Previews: PreviewProvider {
     static var previews: some View {
-        ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem), selectedFilter: .isArchive)
+        ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem))
             .preferredColorScheme(.dark)
     }
 }

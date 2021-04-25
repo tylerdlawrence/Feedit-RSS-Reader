@@ -40,11 +40,12 @@ extension RSSItem {
     @NSManaged public var author: String
     @NSManaged public var isArchive: Bool
     @NSManaged public var isRead: Bool
-    @NSManaged public var image: String
+    @NSManaged public var image: String?
     @NSManaged public var thumbnailURL: URL
     @NSManaged public var unread: Bool
     @NSManaged public var itemCount: Int64
-    @NSManaged public var urlToImage: String?
+    
+    @NSManaged public var imageUrl: String?
     
     @NSManaged public var unreadArticles: [RSSItem]
     @NSManaged public var starredArticles: [RSSItem]
@@ -60,8 +61,7 @@ extension RSSItem {
         uuid = UUID()
     }
     
-    static func create(uuid: UUID, title: String, desc: String = "", author: String, url: String,
-                       createTime: Date = Date(), progress: Double = 0, in context: NSManagedObjectContext) -> RSSItem {
+    static func create(uuid: UUID, title: String, desc: String = "", author: String, url: String, createTime: Date = Date(), progress: Double = 0, in context: NSManagedObjectContext) -> RSSItem {
         let item = RSSItem(context: context)
         item.rssUUID = uuid
         item.uuid = UUID()
@@ -69,13 +69,14 @@ extension RSSItem {
         item.desc = desc
         item.author = author
         item.url = url
+        //item.imageUrl = imageUrl
         item.createTime = createTime
         item.progress = 0
         item.isArchive = false
         item.isRead = false
         return item
     }
-    
+        
     static func requestObjects(rssUUID: UUID, start: Int = 0) -> NSFetchRequest<RSSItem> {
         let request = RSSItem.fetchRequest() as NSFetchRequest<RSSItem>
         let predicate = NSPredicate(format: "rssUUID = %@", argumentArray: [rssUUID])
@@ -153,3 +154,14 @@ extension RSSItem: ObjectValidatable {
         return hasPersistentChangedValues
     }
 }
+
+//extension RSSItem {
+//    static func simple() -> RSSItem {
+//        let item = RSSItem(context: Persistence.previews.context)
+//        item.title = "demo"
+//        item.image = ""
+//        item.desc = "desc demo"
+//        item.url = "http://images.apple.com/main/rss/hotnews/hotnews.rss"
+//        return item
+//    }
+//}

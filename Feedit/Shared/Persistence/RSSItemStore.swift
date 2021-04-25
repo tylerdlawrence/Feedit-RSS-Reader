@@ -13,7 +13,8 @@ import CoreData
 import Foundation
 import FaviconFinder
 
-class RSSItemStore: NSObject, ObservableObject {
+class RSSItemStore: NSObject, ObservableObject, Identifiable {
+    
     private let persistence = Persistence.current
 
     private lazy var fetchedResultsController: NSFetchedResultsController<RSSItem> = {
@@ -54,7 +55,7 @@ class RSSItemStore: NSObject, ObservableObject {
         fetchRSS()
     }
     
-    public func createAndSave(rss uuid: UUID, tilte: String, desc: String, author: String, url: String, createTime: Date, image: Image) -> RSSItem {
+    public func createAndSave(rss uuid: UUID, tilte: String, desc: String, author: String, url: String, imageUrl: String, createTime: Date, image: Image) -> RSSItem {
         let item = RSSItem.create(uuid: uuid, title: tilte, desc: desc, author: author, url: url, createTime: createTime,
                                   in: persistence.context)
         saveChanges()

@@ -12,7 +12,9 @@ import CoreData
 import Intents
 
 class DataSourceService: NSObject {
+    
     static let current = DataSourceService()
+    
     var rss = RSSDataSource(parentContext: Persistence.current.context)
     var rssItem = RSSItemDataSource(parentContext: Persistence.current.context)
     

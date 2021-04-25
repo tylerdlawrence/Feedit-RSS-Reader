@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import URLImage
 import Introspect
 import Foundation
 import Combine
@@ -13,6 +14,7 @@ import UIKit
 import SwipeCell
 import FeedKit
 import KingfisherSwiftUI
+import SDWebImageSwiftUI
 
 struct RSSFeedListView: View {
     
@@ -34,7 +36,7 @@ struct RSSFeedListView: View {
         })
     }
     
-    var rssSource: RSS {
+    var rssSource: RSS? {
         return self.rssFeedViewModel.rss
     }
     
@@ -48,6 +50,7 @@ struct RSSFeedListView: View {
     @State var cancellables = Set<AnyCancellable>()
     
     var rss = RSS()
+        
     init(viewModel: RSSFeedViewModel, selectedFilter: FilterType) {
         self.rssFeedViewModel = viewModel
         self.selectedFilter = selectedFilter
@@ -77,14 +80,14 @@ struct RSSFeedListView: View {
                 .toggleStyle(StarStyle()).padding(.trailing)
         }
     }
-    
+        
     @State private var showMarkAllAsReadAlert = false
     
     var body: some View {
         ScrollViewReader { scrollViewProxy in
             ZStack {
                 List {
-                    ForEach(filteredArticles) { item in
+                    ForEach(self.filteredArticles) { item in
                         ZStack {
                             NavigationLink(destination: NavigationLazyView(RSSFeedDetailView(rssItem: item, rssFeedViewModel: self.rssFeedViewModel))) {
                                 EmptyView()
@@ -92,8 +95,12 @@ struct RSSFeedListView: View {
                             .opacity(0.0)
                             .buttonStyle(PlainButtonStyle())
 
-                            HStack {
-                                RSSItemRow(rssItem: item, menu: self.contextmenuAction(_:), rssFeedViewModel: rssFeedViewModel)
+                            HStack(spacing: nil) {
+                                
+                                RSSItemRow(rssItem: item, menu: self.contextmenuAction(_:), rssFeedViewModel: self.rssFeedViewModel)
+                                    
+                                
+                                    
                                     .contentShape(Rectangle())
                                     .onTapGesture {
                                         self.selectedItem = item
@@ -136,14 +143,14 @@ struct RSSFeedListView: View {
                 .toolbar{
                     ToolbarItem(placement: .principal) {
                         HStack {
-                            KFImage(URL(string: rssSource.image))
+                            KFImage(URL(string: rssSource?.image ?? ""))
                                 .placeholder({
                                     Image("getInfo")
                                         .renderingMode(.original).resizable().aspectRatio(contentMode: .fit).frame(width: 20, height: 20,alignment: .center).cornerRadius(2).clipped()
                                 })
                                 .renderingMode(.original).resizable().aspectRatio(contentMode: .fit).frame(width: 20, height: 20,alignment: .center).cornerRadius(2).clipped()
                             
-                            Text(rssSource.title)
+                            Text(rssSource?.title ?? "")
                                 .font(.system(size: 20, weight: .medium, design: .rounded))
                             
                             UnreadCountView(count: filteredArticles.count)
@@ -186,27 +193,11 @@ struct RSSFeedListView: View {
 }
 
 struct RSSFeedListView_Previews: PreviewProvider {
-    static let rss = RSS.simple()
-    static let rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
-    
-    static var filteredArticles: [RSSItem] {
-        return rssFeedViewModel.items.filter({ (item) -> Bool in
-            return !((self.rssFeedViewModel.isOn && !item.isArchive) || (self.rssFeedViewModel.unreadIsOn && item.isRead))
-        })
-    }
-    
-    //UnreadCountView(count: feed.posts.filter { !$0.isRead }.count)
-    
     static var previews: some View {
         NavigationView {
-            List {
-                ForEach(filteredArticles) { index in
-                    RSSFeedListView(viewModel: rssFeedViewModel, selectedFilter: .all)
-                }
+            ForEach(0..<6) { index in
+                RSSFeedListView(viewModel: RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem), selectedFilter: .all)
             }
-            .environmentObject(DataSourceService.current.rss)
-            .environmentObject(DataSourceService.current.rssItem)
-            .environment(\.managedObjectContext, Persistence.current.context)
         }.preferredColorScheme(.dark)
     }
 }

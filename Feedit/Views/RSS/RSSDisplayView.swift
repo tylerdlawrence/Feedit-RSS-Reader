@@ -7,16 +7,17 @@
 
 import SwiftUI
 import KingfisherSwiftUI
+import Combine
 
 struct RSSDisplayView: View {
     
     @ObservedObject var rss: RSS
     @State private var isLoading = false
-    
+        
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             if rss.isFetched {
-                KFImage(URL(string: rss.image))
+                KFImage(URL(string: rss.image ?? ""))
                     .renderingMode(.original)
                     .resizable()
                     .placeholder {
@@ -47,7 +48,7 @@ struct RSSDisplayView: View {
                     .foregroundColor(.gray)
                 
             } else {
-                KFImage(URL(string: rss.image))
+                KFImage(URL(string: rss.image ?? ""))
                     .renderingMode(.original)
                     .resizable()
                     .placeholder {
@@ -73,7 +74,7 @@ struct RSSDisplayView: View {
                 TextFieldView(label: "Title:", placeholder: "", text: $rss.title)
                 TextFieldView(label: "Description:", placeholder: "", text: $rss.desc)
                 TextFieldView(label: "Feed URL:", placeholder: "", text: $rss.url)
-                TextFieldView(label: "Image URL:", placeholder: "", text: $rss.image)
+                TextFieldView(label: "Image URL:", placeholder: "", text: $rss.image ?? "")
             }.padding(.vertical)
         }
     }

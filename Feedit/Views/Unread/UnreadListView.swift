@@ -23,18 +23,19 @@ struct UnreadListView: View {
     @ObservedObject var unreads: Unread
     
     @ObservedObject var searchBar: SearchBar = SearchBar()
+    
     @StateObject var rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
     
     @State private var selectedItem: RSSItem?
     @State private var footer = "Load More Articles"
     @State private var disabled = true
     
-    init(unreads: Unread, selectedFilter: FilterType) {
+    init(unreads: Unread) {
         self.unreads = unreads
-        self.selectedFilter = selectedFilter
+        //self.selectedFilter = selectedFilter
     }
     
-    @State var selectedFilter: FilterType
+    @State var selectedFilter: FilterType = .unreadIsOn
     private var navButtons: some View {
         HStack(alignment: .center, spacing: 30) {
             Toggle(isOn: $rssFeedViewModel.unreadIsOn) { Text("") }
@@ -54,6 +55,7 @@ struct UnreadListView: View {
                 .toggleStyle(StarStyle()).padding(.trailing)
         }
     }
+    
     
     var body: some View {
         ScrollViewReader { scrollViewProxy in
@@ -167,7 +169,7 @@ struct UnreadListView_Previews: PreviewProvider {
     static let rss = RSS()
     static var previews: some View {
         NavigationView {
-            UnreadListView(unreads: Unread(dataSource: DataSourceService.current.rssItem), selectedFilter: .unreadIsOn)
+            UnreadListView(unreads: Unread(dataSource: DataSourceService.current.rssItem))
         }.preferredColorScheme(.dark)
     }
 }

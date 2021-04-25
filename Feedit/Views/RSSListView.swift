@@ -20,7 +20,7 @@ struct RSSListView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @StateObject var viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     @State private var revealFeedsDisclosureGroup = false
-    
+
     @ObservedObject var feed = RSSStore.instance
     @Environment(\.injected) private var injected: DIContainer
     
@@ -50,14 +50,14 @@ struct RSSListView: View {
                         }.id(index)
                     }
                 }.onDelete(perform: delete)
-                //                .onDelete { index in
-                //                    guard let index = index.first else { return }
-                //                    self.viewModel.removeFeed(index: index)
-                //            }
-                .listRowBackground(Color("accent"))
-                .environmentObject(DataSourceService.current.rss)
-                .environmentObject(DataSourceService.current.rssItem)
-                .environment(\.managedObjectContext, Persistence.current.context)
+//                .onDelete { index in
+//                    guard let index = index.first else { return }
+//                    self.viewModel.removeFeed(index: index)
+//            }
+            .listRowBackground(Color("accent"))
+            .environmentObject(DataSourceService.current.rss)
+            .environmentObject(DataSourceService.current.rssItem)
+            .environment(\.managedObjectContext, Persistence.current.context)
             }, label: {
                 HStack {
                     Text("Feeds")
@@ -69,19 +69,19 @@ struct RSSListView: View {
                                 self.revealFeedsDisclosureGroup.toggle()
                             }
                         }
-                }
-            }).listRowBackground(Color("darkerAccent"))
-            .accentColor(Color("tab"))
-            .onAppear(perform: {
-                self.viewModel.fecthResults()
+                    }
+                }).listRowBackground(Color("darkerAccent"))
+                .accentColor(Color("tab"))
+                .onAppear(perform: {
+                    self.viewModel.fecthResults()
             })
-    }
+        }
     
     func insert(url: String, title: String, desc: String?, image: String?) {
         injected.interactors.rssSourcesInteractor
             .store(url: url, title: title, desc: desc ?? "", image: image ?? "")
     }
-    
+
     func insert(rss: RSS) {
         injected.interactors.rssSourcesInteractor
             .store(source: rss)
@@ -122,20 +122,20 @@ struct RSSListView_Previews: PreviewProvider {
                     .environmentObject(DataSourceService.current.rss)
                     .environmentObject(DataSourceService.current.rssItem)
                     .environment(\.managedObjectContext, Persistence.current.context)
-                
+                    
             }
         }.preferredColorScheme(.dark)
     }
 }
 
 struct NavigationLazyView<Content: View>: View {
-    let build: () -> Content
-    
-    init(_ build: @autoclosure @escaping () -> Content) {
-        self.build = build
-    }
-    
-    var body: Content {
-        build()
-    }
+   let build: () -> Content
+
+   init(_ build: @autoclosure @escaping () -> Content) {
+       self.build = build
+   }
+
+   var body: Content {
+       build()
+   }
 }

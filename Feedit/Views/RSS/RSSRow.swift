@@ -31,13 +31,10 @@ struct RSSRow: View, Equatable {
     
     @ObservedObject var rss: RSS
     @ObservedObject var feed = RSSStore.instance
-//    @Environment(\.injected) private var injected: DIContainer
-//    private let persistenceManager = PersistenceManager()
-//    private let container: DIContainer
-//    init(rss: RSS, container: DIContainer) {
-//        self.rss = rss
-//        self.container = container
-//    }
+
+    var rssSource: RSS {
+        return self.rssFeedViewModel.rss
+    }
     
     @State private var actionSheetShown = false
     @State private var showAlert = false
@@ -86,10 +83,6 @@ struct RSSRow: View, Equatable {
         return rssFeedViewModel.items.filter({ (item) -> Bool in
             return !((self.rssFeedViewModel.isOn && !item.isArchive) || (self.rssFeedViewModel.unreadIsOn && item.isRead))
         })
-    }
-    
-    var rssSource: RSS {
-        return self.rssFeedViewModel.rss
     }
     
     @State private var count: Int = 0
@@ -154,7 +147,7 @@ struct RSSRow: View, Equatable {
         
         let deleteSlot = SwipeCellSlot(slots: [deleteButton], slotStyle: .destructive, buttonWidth: 60)
                 HStack(alignment: .center){
-                    KFImage(URL(string: rss.image))
+                    KFImage(URL(string: self.rss.image ?? ""))
                         .placeholder({
                             Image("all")
                                 .renderingMode(.original)
@@ -170,14 +163,14 @@ struct RSSRow: View, Equatable {
                         .frame(width: 25, height: 25,alignment: .center)
                         .cornerRadius(3)
                     
-                    Text(rss.title)
+                    Text(self.rss.title)
                         .font(.system(size: 18, weight: .regular, design: .rounded))
                         .lineLimit(1)
                         .foregroundColor(Color("text"))
                     Spacer()
                     
                     
-                    UnreadCountView(count: unread.filteredPosts.filter { !$0.isRead }.count)
+                    UnreadCountView(count: self.unread.filteredPosts.filter { !$0.isRead }.count)
                     
 //                    UnreadCountView(count: filteredArticles.filter { !$0.isRead }.count)
 //                    Text("\(rss.posts.filter { !$0.isRead }.count)")
@@ -222,7 +215,7 @@ struct RSSRow: View, Equatable {
                     Divider()
                                     
                     Button(action: {
-                        UIPasteboard.general.setValue(rss.url,
+                        UIPasteboard.general.setValue(self.rss.url,
                                                       forPasteboardType: kUTTypePlainText as String)
                     }) {
                         Text("Copy Feed URL")
@@ -230,7 +223,7 @@ struct RSSRow: View, Equatable {
                     }
                     
                     Button(action: {
-                        UIPasteboard.general.setValue(rss.url,
+                        UIPasteboard.general.setValue(self.rss.url,
                                                       forPasteboardType: kUTTypePlainText as String)
                     }) {
                         Text("Copy Website URL")

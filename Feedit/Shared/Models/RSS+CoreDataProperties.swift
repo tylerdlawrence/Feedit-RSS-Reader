@@ -31,7 +31,7 @@ extension RSS {
     @NSManaged public var updateTime: Date?
     @NSManaged public var lastFetchTime: Date?
     @NSManaged public var uuid: UUID?
-    @NSManaged public var image: String
+    @NSManaged public var image: String?
     @NSManaged public var isFetched: Bool
     @NSManaged public var isArchive: Bool
     @NSManaged public var isRead: Bool
@@ -43,6 +43,8 @@ extension RSS {
     @NSManaged public var children: String
     
     @NSManaged public var articles: NSSet?
+    
+    @NSManaged public var imageUrl: String
     
     public var rssURL: URL? {
         return URL(string: url)

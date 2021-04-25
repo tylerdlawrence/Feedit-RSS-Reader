@@ -206,6 +206,75 @@ extension FileManager {
     }
 }
 
+struct JSONModel: Codable {
+    let articles: [Article]
+}
+
+struct Article: Codable {
+    let source: Source
+    let author: String?
+    let title: String
+    let description: String?
+    let url: String
+    let urlToImage: String?
+    let publishedAt: String
+   // let content: String?
+    
+}
+// MARK: - Source
+struct Source: Codable {
+    let id: String?
+    let name: String
+}
+
+struct ViewModel: Identifiable {
+    
+    let id = UUID()
+    
+    let article: Article
+    
+    init(article: Article) {
+        self.article = article
+    }
+    
+    var title: String {
+        return self.article.title
+    }
+    
+    var description: String {
+        return self.article.description ?? ""
+    }
+    
+    var sourceName: String {
+        return self.article.source.name
+    }
+    var urlToImage: String? {
+        return self.article.urlToImage
+    }
+    
+    var urlWeb: String {
+        return self.article.url
+    }
+    
+    var image: UIImage?
+    
+    var publishedAt: String {
+        //2020-11-11T21:04:00Z
+        let df = DateFormatter()
+        df.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        df.timeZone = TimeZone(abbreviation: "UTC")
+        
+        if let date = df.date(from: self.article.publishedAt) {
+            df.dateStyle = .medium
+            df.timeStyle = .short
+            return df.string(from: date)
+        } else {
+            return ""
+        }
+    }
+}
+
+
 //init this model by fetchData()
 class ArticleListViewModel: ObservableObject {
     
@@ -288,7 +357,7 @@ final class ImageStore {
 //    }
 //
     static func downloadImageBy(url: String, completion: @escaping (UIImage)->Void) {
-        
+
         guard let url = URL(string: url) else { return }
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             if let data = data, error == nil {

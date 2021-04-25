@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import URLImage
 import Foundation
 import MobileCoreServices
 import KingfisherSwiftUI
@@ -17,6 +18,7 @@ import SwipeCell
 import FeedKit
 import SDWebImageSwiftUI
 import Intents
+import WidgetKit
 
 struct RSSItemRow: View {
     @Environment(\.managedObjectContext) private var context
@@ -29,9 +31,11 @@ struct RSSItemRow: View {
     @State private var selectedItem: RSSItem?
     var contextMenuAction: ((RSSItem) -> Void)?
     
-    var rssSource: RSS {
+    var rssSource: RSS? {
         return self.rssFeedViewModel.rss
     }
+    
+    let rss = RSS()
     
     @State private var hideRemove = false
     @State private var hideKeep = false
@@ -40,7 +44,41 @@ struct RSSItemRow: View {
         self.rssItem = rssItem
         contextMenuAction = action
         self.rssFeedViewModel = rssFeedViewModel
+        
+        formatter = NumberFormatter()
+        formatter.numberStyle = .percent
+        
     }
+    
+    
+    var remoteImage: RemoteImage?
+    var post: RSSItem? {
+            didSet {
+                guard let post = post else {
+                    return
+                }
+                remoteImage = URLImageService.shared.makeRemoteImage(url: post.thumbnailURL)
+                cancellable = remoteImage?.$loadingState.sink { state in
+                    switch state {
+                        case .initial, .inProgress, .failure:
+                            break
+                    case .success:
+                        WidgetCenter.shared.reloadAllTimelines()
+                        URLImageService.shared.cleanup()
+                        URLImageService.shared.removeAllCachedImages()
+                    }
+                }
+                remoteImage?.load()
+            }
+        }
+
+    var cancellable: AnyCancellable?
+    
+    let id = UUID()
+    private let formatter: NumberFormatter
+
+
+    
     
     var body: some View {
         let toggleStarred = SwipeCellButton(
@@ -105,33 +143,48 @@ struct RSSItemRow: View {
         ZStack {
             VStack(alignment: .leading) {
                 HStack(alignment: .top) {
-                    VStack(alignment: .center) {
+                    VStack(alignment: .center, spacing: 4) {
                         if !rssItem.isRead {
                             Text("")
-                                .frame(width: 8, height: 8)
+                                .frame(width: 10, height: 10)
                                 .background(Color.blue)
                                 .opacity(rssItem.isRead ? 0 : 1)
                                 .clipShape(Circle())
-                                .padding([.bottom])
+                                //.padding([.bottom])
                         } else {
                             Text("")
-                                .frame(width: 8, height: 8)
+                                .frame(width: 10, height: 10)
                                 .background(Color.blue)
                                 .opacity(0)
                                 .clipShape(Circle())
-                                .padding([.bottom])
+                                //.padding([.bottom])
                         }
                         
-                        //WebImage(url: rssSource.rssURL)
-                        KFImage(URL(string: rssItem.image))
-                            .renderingMode(.original)
-                            .resizable()
-                            .placeholder {
-                                Rectangle().foregroundColor(.gray)
-                            }
-                            .frame(width: 21, height: 21)
-                            .clipShape(RoundedRectangle(cornerRadius: 3))
-                            .padding(.leading)
+                        Rectangle().foregroundColor(.gray)
+                            .clipped()
+                            .cornerRadius(3)
+                            .frame(width: 22, height: 22)
+                        
+//                        KFImage(URL(string: rssSource.image ?? ""))
+//                            .renderingMode(.original)
+//                            .resizable()
+//                            .placeholder {
+//                                Rectangle().foregroundColor(.gray)
+//                            }
+//                            .resizable()
+//                            .aspectRatio(contentMode: .fit)
+//                            .clipped()
+//                            .cornerRadius(3)
+//                            .frame(width: 22, height: 22)
+
+//                        URLImage(url: ((URL(string: self.rssSource?.image ?? "https://picsum.photos/60") ?? nil)!), options: URLImageOptions(cachePolicy: .useProtocol)) { image in
+//                                image
+//                                    .resizable()
+//                                    .aspectRatio(contentMode: .fit)
+//                                    .clipped()
+//                                    .cornerRadius(3)
+//                                    .frame(width: 22, height: 22)
+//                        }
                     }
                     HStack{
                         VStack(alignment: .leading){
@@ -176,7 +229,7 @@ struct RSSItemRow: View {
                                     .lineLimit(3)
                             }
                             
-                            Text(rssItem.desc.trimHTMLTag.trimWhiteAndSpace)
+                            Text((rssItem.desc).trimHTMLTag.trimWhiteAndSpace)
                                 .font(.system(size: 15, weight: .medium, design: .rounded))
                                 .opacity(0.8)
                                 .foregroundColor(Color.gray)
@@ -190,7 +243,26 @@ struct RSSItemRow: View {
                                 .textCase(.uppercase)
                                 .foregroundColor(.gray)
                         }
-                        Spacer()
+                                                
+                        //KFImage(URL(string: rssSource.image))
+//                        WebImage(url: rssSource.rssURL ?? nil)
+//                            .placeholder(content: {
+//                                Rectangle().foregroundColor(.gray)
+//                            })
+//                            .resizable()
+//                            .scaledToFill()
+//                            .frame(width: 70, height: 70)
+//                            .clipped()
+//                            .cornerRadius(12)
+                        
+                        URLImage(url: ((URL(string: post?.image ?? "https://picsum.photos/60") ?? nil)!), options: URLImageOptions(cachePolicy: .useProtocol)) { image in
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .clipped()
+                                    .cornerRadius(3)
+                                    .frame(width: 60, height: 60)
+                            }
                     }
                 }
             }
@@ -261,12 +333,9 @@ struct RSSItemRow: View {
 
 #if DEBUG
 struct RSSFeedRow_Previews: PreviewProvider {
-    static var rss = RSS()
-    static var rssFeedViewModel = RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem)
     
     static var previews: some View {
-        return RSSItemRow(rssItem: RSSItem(), rssFeedViewModel: rssFeedViewModel).environmentObject(DataSourceService.current.rssItem)
-            
+        RSSItemRow(rssItem: RSSItem(), rssFeedViewModel: RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem))
             .previewLayout(.fixed(width: 375, height: 75))
             .preferredColorScheme(.dark)
     }

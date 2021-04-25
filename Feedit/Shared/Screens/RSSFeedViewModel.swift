@@ -12,6 +12,7 @@ import Combine
 import UIKit
 import FeedKit
 import FaviconFinder
+import URLImage
 import BackgroundTasks
 import WidgetKit
 
@@ -22,7 +23,8 @@ extension RSSFeedViewModel: Identifiable {
 class RSSFeedViewModel: NSObject, ObservableObject {
     typealias Element = RSSItem
     typealias Context = RSSItem
-    private(set) lazy var rssFeedViewModel = RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem)
+    typealias Model = Post
+    private(set) lazy var rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
     
     @Published var isOn = false
     @Published var unreadIsOn = false
@@ -36,6 +38,7 @@ class RSSFeedViewModel: NSObject, ObservableObject {
     @Published var showingDetail = false
     @Published var showFilter = false
     @Published var rss: RSS
+    @Published var rssItem = RSSItem()
     
     private var cancellable: AnyCancellable? = nil
     private var cancellable2: AnyCancellable? = nil
@@ -44,13 +47,35 @@ class RSSFeedViewModel: NSObject, ObservableObject {
     
     var start = 0
     
+    var rssSource: RSS {
+        return self.rssFeedViewModel.rss
+    }
+        
+    let urls = [URL]()
+    
     init(rss: RSS, dataSource: RSSItemDataSource) {
         self.dataSource = dataSource
         self.rss = rss
         super.init()
         
-        self.filteredPosts = rss.posts.filter { self.filterType == .unreadIsOn ? !$0.isRead : true }
         
+        
+        let publishers = urls.map { URLImageService.shared.remoteImagePublisher($0) }
+        cancellable = Publishers.MergeMany(publishers)
+            .tryMap { $0.cgImage }
+            .catch { _ in
+                Just(nil)
+            }
+            .collect()
+            .sink { images in
+                if let objects = dataSource.fetchedResult.fetchedObjects {
+                    self.items.insert(contentsOf: objects, at: 0)
+            }
+        }
+        
+        
+                
+        self.filteredPosts = rss.posts.filter { self.filterType == .unreadIsOn ? !$0.isRead : true }
         cancellable = Publishers.CombineLatest3(self.$rss, self.$filterType, self.$shouldReload)
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { (newValue) in
@@ -168,37 +193,79 @@ class RSSFeedViewModel: NSObject, ObservableObject {
     }
 }
 
-//class FeedObject: Codable, Identifiable, ObservableObject {
-//    var id = UUID()
-////    var count: Int
-//    var articles: [Post] = [] {
-//        didSet {
-//            objectWillChange.send()
-//        }
-//    }
-//
-////    let feed = ""
-////    var imageURL: URL?
-////    var lastUpdateDate: Date
-//
-//    init?(articles: [Post]) {
-////        self.feed = feed
-////        self.count = count
-////        lastUpdateDate = Date()
-//        self.articles = articles
-//    }
-//}
-//
-//extension RSS {
-//    func totalUnreadCount() -> Int {
-//        return self.children.reduce(0) { count, rss in
-//            // Reduce closures get passed the previous value, as well
-//            // as the next element within the sequence that's being
-//            // reduced, and then returns a new value.
-//            count + self.children.count
-//        }
-//    }
-//}
+class FeedObject: Codable, Identifiable, ObservableObject {
+    var id = UUID()
+    var name: String
+    var url: URL
+    var posts: [Post] {
+        didSet {
+            objectWillChange.send()
+        }
+    }
+    
+    var imageURL: URL?
+    
+    var lastUpdateDate: Date
+    
+    init?(feed: Feed, url: URL) {
+        self.url = url
+        lastUpdateDate = Date()
+        
+        switch feed {
+        case .rss(let rssFeed):
+            self.name =  rssFeed.title ?? ""
+            
+            let items = rssFeed.items ?? []
+            self.posts = items
+                .compactMap { Post(feedItem: $0) }
+                .sorted(by: { (lhs, rhs) -> Bool in
+                    return Calendar.current.compare(lhs.date, to: rhs.date, toGranularity: .minute) == ComparisonResult.orderedDescending
+                })
+            
+            if let urlStr = rssFeed.image?.url, let url = URL(string: urlStr) {
+                self.imageURL = url
+            } else {
+                FaviconFinder(url: URL(string: rssFeed.link ?? "")!).downloadFavicon { (_) in
+                    self.imageURL = url
+                }
+            }
+            
+        case .atom(let atomFeed):
+            self.name =  atomFeed.title ?? ""
+            
+            let items = atomFeed.entries ?? []
+            self.posts = items
+                .compactMap { Post(atomFeed: $0) }
+                .sorted(by: { (lhs, rhs) -> Bool in
+                    return Calendar.current.compare(lhs.date, to: rhs.date,     toGranularity: .minute) ==  ComparisonResult.orderedDescending
+                })
+            
+            if let urlStr = atomFeed.logo, let url = URL(string: urlStr) {
+                self.imageURL = url
+            } else {
+                FaviconFinder(url: URL(string: atomFeed.links?.first?.attributes?.href ?? "")!).downloadFavicon { (_) in
+                    self.imageURL = url
+                }
+            }
+        default:
+            return nil
+        }
+        
+    }
+    
+    init(name: String, url: URL, posts: [Post]) {
+        self.name = name
+        self.url = url
+        self.posts = posts
+        lastUpdateDate = Date()
+    }
+    
+    static var testObject: FeedObject {
+        return FeedObject(name: "Test feed",
+        url: URL(string: "https://www.google.com")!,
+        posts: [Post.testObject])
+    }
+}
 
 class Post: Codable, Identifiable, ObservableObject {
     var id = UUID()
@@ -206,9 +273,6 @@ class Post: Codable, Identifiable, ObservableObject {
     var description: String
     var url: URL
     var date: Date
-    var isToday: Bool
-    var isStarred: Bool
-
 
     var isRead: Bool
     {
@@ -226,8 +290,6 @@ class Post: Codable, Identifiable, ObservableObject {
     init?(feedItem: RSSFeedItem) {
         self.title =  feedItem.title ?? ""
         self.description = feedItem.description ?? ""
-        self.isStarred = false
-        self.isToday = false
 
         if let link = feedItem.link, let url = URL(string: link) {
             self.url = url
@@ -240,8 +302,6 @@ class Post: Codable, Identifiable, ObservableObject {
 
     init?(atomFeed: AtomFeedEntry) {
         self.title =  atomFeed.title ?? ""
-        self.isStarred = false
-        self.isToday = false
         let description = atomFeed.content?.value ?? ""
 
         let attributed = try? NSAttributedString(data: description.data(using: .unicode)!, options: [.documentType: NSAttributedString.DocumentType.html], documentAttributes: nil)
@@ -262,8 +322,6 @@ class Post: Codable, Identifiable, ObservableObject {
         self.url = url
         self.date = Date()
         lastUpdateDate = Date()
-        self.isStarred = false
-        self.isToday = false
     }
 
     static var testObject: Post {

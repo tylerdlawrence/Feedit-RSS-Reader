@@ -25,6 +25,12 @@ class ArchiveListViewModel: NSObject, ObservableObject {
     
     let dataSource: RSSItemDataSource
     var start = 0
+    
+    let rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
+    
+    var rssSource: RSS {
+        return self.rssFeedViewModel.rss
+    }
         
     init(dataSource: RSSItemDataSource) {
         self.dataSource = dataSource

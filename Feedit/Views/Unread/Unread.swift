@@ -18,7 +18,6 @@ public class Unread: NSObject, ObservableObject {
     @Published var unreadIsOn: Bool = true
     
     @ObservedObject var store = RSSStore.instance
-    //@Published var feed: RSS
     @Published var filteredPosts: [RSSItem] = []
     @Published var filterType = FilterType.unreadIsOn
     @Published var selectedPost: RSSItem?
@@ -29,6 +28,12 @@ public class Unread: NSObject, ObservableObject {
     private var cancellable: AnyCancellable? = nil
     private var cancellable2: AnyCancellable? = nil
     
+    let rssFeedViewModel = RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem)
+    
+    var rssSource: RSS {
+        return self.rssFeedViewModel.rss
+    }
+    
     let dataSource: RSSItemDataSource
     var start = 0
     
@@ -36,21 +41,7 @@ public class Unread: NSObject, ObservableObject {
         self.dataSource = dataSource
         super.init()
     }
-    
-//    init(dataSource: RSSItemDataSource, feed: RSS) {
-//        self.dataSource = dataSource
-//        self.feed = feed
-//        super.init()
-//
-//        self.filteredPosts = feed.posts.filter { self.filterType == .unreadIsOn ? !$0.isRead : true }
-//
-//        cancellable = Publishers.CombineLatest3(self.$feed, self.$filterType, self.$shouldReload)
-//            .receive(on: DispatchQueue.main)
-//            .sink(receiveValue: { (newValue) in
-//                self.filteredPosts = newValue.0.posts.filter { newValue.1 == .unreadIsOn ? !$0.isRead : true }
-//        })
-//    }
-    
+
     func loadMore() {
         start = items.count
         fecthResults(start: start)

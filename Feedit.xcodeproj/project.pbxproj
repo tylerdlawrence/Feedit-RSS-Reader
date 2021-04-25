@@ -13,6 +13,10 @@
 		610A854325FFFF990027FF48 /* ExpansionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 610A854225FFFF990027FF48 /* ExpansionHandler.swift */; };
 		610A85A72633211F00B72244 /* DBRepoContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 610A85A62633211F00B72244 /* DBRepoContainer.swift */; };
 		610A85A92633F07200B72244 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 610A85A82633F07200B72244 /* SDWebImageSwiftUI */; };
+		610A85AB2634783500B72244 /* FaviconFinder in Frameworks */ = {isa = PBXBuildFile; productRef = 610A85AA2634783500B72244 /* FaviconFinder */; };
+		610A85B32634D44F00B72244 /* URLImage in Frameworks */ = {isa = PBXBuildFile; productRef = 610A85B22634D44F00B72244 /* URLImage */; };
+		610A85B52634DB3700B72244 /* URLImage in Frameworks */ = {isa = PBXBuildFile; productRef = 610A85B42634DB3700B72244 /* URLImage */; };
+		610A85B726353C3B00B72244 /* BindingOptionalTextFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = 610A85B626353C3A00B72244 /* BindingOptionalTextFields.swift */; };
 		6117364924E83C0600A2DEA5 /* DataUnitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6117364824E83C0600A2DEA5 /* DataUnitView.swift */; };
 		6117365524E83C3E00A2DEA5 /* DataNStorageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6117365424E83C3E00A2DEA5 /* DataNStorageView.swift */; };
 		6117365724E83C7B00A2DEA5 /* DataNStorageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6117365624E83C7B00A2DEA5 /* DataNStorageViewModel.swift */; };
@@ -279,6 +283,7 @@
 		610A854025FF11460027FF48 /* RSSFoldersDisclosureGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSSFoldersDisclosureGroup.swift; sourceTree = "<group>"; };
 		610A854225FFFF990027FF48 /* ExpansionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpansionHandler.swift; sourceTree = "<group>"; };
 		610A85A62633211F00B72244 /* DBRepoContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBRepoContainer.swift; sourceTree = "<group>"; };
+		610A85B626353C3A00B72244 /* BindingOptionalTextFields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BindingOptionalTextFields.swift; sourceTree = SOURCE_ROOT; };
 		6117364824E83C0600A2DEA5 /* DataUnitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataUnitView.swift; sourceTree = "<group>"; };
 		6117365424E83C3E00A2DEA5 /* DataNStorageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataNStorageView.swift; sourceTree = "<group>"; };
 		6117365624E83C7B00A2DEA5 /* DataNStorageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataNStorageViewModel.swift; sourceTree = "<group>"; };
@@ -444,6 +449,7 @@
 				618610D5256EF7A00083A96D /* SwiftSoup in Frameworks */,
 				61DEBE3F25152CB90025B1B3 /* SwiftUI.framework in Frameworks */,
 				61DEBE3D25152CB20025B1B3 /* WidgetKit.framework in Frameworks */,
+				610A85B32634D44F00B72244 /* URLImage in Frameworks */,
 				6162F25025B68865008E7FA7 /* SwipeCell in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -458,6 +464,8 @@
 				61E99356260AC0DE00679853 /* SwiftUI.framework in Frameworks */,
 				61E99355260AC0DE00679853 /* WidgetKit.framework in Frameworks */,
 				6191E4232623620700527270 /* KingfisherSwiftUI in Frameworks */,
+				610A85B52634DB3700B72244 /* URLImage in Frameworks */,
+				610A85AB2634783500B72244 /* FaviconFinder in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -754,6 +762,7 @@
 		61C818ED24E1FB0700593939 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				610A85B626353C3A00B72244 /* BindingOptionalTextFields.swift */,
 				616CAF6124F7146700690804 /* Dates */,
 				611F17812612277F00D11687 /* Cache.swift */,
 				611F178B2612279900D11687 /* NSURLSessionExtension.swift */,
@@ -919,6 +928,7 @@
 				6162F24F25B68865008E7FA7 /* SwipeCell */,
 				6162F27F25B69071008E7FA7 /* FaviconFinder */,
 				6171B8C426291F55000486FB /* RSWeb */,
+				610A85B22634D44F00B72244 /* URLImage */,
 			);
 			productName = Feedit;
 			productReference = 61C8189224E1F3FB00593939 /* Feedit.app */;
@@ -942,6 +952,8 @@
 				6191E4202623619900527270 /* SwipeCell */,
 				6191E4222623620700527270 /* KingfisherSwiftUI */,
 				610A85A82633F07200B72244 /* SDWebImageSwiftUI */,
+				610A85AA2634783500B72244 /* FaviconFinder */,
+				610A85B42634DB3700B72244 /* URLImage */,
 			);
 			productName = FeedsWidgetExtension;
 			productReference = 61E99354260AC0DE00679853 /* FeedsWidgetExtension.appex */;
@@ -987,6 +999,7 @@
 				6162F24E25B68865008E7FA7 /* XCRemoteSwiftPackageReference "SwipeCell" */,
 				6162F27E25B69071008E7FA7 /* XCRemoteSwiftPackageReference "FaviconFinder" */,
 				6171B8C326291F55000486FB /* XCRemoteSwiftPackageReference "RSWeb" */,
+				610A85B12634D44E00B72244 /* XCRemoteSwiftPackageReference "url-image" */,
 			);
 			productRefGroup = 61C8189324E1F3FB00593939 /* Products */;
 			projectDirPath = "";
@@ -1114,6 +1127,7 @@
 				6195028025B115C200277F70 /* Bundle-Decodable.swift in Sources */,
 				61967EC724E204BC00AA647C /* UserDefaultWrapper.swift in Sources */,
 				617B49E5260285E20016FC3D /* AllArticles.swift in Sources */,
+				610A85B726353C3B00B72244 /* BindingOptionalTextFields.swift in Sources */,
 				610A85A72633211F00B72244 /* DBRepoContainer.swift in Sources */,
 				61967EF524E2061100AA647C /* RSSFeedListView.swift in Sources */,
 				6117365924E83C9F00A2DEA5 /* BatchImportView.swift in Sources */,
@@ -1628,6 +1642,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		610A85B12634D44E00B72244 /* XCRemoteSwiftPackageReference "url-image" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/dmytro-anokhin/url-image.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.2.4;
+			};
+		};
 		615E989A253403D600891083 /* XCRemoteSwiftPackageReference "OAuthSwift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Ranchero-Software/OAuthSwift.git";
@@ -1723,6 +1745,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 616121EE255367B60074F061 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
 			productName = SDWebImageSwiftUI;
+		};
+		610A85AA2634783500B72244 /* FaviconFinder */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6162F27E25B69071008E7FA7 /* XCRemoteSwiftPackageReference "FaviconFinder" */;
+			productName = FaviconFinder;
+		};
+		610A85B22634D44F00B72244 /* URLImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 610A85B12634D44E00B72244 /* XCRemoteSwiftPackageReference "url-image" */;
+			productName = URLImage;
+		};
+		610A85B42634DB3700B72244 /* URLImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 610A85B12634D44E00B72244 /* XCRemoteSwiftPackageReference "url-image" */;
+			productName = URLImage;
 		};
 		615E989E2534046A00891083 /* OAuthSwift */ = {
 			isa = XCSwiftPackageProductDependency;

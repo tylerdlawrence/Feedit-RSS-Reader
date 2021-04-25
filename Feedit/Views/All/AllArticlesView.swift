@@ -29,10 +29,11 @@ struct AllArticlesView: View {
     
     @ObservedObject var rssFeedViewModel: RSSFeedViewModel
     
-    init(articles: AllArticles, rssFeedViewModel: RSSFeedViewModel, selectedFilter: FilterType) {
+    init(articles: AllArticles, rssFeedViewModel: RSSFeedViewModel) {
         self.articles = articles
         self.rssFeedViewModel = rssFeedViewModel
-        self.selectedFilter = selectedFilter
+        //self.selectedFilter = selectedFilter
+        
     }
         
     private var refreshButton: some View {
@@ -49,19 +50,17 @@ struct AllArticlesView: View {
         })
     }
     
-    @State var selectedFilter: FilterType
+    @State var selectedFilter: FilterType = .all
     private var navButtons: some View {
         HStack(alignment: .center, spacing: 30) {
             Toggle(isOn: $rssFeedViewModel.unreadIsOn) { Text("") }
                 .toggleStyle(CheckboxStyle()).padding(.leading)
-//        }
             Spacer(minLength: 1)
             
             Picker("", selection: $selectedFilter, content: {
                 ForEach(FilterType.allCases, id: \.self) {
                     Text($0.rawValue)
                 }
-//                SelectedFilterView(selectedFilter: selectedFilter)
             }).pickerStyle(SegmentedPickerStyle()).frame(width: 180, height: 20)
             .listRowBackground(Color("accent"))
             
@@ -74,7 +73,7 @@ struct AllArticlesView: View {
     
     @State var isShowing: Bool = false
     @State private var searchTerm : String = ""
-    
+        
     var body: some View {
         ScrollViewReader { scrollViewProxy in
             ZStack {
@@ -96,7 +95,8 @@ struct AllArticlesView: View {
                                    }
                                }
                            }
-                    }.environment(\.managedObjectContext, Persistence.current.context)
+                    }.environmentObject(rssDataSource)
+                    .environment(\.managedObjectContext, Persistence.current.context)
                     .environmentObject(rssFeedViewModel)
                 }
 //                .animation(.default)
@@ -168,7 +168,7 @@ struct AllArticlesView_Previews: PreviewProvider {
     static let rss = RSS()
     static var previews: some View {
         NavigationView {
-            AllArticlesView(articles: AllArticles(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), selectedFilter: .all)
+            AllArticlesView(articles: AllArticles(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem))
                 .preferredColorScheme(.dark)
         }
     }
