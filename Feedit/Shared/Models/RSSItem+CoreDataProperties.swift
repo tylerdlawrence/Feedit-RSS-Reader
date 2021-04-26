@@ -41,7 +41,7 @@ extension RSSItem {
     @NSManaged public var isArchive: Bool
     @NSManaged public var isRead: Bool
     @NSManaged public var image: String?
-    @NSManaged public var thumbnailURL: URL
+    @NSManaged public var thumbnailURL: URL?
     @NSManaged public var unread: Bool
     @NSManaged public var itemCount: Int64
     
@@ -55,13 +55,29 @@ extension RSSItem {
 //    let todayArticles: [LatestArticle]
         
     @NSManaged public var readDate: Date?
+    
+    @NSManaged public var avatar: String?
+    @NSManaged public var next_url: String?
+    @NSManaged public var icon: String?
+    @NSManaged public var favicon: String?
+    @NSManaged public var home_page_url: String?
+    
+    @NSManaged public var external_url: String?
+    @NSManaged public var content_text: String?
+    @NSManaged public var content_html: String?
+    @NSManaged public var summary: String?
+    @NSManaged public var banner_image: String?
+    @NSManaged public var date_published: Date?
+    @NSManaged public var date_modified: Date?
+    @NSManaged public var tags: String?
+    @NSManaged public var attachments: String?
         
     public override func awakeFromInsert() {
         super.awakeFromInsert()
         uuid = UUID()
     }
     
-    static func create(uuid: UUID, title: String, desc: String = "", author: String, url: String, createTime: Date = Date(), progress: Double = 0, in context: NSManagedObjectContext) -> RSSItem {
+    static func create(uuid: UUID, title: String, desc: String = "", author: String, url: String, createTime: Date = Date(), image: String = "", progress: Double = 0, in context: NSManagedObjectContext) -> RSSItem {
         let item = RSSItem(context: context)
         item.rssUUID = uuid
         item.uuid = UUID()
@@ -69,8 +85,9 @@ extension RSSItem {
         item.desc = desc
         item.author = author
         item.url = url
-        //item.imageUrl = imageUrl
         item.createTime = createTime
+        item.image = image
+        
         item.progress = 0
         item.isArchive = false
         item.isRead = false
@@ -154,14 +171,3 @@ extension RSSItem: ObjectValidatable {
         return hasPersistentChangedValues
     }
 }
-
-//extension RSSItem {
-//    static func simple() -> RSSItem {
-//        let item = RSSItem(context: Persistence.previews.context)
-//        item.title = "demo"
-//        item.image = ""
-//        item.desc = "desc demo"
-//        item.url = "http://images.apple.com/main/rss/hotnews/hotnews.rss"
-//        return item
-//    }
-//}

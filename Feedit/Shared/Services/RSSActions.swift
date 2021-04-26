@@ -150,4 +150,3 @@ func fetchNewRSSItem(model: RSS, url: URL?, start: Int = 0, in store: RSSItemSto
         print("error = \(errror)")
     }
 }
-

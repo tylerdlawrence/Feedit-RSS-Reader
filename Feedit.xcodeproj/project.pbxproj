@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		6103807625490A1300222019 /* ViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6103807525490A1300222019 /* ViewExtensions.swift */; };
 		6105657725599D8B007DCAA1 /* Subscriptions-OnMyiPhone.opml in Resources */ = {isa = PBXBuildFile; fileRef = 6105657625599D8B007DCAA1 /* Subscriptions-OnMyiPhone.opml */; };
-		610A854125FF11470027FF48 /* RSSFoldersDisclosureGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 610A854025FF11460027FF48 /* RSSFoldersDisclosureGroup.swift */; };
 		610A854325FFFF990027FF48 /* ExpansionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 610A854225FFFF990027FF48 /* ExpansionHandler.swift */; };
 		610A85A72633211F00B72244 /* DBRepoContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 610A85A62633211F00B72244 /* DBRepoContainer.swift */; };
 		610A85A92633F07200B72244 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 610A85A82633F07200B72244 /* SDWebImageSwiftUI */; };
@@ -17,6 +16,7 @@
 		610A85B32634D44F00B72244 /* URLImage in Frameworks */ = {isa = PBXBuildFile; productRef = 610A85B22634D44F00B72244 /* URLImage */; };
 		610A85B52634DB3700B72244 /* URLImage in Frameworks */ = {isa = PBXBuildFile; productRef = 610A85B42634DB3700B72244 /* URLImage */; };
 		610A85B726353C3B00B72244 /* BindingOptionalTextFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = 610A85B626353C3A00B72244 /* BindingOptionalTextFields.swift */; };
+		610A85B82635C95E00B72244 /* ImageServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61967ECA24E204FB00AA647C /* ImageServices.swift */; };
 		6117364924E83C0600A2DEA5 /* DataUnitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6117364824E83C0600A2DEA5 /* DataUnitView.swift */; };
 		6117365524E83C3E00A2DEA5 /* DataNStorageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6117365424E83C3E00A2DEA5 /* DataNStorageView.swift */; };
 		6117365724E83C7B00A2DEA5 /* DataNStorageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6117365624E83C7B00A2DEA5 /* DataNStorageViewModel.swift */; };
@@ -1156,7 +1156,6 @@
 				616CAF6924F715DD00690804 /* ISO8601DateFormatter.swift in Sources */,
 				6171B898262633C7000486FB /* CoreDataManager.swift in Sources */,
 				611F178C2612279A00D11687 /* NSURLSessionExtension.swift in Sources */,
-				610A854125FF11470027FF48 /* RSSFoldersDisclosureGroup.swift in Sources */,
 				6103807625490A1300222019 /* ViewExtensions.swift in Sources */,
 				616CAF9224F974AF00690804 /* SettingViewModel.swift in Sources */,
 				61967EED24E205DD00AA647C /* SectionView.swift in Sources */,
@@ -1220,6 +1219,7 @@
 				61E993A3260AF4D300679853 /* DeepLinks.swift in Sources */,
 				614136D7262A99D700C0B197 /* RSSParser.swift in Sources */,
 				61E9936B260AC1F200679853 /* RSSItem+CoreDataClass.swift in Sources */,
+				610A85B82635C95E00B72244 /* ImageServices.swift in Sources */,
 				6191E41126235E2E00527270 /* AllArticles.swift in Sources */,
 				61E993AC260AF6DE00679853 /* UnreadWidgetView.swift in Sources */,
 				61E99382260AC9E900679853 /* DateSpec.swift in Sources */,

@@ -37,7 +37,7 @@ struct RSSListView: View {
                 ForEach(viewModel.items.indices, id: \.self) { index in
                     ZStack {
                         NavigationLink(destination:
-                                        RSSFeedListView(viewModel: RSSFeedViewModel(rss: self.viewModel.items[index], dataSource: DataSourceService.current.rssItem), selectedFilter: .all).environmentObject(self.viewModel.store)) {
+                                        RSSFeedListView(rssItem: RSSItem(), viewModel: RSSFeedViewModel(rss: self.viewModel.items[index], dataSource: DataSourceService.current.rssItem), selectedFilter: .all).environmentObject(self.viewModel.store)) {
                             EmptyView()
                         }.opacity(0.0)
                         .buttonStyle(PlainButtonStyle())
@@ -104,8 +104,8 @@ struct RSSListView: View {
     }
     
     private func destinationView(rss: RSS) -> some View {
-        return RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), selectedFilter: .all)
-            .environmentObject(DataSourceService.current.rss)
+        return RSSFeedListView(rssItem: RSSItem(), viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), selectedFilter: .all)
+            .environmentObject(DataSourceService.current.rss).environmentObject(DataSourceService.current.rssItem)
     }
 }
 

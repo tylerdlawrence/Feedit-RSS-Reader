@@ -36,8 +36,12 @@ struct RSSFeedListView: View {
         })
     }
     
-    var rssSource: RSS? {
+    var rssSource: RSS {
         return self.rssFeedViewModel.rss
+    }
+    
+    var itemSource: RSSItem? {
+        return self.rssFeedViewModel.rssItem
     }
     
     @EnvironmentObject var rssDataSource: RSSDataSource
@@ -50,18 +54,33 @@ struct RSSFeedListView: View {
     @State var cancellables = Set<AnyCancellable>()
     
     var rss = RSS()
+    @ObservedObject var rssItem: RSSItem
+    
+    //@ObservedObject private var imageLoader: ImageLoader
         
-    init(viewModel: RSSFeedViewModel, selectedFilter: FilterType) {
+    init(rssItem: RSSItem, viewModel: RSSFeedViewModel, selectedFilter: FilterType) {
+        self.rssItem = rssItem
         self.rssFeedViewModel = viewModel
         self.selectedFilter = selectedFilter
+        
+        //self.imageLoader = ImageLoader(path: viewModel.rssItem.image)
     }
+    
+    private func articleImage(_ image: UIImage) -> some View {
+        Image(uiImage: image)
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .clipped()
+            .cornerRadius(3)
+            .frame(width: 22, height: 22)
+            //.frame(width: 60, height: 60)
+        }
     
     private var refreshButton: some View {
         Button(action: self.rssFeedViewModel.loadMore) {
             Image(systemName: "arrow.clockwise").font(.system(size: 16, weight: .bold)).foregroundColor(Color("tab")).padding()
         }.buttonStyle(BorderlessButtonStyle())
     }
-    
     private var navButtons: some View {
         HStack(alignment: .center, spacing: 30) {
             Toggle(isOn: $rssFeedViewModel.unreadIsOn) { Text("") }
@@ -80,14 +99,13 @@ struct RSSFeedListView: View {
                 .toggleStyle(StarStyle()).padding(.trailing)
         }
     }
-        
     @State private var showMarkAllAsReadAlert = false
-    
+        
     var body: some View {
         ScrollViewReader { scrollViewProxy in
             ZStack {
                 List {
-                    ForEach(self.filteredArticles) { item in
+                    ForEach(self.filteredArticles, id: \.url) { item in
                         ZStack {
                             NavigationLink(destination: NavigationLazyView(RSSFeedDetailView(rssItem: item, rssFeedViewModel: self.rssFeedViewModel))) {
                                 EmptyView()
@@ -95,8 +113,18 @@ struct RSSFeedListView: View {
                             .opacity(0.0)
                             .buttonStyle(PlainButtonStyle())
 
-                            HStack(spacing: nil) {
+                            HStack(spacing: -12) {
+//                                KFImage(URL(string: rssSource?.image ?? ""))
+//                                    .resizable()
+//                                    .aspectRatio(contentMode: .fit)
+//                                    .clipped()
+//                                    .cornerRadius(3)
+//                                    .frame(width: 22, height: 22)
+//                                    .padding(.top)
                                 
+//                                if self.imageLoader.image != nil {
+//                                    articleImage(self.imageLoader.image!)
+//                                }
                                 RSSItemRow(rssItem: item, menu: self.contextmenuAction(_:), rssFeedViewModel: self.rssFeedViewModel)
                                     
                                 
@@ -143,14 +171,14 @@ struct RSSFeedListView: View {
                 .toolbar{
                     ToolbarItem(placement: .principal) {
                         HStack {
-                            KFImage(URL(string: rssSource?.image ?? ""))
+                            KFImage(URL(string: rssSource.image ?? ""))
                                 .placeholder({
                                     Image("getInfo")
                                         .renderingMode(.original).resizable().aspectRatio(contentMode: .fit).frame(width: 20, height: 20,alignment: .center).cornerRadius(2).clipped()
                                 })
                                 .renderingMode(.original).resizable().aspectRatio(contentMode: .fit).frame(width: 20, height: 20,alignment: .center).cornerRadius(2).clipped()
                             
-                            Text(rssSource?.title ?? "")
+                            Text(rssSource.title)
                                 .font(.system(size: 20, weight: .medium, design: .rounded))
                             
                             UnreadCountView(count: filteredArticles.count)
@@ -196,8 +224,60 @@ struct RSSFeedListView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             ForEach(0..<6) { index in
-                RSSFeedListView(viewModel: RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem), selectedFilter: .all)
+                RSSFeedListView(rssItem: RSSItem(), viewModel: RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem), selectedFilter: .all)
             }
         }.preferredColorScheme(.dark)
+    }
+}
+
+// Download Image
+struct ImageRow: View {
+    let rssFeedViewModel: RSSItem
+    var body: some View {
+        VStack(alignment: .center) {
+            ImageViewContainer(imageUrl: rssFeedViewModel.url, rssItem: rssFeedViewModel)
+        }
+    }
+}
+
+struct ImageViewContainer: View {
+    @ObservedObject var remoteImageURL: RemoteImageURL
+    @ObservedObject var rssItem: RSSItem
+    
+    init(imageUrl: String, rssItem: RSSItem) {
+        remoteImageURL = RemoteImageURL(imageURL: imageUrl)
+        
+        self.rssItem = rssItem
+    }
+
+    var body: some View {
+        Image(uiImage: UIImage(data: remoteImageURL.data) ?? UIImage())
+            .resizable()
+            .clipShape(Circle())
+            .overlay(Circle().stroke(Color.black, lineWidth: 3.0))
+            .frame(width: 70.0, height: 70.0)
+    }
+}
+
+class RemoteImageURL: ObservableObject {
+    
+    var didChange = PassthroughSubject<Data, Never>()
+    
+    @Published var data = Data() {
+        didSet {
+            didChange.send(data)
+        }
+    }
+    
+    init(imageURL: String) {
+        
+        guard let url = URL(string: imageURL) else { return }
+
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            guard let data = data else { return }
+
+            DispatchQueue.main.async { self.data = data }
+
+            }.resume()
     }
 }

@@ -15,7 +15,6 @@ import BackgroundTasks
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
         
         if ProcessInfo.processInfo.arguments.contains("UI-Testing"), let bundleName = Bundle.main.bundleIdentifier {
             UserDefaults.standard.removePersistentDomain(forName: bundleName)
@@ -28,32 +27,51 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
         
     // MARK: UISceneSession Lifecycle
-    
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
-        // Called when a new scene session is being created.
-        // Use this method to select a configuration to create the new scene with.
         return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
     }
     
     func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
-        // Called when the user discards a scene session.
-        // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
-        // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
+        
+    }
+
+    // MARK: - Core Data stack
+    lazy var persistentContainer: NSPersistentCloudKitContainer = {
+        let container = NSPersistentCloudKitContainer(name: "RSS")
+        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+            if let error = error as NSError? {
+                fatalError("Unresolved error \(error), \(error.userInfo)")
+            }
+        })
+        return container
+    }()
+
+    // MARK: - Core Data Saving support
+    func saveContext() {
+        let context = persistentContainer.viewContext
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch {
+                let nserror = error as NSError
+                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            }
+        }
     }
 }
 
-extension AppDelegate: UNUserNotificationCenterDelegate{
+extension AppDelegate: UNUserNotificationCenterDelegate {
     
-    // This function will be called right after user tap on the notification
+    //MARK: This function will be called right after user tap on the notification
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         
-        // tell the app that we have finished processing the user’s action / response
+        //MARK: tell the app that we have finished processing the user’s action / response
         RSSStore.instance.shouldSelectFeedURL = response.notification.request.content.userInfo["feedURL"] as? String
         completionHandler()
     }
 }
 
-// macOS Menu
+//MARK: macOS
 extension AppDelegate {
     override func buildMenu(with builder: UIMenuBuilder) {
         let reloadCommand =
@@ -110,16 +128,14 @@ extension AppDelegate {
             task.setTaskCompleted(success: true)
             self.scheduleAppRefresh()
         }
-        
         scheduleAppRefresh()
-        
     }
     
     func scheduleAppRefresh() {
         guard RSSStore.instance.notificationsEnabled else { return }
         
         let request = BGAppRefreshTaskRequest(identifier: "io.lucasfarah.update.fetchposts")
-        request.earliestBeginDate = Date(timeIntervalSinceNow: TimeInterval(RSSStore.instance.fetchContentType.seconds)) // App Refresh after 1 hour.
+        request.earliestBeginDate = Date(timeIntervalSinceNow: TimeInterval(RSSStore.instance.fetchContentType.seconds))
         
         do {
             try BGTaskScheduler.shared.submit(request)
@@ -127,5 +143,4 @@ extension AppDelegate {
             print("Could not schedule app refresh: \(error)")
         }
     }
-    
 }

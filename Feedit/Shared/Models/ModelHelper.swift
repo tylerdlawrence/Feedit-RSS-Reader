@@ -26,10 +26,11 @@ extension RSSFeedItem: RSSItemConvertable {
     func asRSSItem(container uuid: UUID, in context: NSManagedObjectContext) -> RSSItem {
         return RSSItem.create(uuid: uuid,
                               title: title ?? "",
-                              desc: description ?? "",
-                              author: author ?? "",
+                              desc: description?.trimWhiteAndSpace.trimHTMLTag ?? "",
+                              author: author?.first?.description ?? "",
                               url: link ?? "",
                               createTime: pubDate ?? Date(),
+                              image: media?.mediaThumbnails?.first?.value ?? "",
                               in: context)
     }
 }
@@ -38,10 +39,11 @@ extension AtomFeedEntry: RSSItemConvertable {
     func asRSSItem(container uuid: UUID, in context: NSManagedObjectContext) -> RSSItem {
         return RSSItem.create(uuid: uuid,
                               title: title ?? "",
-                              desc: "",
+                              desc: summary?.value ?? "",
                               author: authors?.first?.name ?? "",
                               url: links?.first?.attributes?.href ?? "",
                               createTime: (published ?? updated) ?? Date(),
+                              image: media?.mediaThumbnails?.first?.value ?? "",
                               in: context)
     }
 }
@@ -50,9 +52,11 @@ extension JSONFeedItem: RSSItemConvertable {
     func asRSSItem(container uuid: UUID, in context: NSManagedObjectContext) -> RSSItem {
         return RSSItem.create(uuid: uuid,
                               title: title ?? "",
+                              desc: contentHtml?.trimWhiteAndSpace ?? "",
                               author: author?.name ?? "",
                               url: url ?? "",
                               createTime: datePublished ?? Date(),
+                              image: image ?? bannerImage ?? "",
                               in: context)
     }
 }

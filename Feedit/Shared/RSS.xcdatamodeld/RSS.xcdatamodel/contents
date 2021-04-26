@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="18154" systemVersion="20E5224a" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="18154" systemVersion="20E5229a" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="RSS" representedClassName="RSS" syncable="YES">
         <attribute name="createTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="desc" optional="YES" attributeType="String" defaultValueString=""/>
@@ -32,7 +32,7 @@
         <attribute name="author" optional="YES" attributeType="String" defaultValueString=""/>
         <attribute name="createTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="desc" optional="YES" attributeType="String" defaultValueString=""/>
-        <attribute name="image" optional="YES" attributeType="String"/>
+        <attribute name="image" optional="YES" attributeType="String" defaultValueString=""/>
         <attribute name="imageURL" optional="YES" attributeType="String"/>
         <attribute name="isArchive" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="isRead" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
@@ -54,8 +54,8 @@
     </entity>
     <elements>
         <element name="RSS" positionX="-544.7466430664062" positionY="45.42822265625" width="128" height="239"/>
-        <element name="RSSGroup" positionX="-459" positionY="162" width="128" height="119"/>
-        <element name="RSSItem" positionX="-370.7073974609375" positionY="38.6402587890625" width="128" height="254"/>
+        <element name="RSSGroup" positionX="-715.9454345703125" positionY="73.57846069335938" width="128" height="119"/>
+        <element name="RSSItem" positionX="-370.7073974609375" positionY="38.6402587890625" width="128" height="268"/>
         <element name="Settings" positionX="-470.65283203125" positionY="309.8365783691406" width="128" height="118"/>
     </elements>
 </model>

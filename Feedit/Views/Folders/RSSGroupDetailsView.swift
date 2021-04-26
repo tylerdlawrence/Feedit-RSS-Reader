@@ -54,10 +54,10 @@ struct RSSGroupDetailsView: View {
         }
         .navigationBarTitle(Text(rssGroup.name ?? "Folders"))
     }
-    private func destinationView(rss: RSS) -> some View {
-        return RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), selectedFilter: .all)
-            .environmentObject(DataSourceService.current.rss)
-    }
+//    private func destinationView(rss: RSS) -> some View {
+//        return RSSFeedListView(viewModel: RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem), selectedFilter: .all)
+//            .environmentObject(DataSourceService.current.rss)
+//    }
 }
 
 #if DEBUG

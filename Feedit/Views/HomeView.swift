@@ -51,6 +51,7 @@ struct HomeView: View {
     
     @Environment(\.injected) private var injected: DIContainer
     @State private var isActive: Bool = false
+    
     private let container: DIContainer
     let inspection = PassthroughSubject<((AnyView) -> Void), Never>()
     init(container: DIContainer) {
@@ -118,8 +119,6 @@ struct HomeView: View {
             self.selectedFeatureItem = .folder
         })
     }
-    
-
     
     private var navButtons: some View {
         HStack(alignment: .center, spacing: 24) {
@@ -241,16 +240,16 @@ struct HomeView: View {
                             .accentColor(Color("tab"))
                         
                         RSSListView().inject(self.container)
-//                        RSSFoldersDisclosureGroup(persistence: Persistence.current, unread: unread, viewModel: self.viewModel, isExpanded: selectedCells.contains(rss))
-//                            .onTapGesture { self.selectDeselect(rss) }
+                        //RSSFoldersDisclosureGroup(persistence: Persistence.current, unread: unread, viewModel: self.viewModel, isExpanded: selectedCells.contains(rss))
+                            //.onTapGesture { self.selectDeselect(rss) }
                     }
                     .pullToRefresh(isShowing: $isShowing) {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                             self.isShowing = false
-                            viewModel.fecthResults()
-                            all.fecthResults()
-                            unreads.fecthResults()
-                            starred.fecthResults()
+                            self.viewModel.fecthResults()
+                            self.all.fecthResults()
+                            self.unreads.fecthResults()
+                            self.starred.fecthResults()
                         }
                     }
                     .environmentObject(DataSourceService.current.rss)
@@ -258,8 +257,8 @@ struct HomeView: View {
                     .environment(\.managedObjectContext, Persistence.current.context)
                     .environment(\.editMode, .constant(self.isEditing ? EditMode.active : EditMode.inactive)).animation(Animation.spring())
                     .listStyle(PlainListStyle())
-//                    .listStyle(SidebarListStyle())
-                    .navigationBarTitle("Home", displayMode: .automatic)
+                    //.listStyle(SidebarListStyle())
+                    .navigationBarTitle("Feeds", displayMode: .automatic)
                     .toolbar {
                         ToolbarItem(placement: .navigationBarLeading) {
                             ifEditModeButton
@@ -268,7 +267,7 @@ struct HomeView: View {
                             editMenu
                         }
                     }
-//                    .add(self.searchBar)
+                    //.add(self.searchBar)
                 }
                 
                 Spacer()
@@ -282,19 +281,17 @@ struct HomeView: View {
             }
             .onReceive(stateUpdate) { self.isActive = $0 }
             .onReceive(inspection) { callback in
-                viewModel.fecthResults()
-                //self.viewModel.fetchInfo()
+                self.viewModel.fecthResults()
             }
             .onReceive(addRSSPublisher, perform: { output in
                 guard
                     let userInfo = output.userInfo,
-                    let total = userInfo["total"] as? Double else { return }
+                    let total = userInfo["feedURL"] as? Double else { return }
                 self.addRSSProgressValue += 1.0/total
             })
         
             .onReceive(rssRefreshPublisher, perform: { output in
-                viewModel.fecthResults()
-                //viewModel.fetchInfo()
+                self.viewModel.fecthResults()
             })
             
             .sheet(isPresented: $isSheetPresented, content: {
@@ -316,18 +313,15 @@ struct HomeView: View {
         }
         .onAppear(perform: {
             WidgetCenter.shared.reloadAllTimelines()
-            all.fecthResults()
-            unreads.fecthResults()
-            starred.fecthResults()
-            //viewModel.fecthResults()
-            //self.viewModel.fetchInfo()
-            
+            self.all.fecthResults()
+            self.unreads.fecthResults()
+            self.starred.fecthResults()
         })
     }
     
     private var editButton: some View {
         Button(action: {
-//            self.editMode.toggle()
+            //self.editMode.toggle()
             self.selection = Set<UUID>()
         }) {
             Image(systemName: "ellipsis.circle").font(.system(size: 20, weight: .medium, design: .rounded))
@@ -371,8 +365,10 @@ struct HomeView: View {
 extension HomeView {
     private func onDoneAction() {
         withAnimation {
-            //viewModel.fetchInfo()
-            viewModel.fecthResults()
+            self.viewModel.fecthResults()
+            self.all.fecthResults()
+            self.unreads.fecthResults()
+            self.starred.fecthResults()
         }
     }
     private func selectDeselect(_ group: RSSGroup) {
