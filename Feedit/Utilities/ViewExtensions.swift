@@ -15,6 +15,52 @@ import FeedKit
 import CoreData
 import Foundation
 
+struct MarkAsStarredButton: View {
+    @Binding var isSet: Bool
+    var body: some View {
+        Button(action: {
+            isSet.toggle()
+        }) {
+            Image(systemName: isSet ? "star.fill" : "star")
+                .imageScale(.medium)
+                .foregroundColor(Color("tab"))
+                .font(.system(size: 20, weight: .regular, design: .default))
+        }
+    }
+}
+
+struct ReaderModeButton: View {
+    @Binding var isSet: Bool
+//    @Binding var isSelected: Bool
+    var body: some View {
+        Button(action: {
+            isSet.toggle()
+//            self.isSelected.toggle()
+        }) {
+            
+            Image(systemName: isSet ? "doc.plaintext.fill" : "doc.plaintext")
+                .imageScale(.medium)
+                .foregroundColor(Color("tab"))
+                .font(.system(size: 20, weight: .regular, design: .default))
+        }
+    }
+}
+
+struct MarkAsReadButton: View {
+    @Binding var isSet: Bool
+
+    var body: some View {
+        Button(action: {
+            isSet.toggle()
+        }) {
+            Image(systemName: isSet ? "circle.fill" : "circle")
+                .imageScale(.medium)
+                .foregroundColor(Color("tab"))
+                .font(.system(size: 20, weight: .regular, design: .default))
+        }
+    }
+}
+
 struct ScrollCell: ViewModifier {
     func body(content: Content) -> some View {
         Group {

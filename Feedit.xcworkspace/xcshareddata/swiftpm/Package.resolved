@@ -11,6 +11,24 @@
         }
       },
       {
+        "package": "Alamofire",
+        "repositoryURL": "https://github.com/Alamofire/Alamofire.git",
+        "state": {
+          "branch": null,
+          "revision": "f96b619bcb2383b43d898402283924b80e2c4bae",
+          "version": "5.4.3"
+        }
+      },
+      {
+        "package": "Down",
+        "repositoryURL": "https://github.com/iwasrobbed/Down",
+        "state": {
+          "branch": null,
+          "revision": "0bcd20dc56ad7fd47bbb99a1d2302a8bfa43b6d0",
+          "version": "0.10.0"
+        }
+      },
+      {
         "package": "FaviconFinder",
         "repositoryURL": "https://github.com/will-lumley/FaviconFinder.git",
         "state": {
@@ -35,6 +53,15 @@
           "branch": null,
           "revision": "2a10bf41da75599a9f8e872dbd44fe0155a2e00c",
           "version": "5.15.8"
+        }
+      },
+      {
+        "package": "Parma",
+        "repositoryURL": "https://github.com/dasautoooo/Parma.git",
+        "state": {
+          "branch": null,
+          "revision": "5aa1de6cdbbd37a38d56f3b55bed94d1dc48ec96",
+          "version": "0.2.0"
         }
       },
       {
@@ -89,6 +116,15 @@
           "branch": null,
           "revision": "2e09be8af614401bc9f87d40093ec19ce56ccaf2",
           "version": "0.1.3"
+        }
+      },
+      {
+        "package": "SwiftyJSON",
+        "repositoryURL": "https://github.com/SwiftyJSON/SwiftyJSON.git",
+        "state": {
+          "branch": null,
+          "revision": "b3dcd7dbd0d488e1a7077cb33b00f2083e382f07",
+          "version": "5.0.1"
         }
       },
       {

@@ -15,6 +15,7 @@ import Combine
 import UIKit
 import FeedKit
 import KingfisherSwiftUI
+import libcmark
 
 struct AllArticlesView: View {
     @EnvironmentObject private var persistence: Persistence
@@ -31,9 +32,7 @@ struct AllArticlesView: View {
     
     init(articles: AllArticles, rssFeedViewModel: RSSFeedViewModel) {
         self.articles = articles
-        self.rssFeedViewModel = rssFeedViewModel
-        //self.selectedFilter = selectedFilter
-        
+        self.rssFeedViewModel = rssFeedViewModel        
     }
         
     private var refreshButton: some View {
@@ -80,8 +79,8 @@ struct AllArticlesView: View {
                 List {
                     ForEach(articles.items, id: \.self) { article in
                         ZStack {
+//                            NavigationLink(destination: RSSFeedDetailView(rssItem: article, rssFeedViewModel: self.rssFeedViewModel)) {
                             NavigationLink(destination: WebView(rssItem: article, onCloseClosure: {})) {
-                                
                                EmptyView()
                            }
                            .opacity(0.0)

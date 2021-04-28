@@ -123,3 +123,54 @@ extension String {
     }
 
 }
+
+extension String {
+
+    /// Convert the string representation of a time duration to a Time Interval.
+    ///
+    /// - Returns: A TimeInterval.
+    func toDuration() -> TimeInterval? {
+        let comps = self
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .components(separatedBy: ":")
+
+        guard
+            !comps.contains(where: { Int($0) == nil }),
+            !comps.contains(where: { Int($0)! < 0 })
+            else { return nil }
+
+        return comps
+            .reversed()
+            .enumerated()
+            .map { i, e in
+                (Double(e) ?? 0)
+                    *
+                    pow(Double(60), Double(i))
+            }
+            .reduce(0, +)
+        
+    }
+    
+}
+
+extension URL {
+    /// Returns a new `URL` in which the target scheme is replaced by another given
+    /// scheme. Returns `self` if the scheme already matches the target scheme.
+    ///
+    /// - Parameters:
+    ///   - target: The target scheme
+    ///   - replacement: The replacement scheme
+    func replacing<Target, Replacement>(
+        scheme target: Target,
+        with replacement: Replacement)
+        -> URL? where Target : StringProtocol, Replacement : StringProtocol
+    {
+        var urlComponents = URLComponents(url: self, resolvingAgainstBaseURL: true)
+        let isTargetScheme = urlComponents?.scheme?.caseInsensitiveCompare(target) == ComparisonResult.orderedSame
+        if isTargetScheme {
+            urlComponents?.scheme = "\(replacement)"
+            return urlComponents?.url
+        }
+        return self
+    }
+}

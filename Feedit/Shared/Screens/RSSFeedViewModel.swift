@@ -15,6 +15,20 @@ import FaviconFinder
 import URLImage
 import BackgroundTasks
 import WidgetKit
+import Alamofire
+import SwiftyJSON
+
+public extension UIView {
+    func getImage(from imageUrl: String, to imageView: UIImageView) {
+        guard let url = URL(string: imageUrl ) else { return }
+        DispatchQueue.global().async {
+            guard let data = try? Data(contentsOf: url) else { return }
+            DispatchQueue.main.async {
+                imageView.image = UIImage(data: data)
+            }
+        }
+    }
+}
 
 extension RSSFeedViewModel: Identifiable {
 
@@ -40,6 +54,7 @@ class RSSFeedViewModel: NSObject, ObservableObject {
     @Published var rss: RSS
     @Published var rssItem = RSSItem()
     
+    
     private var cancellable: AnyCancellable? = nil
     private var cancellable2: AnyCancellable? = nil
     
@@ -50,31 +65,12 @@ class RSSFeedViewModel: NSObject, ObservableObject {
     var rssSource: RSS {
         return self.rssFeedViewModel.rss
     }
-        
-    let urls = [URL]()
     
     init(rss: RSS, dataSource: RSSItemDataSource) {
         self.dataSource = dataSource
         self.rss = rss
         super.init()
         
-        
-        
-        let publishers = urls.map { URLImageService.shared.remoteImagePublisher($0) }
-        cancellable = Publishers.MergeMany(publishers)
-            .tryMap { $0.cgImage }
-            .catch { _ in
-                Just(nil)
-            }
-            .collect()
-            .sink { images in
-                if let objects = dataSource.fetchedResult.fetchedObjects {
-                    self.items.insert(contentsOf: objects, at: 0)
-            }
-        }
-        
-        
-                
         self.filteredPosts = rss.posts.filter { self.filterType == .unreadIsOn ? !$0.isRead : true }
         cancellable = Publishers.CombineLatest3(self.$rss, self.$filterType, self.$shouldReload)
             .receive(on: DispatchQueue.main)
@@ -330,3 +326,323 @@ class Post: Codable, Identifiable, ObservableObject {
         url: URL(string: "https://www.google.com")!)
     }
 }
+
+
+struct XMLElement {
+    var value:String
+    var attributes:[String:String]
+}
+
+typealias XMLDictionary = [String:Any]
+
+class XMLHelper:NSObject {
+    func parseXML(atURL url:URL,
+                  completion:@escaping (XMLDictionary?) -> Void) {
+        guard let data = try? Data(contentsOf: url) else {
+            completion(nil)
+            return
+        }
+        parseXML(data: data, completion: completion)
+    }
+    
+    func parseXML(atURL url:URL,
+                  elementName:String,
+                  completion:@escaping (Array<XMLDictionary>?) -> Void) {
+        guard let data = try? Data(contentsOf: url) else {
+            completion(nil)
+            return
+        }
+       parseXML(data: data, elementName: elementName, completion: completion)
+    }
+    
+    func parseXML(data:Data,
+                  completion:@escaping (XMLDictionary?) -> Void) {
+        let parser = XMLParser(data: data)
+        self.completion = completion
+        let helperParser = ParserAllTags(completion: completion)
+        parser.delegate = helperParser
+        parser.parse()
+    }
+    
+    func parseXML(data:Data,
+                  elementName:String,
+                  completion:@escaping(Array<XMLDictionary>?) -> Void) {
+        let parser = XMLParser(data: data)
+        self.completionArray = completion
+        //let helperParser = ParserSpecificElement(elementName: elementName, completion:completion)
+        let helperParser = ParserAllTags(elementName:elementName, completion: completion)
+        parser.delegate = helperParser
+        parser.parse()
+    }
+    
+    @available(iOS 13.0, *)
+    func parseXML(atURL url:URL) -> AnyPublisher<XMLDictionary?, Never> {
+        let subject = CurrentValueSubject<XMLDictionary?, Never>(nil)
+        parseXML(atURL: url) { dictionary in
+            subject.send(dictionary)
+        }
+        return subject.eraseToAnyPublisher()
+    }
+    
+    @available(iOS 13.0, *)
+    func parseXML(data: Data) -> AnyPublisher<XMLDictionary?, Never> {
+        let subject = CurrentValueSubject<XMLDictionary?, Never>(nil)
+        parseXML(data:data) { dictionary in
+            subject.send(dictionary)
+        }
+        return subject.eraseToAnyPublisher()
+    }
+    
+    @available(iOS 13.0, *)
+    func parseXML(atURL url:URL, elementName:String) -> AnyPublisher<Array<XMLDictionary>?, Never> {
+        let subject = CurrentValueSubject<Array<XMLDictionary>?, Never>(nil)
+        parseXML(atURL: url, elementName: elementName) { arrayDictionary in
+            subject.send(arrayDictionary)
+        }
+        return subject.eraseToAnyPublisher()
+    }
+    
+    @available(iOS 13.0, *)
+    func parseXML(data:Data, elementName:String) -> AnyPublisher<Array<XMLDictionary>?, Never> {
+        let subject = CurrentValueSubject<Array<XMLDictionary>?, Never>(nil)
+        parseXML(data:data, elementName: elementName) { arrayDictionary in
+            subject.send(arrayDictionary)
+        }
+        return subject.eraseToAnyPublisher()
+    }
+    
+    // MARK: - Private
+    
+    private var completionArray:((Array<XMLDictionary>?) -> Void)?
+    private var completion:((XMLDictionary?) -> Void)?
+}
+
+// MARK: - ParserSpecificElement
+
+fileprivate class ParserSpecificElement:NSObject, XMLParserDelegate {
+    init(elementName:String, completion:@escaping (Array<XMLDictionary>?) -> Void) {
+        self.elementNameToGet = elementName
+        self.completion = completion
+    }
+    
+    func parser(_ parser: XMLParser,
+                didStartElement elementName: String,
+                namespaceURI: String?,
+                qualifiedName qName: String?,
+                attributes attributeDict: [String : String] = [:]) {
+        currentElementName = nil
+        if elementName == elementNameToGet {
+            newDictionary()
+        }
+        else if currentDictionary != nil {
+            currentElementName = elementName
+        }
+        if let currentElementName = currentElementName {
+            addAttributes(attributeDict, forKey:currentElementName)
+        }
+    }
+    
+    func parser(_ parser: XMLParser,
+                didEndElement elementName: String,
+                namespaceURI: String?,
+                qualifiedName qName: String?) {
+        if elementName == elementNameToGet {
+            addCurrentDictionaryToResults()
+        }
+    }
+    
+    func parser(_ parser: XMLParser, foundCharacters string: String) {
+        if let key = currentElementName {
+            addString(string, forKey: key)
+        }
+    }
+    
+    func parserDidStartDocument(_ parser: XMLParser) {
+        
+    }
+    
+    func parserDidEndDocument(_ parser: XMLParser) {
+        if let _ = elementNameToGet {
+            completion(results)
+        }
+    }
+
+    // MARK: - Private
+    
+    private var completion:(Array<XMLDictionary>?) -> Void
+    private var currentDictionary:XMLDictionary?
+    private var currentElementName:String?
+    private var elementNameToGet:String?
+    private var results:[XMLDictionary] = []
+    
+    private func addAttributes(_ attributes:[String:String], forKey key:String) {
+        currentDictionary?[key] = XMLElement(value: "", attributes: attributes)
+    }
+    
+    private func addCurrentDictionaryToResults() {
+        if let currentDictionary = currentDictionary {
+            results.append(currentDictionary)
+        }
+        currentDictionary = nil
+    }
+    
+    private func addString(_ string:String, forKey key:String) {
+        if let currentValue = currentDictionary?[key] as? XMLElement {
+            let valueString = currentValue.value + string
+            currentDictionary?[key] = XMLElement(value: valueString, attributes: currentValue.attributes)
+        }
+        else {
+            currentDictionary?[key] = XMLElement(value: string, attributes: [:])
+        }
+    }
+    
+    private func newDictionary() {
+        currentDictionary = [:]
+    }
+}
+
+
+
+
+// MARK: - ParserAllTags
+
+fileprivate class ParserAllTags:NSObject, XMLParserDelegate {
+    
+    init(elementName:String, completion:@escaping(Array<XMLDictionary>?) -> Void) {
+        self.arrayCompletion = completion
+        elementNameToGet = elementName
+    }
+    
+    init(completion:@escaping (XMLDictionary?) -> Void) {
+        self.completion = completion
+    }
+    
+    private var arrayCompletion:((Array<XMLDictionary>?) -> Void)? // used in case of specific element
+    private var completion:((XMLDictionary?) -> Void)? // used when parsing all tags
+    private var currentDictionary:XMLDictionary = [:]
+    private var currentElementName:String = ""
+    private var elementNameToGet:String?
+    private var results:[XMLDictionary] = [] // used in case of specific element
+    private var rootDictionary:XMLDictionary = [:]
+    private var stack:[XMLDictionary] = []
+    
+    private func addAttributes(_ attributes:[String:String], forKey key:String) {
+        currentDictionary[key] = XMLElement(value: "", attributes: attributes)
+    }
+    
+    private func addCurrentDictionaryToResults() {
+        results.append(currentDictionary)
+        currentDictionary = [:]
+    }
+    
+    /// Add a dictionary to an existing one
+    /// If the key is already in the dictionary we need to create an array
+    /// - Parameters:
+    ///   - dictionary: the dictionary to add
+    ///   - toDictionary: the dictionary where the given dictionary will be added
+    ///   - key: the key
+    /// - Returns: the dictionary passed as toDictionary with the new value added
+    private func addDictionary(_ dictionary:XMLDictionary, toDictionary:XMLDictionary,
+                                      key:String) -> XMLDictionary {
+        var returnDictionary = toDictionary
+        if let array = returnDictionary[key] as? Array<XMLDictionary> {
+            var newArray = array
+            newArray.append(dictionary)
+            returnDictionary[key] = newArray
+        }
+        else if let dictionary = returnDictionary[key] as? XMLDictionary {
+            var array:[XMLDictionary] = [dictionary]
+            array.append(dictionary)
+            returnDictionary[key] = array
+        }
+        else {
+            returnDictionary[key] = dictionary
+        }
+        return returnDictionary
+    }
+    
+    private func addString(_ string:String, forKey key:String) {
+        if let currentValue = currentDictionary[key] as? XMLElement {
+            let valueString = currentValue.value + string
+            currentDictionary[key] = XMLElement(value: valueString, attributes: currentValue.attributes)
+        }
+        else {
+            currentDictionary[key] = XMLElement(value: string, attributes: [:])
+        }
+    }
+    
+    private func newDictionary() {
+        currentDictionary = [:]
+    }
+    
+    // MARK: - XMLParserDelegate
+    
+    func parser(_ parser: XMLParser,
+                didStartElement elementName: String,
+                namespaceURI: String?,
+                qualifiedName qName: String?,
+                attributes attributeDict: [String : String] = [:]) {
+        if let elementNameToGet = elementNameToGet {
+            currentElementName = ""
+            if elementName == elementNameToGet {
+                newDictionary()
+            }
+            else {
+                currentElementName = elementName
+            }
+            if currentElementName != "" {
+                addAttributes(attributeDict, forKey:currentElementName)
+            }
+        }
+        else {
+            stack.append(currentDictionary)
+            currentDictionary = [:]
+            currentElementName = elementName
+        }
+    }
+    
+    func parser(_ parser: XMLParser,
+                didEndElement elementName: String,
+                namespaceURI: String?,
+                qualifiedName qName: String?) {
+        if let elementNameToGet = elementNameToGet {
+            if elementName == elementNameToGet {
+                addCurrentDictionaryToResults()
+            }
+        }
+        else {
+            var parentDictionary = stack.removeLast()
+            parentDictionary = addDictionary(currentDictionary, toDictionary: parentDictionary, key: elementName)
+            currentDictionary = parentDictionary
+        }
+    }
+    
+    func parser(_ parser: XMLParser, foundCharacters string: String) {
+        if string.starts(with: "\n") {
+            return
+        }
+        if let _ = elementNameToGet {
+            if currentElementName != "" {
+                addString(string, forKey: currentElementName)
+            }
+            return
+        }
+        if let currentValue = currentDictionary[currentElementName] as? XMLElement {
+            let valueString = currentValue.value + string
+            currentDictionary[currentElementName] = XMLElement(value: valueString, attributes: currentValue.attributes)
+        }
+        else {
+            currentDictionary[currentElementName] = XMLElement(value: string, attributes: [:])
+        }
+    }
+    
+    func parserDidEndDocument(_ parser: XMLParser) {
+        if let arrayCompletion = arrayCompletion {
+            arrayCompletion(results)
+        }
+        else if let completion = completion {
+            completion(currentDictionary)
+        }
+    }
+}
+

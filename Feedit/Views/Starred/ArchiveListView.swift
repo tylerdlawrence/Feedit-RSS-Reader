@@ -34,7 +34,6 @@ struct ArchiveListView: View {
     init(viewModel: ArchiveListViewModel, rssFeedViewModel: RSSFeedViewModel) {
         self.archiveListViewModel = viewModel
         self.rssFeedViewModel = rssFeedViewModel
-        //self.selectedFilter = selectedFilter
         
     }
     
@@ -50,14 +49,12 @@ struct ArchiveListView: View {
         HStack(alignment: .center, spacing: 30) {
             Toggle(isOn: $rssFeedViewModel.unreadIsOn) { Text("") }
                 .toggleStyle(CheckboxStyle()).padding(.leading)
-//        }
             Spacer(minLength: 1)
             
             Picker("", selection: $selectedFilter, content: {
                 ForEach(FilterType.allCases, id: \.self) {
                     Text($0.rawValue)
                 }
-//                SelectedFilterView(selectedFilter: selectedFilter)
             }).pickerStyle(SegmentedPickerStyle()).frame(width: 180, height: 20)
             .listRowBackground(Color("accent"))
             
@@ -175,7 +172,8 @@ extension ArchiveListView {
 
 struct ArchiveListView_Previews: PreviewProvider {
     static var previews: some View {
-        ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem))
-            .preferredColorScheme(.dark)
+        NavigationView {
+            ArchiveListView(viewModel: ArchiveListViewModel(dataSource: DataSourceService.current.rssItem), rssFeedViewModel: RSSFeedViewModel(rss: RSS(), dataSource: DataSourceService.current.rssItem))
+        }.preferredColorScheme(.dark)
     }
 }

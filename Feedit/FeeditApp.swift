@@ -21,9 +21,12 @@ struct FeeditApp: App {
     
     var viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     
+    var articlesViewModel = ArticleItemViewModel()
+    
     var body: some Scene {
         WindowGroup {
             HomeView(container: DIContainer.defaultValue)
+                .environmentObject(viewModel)
                 .environmentObject(self.viewModel.store)
                 .environmentObject(DataSourceService.current.rss)
                 .environmentObject(DataSourceService.current.rssItem)

@@ -13,6 +13,8 @@ import BackgroundTasks
 
 //@UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
+    
+    static let defaultImage = "https://images.unsplash.com/photo-1579273166152-d725a4e2b755?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=905&q=80"
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         

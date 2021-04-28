@@ -40,27 +40,19 @@ struct RSSItemRow: View {
     
     @State private var hideRemove = false
     @State private var hideKeep = false
-    
-    //@ObservedObject private var imageLoader: ImageLoader
-            
+                
     init(rssItem: RSSItem, menu action: ((RSSItem) -> Void)? = nil, rssFeedViewModel: RSSFeedViewModel) {
         self.rssItem = rssItem
         contextMenuAction = action
         self.rssFeedViewModel = rssFeedViewModel
         
-        //self.imageLoader = ImageLoader(path: rssFeedViewModel.rss.image)
     }
     
-    private func articleImage(_ image: UIImage) -> some View {
-        Image(uiImage: image)
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .clipped()
-            .cornerRadius(3)
-            .frame(width: 22, height: 22)
-            //.frame(width: 60, height: 60)
-        }
+    //var articleImage = RSSFeedImage().url//?.isImage()
+    //var data = ArticleItem(from: RSSItem())
     
+    let options = URLImageOptions(identifier: "imageUrl")
+    @State private var sample: SampleURLs = .midRes50
     var body: some View {
         let toggleStarred = SwipeCellButton(buttonStyle: .view, title: "", systemImage: "", view: {
                 AnyView(
@@ -97,10 +89,12 @@ struct RSSItemRow: View {
         let star = SwipeCellSlot(slots: [toggleStarred], slotStyle: .destructive, buttonWidth: 60)
         let read = SwipeCellSlot(slots: [toggleRead], slotStyle: .destructive, buttonWidth: 60)
         
+        //let urls = URL(string: "")
+                
         ZStack {
-            VStack(spacing: 10) {
-                HStack(alignment: .top) {
-                    VStack(alignment: .trailing, spacing: 4) {
+            VStack {
+                HStack(alignment: .top, spacing: 4) {
+                    VStack(alignment: .center, spacing: 4) {
                         if !rssItem.isRead {
                             Text("")
                                 .frame(width: 10, height: 10).background(Color.blue).opacity(rssItem.isRead ? 0 : 1).clipShape(Circle())
@@ -109,26 +103,26 @@ struct RSSItemRow: View {
                                 .frame(width: 10, height: 10).background(Color.blue).opacity(0).clipShape(Circle())
                         }
                         
-//                        if self.imageLoader.image != nil {
-//                            articleImage(self.imageLoader.image!)
-//                        }
-                        
-//                        URLImage(url: ((URL(string: post?.image ?? "https://picsum.photos/60")!)), options: URLImageOptions(cachePolicy: .useProtocol)) { image in
-//                                image
-//                                    .resizable()
-//                                    .aspectRatio(contentMode: .fit)
-//                                    .clipped()
-//                                    .cornerRadius(3)
-//                                    .frame(width: 22, height: 22)
-//                        }
-                        
-//                        KFImage(URL(string: rssItem.url)!)
-//                            .resizable()
-//                            .aspectRatio(contentMode: .fit)
-//                            .clipped()
-//                            .cornerRadius(3)
-//                            .frame(width: 22, height: 22)
-                        
+//                        if let imageUrl = rssItem.image,
+//                           let url = URL(string: imageUrl)! {
+//                                URLImage(url: url,
+//                                         options: URLImageOptions(
+//                                            identifier: rssItem.image,
+//                                            cachePolicy: .returnCacheElseLoad(cacheDelay: nil, downloadDelay: nil)
+//                                         ),
+//                                         failure: { error, _ in
+//                                            Image("getInfo")
+//                                                .resizable()
+//                                                .aspectRatio(contentMode: .fit)
+//                                                .clipped()
+//                                            //ProgressView()
+//                                         },
+//                                         content: { image in
+//                                            image
+//                                                .resizable()
+//                                                .aspectRatio(contentMode: .fill)
+//                                    }).frame(width: 22, height: 22).cornerRadius(3)
+//                            }
                     }
                     
                     HStack{
@@ -156,20 +150,31 @@ struct RSSItemRow: View {
                                     .font(.system(size: 17, weight: .medium, design: .rounded)).foregroundColor(Color("text")).opacity(rssItem.isRead ? 0.6 : 1).lineLimit(3)
                             }
                             
-                            Text((rssItem.desc).trimHTMLTag.trimWhiteAndSpace)
+                            Text(rssItem.desc.tagsStripped.trimHTMLTag.decodedURLString?.trimWhiteAndSpace ?? "")
                                 .font(.system(size: 15, weight: .medium, design: .rounded)).foregroundColor(Color.gray).lineLimit(1)
                             
-                            Text(rssItem.author).font(.system(size: 11, weight: .medium, design: .rounded)).textCase(.uppercase).foregroundColor(.gray)
+                            Text(rssItem.url).font(.system(size: 11, weight: .medium, design: .rounded)).textCase(.uppercase).foregroundColor(.gray)
+                                .lineLimit(1)
+                        }
+                        URLImage(url: URL(string: rssItem.url) ?? URL(string: "https://picsum.photos/60")!,
+//                        URLImage(url: URL(string: rssItem.url ?? "https://picsum.photos/60")!,
+                                 options: options) { image in
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .clipped()
+                                .cornerRadius(3)
+                                .frame(width: 60, height: 60)
                         }
                         
-//                        KFImage(URL(string: rssItem.url)!)
-//                            .resizable()
-//                            .aspectRatio(contentMode: .fit)
-//                            .clipped()
-//                            .cornerRadius(3)
-//                            .frame(width: 22, height: 22)
-//                        if self.imageLoader.image != nil {
-//                            articleImage(self.imageLoader.image!)
+//                        URLImage(url: URL(string: rssItem.url) ?? URL(string: "https://picsum.photos/60")!,
+//                                 options: options) { image in
+//                            image
+//                                .resizable()
+//                                .aspectRatio(contentMode: .fit)
+//                                .clipped()
+//                                .cornerRadius(3)
+//                                .frame(width: 60, height: 60)
 //                        }
                     }
                 }
@@ -241,3 +246,39 @@ struct RSSFeedRow_Previews: PreviewProvider {
     }
 }
 #endif
+
+enum SampleURLs: Int, CaseIterable, Identifiable {
+
+    /// 50 images ~500px wide
+    case midRes50
+
+    /// 50 images ~1000px wide
+    case highRes50
+
+    /// 50 images ~2500px wide
+    case higherRes50
+
+    /// 1000 images starting from 500px wide
+    case largeSet
+
+    var id: Int {
+        rawValue
+    }
+
+    var urls: [URL] {
+        switch self {
+            case .midRes50:
+                return SampleURLs.picsum(range: 500..<550)
+            case .highRes50:
+                return SampleURLs.picsum(range: 1000..<1050)
+            case .higherRes50:
+                return SampleURLs.picsum(range: 2500..<2550)
+            case .largeSet:
+                return SampleURLs.picsum(range: 500..<500 + 1000)
+        }
+    }
+
+    static func picsum(range: Range<Int>) -> [URL] {
+        range.map { URL(string: "https://picsum.photos/\($0)")! }
+    }
+}

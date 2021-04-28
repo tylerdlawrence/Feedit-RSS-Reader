@@ -6,10 +6,14 @@
 //
 
 import SwiftUI
+import FeedKit
+import Parma
 import Foundation
 import Combine
 import CoreMotion
 import KingfisherSwiftUI
+import SDWebImageSwiftUI
+import libcmark
 
 struct RSSFeedDetailView: View {
     enum SettingItem: CaseIterable {
@@ -46,13 +50,12 @@ struct RSSFeedDetailView: View {
             
             ForEach([SettingItem.webView], id: \.self) { _ in
                 NavigationLink(destination: WebView(rssItem: rssItem, onCloseClosure: {})) {
-                    
-                    ReaderModeButton(isSet: self.$isSelected)
+                    ReaderModeButton(isSet: $isSelected)
                 }
             }
             
             NavigationLink(destination: WebView(rssItem: rssItem, onCloseClosure: {})) {
-                Image(systemName: "chevron.right.circle")
+                Image(systemName: "chevron.right")
                     .foregroundColor(Color("tab"))
                     .font(.system(size: 20, weight: .regular, design: .default))
             }
@@ -60,9 +63,12 @@ struct RSSFeedDetailView: View {
     }
     
     private var trailingButtons: some View {
-        HStack {
-//            DarkmModeSettingView(darkMode: $darkMode)
-            Button(action: actionSheet) {
+        HStack(spacing: 30) {
+            DarkmModeSettingView(darkMode: $darkMode)
+            Button(action: {
+                //shareSheet not working w/ UIApplication.shared
+                //Feedit.actionSheet()
+            }) {
                 Image(systemName: "square.and.arrow.up")
                     .imageScale(.medium)
                     .foregroundColor(Color("tab"))
@@ -71,6 +77,14 @@ struct RSSFeedDetailView: View {
         }
     }
     
+    @State var markdown: String = ""
+    var rss = RSS()
+    
+    init(withURL url:String, rssItem: RSSItem, rssFeedViewModel: RSSFeedViewModel) {
+        self.rssItem = rssItem
+        self.rssFeedViewModel = rssFeedViewModel
+    }
+        
     var body: some View {
         ZStack {
             ScrollView {
@@ -78,17 +92,18 @@ struct RSSFeedDetailView: View {
                     Divider().padding(0)
                     HStack {
                         VStack(alignment: .leading) {
-                            Text(rssSource.title)
-                                .font(.system(size: 17, weight: .medium, design: .rounded))
-                            Text(rssSource.desc)
+                            NavigationLink(destination: WebView(rssItem: rssItem, onCloseClosure: {})) {
+                                Text(rssSource.title)
+                                    .font(.system(size: 17, weight: .medium, design: .rounded))
+                            }
+                            Text(rssSource.desc.tagsStripped)
                                 .font(.system(size: 16, weight: .medium, design: .rounded)).foregroundColor(.gray)
                                 .lineLimit(2)
-                            Text(rssItem.author)
-                                .font(.system(size: 16, weight: .medium, design: .rounded)).foregroundColor(.gray)
+                            Text(rssItem.author?.description ?? "")
+                                .font(.system(size: 16, weight: .medium, design: .rounded)).foregroundColor(.gray).lineLimit(1)
                         }
-                        
                         Spacer()
-                        
+                                                
                         KFImage(URL(string: rssSource.image ?? ""))
                             .placeholder({
                                 Image("getInfo")
@@ -112,7 +127,7 @@ struct RSSFeedDetailView: View {
                     Text(verbatim: rssItem.title)
                         .font(.system(size: 26, weight: .medium, design: .rounded))
                         .padding(.top)
-                    
+
                     HStack {
                         Text("\(rssItem.createTime?.string() ?? "")")
                             .textCase(.uppercase)
@@ -121,14 +136,17 @@ struct RSSFeedDetailView: View {
                             .padding(.bottom)
                         Spacer()
                     }.padding(.top, 3)
-                    
-                    Text(rssItem.desc.trimHTMLTag.trimWhiteAndSpace)
-                        .font(.system(size: 17, weight: .medium, design: .rounded)).foregroundColor(.gray)
-                        .padding(.bottom)
+                                                           
+                    //Parma(rssItem.debugDescription)
+                    Parma(rssItem.desc.tagsStripped.trimHTMLTag.decodedURLString ?? "" , render: MyRenderer())
                     
                     NavigationLink(destination: WebView(rssItem: rssItem, onCloseClosure: {})) {
                         Text("View Full Article")
                             .font(.system(size: 16, weight: .medium, design: .rounded))
+                    }
+                    NavigationLink(destination: WebView(rssItem: rssItem, onCloseClosure: {})) {
+                        Text(rssItem.url)
+                            .font(.system(size: 16, weight: .medium, design: .rounded)).padding(.top)
                     }
                 }
                 .toolbar {
@@ -145,7 +163,7 @@ struct RSSFeedDetailView: View {
     func actionSheet() {
         guard let urlShare = URL(string: rssItem.url) else { return }
            let activityVC = UIActivityViewController(activityItems: [urlShare], applicationActivities: nil)
-           UIApplication.shared.windows.first?.rootViewController?.present(activityVC, animated: true, completion: nil)
+        UIApplication.init().windows.first?.rootViewController?.present(activityVC, animated: true, completion: nil)
        }
 }
 
@@ -155,79 +173,111 @@ struct RSSFeedDetailView_Previews: PreviewProvider {
     static var rssFeedViewModel = RSSFeedViewModel(rss: rss, dataSource: DataSourceService.current.rssItem)
 
     static var previews: some View {
-        return RSSFeedDetailView(rssItem: RSSItem(), rssFeedViewModel: self.rssFeedViewModel)//.environment(\.managedObjectContext, Persistence.current.context).environmentObject(DataSourceService.current.rss)
-            .environment(\.colorScheme, .dark)
+        NavigationView {
+            /*
+            RSSFeedDetailView(withURL: "", rssItem: RSSItem.create(uuid: UUID(), title: "title", desc: "description", author: "author", url: "https://",image: "all", in: Persistence.current.context), rssFeedViewModel: self.rssFeedViewModel)
+
+            .environment(\.managedObjectContext, Persistence.current.context).environmentObject(DataSourceService.current.rss).environmentObject(DataSourceService.current.rssItem)
+             */
+            ParmaDetailView()
+        }.environment(\.colorScheme, .dark)
     }
 }
 #endif
 
-struct MarkAsStarredButton: View {
-    @Binding var isSet: Bool
-
-    var body: some View {
-        Button(action: {
-            isSet.toggle()
-        }) {
-            Image(systemName: isSet ? "star.fill" : "star")
-                .imageScale(.medium)
-                .foregroundColor(Color("tab"))
-                .font(.system(size: 20, weight: .regular, design: .default))
+struct MyRenderer: ParmaRenderable {
+    
+    func link(textView: Text, destination: String?) -> Text {
+        textView.bold()
+            .foregroundColor(Color("tab"))
+    }
+    
+    func imageView(with urlString: String, altTextView: AnyView?) -> AnyView {
+        AnyView(ArticleImageView(imageSrc: urlString))
+    }
+    
+    func code(_ text: String) -> Text {
+        return plainText(text).baselineOffset(10.0)
+    }
+    
+    func heading(level: HeadingLevel?, textView: Text) -> Text {
+        switch level {
+        case .one:
+            return textView.font(.system(.largeTitle, design: .serif)).bold()
+        case .two:
+            return textView.font(.system(.title, design: .serif)).bold()
+        case .three:
+            return textView.font(.system(.title2)).bold()
+        default:
+            return textView.font(.system(.title3)).bold()
         }
     }
-}
-
-struct MarkAsStarredButton_Previews: PreviewProvider {
-    static var previews: some View {
-        MarkAsStarredButton(isSet: .constant(true))
-            .padding()
-            .previewLayout(.sizeThatFits)
+    
+    func headingBlock(level: HeadingLevel?, view: AnyView) -> AnyView {
+        switch level {
+        case .one, .two:
+            return AnyView(
+                VStack(alignment: .leading, spacing: 2) {
+                    view
+                        .padding(.top, 4)
+                    Rectangle()
+                        .foregroundColor(.pink)
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: 1, alignment: .center)
+                        .padding(.bottom, 8)
+                }
+            )
+        default:
+            return AnyView(view.padding(.bottom, 4))
+        }
     }
-}
-
-struct ReaderModeButton: View {
-    @Binding var isSet: Bool
-//    @Binding var isSelected: Bool
-    var body: some View {
-        Button(action: {
-            isSet.toggle()
-//            self.isSelected.toggle()
-        }) {
+    
+    public func paragraphBlock(view: AnyView) -> AnyView {
+        struct ExpandableView: View {
+            @State var lineLimit: Int? = nil
+            let view: AnyView
             
-            Image(systemName: isSet ? "doc.plaintext.fill" : "doc.plaintext")
-                .imageScale(.medium)
-                .foregroundColor(Color("tab"))
-                .font(.system(size: 20, weight: .regular, design: .default))
+            var body: some View {
+                view
+                    .font(.system(size: 17, weight: .regular, design: .rounded)).foregroundColor(Color("text")).lineLimit(lineLimit).padding(.horizontal).padding(.bottom)
+                    .onTapGesture {
+                        if lineLimit == nil {
+                            lineLimit = 1
+                        } else {
+                            lineLimit = nil
+                    }
+                }
+            }
         }
+        return AnyView(ExpandableView(view: view))
+    }
+    
+    func listItem(view: AnyView) -> AnyView {
+        let bullet = "•"
+        return AnyView(
+            HStack(alignment: .top, spacing: 8) {
+                Text(bullet)
+                view.fixedSize(horizontal: false, vertical: true)
+            }
+            .padding(.leading, 4)
+        )
     }
 }
 
-struct ReaderModeButton_Previews: PreviewProvider {
-    static var previews: some View {
-        ReaderModeButton(isSet: .constant(true))
-            .padding()
-            .previewLayout(.sizeThatFits)
-    }
-}
-
-struct MarkAsReadButton: View {
-    @Binding var isSet: Bool
-
+struct ArticleImageView: View {
+    
+    var imageSrc: String
     var body: some View {
-        Button(action: {
-            isSet.toggle()
-        }) {
-            Image(systemName: isSet ? "circle.fill" : "circle")
-                .imageScale(.medium)
-                .foregroundColor(Color("tab"))
-                .font(.system(size: 20, weight: .regular, design: .default))
-        }
-    }
-}
-
-struct MarkAsReadButton_Previews: PreviewProvider {
-    static var previews: some View {
-        MarkAsReadButton(isSet: .constant(true))
-            .padding()
-            .previewLayout(.sizeThatFits)
+        
+        WebImage(url: URL(string: imageSrc)!)
+            .placeholder {
+                ProgressView().progressViewStyle(LinearProgressViewStyle())
+            }
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(maxWidth: .infinity)
+            .onTapGesture {
+                //detailImageModel.imageStr = imageSrc
+                //detailImageModel.show = true
+            }
     }
 }

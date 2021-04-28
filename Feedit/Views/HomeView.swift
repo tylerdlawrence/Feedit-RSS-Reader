@@ -47,7 +47,7 @@ struct HomeView: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @EnvironmentObject private var persistence: Persistence
     @Environment(\.managedObjectContext) private var context
-    @ObservedObject var searchBar: SearchBar = SearchBar()
+    //@ObservedObject var searchBar: SearchBar = SearchBar()
     
     @Environment(\.injected) private var injected: DIContainer
     @State private var isActive: Bool = false
@@ -212,6 +212,8 @@ struct HomeView: View {
             Image(systemName: "ellipsis.circle").font(.system(size: 20, weight: .medium, design: .rounded))
         }
     }
+    
+    
     
     var body: some View {
         NavigationView {

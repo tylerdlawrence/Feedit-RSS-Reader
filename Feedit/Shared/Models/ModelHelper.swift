@@ -26,11 +26,11 @@ extension RSSFeedItem: RSSItemConvertable {
     func asRSSItem(container uuid: UUID, in context: NSManagedObjectContext) -> RSSItem {
         return RSSItem.create(uuid: uuid,
                               title: title ?? "",
-                              desc: description?.trimWhiteAndSpace.trimHTMLTag ?? "",
+                              desc: (description?.trimWhiteAndSpace.trimHTMLTag ?? content?.contentEncoded) ?? "",
                               author: author?.first?.description ?? "",
-                              url: link ?? "",
+                              url: (link ?? link?.urlParts.host) ?? "",
                               createTime: pubDate ?? Date(),
-                              image: media?.mediaThumbnails?.first?.value ?? "",
+                              image: (source?.attributes?.url ?? source?.value?.decodedURLString ?? media?.mediaThumbnails?.first?.value) ?? "",
                               in: context)
     }
 }
@@ -43,7 +43,7 @@ extension AtomFeedEntry: RSSItemConvertable {
                               author: authors?.first?.name ?? "",
                               url: links?.first?.attributes?.href ?? "",
                               createTime: (published ?? updated) ?? Date(),
-                              image: media?.mediaThumbnails?.first?.value ?? "",
+                              image: (media?.mediaThumbnails?.first?.value ?? source?.title?.tagsStripped) ?? "",
                               in: context)
     }
 }
@@ -52,11 +52,12 @@ extension JSONFeedItem: RSSItemConvertable {
     func asRSSItem(container uuid: UUID, in context: NSManagedObjectContext) -> RSSItem {
         return RSSItem.create(uuid: uuid,
                               title: title ?? "",
-                              desc: contentHtml?.trimWhiteAndSpace ?? "",
+                              desc: (contentHtml ?? summary?.trimHTMLTag ?? contentText?.escapedHTML.tagsStripped ?? contentHtml ?? contentHtml?.escapedHTML.tagsStripped) ?? "",
                               author: author?.name ?? "",
-                              url: url ?? "",
+                              url: (url?.decodedURLString ?? id?.decodedURLString) ?? "",
                               createTime: datePublished ?? Date(),
-                              image: image ?? bannerImage ?? "",
+                              image: image?.isImage().string ?? "",
+//                              image: (image ?? contentHtml ?? contentText ?? image?.decodedURLString?.tagsStripped.trimHTMLTag) ?? "",
                               in: context)
     }
 }

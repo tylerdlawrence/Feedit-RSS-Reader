@@ -28,53 +28,48 @@ extension RSSItem {
     @nonobjc public class func fetchRequest() -> NSFetchRequest<RSSItem> {
         return NSFetchRequest<RSSItem>(entityName: "RSSItem")
     }
+    
+    @NSManaged public var title: String
+    @NSManaged public var url: String
+    @NSManaged public var author: String?
+    @NSManaged public var imageUrl: String?
+    @NSManaged public var uuid: UUID
+    @NSManaged public var articleID: UUID?
+    
+    func set(from article: RSSItem){
+        author = article.author
+        uuid = article.uuid
+        imageUrl = article.imageUrl
+        desc = article.desc
+        title = article.title
+        url = article.url
+    }
 
     @NSManaged public var updateTime: Date?
     @NSManaged public var createTime: Date?
     @NSManaged public var desc: String
     @NSManaged public var progress: Double
     @NSManaged public var rssUUID: UUID?
-    @NSManaged public var title: String
-    @NSManaged public var url: String
-    @NSManaged public var uuid: UUID?
-    @NSManaged public var author: String
     @NSManaged public var isArchive: Bool
     @NSManaged public var isRead: Bool
-    @NSManaged public var image: String?
-    @NSManaged public var thumbnailURL: URL?
-    @NSManaged public var unread: Bool
-    @NSManaged public var itemCount: Int64
-    
-    @NSManaged public var imageUrl: String?
-    
-    @NSManaged public var unreadArticles: [RSSItem]
-    @NSManaged public var starredArticles: [RSSItem]
-    @NSManaged public var todayArticles: [RSSItem]
-//    let unreadArticles: [LatestArticle]
-//    let starredArticles: [LatestArticle]
-//    let todayArticles: [LatestArticle]
-        
+    @NSManaged public var image: String? //rss
     @NSManaged public var readDate: Date?
-    
-    @NSManaged public var avatar: String?
-    @NSManaged public var next_url: String?
-    @NSManaged public var icon: String?
-    @NSManaged public var favicon: String?
-    @NSManaged public var home_page_url: String?
-    
-    @NSManaged public var external_url: String?
-    @NSManaged public var content_text: String?
-    @NSManaged public var content_html: String?
-    @NSManaged public var summary: String?
-    @NSManaged public var banner_image: String?
-    @NSManaged public var date_published: Date?
-    @NSManaged public var date_modified: Date?
-    @NSManaged public var tags: String?
-    @NSManaged public var attachments: String?
         
     public override func awakeFromInsert() {
         super.awakeFromInsert()
         uuid = UUID()
+    }
+    
+    static func create(uuid: UUID, title: String, desc: String, author: String, url: String, createTime: Date = Date(), image: String) -> RSSItem {
+        let article = RSSItem(context: Persistence.current.context)
+        article.title = title
+        article.desc = desc
+        article.author = author
+        article.url = url
+        article.createTime = createTime
+        article.imageUrl = image
+        
+        return article
     }
     
     static func create(uuid: UUID, title: String, desc: String = "", author: String, url: String, createTime: Date = Date(), image: String = "", progress: Double = 0, in context: NSManagedObjectContext) -> RSSItem {

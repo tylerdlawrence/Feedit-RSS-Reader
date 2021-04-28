@@ -20,7 +20,9 @@ struct RSSListView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @StateObject var viewModel = RSSListViewModel(dataSource: DataSourceService.current.rss)
     @State private var revealFeedsDisclosureGroup = false
-
+    @State private var isShowingDeleteConfirmation: Bool = false
+    @State private var deletionOffsets: IndexSet = []
+    
     @ObservedObject var feed = RSSStore.instance
     @Environment(\.injected) private var injected: DIContainer
     
@@ -28,6 +30,11 @@ struct RSSListView: View {
         guard let url = url else { return nil }
         return viewModel.items.first(where: { $0.url == url })
     }
+    
+//    @FetchRequest(
+//            sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
+//            animation: .default)
+//        private var items: FetchedResults<Item>
     
     var body: some View {
         DisclosureGroup(
@@ -49,27 +56,33 @@ struct RSSListView: View {
                             
                         }.id(index)
                     }
-                }.onDelete(perform: delete)
-//                .onDelete { index in
-//                    guard let index = index.first else { return }
-//                    self.viewModel.removeFeed(index: index)
-//            }
-            .listRowBackground(Color("accent"))
-            .environmentObject(DataSourceService.current.rss)
-            .environmentObject(DataSourceService.current.rssItem)
-            .environment(\.managedObjectContext, Persistence.current.context)
-            }, label: {
-                HStack {
-                    Text("Feeds")
-                        .font(.system(size: 18, weight: .regular, design: .rounded)).textCase(nil)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            withAnimation {
-                                self.revealFeedsDisclosureGroup.toggle()
+                }.onDelete { offsets in
+                    self.delete(offsets: offsets)
+                    self.isShowingDeleteConfirmation = true
+                }//.onDelete(perform: delete)
+                .listRowBackground(Color("accent"))
+                .environmentObject(DataSourceService.current.rss)
+                .environmentObject(DataSourceService.current.rssItem)
+                .environment(\.managedObjectContext, Persistence.current.context)
+                .actionSheet(isPresented: $isShowingDeleteConfirmation) {
+                            ActionSheet(title: Text("Unsubscribe?"), message: Text("The action is not reversible"), buttons: [
+                                .destructive(Text("Unsubscribe"), action: { self.viewModel.items.remove(atOffsets: self.deletionOffsets) }),
+                                .cancel()
+                            ])
+                        }
+                
+                }, label: {
+                    HStack {
+                        Text("Feeds")
+                            .font(.system(size: 18, weight: .regular, design: .rounded)).textCase(nil)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                withAnimation {
+                                    self.revealFeedsDisclosureGroup.toggle()
+                                }
                             }
                         }
-                    }
                 }).listRowBackground(Color("darkerAccent"))
                 .accentColor(Color("tab"))
                 .onAppear(perform: {
@@ -126,16 +139,4 @@ struct RSSListView_Previews: PreviewProvider {
             }
         }.preferredColorScheme(.dark)
     }
-}
-
-struct NavigationLazyView<Content: View>: View {
-   let build: () -> Content
-
-   init(_ build: @autoclosure @escaping () -> Content) {
-       self.build = build
-   }
-
-   var body: Content {
-       build()
-   }
 }

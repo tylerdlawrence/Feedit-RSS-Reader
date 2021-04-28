@@ -22,6 +22,31 @@
 		6117365724E83C7B00A2DEA5 /* DataNStorageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6117365624E83C7B00A2DEA5 /* DataNStorageViewModel.swift */; };
 		6117365924E83C9F00A2DEA5 /* BatchImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6117365824E83C9F00A2DEA5 /* BatchImportView.swift */; };
 		6117365B24E83CC500A2DEA5 /* BatchImportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6117365A24E83CC500A2DEA5 /* BatchImportViewModel.swift */; };
+		611BE9D8263715160043ACCA /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 611BE9D7263715160043ACCA /* SwiftyJSON */; };
+		611BE9DB263715550043ACCA /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 611BE9DA263715550043ACCA /* Alamofire */; };
+		611BE9DC263717AA0043ACCA /* Searchbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6162F25725B68BA1008E7FA7 /* Searchbar.swift */; };
+		611BE9DE263718540043ACCA /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 611BE9DD263718540043ACCA /* SwiftyJSON */; };
+		611BE9E02637185E0043ACCA /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 611BE9DF2637185E0043ACCA /* Alamofire */; };
+		611BE9EA26372C930043ACCA /* Parma in Frameworks */ = {isa = PBXBuildFile; productRef = 611BE9E926372C930043ACCA /* Parma */; };
+		611BE9EE263749310043ACCA /* RSSFeedDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61BED57325FC6618008F6EA3 /* RSSFeedDetailView.swift */; };
+		611BE9F426374FE70043ACCA /* Parma in Frameworks */ = {isa = PBXBuildFile; productRef = 611BE9F326374FE70043ACCA /* Parma */; };
+		611BEA1E26375A850043ACCA /* MarkdownModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BEA1D26375A850043ACCA /* MarkdownModel.swift */; };
+		611BEA1F26375A850043ACCA /* MarkdownModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BEA1D26375A850043ACCA /* MarkdownModel.swift */; };
+		611BEA2126375B0F0043ACCA /* ContinuousIntegration.md in Resources */ = {isa = PBXBuildFile; fileRef = 611BEA2026375B0F0043ACCA /* ContinuousIntegration.md */; };
+		611BEA2226375B0F0043ACCA /* ContinuousIntegration.md in Resources */ = {isa = PBXBuildFile; fileRef = 611BEA2026375B0F0043ACCA /* ContinuousIntegration.md */; };
+		611BEA232637645B0043ACCA /* ViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6103807525490A1300222019 /* ViewExtensions.swift */; };
+		611BEA2526376F2B0043ACCA /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F17802612277D00D11687 /* StringExtension.swift */; };
+		611BEA2626376F4B0043ACCA /* Regex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F177B2612277600D11687 /* Regex.swift */; };
+		611BEA29263858160043ACCA /* FeedTopicHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BEA28263858150043ACCA /* FeedTopicHandler.swift */; };
+		611BEA2A263858160043ACCA /* FeedTopicHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BEA28263858150043ACCA /* FeedTopicHandler.swift */; };
+		611BEA2C263858610043ACCA /* AppleTopicsTC.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 611BEA2B263858610043ACCA /* AppleTopicsTC.mlmodel */; };
+		611BEA2F2638588C0043ACCA /* AppleTopics.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 611BEA2E2638588C0043ACCA /* AppleTopics.mlmodel */; };
+		611BEA31263859430043ACCA /* AppleTopicsTC.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 611BEA2B263858610043ACCA /* AppleTopicsTC.mlmodel */; };
+		611BEA32263859460043ACCA /* AppleTopics.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 611BEA2E2638588C0043ACCA /* AppleTopics.mlmodel */; };
+		611BEA36263902510043ACCA /* HTMLScraper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BEA35263902500043ACCA /* HTMLScraper.swift */; };
+		611BEA37263902520043ACCA /* HTMLScraper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BEA35263902500043ACCA /* HTMLScraper.swift */; };
+		611BEA39263911D70043ACCA /* ArticleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BEA38263911D70043ACCA /* ArticleModel.swift */; };
+		611BEA3A263911D70043ACCA /* ArticleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BEA38263911D70043ACCA /* ArticleModel.swift */; };
 		611F17832612278300D11687 /* Regex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F177B2612277600D11687 /* Regex.swift */; };
 		611F17842612278300D11687 /* ResponseExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F177C2612277700D11687 /* ResponseExtension.swift */; };
 		611F17852612278300D11687 /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F177D2612277800D11687 /* Response.swift */; };
@@ -107,7 +132,6 @@
 		6191E41526235E8100527270 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61967EF024E2061100AA647C /* WebView.swift */; };
 		6191E41626235E9700527270 /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61967EE524E205DD00AA647C /* ProgressBar.swift */; };
 		6191E41726235EEF00527270 /* FilterBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6162F2A525B71AF3008E7FA7 /* FilterBar.swift */; };
-		6191E41826235F2F00527270 /* Searchbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6162F25725B68BA1008E7FA7 /* Searchbar.swift */; };
 		6191E41926235F5600527270 /* WKWebViewWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CDCF5E24E8466C007654C5 /* WKWebViewWrapper.swift */; };
 		6191E41A26235F7100527270 /* SafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61967EE724E205DD00AA647C /* SafariView.swift */; };
 		6191E41B26235F7E00527270 /* CheckboxToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DE7AC225CD1E18008F8DDE /* CheckboxToggle.swift */; };
@@ -289,6 +313,13 @@
 		6117365624E83C7B00A2DEA5 /* DataNStorageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataNStorageViewModel.swift; sourceTree = "<group>"; };
 		6117365824E83C9F00A2DEA5 /* BatchImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchImportView.swift; sourceTree = "<group>"; };
 		6117365A24E83CC500A2DEA5 /* BatchImportViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchImportViewModel.swift; sourceTree = "<group>"; };
+		611BEA1D26375A850043ACCA /* MarkdownModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownModel.swift; sourceTree = "<group>"; };
+		611BEA2026375B0F0043ACCA /* ContinuousIntegration.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = ContinuousIntegration.md; sourceTree = "<group>"; };
+		611BEA28263858150043ACCA /* FeedTopicHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedTopicHandler.swift; sourceTree = "<group>"; };
+		611BEA2B263858610043ACCA /* AppleTopicsTC.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = AppleTopicsTC.mlmodel; sourceTree = "<group>"; };
+		611BEA2E2638588C0043ACCA /* AppleTopics.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = AppleTopics.mlmodel; sourceTree = "<group>"; };
+		611BEA35263902500043ACCA /* HTMLScraper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTMLScraper.swift; sourceTree = "<group>"; };
+		611BEA38263911D70043ACCA /* ArticleModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ArticleModel.swift; path = Feedit/ArticleModel.swift; sourceTree = SOURCE_ROOT; };
 		611F177B2612277600D11687 /* Regex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Regex.swift; sourceTree = "<group>"; };
 		611F177C2612277700D11687 /* ResponseExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResponseExtension.swift; sourceTree = "<group>"; };
 		611F177D2612277800D11687 /* Response.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
@@ -439,10 +470,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				611BE9D8263715160043ACCA /* SwiftyJSON in Frameworks */,
+				611BE9DB263715550043ACCA /* Alamofire in Frameworks */,
 				618610DC256EF8420083A96D /* Reachability in Frameworks */,
 				6162F28025B69071008E7FA7 /* FaviconFinder in Frameworks */,
 				616121EC2553678B0074F061 /* AFNetworking in Frameworks */,
 				616121E42553670B0074F061 /* FeedKit in Frameworks */,
+				611BE9EA26372C930043ACCA /* Parma in Frameworks */,
 				618610B3256ED5BE0083A96D /* KingfisherSwiftUI in Frameworks */,
 				616121F0255367B60074F061 /* SDWebImageSwiftUI in Frameworks */,
 				6171B8C526291F55000486FB /* RSWeb in Frameworks */,
@@ -458,10 +492,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				611BE9DE263718540043ACCA /* SwiftyJSON in Frameworks */,
 				610A85A92633F07200B72244 /* SDWebImageSwiftUI in Frameworks */,
 				61E99389260ACFA000679853 /* FeedKit in Frameworks */,
 				6191E4212623619900527270 /* SwipeCell in Frameworks */,
 				61E99356260AC0DE00679853 /* SwiftUI.framework in Frameworks */,
+				611BE9F426374FE70043ACCA /* Parma in Frameworks */,
+				611BE9E02637185E0043ACCA /* Alamofire in Frameworks */,
 				61E99355260AC0DE00679853 /* WidgetKit.framework in Frameworks */,
 				6191E4232623620700527270 /* KingfisherSwiftUI in Frameworks */,
 				610A85B52634DB3700B72244 /* URLImage in Frameworks */,
@@ -531,6 +568,7 @@
 		611F17B32613FB4500D11687 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				611BEA38263911D70043ACCA /* ArticleModel.swift */,
 				618F9028250DCD4F00D5A03E /* RSS+CoreDataProperties.swift */,
 				618F9027250DCD4F00D5A03E /* RSS+CoreDataClass.swift */,
 				618F9029250DCD4F00D5A03E /* RSSItem+CoreDataClass.swift */,
@@ -650,6 +688,8 @@
 			isa = PBXGroup;
 			children = (
 				61C8189424E1F3FB00593939 /* Feedit */,
+				611BEA2B263858610043ACCA /* AppleTopicsTC.mlmodel */,
+				611BEA2E2638588C0043ACCA /* AppleTopics.mlmodel */,
 				6182212B25053FEE005636B2 /* rssTests */,
 				61E99357260AC0DE00679853 /* FeedsWidget */,
 				61C8189324E1F3FB00593939 /* Products */,
@@ -722,6 +762,7 @@
 				616CAF5F24F7131000690804 /* OPMLParser.swift */,
 				61967EC824E204FB00AA647C /* AppEnvironment.swift */,
 				61967ECA24E204FB00AA647C /* ImageServices.swift */,
+				611BEA35263902500043ACCA /* HTMLScraper.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -822,6 +863,9 @@
 				61967EE724E205DD00AA647C /* SafariView.swift */,
 				61BED57325FC6618008F6EA3 /* RSSFeedDetailView.swift */,
 				6168A2F72610355A002F70EC /* ScrollViewExt.swift */,
+				611BEA1D26375A850043ACCA /* MarkdownModel.swift */,
+				611BEA2026375B0F0043ACCA /* ContinuousIntegration.md */,
+				611BEA28263858150043ACCA /* FeedTopicHandler.swift */,
 			);
 			path = RSSFeed;
 			sourceTree = "<group>";
@@ -929,6 +973,9 @@
 				6162F27F25B69071008E7FA7 /* FaviconFinder */,
 				6171B8C426291F55000486FB /* RSWeb */,
 				610A85B22634D44F00B72244 /* URLImage */,
+				611BE9D7263715160043ACCA /* SwiftyJSON */,
+				611BE9DA263715550043ACCA /* Alamofire */,
+				611BE9E926372C930043ACCA /* Parma */,
 			);
 			productName = Feedit;
 			productReference = 61C8189224E1F3FB00593939 /* Feedit.app */;
@@ -954,6 +1001,9 @@
 				610A85A82633F07200B72244 /* SDWebImageSwiftUI */,
 				610A85AA2634783500B72244 /* FaviconFinder */,
 				610A85B42634DB3700B72244 /* URLImage */,
+				611BE9DD263718540043ACCA /* SwiftyJSON */,
+				611BE9DF2637185E0043ACCA /* Alamofire */,
+				611BE9F326374FE70043ACCA /* Parma */,
 			);
 			productName = FeedsWidgetExtension;
 			productReference = 61E99354260AC0DE00679853 /* FeedsWidgetExtension.appex */;
@@ -1000,6 +1050,9 @@
 				6162F27E25B69071008E7FA7 /* XCRemoteSwiftPackageReference "FaviconFinder" */,
 				6171B8C326291F55000486FB /* XCRemoteSwiftPackageReference "RSWeb" */,
 				610A85B12634D44E00B72244 /* XCRemoteSwiftPackageReference "url-image" */,
+				611BE9D6263715160043ACCA /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
+				611BE9D9263715550043ACCA /* XCRemoteSwiftPackageReference "Alamofire" */,
+				611BE9E826372C930043ACCA /* XCRemoteSwiftPackageReference "Parma" */,
 			);
 			productRefGroup = 61C8189324E1F3FB00593939 /* Products */;
 			projectDirPath = "";
@@ -1029,6 +1082,7 @@
 			files = (
 				61C818A524E1F3FD00593939 /* LaunchScreen.storyboard in Resources */,
 				614136E1262CD92400C0B197 /* bot@2x.png in Resources */,
+				611BEA2126375B0F0043ACCA /* ContinuousIntegration.md in Resources */,
 				61C8189F24E1F3FD00593939 /* Assets.xcassets in Resources */,
 				61342893260795E100B9C20C /* feedit@3x.png in Resources */,
 				61E99391260AEF8900679853 /* widget-sample.json in Resources */,
@@ -1047,6 +1101,7 @@
 				6191E4252623823500527270 /* Assets.xcassets in Resources */,
 				61E99393260AEF9400679853 /* Localizable.stringsdict in Resources */,
 				614136E2262CD92500C0B197 /* bot@2x.png in Resources */,
+				611BEA2226375B0F0043ACCA /* ContinuousIntegration.md in Resources */,
 				614136E4262CD92500C0B197 /* bot@3x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1078,8 +1133,10 @@
 				61BED57E25FE54E9008F6EA3 /* SelectGroupView.swift in Sources */,
 				61967EF424E2061100AA647C /* WebView.swift in Sources */,
 				61CDCF5924E845DE007654C5 /* DocumentPicker.swift in Sources */,
+				611BEA39263911D70043ACCA /* ArticleModel.swift in Sources */,
 				61B95EC725D0B68200829741 /* Color.swift in Sources */,
 				61C818EB24E1FAB000593939 /* DataSource.swift in Sources */,
+				611BEA2C263858610043ACCA /* AppleTopicsTC.mlmodel in Sources */,
 				61967EEC24E205DD00AA647C /* SafariView.swift in Sources */,
 				61E99390260AEF8900679853 /* Localized.swift in Sources */,
 				611F17882612278300D11687 /* StringExtension.swift in Sources */,
@@ -1092,7 +1149,9 @@
 				614136D6262A99D700C0B197 /* RSSParser.swift in Sources */,
 				61967EFB24E2063D00AA647C /* SettingView.swift in Sources */,
 				617B49D8260054090016FC3D /* FeeditApp.swift in Sources */,
+				611BEA36263902510043ACCA /* HTMLScraper.swift in Sources */,
 				61E993A5260AF66700679853 /* StarredWidgetView.swift in Sources */,
+				611BEA2F2638588C0043ACCA /* AppleTopics.mlmodel in Sources */,
 				61C818DF24E1F7F300593939 /* ArchiveListView.swift in Sources */,
 				61E9939F260AF47B00679853 /* SmartFeedsView.swift in Sources */,
 				61C818DB24E1F77C00593939 /* RSSListViewModel.swift in Sources */,
@@ -1111,6 +1170,7 @@
 				61967ECB24E204FB00AA647C /* AppEnvironment.swift in Sources */,
 				61CDCF5B24E8461D007654C5 /* RoundRectangleButton.swift in Sources */,
 				61B95ED425D1069600829741 /* RSS.xcdatamodeld in Sources */,
+				611BEA1E26375A850043ACCA /* MarkdownModel.swift in Sources */,
 				61B95ECD25D0BA4C00829741 /* Shake.swift in Sources */,
 				61B95D8C25CEFB5B00829741 /* RSSObservable.swift in Sources */,
 				611F17902612299C00D11687 /* SmartFeedsHomeView.swift in Sources */,
@@ -1158,6 +1218,7 @@
 				611F178C2612279A00D11687 /* NSURLSessionExtension.swift in Sources */,
 				6103807625490A1300222019 /* ViewExtensions.swift in Sources */,
 				616CAF9224F974AF00690804 /* SettingViewModel.swift in Sources */,
+				611BEA29263858160043ACCA /* FeedTopicHandler.swift in Sources */,
 				61967EED24E205DD00AA647C /* SectionView.swift in Sources */,
 				61967F0124E2068400AA647C /* AddRSSViewModel.swift in Sources */,
 				61E9939C260AF1E500679853 /* ArticleItemView.swift in Sources */,
@@ -1203,10 +1264,11 @@
 				61E9936D260AC1F200679853 /* RSSDataSource.swift in Sources */,
 				6171B8A2262750A5000486FB /* TestWidget.swift in Sources */,
 				6171B8972626329C000486FB /* CoreDataManager.swift in Sources */,
-				6191E41826235F2F00527270 /* Searchbar.swift in Sources */,
 				61E99368260AC1F200679853 /* RSS+CoreDataClass.swift in Sources */,
+				611BEA1F26375A850043ACCA /* MarkdownModel.swift in Sources */,
 				61E99369260AC1F200679853 /* RSSItem+CoreDataProperties.swift in Sources */,
 				61E99363260AC1F200679853 /* ManagedObjectContext.swift in Sources */,
+				611BE9EE263749310043ACCA /* RSSFeedDetailView.swift in Sources */,
 				61E99366260AC1F200679853 /* RSSItemDataSource.swift in Sources */,
 				61E99383260AC9F900679853 /* RSSError.swift in Sources */,
 				61E99397260AF04400679853 /* TimelineProvider.swift in Sources */,
@@ -1216,6 +1278,7 @@
 				6191E41B26235F7E00527270 /* CheckboxToggle.swift in Sources */,
 				61E99370260AC1F200679853 /* RSSItemStore.swift in Sources */,
 				61E99394260AEF9400679853 /* Localized.swift in Sources */,
+				611BEA32263859460043ACCA /* AppleTopics.mlmodel in Sources */,
 				61E993A3260AF4D300679853 /* DeepLinks.swift in Sources */,
 				614136D7262A99D700C0B197 /* RSSParser.swift in Sources */,
 				61E9936B260AC1F200679853 /* RSSItem+CoreDataClass.swift in Sources */,
@@ -1225,6 +1288,7 @@
 				61E99382260AC9E900679853 /* DateSpec.swift in Sources */,
 				6191E41E26235FC000527270 /* AppEnvironment.swift in Sources */,
 				61E9936A260AC1F200679853 /* RSSFeedViewModel.swift in Sources */,
+				611BEA31263859430043ACCA /* AppleTopicsTC.mlmodel in Sources */,
 				61E9936F260AC1F200679853 /* RSSStore.swift in Sources */,
 				61E99359260AC0DE00679853 /* RandomNewsWidget.swift in Sources */,
 				61E993AF260AF7F400679853 /* WidgetBundle.swift in Sources */,
@@ -1234,13 +1298,17 @@
 				6191E41526235E8100527270 /* WebView.swift in Sources */,
 				61E99381260AC9E900679853 /* RFC822DateFormatter.swift in Sources */,
 				6191E41A26235F7100527270 /* SafariView.swift in Sources */,
+				611BEA37263902520043ACCA /* HTMLScraper.swift in Sources */,
+				611BEA2526376F2B0043ACCA /* StringExtension.swift in Sources */,
 				6191E41326235E2E00527270 /* ArchiveListView.swift in Sources */,
 				6191E41F2623609C00527270 /* ActionContextMenu.swift in Sources */,
 				6191E424262363F100527270 /* UnreadCountView.swift in Sources */,
 				61E9937D260AC9AC00679853 /* String+Ext.swift in Sources */,
 				61E99372260AC1F200679853 /* RSS+CoreDataProperties.swift in Sources */,
 				61E99367260AC1F200679853 /* DataSourceService.swift in Sources */,
+				611BEA3A263911D70043ACCA /* ArticleModel.swift in Sources */,
 				6191E41426235E2E00527270 /* AllArticlesView.swift in Sources */,
+				611BE9DC263717AA0043ACCA /* Searchbar.swift in Sources */,
 				61381EB026329D2600293296 /* WidgetDataDecoder.swift in Sources */,
 				6191E41026235E2E00527270 /* UnreadListView.swift in Sources */,
 				61E99384260ACA4600679853 /* RSSActions.swift in Sources */,
@@ -1252,13 +1320,16 @@
 				61E9939A260AF11D00679853 /* SizeCategories.swift in Sources */,
 				61E9938A260AEB8300679853 /* UserDefaultWrapper.swift in Sources */,
 				61E99378260AC1FA00679853 /* RSS.xcdatamodeld in Sources */,
+				611BEA2A263858160043ACCA /* FeedTopicHandler.swift in Sources */,
 				61E9936C260AC1F200679853 /* ArchiveListViewModel.swift in Sources */,
 				6171B89B26265145000486FB /* PersistenceController.swift in Sources */,
+				611BEA232637645B0043ACCA /* ViewExtensions.swift in Sources */,
 				61E993A9260AF6AE00679853 /* AllArticlesWidgetView.swift in Sources */,
 				61E9939D260AF1E600679853 /* ArticleItemView.swift in Sources */,
 				6191E41226235E2E00527270 /* Unread.swift in Sources */,
 				61E9937E260AC9AC00679853 /* Date+Ext.swift in Sources */,
 				6191E41C26235F8D00527270 /* RSSFeedRow.swift in Sources */,
+				611BEA2626376F4B0043ACCA /* Regex.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1421,6 +1492,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_INCLUDE_PATHS = "${SRCROOT}/libcmark";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -1476,6 +1548,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_INCLUDE_PATHS = "${SRCROOT}/libcmark";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1509,6 +1582,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTS_MACCATALYST = NO;
+				SWIFT_INCLUDE_PATHS = "${SRCROOT}/libcmark";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1542,6 +1616,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTS_MACCATALYST = NO;
+				SWIFT_INCLUDE_PATHS = "${SRCROOT}/libcmark";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1568,6 +1643,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.tylerdlawrence.feeditrssreader.FeedsWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_INCLUDE_PATHS = "${SRCROOT}/libcmark";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1595,6 +1671,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.tylerdlawrence.feeditrssreader.FeedsWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_INCLUDE_PATHS = "${SRCROOT}/libcmark";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1648,6 +1725,30 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 2.2.4;
+			};
+		};
+		611BE9D6263715160043ACCA /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.1;
+			};
+		};
+		611BE9D9263715550043ACCA /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.4.3;
+			};
+		};
+		611BE9E826372C930043ACCA /* XCRemoteSwiftPackageReference "Parma" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/dasautoooo/Parma.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.2.0;
 			};
 		};
 		615E989A253403D600891083 /* XCRemoteSwiftPackageReference "OAuthSwift" */ = {
@@ -1760,6 +1861,36 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 610A85B12634D44E00B72244 /* XCRemoteSwiftPackageReference "url-image" */;
 			productName = URLImage;
+		};
+		611BE9D7263715160043ACCA /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 611BE9D6263715160043ACCA /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
+		};
+		611BE9DA263715550043ACCA /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 611BE9D9263715550043ACCA /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		611BE9DD263718540043ACCA /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 611BE9D6263715160043ACCA /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
+		};
+		611BE9DF2637185E0043ACCA /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 611BE9D9263715550043ACCA /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		611BE9E926372C930043ACCA /* Parma */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 611BE9E826372C930043ACCA /* XCRemoteSwiftPackageReference "Parma" */;
+			productName = Parma;
+		};
+		611BE9F326374FE70043ACCA /* Parma */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 611BE9E826372C930043ACCA /* XCRemoteSwiftPackageReference "Parma" */;
+			productName = Parma;
 		};
 		615E989E2534046A00891083 /* OAuthSwift */ = {
 			isa = XCSwiftPackageProductDependency;

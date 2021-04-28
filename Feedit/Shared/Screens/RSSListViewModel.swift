@@ -83,7 +83,7 @@ class RSSListViewModel: NSObject, ObservableObject, NSFetchedResultsControllerDe
         do {
             let rs = try fetchedResultsController.managedObjectContext.fetch(fetchRequest)
             rs.forEach { item in
-                print("item created time = \(String(describing: item.itemCount))")
+                print("item created time = \(String(describing: item))")
             }
             return rs
         } catch let error {
